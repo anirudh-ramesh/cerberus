@@ -1,0 +1,22 @@
+upstream cerberus {
+
+  server cerberus:80 max_fails=6 fail_timeout=30s;
+
+}
+
+server {
+
+  listen 80;
+  server_name cerberus${SUBDOMAIN_SUFFIX}.${DOMAIN_NAME};
+
+  location / {
+
+    proxy_pass http://cerberus;
+    proxy_http_version 1.1;
+    proxy_set_header Host $http_host;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+
+  }
+
+}
