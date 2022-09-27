@@ -14,10 +14,6 @@ volumes:
 
         external: false
 
-    cerberus:
-
-        external: false
-
 services:
 
     timescaledb:
@@ -69,49 +65,38 @@ services:
 
         profiles: ["all"]
 
-    _cerberus:
+    # django:
 
-        logging:
+    #     logging:
 
-            driver: local
+    #         driver: local
 
-            options:
-                max-size: "20m"
-                max-file: "5"
-                compress: "true"
+    #         options:
+    #             max-size: "20m"
+    #             max-file: "5"
+    #             compress: "true"
 
-        restart: unless-stopped
+    #     restart: unless-stopped
 
-        networks:
-            - khyber
+    #     networks:
+    #         - khyber
 
-        container_name: cerberus
+    #     container_name: django
 
-        volumes:
-            # - "_cerberus:/goodenough"
-            - "./cerberus:/goodenough"
+    #     # volumes:
+    #         # - "django:${DATA}"
 
-        build:
-            context: ./cerberus
-            args:
-                - PYTHON_VERSION=${PYTHON_VERSION}
+    #     build:
+    #         context: ./django
+    #         args:
+    #             # - X_VERSION=${X_VERSION}
 
-        image: irasus/cerberus:${IRASUS_DEVELOPMENT_CERBERUS_VERSION}
+    #     image:
 
-        command: python manage.py runserver 0.0.0.0:8000
+    #     environment:
+    #         - TZ=${TZ}
 
-        environment:
-            - TZ=${TZ}
-            - DATABASE_SERVER_HOSTNAME=timescaledb
-            - DATABASE_SERVER_PORTNUMBER=5432
-            - DATABASE_SERVER_DATABASENAME=DATABASE_NAME
-            - DATABASE_SERVER_USERNAME=USER_NAME
-            - DATABASE_SERVER_PASSWORD=PASSWORD
-
-        depends_on:
-            - timescaledb
-
-        profiles: ["all", "development/cerberus"]
+    #     profiles: ["all"]
 
     nginx:
 
@@ -152,10 +137,8 @@ services:
             # - SUBDOMAIN_SUFFIX=${SUBDOMAIN_SUFFIX}
 
         depends_on:
-            - cerberus
+            - django
             - cloudbeaver
-
-        profiles: ["all"]
 
     cloudbeaver:
 
