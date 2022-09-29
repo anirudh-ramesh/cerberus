@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'irasusapp',
+    'user_management',
 
     'allauth',
     'allauth.account',
@@ -123,6 +124,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+
+
 
 #SMTP Configuration
 

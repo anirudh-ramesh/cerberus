@@ -13,7 +13,7 @@ class UserAdmin(BaseUserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ('email', 'username','contact', 'password', 'password_conformation')
+    list_display = ('email', 'username','contact')
     list_filter = ('email',)
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
@@ -31,7 +31,5 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ('email',)
     ordering = ('email',)
     filter_horizontal = ()
-
-
 # Now register the new UserAdmin...
 admin.site.register(Crmuser, UserAdmin)
