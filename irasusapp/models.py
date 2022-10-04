@@ -1,7 +1,8 @@
 # Create your models here.
 from django.db import models
-from datetime import date, datetime
+import datetime
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from django.core.exceptions import ValidationError
 
 
 class CrmUserManager(BaseUserManager):
@@ -43,6 +44,14 @@ class CrmUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+
+def password_validator(value):
+    if len(value) < 8:
+        raise ValidationError(
+            str('is too short (minimum 8 characters)'),
+            code='invalid'
+        )
+
 class Crmuser(AbstractBaseUser):
     email = models.EmailField(
         verbose_name='email address',
@@ -52,10 +61,12 @@ class Crmuser(AbstractBaseUser):
     )
     username = models.CharField(max_length=100, default='')
     contact = models.CharField(max_length=12, default='')
-    password = models.CharField(max_length=100,default='')
-    password_conformation = models.CharField(max_length=100,default='')
-    last_login = models.DateTimeField(default=datetime.now())
-    # is_active = models.BooleanField(default='', blank=True)
+    password = models.CharField(max_length=100,default='', validators=[password_validator])
+    password_conformation = models.CharField(max_length=100,default='',validators=[password_validator])
+    last_login = models.DateField(auto_now=True)
+    created_at = models.DateTimeField(default=datetime.datetime.now, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(default=datetime.datetime.now)
     is_admin = models.BooleanField(default=False)
 
     objects = CrmUserManager()

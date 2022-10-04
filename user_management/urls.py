@@ -9,5 +9,18 @@ urlpatterns= [
         path('getuser/', views.getUser, name="getdata"),
         path('updateuser/<str:id>/', views.updateUser, name="update"),
         path('deletuser/<str:id>/', views.deleteUser, name="delete"),
+ 
+        path('addorg/', views.addOrganisation, name="addorg"),
+        path('listorg/', views.listOrganisation, name="listorg"),
+        path('updateorg/<int:id>/', views.updateOranisation, name="updateorg"),
+        path('deleteorg/<int:id>/', views.deleteOraganisation, name="deleteorg"),
+        
+
+        path('orgprofile/', views.addOrganisationProfile, name="orgprofile"),
+        path('listorgprofile/', views.listOrganisationProfile, name="listorgprofile"),
+
+        
+        
+        
         
 ]
