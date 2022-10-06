@@ -19,7 +19,7 @@ urlpatterns= [
         path('orgprofile/', views.addOrganisationProfile, name="orgprofile"),
         path('listorgprofile/', views.listOrganisationProfile, name="listorgprofile"),
 
-        
+        path('addrole/', views.addUserRole, name="role"),     
         
         
         

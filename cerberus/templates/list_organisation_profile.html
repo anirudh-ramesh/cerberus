@@ -7,6 +7,7 @@
 <div class="col-sm-8">
     <h4 class="text-center alert alert info">Organisation Profile</h4>
     <form action="" method="GET">
+      {{organisation_profile_data}}
         {% if organisation_profile_data %}
                 <!-- {{fm.label_tag}} {{fm}} {{fm.errors|striptags}} <br><br> -->
                 <table class="table table-hover">
@@ -19,13 +20,13 @@
 
                       </tr>
                     <tbody>
-                    {% for fm in organisation_data %}
+                    {% for fm in organisation_profile_data %}
                         <tr>
                             {{fm}}
-                            <td>{{fm.serial_number}}</td>
+                            <!-- <td>{{fm.serial_number}}</td>
                             <td>{{fm.organisation_name}}</td>
                             <td>{{fm.organisation_profile}}</td>
-                            <td>{{fm.is_active}}</td>
+                            <td>{{fm.is_active}}</td> -->
 
                             <td>
                                 <a href="{% url 'user_management:updateorg' fm.serial_number %}" class="btn btn-warning btn-sm">Edit</a>

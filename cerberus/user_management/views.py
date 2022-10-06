@@ -1,9 +1,7 @@
-from email import message
 from irasusapp.models import Crmuser
 from user_management.models import Organisation, OrganisationProfile
-from .forms import OrganisationProfileForm, UserCreatedByAdmin, OrgasationForm
+from .forms import OrganisationProfileForm, UserCreatedByAdmin, OrgasationForm,UserRole
 from django.shortcuts import render, redirect
-from datetime import datetime
 from django.contrib import messages
 # Create your views here.
 
@@ -105,3 +103,12 @@ def listOrganisationProfile(request):
         data = list(OrganisationProfile.objects.values())
     contex = {'organisation_profile_data' : data }
     return render(request, 'list_organisation_data.html',contex)
+
+def addUserRole(request):
+    form = UserRole()
+    if request.method == "POST":
+        form = UserRole(request.POST)
+        if form.is_valid():
+            form.save()
+    context = { 'form': form }
+    return render(request,'user_management_templates/add_user_role.html',context)

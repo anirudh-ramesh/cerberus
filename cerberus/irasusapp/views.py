@@ -3,13 +3,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 # from .mixins import MessageHandler
 from .forms import BatteryDetailsFrom, CreateUserForm
-from .models import Crmuser, BatteryDetail, CrmUserManager
+from .models import Crmuser, BatteryDetail
 from django.contrib import messages
 from django.contrib.auth import logout
 import psycopg2 as db
 from django.contrib.auth.hashers import make_password, check_password
 from .auth_helper import getSignInFlow, getTokenFromCode,getToken,getMsalApp,removeUserAndToken, storeUser
-from .graph_helper import *
 
 
 

@@ -3,7 +3,7 @@ import sys
 sys.path.append(".")
 from django import forms
 from irasusapp.models import Crmuser
-from user_management.models import Organisation,OrganisationProfile
+from user_management.models import Organisation,OrganisationProfile,Role
 
 
 
@@ -31,3 +31,8 @@ class OrganisationProfileForm(forms.ModelForm):
             'battrey_swap_satation_financier','battrey_swap_satation_owner',
             'battrey_swap_satation_operator'
         ]
+
+class UserRole(forms.ModelForm):
+    class Meta:
+        model = Role
+        fields = ['roles']

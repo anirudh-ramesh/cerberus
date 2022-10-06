@@ -4,6 +4,7 @@ import datetime
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.core.exceptions import ValidationError
 
+from user_management.models import Organisation,Role
 
 class CrmUserManager(BaseUserManager):
     def create_user(self, email,username,contact, password=None, password_conformation=None):
@@ -63,11 +64,13 @@ class Crmuser(AbstractBaseUser):
     contact = models.CharField(max_length=12, default='')
     password = models.CharField(max_length=100,default='', validators=[password_validator])
     password_conformation = models.CharField(max_length=100,default='',validators=[password_validator])
-    last_login = models.DateField(auto_now=True)
+    last_login = models.DateField(auto_now_add=True)
     created_at = models.DateTimeField(default=datetime.datetime.now, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(default=datetime.datetime.now)
     is_admin = models.BooleanField(default=False)
+    roles = models.ForeignKey(Role,null=True, blank=True,on_delete=models.CASCADE)
+    organisation = models.ForeignKey(Organisation,null=True, blank=True,on_delete=models.CASCADE)
 
     objects = CrmUserManager()
 
@@ -160,15 +163,3 @@ class BatteryDetail(models.Model):
 
     def __str__(self):
         return str(self.model_name)
-
-
-class UserPermission(models.Model):
-    email = models.ForeignKey(Crmuser, on_delete=models.CASCADE)
-    role = models.CharField(max_length=100, default='')
-    permission = models.CharField(max_length=225, default='')
-    updated_at = models.DateTimeField(default='')
-    policy = models.CharField(max_length=225,default='')
-    default_permission = models.CharField(max_length=225, default='')
-    
-    def __str__(self):
-        return str(self.email)
