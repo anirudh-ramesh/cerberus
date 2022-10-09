@@ -1,0 +1,36 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-8 offset-2">
+        <h4 class="alert alert-info">{{data}}</h4>
+        <form action="" method="GET">
+            {% csrf_token %}
+            {% if user_org_list %}
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">Email</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Role</th>
+                    </tr>
+                    <tbody>
+                    {% for fm in user_org_list %}
+                    <tr>
+                        <td>{{fm.email}}</td>
+                        <td>{{fm.username}}</td>
+                        <td>{{fm.role}}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                    </thead>
+                </table>
+                {% else %}
+                <h4 class="text-center alert alert warning">User Not Found</h4>
+            {% endif %}
+        </form>
+    </div>
+</div>
+
+{% endblock %}

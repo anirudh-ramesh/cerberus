@@ -3,14 +3,56 @@
 {% block content %}
 
 <div class="row">
-    <div class="col-sm-8 offset-2">
+    <div class="col-sm-4 offset-2">
         <h4 class="alert alert-info">Update Battery Details</h4>
         <form action="" method="POST">
             {% csrf_token %}
             {{form.as_p}}
-            <input type="submit" class="btn btn-success" value="Update">
-            <a href="{% url 'user_management:listorg' %}" class="btn btn-info">Back to Details</a>
-        </form>
+              <label>Role : </label>
+              <select class="form-select" aria-label=".form-select-lg" name="role_name" >
+                {% for dm in role %}
+                <option value="{{dm}}">{{dm}}</option>
+                {% endfor %}
+            </select>
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">Select</th>
+                    <th scope="col">Email</th>
+                    <!-- <th scope="col">Roles</th> -->
+
+                  </tr>
+                <tbody>
+                    {% for fm in listuser %}
+                      <tr>
+                      <td>
+                        {% if fm %}
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="{{fm}}" name="checkedvalue">
+                        </div>
+                        {% else %}
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="{{fm}}" name="boxes">
+                        </div>
+                        {% endif %}
+                      </td>
+                        <td>{{fm}}</td>
+                      </tr>
+                      {% endfor %}
+                </tbody>
+                      <!-- <div class="table-data">
+                        <tbody>
+                          {% for dm in role %}
+                          <tr>
+                              <td>{{dm}}</td>
+                            </tr>
+                          {% endfor %}
+                        </tbody>
+                      </div> -->
+                </table>
+                <input type="submit" class="btn btn-success" value="Update">
+                <a href="{% url 'user_management:listorg' %}" class="btn btn-info">Back to Details</a>
+            </form>
     </div>
 </div>
 {% endblock %}

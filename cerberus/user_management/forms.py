@@ -1,4 +1,3 @@
-from dataclasses import fields
 import sys
 sys.path.append(".")
 from django import forms
@@ -32,7 +31,14 @@ class OrganisationProfileForm(forms.ModelForm):
             'battrey_swap_satation_operator'
         ]
 
-class UserRole(forms.ModelForm):
+class UserRoleForm(forms.ModelForm):
     class Meta:
         model = Role
-        fields = ['roles']
+        fields = ['roles','name','select','org_id']
+        labels = {
+            'roles':'Role Name',
+            'name':'Permission',
+        }
+        def __init__(self, *args, **kwargs):
+            super(Role,self).__init__(*args, **kwargs)
+            self.fields['select'].empty_label = "select"

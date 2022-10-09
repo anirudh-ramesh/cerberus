@@ -4,7 +4,7 @@ import datetime
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.core.exceptions import ValidationError
 
-from user_management.models import Organisation,Role
+from user_management.models import Organisation,Role, UserOrgPermission
 
 class CrmUserManager(BaseUserManager):
     def create_user(self, email,username,contact, password=None, password_conformation=None):
@@ -69,8 +69,7 @@ class Crmuser(AbstractBaseUser):
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(default=datetime.datetime.now)
     is_admin = models.BooleanField(default=False)
-    roles = models.ForeignKey(Role,null=True, blank=True,on_delete=models.CASCADE)
-    organisation = models.ForeignKey(Organisation,null=True, blank=True,on_delete=models.CASCADE)
+    orgs = models.ManyToManyField(Organisation, through=UserOrgPermission)
 
     objects = CrmUserManager()
 
