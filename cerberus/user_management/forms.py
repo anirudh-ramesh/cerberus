@@ -15,7 +15,7 @@ class UserCreatedByAdmin(forms.ModelForm):
 class OrgasationForm(forms.ModelForm):
     class Meta:
         model = Organisation
-        fields = ['serial_number','organisation_name','organisation_profile','created_at','is_active']
+        fields = ['serial_number','organisation_name','created_at','is_active']
 
 class OrganisationProfileForm(forms.ModelForm):
     class Meta:

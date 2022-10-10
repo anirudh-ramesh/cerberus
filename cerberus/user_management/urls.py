@@ -16,8 +16,8 @@ urlpatterns= [
         path('deleteorg/<int:id>/', views.deleteOraganisation, name="deleteorg"),
         
 
-        path('orgprofile/', views.addOrganisationProfile, name="orgprofile"),
-        path('listorgprofile/', views.listOrganisationProfile, name="listorgprofile"),
+        path('addorgprofile/<int:id>/', views.addOrganisationProfile, name="addprofile"),
+        path('listorgprofile/<int:id>/', views.listOrganisationProfile, name="listorgprofile"),
 
         path('addrole/<int:id>', views.createUserRole, name="role"),
         path('getrole/', views.listRole, name="listrole"),

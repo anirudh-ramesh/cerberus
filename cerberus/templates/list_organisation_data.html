@@ -14,7 +14,6 @@
                       <tr>
                         <th scope="col">Serial Number</th>
                         <th scope="col">Organisation Name</th>
-                        <th scope="col">Organisation Profile</th>
                         <th scope="col">Is Active</th>
 
                       </tr>
@@ -28,8 +27,6 @@
                           <option value="{{dm}}">{{dm.battery_pack_manufacture}}</option>
                           {% endfor %}
                         </select></td> -->
-                        <td>{{fm.organisation_profile}}</td>
-
                         <td>{{fm.is_active}}</td>
 
                         <td>
@@ -42,6 +39,8 @@
                               <a href="{% url 'user_management:list' fm.serial_number %}" class="btn btn-secondary btn-sm">Org Details</a>
 
                               <a href="{% url 'user_management:role' fm.serial_number %}" class="btn btn-secondary btn-sm">Create Role</a>
+                              
+                              <a href="{% url 'user_management:addprofile' fm.serial_number %}" class="btn btn-secondary btn-sm">Create Organization Profile</a>
                             </form>
                           </td>     
                       </tr>

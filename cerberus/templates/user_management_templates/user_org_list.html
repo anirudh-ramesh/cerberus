@@ -3,10 +3,11 @@
 {% block content %}
 
 <div class="row">
-    <div class="col-sm-8 offset-2">
+    <div class="col-sm-6 offset">
         <h4 class="alert alert-info">{{data}}</h4>
         <form action="" method="GET">
             {% csrf_token %}
+            <h4>Organisation User</h4>
             {% if user_org_list %}
                 <table class="table table-hover">
                     <thead>
@@ -29,7 +30,93 @@
                 {% else %}
                 <h4 class="text-center alert alert warning">User Not Found</h4>
             {% endif %}
-        </form>
+            <h4 >Organisation Profile</h4>
+            {% if orgprofiledata %}
+                <!-- {{fm.label_tag}} {{fm}} {{fm.errors|striptags}} <br><br> -->
+                <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">Battery Pack Manufacture</th>
+                        <th scope="col">Battery Pack Distributor</th>
+                        <th scope="col">Battery Pack Sub Distributor</th>
+                        <th scope="col">Battery Pack Financier</th>
+                        <th scope="col">Battery Pack Owner</th>
+                        <th scope="col">Battery Pack Operator</th>
+                        <th scope="col">Vehical Manufacture</th>
+                        <th scope="col">Vehical Distributor</th>
+                        <th scope="col">Vehical Sub Distributor</th>
+                        <th scope="col">Vehical Retailer</th>
+                        <th scope="col">Vehical Financier</th>
+                        <th scope="col">Vehical Owner</th>
+                        <th scope="col">Vehical Operator</th>
+                        <th scope="col">Battery Swap Station Manufacture</th>
+                        <th scope="col">Battery Swap Station Distributor</th>
+                        <th scope="col">Battery Swap Station Sub Distributor</th>
+                        <th scope="col">Battery Swap Station Financier</th>
+                        <th scope="col">Battery Swap Station Owner</th>
+                        <th scope="col">Battery Swap Station Operator</th>
+                        
+                      </tr>
+                    <tbody>
+    
+                    {% for fm in orgprofiledata %}
+                      <tr>
+                        <td>{{fm.battery_pack_manufacture}}</td>
+                        <td>{{fm.battery_pack_distributor}}</td>
+                        <td>{{fm.battery_pack_sub_distributor}}</td>
+                        <td>{{fm.battery_pack_financier}}</td>
+                        <td>{{fm.battery_pack_owner}}</td>
+                        <td>{{fm.battery_pack_operator}}</td>
+                        <td>{{fm.vehical_manufacture}}</td>
+                        <td>{{fm.vehical_distributor}}</td>
+                        <td>{{fm.vehical_sub_distributor}}</td>
+                        <td>{{fm.vehical_retailer}}</td>
+                        <td>{{fm.vehical_financier}}</td>
+                        <td>{{fm.vehical_owner}}</td>
+                        <td>{{fm.vehical_operator}}</td>
+                        <td>{{fm.battrey_swap_satation_manufacture}}</td>
+                        <td>{{fm.battrey_swap_satation_distributor}}</td>
+                        <td>{{fm.battrey_swap_satation_sub_distributor}}</td>
+                        <td>{{fm.battrey_swap_satation_financier}}</td>
+                        <td>{{fm.battrey_swap_satation_owner}}</td>
+                        <td>{{fm.battrey_swap_satation_operator}}</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                    </thead>
+                  </table>
+            
+        {% else %}
+            <h4 class="text-center alert alert warning">Organisation Profile Not Found</h4>
+        {% endif %}
+
+        <h4 >Organisation Roles</h4>
+            {% if roles %}
+                <!-- {{fm.label_tag}} {{fm}} {{fm.errors|striptags}} <br><br> -->
+                <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">Role Name</th>
+                        <th scope="col">Permission</th>                        
+                      </tr>
+                    <tbody>
+    
+                    {% for fm in roles %}
+                      <tr>
+                        <td>{{fm.roles}}</td>
+                        <td>{{fm.name}}</td>
+                        
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                    </thead>
+                  </table>
+            
+        {% else %}
+            <h4 class="text-center alert alert warning">Roles Data Not Found</h4>
+        {% endif %}
+
+    </form>
     </div>
 </div>
 

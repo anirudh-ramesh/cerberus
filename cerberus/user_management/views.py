@@ -3,7 +3,7 @@ from user_management.models import Organisation, OrganisationProfile, Role
 from .forms import OrganisationProfileForm, UserCreatedByAdmin, OrgasationForm
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from db_connect import sql_query,inset_into_db,getOrgUserInfo
+from db_connect import sql_query,inset_into_db,getOrgUserInfo,orgProfileAddData,getOrgProfiles
 
 def addUser(request):
     form = UserCreatedByAdmin()
@@ -58,9 +58,7 @@ def addOrganisation(request):
 def listOrganisation(request):
     if request.method == "GET":
         data = Organisation.objects.values()
-        student = Organisation.objects.filter(serial_number="16")
-        orgProfile=Organisation.organisation_profile.through.objects.values_list()
-    contex = {'organisation_data' : data,'orgProfile': orgProfile }
+    contex = {'organisation_data' : data }
     return render(request, 'list_organisation_data.html',contex)
 
 
@@ -103,20 +101,38 @@ def deleteOraganisation(request, id):
         print("Error While deleting Record",e)
 
 
-def addOrganisationProfile(request):
-    form = OrganisationProfileForm()
+def addOrganisationProfile(request,id):
     if request.method == "POST":
-        form = OrganisationProfileForm(request.POST)
-        if form.is_valid():
-            form.save()
-    context = { 'organisation_profile': form }
-    return render(request,'add_organisation_profile.html',context)
+        formData = OrganisationProfile.objects.create(
+            battery_pack_manufacture = request.POST['battery_pack_manufacture'],
+            battery_pack_distributor = request.POST['battery_pack_distributor'],
+            battery_pack_sub_distributor = request.POST['battery_pack_sub_distributor'],
+            battery_pack_financier = request.POST['battery_pack_financier'],
+            battery_pack_owner = request.POST['battery_pack_owner'],
+            battery_pack_operator = request.POST['battery_pack_operator'],
+            vehical_manufacture = request.POST['vehical_manufacture'],
+            vehical_distributor = request.POST['vehical_distributor'],
+            vehical_sub_distributor = request.POST['vehical_sub_distributor'],
+            vehical_retailer = request.POST['vehical_retailer'],
+            vehical_financier = request.POST['vehical_financier'],
+            vehical_owner = request.POST['vehical_owner'],
+            vehical_operator = request.POST['vehical_operator'],
+            battrey_swap_satation_manufacture = request.POST['battrey_swap_satation_manufacture'],
+            battrey_swap_satation_distributor = request.POST['battrey_swap_satation_distributor'],
+            battrey_swap_satation_sub_distributor = request.POST['battrey_swap_satation_sub_distributor'],
+            battrey_swap_satation_financier = request.POST['battrey_swap_satation_financier'],
+            battrey_swap_satation_owner = request.POST['battrey_swap_satation_owner'],
+            battrey_swap_satation_operator = request.POST['battrey_swap_satation_operator']
+        )
+        formData.save()
+        orgProfileAddData(id,formData.id)
+    return render(request,'add_organisation_profile.html')
 
-def listOrganisationProfile(request):
+def listOrganisationProfile(request,id):
     if request.method == "GET":
-        data = list(OrganisationProfile.objects.values())
+        data = getOrgProfiles(id)
     contex = {'organisation_profile_data' : data }
-    return render(request, 'list_organisation_data.html',contex)
+    return render(request, 'list_organisation_profile.html',contex)
 
 def createUserRole(request,id):
     if request.method == "POST":
@@ -195,10 +211,14 @@ def orgUserinfo(request,id):
         if request.method == "GET":
             user_multiple_role = getOrgUserInfo(id)
             data = Organisation.objects.get(pk=id)
+            orgprofiledata = getOrgProfiles(id)
+            roles = list(Role.objects.filter(org_id=id).values())
 
         context = {
             'user_org_list': user_multiple_role,
-            'data':data
+            'data':data,
+            'orgprofiledata': orgprofiledata,
+            'roles': roles
         }
         return render(request,"user_management_templates/user_org_list.html",context)        
     except Exception as e:
