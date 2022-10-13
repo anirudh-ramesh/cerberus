@@ -7,7 +7,7 @@ def connect():
 def sql_query(id):
     conn=connect()
     cursor=conn.cursor()
-    sql= f"SELECT email FROM irasusapp_crmuser WHERE NOT EXISTS (SELECT email,serial_number FROM user_management_organisation_user_role WHERE user_management_organisation_user_role.serial_nuOrganisationPermissionmber = '{id}' AND irasusapp_crmuser.email = user_management_organisation_user_role.email) AND irasusapp_crmuser.is_admin=True;"
+    sql= f"SELECT email FROM irasusapp_crmuser WHERE NOT EXISTS (SELECT email,serial_number FROM user_management_organisation_user_role WHERE user_management_organisation_user_role.serial_number = '{id}' AND irasusapp_crmuser.email = user_management_organisation_user_role.email) AND irasusapp_crmuser.is_admin=True;"
     cursor.execute(sql)
     myresult = cursor.fetchall()
     new_data=[]

@@ -99,14 +99,14 @@
                         <th scope="col">Role Name</th>
                         <th scope="col">Permission</th>                        
                       </tr>
-                    <tbody>
-    
-                    {% for fm in roles %}
-                      <tr>
-                        <td>{{fm.roles}}</td>
-                        <td>{{fm.name}}</td>
-                        
-                      </tr>
+                    <tbody class="tabledata">
+                      {% for fm in multipleOrg_role %}
+                        <tr>
+                          <td class="">{{fm.role_name}}</td>                      
+                        </tr>
+                        <tr>
+                          <td class="">{{fm.permission_name}}</td>                      
+                        </tr>
                       {% endfor %}
                     </tbody>
                     </thead>
