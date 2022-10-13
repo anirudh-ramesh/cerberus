@@ -34,10 +34,9 @@ class OrganisationProfileForm(forms.ModelForm):
 class UserRoleForm(forms.ModelForm):
     class Meta:
         model = Role
-        fields = ['roles','name','select','org_id']
+        fields = ['roles','select','org_id']
         labels = {
             'roles':'Role Name',
-            'name':'Permission',
         }
         def __init__(self, *args, **kwargs):
             super(Role,self).__init__(*args, **kwargs)

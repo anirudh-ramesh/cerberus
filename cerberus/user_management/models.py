@@ -35,6 +35,7 @@ class Role(models.Model):
     roles= models.CharField(max_length= 225, default='')
     select = models.BooleanField(default=False)
     org_id = models.CharField(max_length=100, default='')
+
     def __str__(self):
         return self.roles
 
@@ -51,7 +52,11 @@ class Organisation(models.Model):
         return self.organisation_name
 
 
-class UserOrgPermission(models.Model):
-    organisation_name= models.ForeignKey(Organisation,blank=True, on_delete=models.CASCADE)
-    user = models.ForeignKey("irasusapp.Crmuser",blank=True, on_delete=models.CASCADE)
+class OrganisationPermission(models.Model):
+    permission_name = models.CharField(max_length=225, default='')
+    role_id = models.IntegerField(blank=True, default='')
+    role_name = models.CharField(max_length=225, default='')
+
+    def __str__(self):
+        return self.role_name 
     

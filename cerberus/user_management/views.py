@@ -1,9 +1,10 @@
+from django.utils import timezone
 from irasusapp.models import Crmuser
 from user_management.models import Organisation, OrganisationProfile, Role
 from .forms import OrganisationProfileForm, UserCreatedByAdmin, OrgasationForm
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from db_connect import sql_query,inset_into_db,getOrgUserInfo,orgProfileAddData,getOrgProfiles
+from db_connect import sql_query,inset_into_db,getOrgUserInfo,orgProfileAddData,getOrgProfiles,organisationmultiplePermission,insertIntoOrgnisationPermission
 
 def addUser(request):
     form = UserCreatedByAdmin()
@@ -23,15 +24,23 @@ def getUser(request):
 
 
 def updateUser(request,id):
+    pi =list(Crmuser.objects.filter(pk=id).values())
     if request.method == 'POST':
-        pi = Crmuser.objects.get(pk=id)
-        fm = UserCreatedByAdmin(request.POST, instance=pi)
-        if fm.is_valid():
-            fm.save()
-    else:
-        pi = Crmuser.objects.get(pk=id)
-        fm = UserCreatedByAdmin(instance=pi)
-    return render(request,'user_management_templates/update_user.html',{'form': fm})
+        username = request.POST['username']
+        email = request.POST['email']
+        contact = request.POST['contact']
+        # last_login = request.POST['lastlogin']
+        isactive = request.POST.get('is_active')
+        if isactive == 'on':
+            isactive = True
+        else:
+            isactive = False
+        Crmuser.objects.filter(email=id).update(username=username,email=email,contact=contact,is_active=isactive, updated_at = timezone.now())
+        pi=[{"email":email ,"username":username, "contact":contact, "is_active": isactive }]
+        return render(request,'user_management_templates/update_user.html',{ 'form': pi })
+
+    pi =list(Crmuser.objects.filter(pk=id).values())
+    return render(request,'user_management_templates/update_user.html',{ 'form': pi })
 
 
 def deleteUser(request, id):
@@ -57,7 +66,7 @@ def addOrganisation(request):
 
 def listOrganisation(request):
     if request.method == "GET":
-        data = Organisation.objects.values()
+        data = Organisation.objects.filter(is_active=True).values()
     contex = {'organisation_data' : data }
     return render(request, 'list_organisation_data.html',contex)
 
@@ -138,11 +147,12 @@ def createUserRole(request,id):
     if request.method == "POST":
         role_name=request.POST.get("roles")
         permission=request.POST.get("permission")
-        print(role_name,permission)
+        data= insertIntoOrgnisationPermission(permission,role_name,id)
+        print(role_name,permission)        
         if Role.objects.filter(roles=role_name).exists():
             messages.info(request,'Role is already taken! try another one')
         else:
-            form = Role.objects.create(roles=role_name,name=permission,select=True,org_id=id)
+            form = Role.objects.create(roles=role_name,name=permission,select=True,org_id=id)       
             form.save()
     return render(request,'user_management_templates/add_user_role.html')
 
@@ -171,15 +181,17 @@ def listRole(request):
 
 
 def updateRole(request,id):
-    if request.method == 'POST':
-        pi = Role.objects.get(pk=id)
-        fm = Role(request.POST, instance=pi)
-        if fm.is_valid():
-            fm.save()
-    else:
-        pi = Role.objects.get(pk=id)
-        fm = Role(pi)
-    return render(request,'user_management_templates/update_role.html',{'form': fm})
+    role_data = list(Role.objects.filter(pk=id).values())
+    if request.method == "POST":
+        role = request.POST['roles']
+        name = request.POST['name']
+        print(name,role)
+        data = Role.objects.filter(id=id).update(roles=role, name= name)
+        role_data = [{"roles": role,"name": name}]
+        return render(request,'user_management_templates/update_role.html',{'form': role_data})
+
+    role_data =list(Role.objects.filter(pk=id).values())
+    return render(request,'user_management_templates/update_role.html',{'form': role_data})
 
 def deleteRole(request,id):
     try:
@@ -212,13 +224,15 @@ def orgUserinfo(request,id):
             user_multiple_role = getOrgUserInfo(id)
             data = Organisation.objects.get(pk=id)
             orgprofiledata = getOrgProfiles(id)
+            multipleOrg_role = organisationmultiplePermission(id)
             roles = list(Role.objects.filter(org_id=id).values())
 
         context = {
             'user_org_list': user_multiple_role,
             'data':data,
             'orgprofiledata': orgprofiledata,
-            'roles': roles
+            'roles': roles,
+            'multipleOrg_role': multipleOrg_role
         }
         return render(request,"user_management_templates/user_org_list.html",context)        
     except Exception as e:
