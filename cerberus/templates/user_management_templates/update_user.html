@@ -1,0 +1,55 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-8 offset-2">
+        <h4 class="alert alert-info">Update Users</h4>
+        <form action="" method="POST">
+            <div class="user_card">
+					<form method="POST" action="">
+						{% csrf_token %}
+                        {% for fm in form %}
+                            <div class="input-group mb-2">
+                                <div class="input-group-append">
+                                    <label>Username</label>
+                                    <input type='text' name='username' value="{{fm.username}}" class="input-register-text" required>
+                                </div>
+                            </div>
+                            <div class="input-group mb-2">
+                                <div class="input-group-append">
+                                    <label>Email</label>
+                                    <input type='text' name='email' value="{{fm.email}}" class="input-register-text" required>
+                                </div>
+                            </div>
+                            <div class="input-group mb-2">
+                                <div class="input-group-append">
+                                    <label>Contact</label>
+                                    <input type='text' name='contact' value="{{fm.contact}}" class="input-register-text" required>
+                                </div>
+                            </div>
+                            <!-- <div class="input-group mb-2">
+                                <div class="input-group-append">
+                                    <label>Last Login</label>
+                                    <input type='text' name='lastlogin' value={{fm.last_login}} class="input-register-text" required>
+                                </div>
+                            </div> -->
+                            <div class="input-group mb-2">
+                                <div class="input-group-append">
+                                    <label>IsActive
+                                        {% if fm.is_active %}
+                                            <input type="checkbox" value="{{fm.is_acitve}}" name="is_active" checked>
+                                        {% else %}
+                                        <input type="checkbox" name="is_active">
+                                        {% endif %}
+                                    </label>   
+                                </div>
+                            </div>
+                        {% endfor %}
+					</form>
+            <input type="submit" class="btn btn-success mt-3" value="Update">
+            <a href="{% url 'user_management:getdata' %}" class="btn btn-info">Back to Details</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

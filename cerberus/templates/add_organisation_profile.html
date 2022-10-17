@@ -1,0 +1,157 @@
+
+{% extends 'main.html' %}
+
+{% block content %}
+
+{% include 'status.html' %}
+
+
+<br>
+
+<div class="row">
+	<div class="col-md-5">
+		<h5>Organisation Profile</h5>
+		<hr>
+		<div class="card card-body">
+			<a class="btn btn-primary  btn-sm btn-block" href="">Bettery Details</a>
+			<table class="table table-sm">
+				<tr>
+					<th></th>
+					<th>Battery</th>
+					<!-- <th>Orders</th> -->
+				</tr>
+			
+			</table>
+			<div class="card card-body">
+				<div class="d-flex justify-content-start form_container">
+					<form method="POST" action="">
+						{% csrf_token %}
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Battery Pack Manufacture </label>
+								<input type='text' name='battery_pack_manufacture' placeholder="battery_pack_manufacture" class="input-register-text" required>
+							</div>
+
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Battery Pack Distributor</label>
+								<input type='text' name='battery_pack_distributor' placeholder="battery_pack_distributor" class="input-register-text" required>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Battery Pack Sub Distributor</label>
+								<input type='text' name='battery_pack_sub_distributor' placeholder="battery_pack_sub_distributor" class="input-register-text" required>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Battery Pack Financier</label>
+								<input type='text' name='battery_pack_financier'  placeholder="battery_pack_financier" class="input-register-text" required>
+								
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Battery Pack Owner</label>
+								<input type='text' name='battery_pack_owner' placeholder="battery_pack_owner"  class="input-register-text" required>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Battery Pack Opertator</label>
+								<input type='text' name='battery_pack_operator'  placeholder="battery_pack_operator" class="input-register-text" required>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Vehical Manufacture</label>
+								<input type='text' name='vehical_manufacture' placeholder="vehical_manufacture"  class="input-register-text" required>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Vehical Distributor</label>
+								<input type='text' name='vehical_distributor' placeholder="vehical_distributor"  class="input-register-text" required>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Vehical Sub Distributor</label>
+								<input type='text' name='vehical_sub_distributor'  placeholder="vehical_sub_distributor" class="input-register-text" required>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Vehical Retailer</label>
+								<input type='text' name='vehical_retailer'  placeholder="vehical_retailer" class="input-register-text" required>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Vehical Financier</label>
+								<input type='text' name='vehical_financier' placeholder="vehical_financier" class="input-register-text" required>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Vehical Owner</label>
+								<input type='text' name='vehical_owner' placeholder="vehical_owner" class="input-register-text" required>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Vehical Opertator</label>
+								<input type='text' name='vehical_operator' placeholder="vehical_operator"  class="input-register-text" required>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Battery Swap Station Manufacture</label>
+								<input type='text' name='battrey_swap_satation_manufacture' placeholder="battrey_swap_satation_manufacture" class="input-register-text" required>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Battery Swap Station Distributor</label>
+								<input type='text' name='battrey_swap_satation_distributor' placeholder="battrey_swap_satation_distributor" class="input-register-text" required>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Battery Swap Station Sub Manufacture</label>
+								<input type='text' name='battrey_swap_satation_sub_distributor' placeholder="battrey_swap_satation_sub_distributor" class="input-register-text" required>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Battery Swap Station Financier</label>
+								<input type='text' name='battrey_swap_satation_financier' placeholder="battrey_swap_satation_financier" class="input-register-text" required>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Battery Swap Station Owner</label>
+								<input type='text' name='battrey_swap_satation_owner' placeholder="battrey_swap_satation_owner" class="input-register-text" required>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Battery Swap Station Opertator</label>
+								<input type='text' name='battrey_swap_satation_operator' placeholder="battrey_swap_satation_operator" class="input-register-text" required>
+							</div>
+						</div>
+				   		<div class="d-flex justify-content-center mt-3 login_container">
+				 			<input class="btn btn-success" type="submit" value="Submit">
+				   		</div>
+
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+{% endblock %}

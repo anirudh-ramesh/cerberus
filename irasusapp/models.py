@@ -1,7 +1,8 @@
 # Create your models here.
 from django.db import models
-from datetime import date, datetime
+import datetime
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from django.core.exceptions import ValidationError
 
 
 class CrmUserManager(BaseUserManager):
@@ -43,6 +44,14 @@ class CrmUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+
+def password_validator(value):
+    if len(value) < 8:
+        raise ValidationError(
+            str('is too short (minimum 8 characters)'),
+            code='invalid'
+        )
+
 class Crmuser(AbstractBaseUser):
     email = models.EmailField(
         verbose_name='email address',
@@ -52,16 +61,26 @@ class Crmuser(AbstractBaseUser):
     )
     username = models.CharField(max_length=100, default='')
     contact = models.CharField(max_length=12, default='')
-    password = models.CharField(max_length=100,default='')
-    password_conformation = models.CharField(max_length=100,default='')
-    last_login = models.DateTimeField(default=datetime.now())
-    # is_active = models.BooleanField(default='', blank=True)
+    password = models.CharField(max_length=100,default='', validators=[password_validator])
+    password_conformation = models.CharField(max_length=100,default='',validators=[password_validator])
+    last_login = models.DateField(auto_now=True)
+    created_at = models.DateTimeField(default=datetime.datetime.now, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(default=datetime.datetime.now)
     is_admin = models.BooleanField(default=False)
 
     objects = CrmUserManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'contact','password', 'password_conformation']
+
+    class Meta:
+        permissions = (
+            ("search_users", "Can search"),
+            ("add", "Can add user"),
+            ("update", "Can update user"),
+            ("delete", "Can delete user"),
+            ("assign role", "Can Assign role"))
 
     def __str__(self):
         return self.email
@@ -127,7 +146,7 @@ class BatteryDetail(models.Model):
     battery_type = models.CharField(max_length=100, default='', choices=BATTERY_TYPES)
     bms_type = models.CharField(max_length=100, default='', choices=BMS_TYPE)
     iot_type = models.CharField(max_length=100, default='', choices=IOT_TYPE)
-    iot_imei_number = models.CharField(max_length=1000)
+    iot_imei_number = models.CharField(max_length=100)
     sim_number = models.CharField(max_length=12, default='', blank=True)
     warrenty_start_date = models.DateField(default='',blank=True)
     warrenty_duration = models.DateField(default='',blank=True)
@@ -150,5 +169,6 @@ class UserPermission(models.Model):
     updated_at = models.DateTimeField(default='')
     policy = models.CharField(max_length=225,default='')
     default_permission = models.CharField(max_length=225, default='')
+    
     def __str__(self):
         return str(self.email)

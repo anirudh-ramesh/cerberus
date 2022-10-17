@@ -1,0 +1,84 @@
+
+{% extends 'main.html' %}
+
+{% block content %}
+
+{% include 'status.html' %}
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var txt=""
+        $('.checkvalues').click(function (){
+            txt+=$(this).val()+","
+        })
+    })
+</script> -->
+
+
+<div class="col-sm-6">
+    <h4 class="text-center alert alert info">List Role</h4>
+    <form action="" method="POST">
+        {% if roledata %}
+                <!-- {{fm.label_tag}} {{fm}} {{fm.errors|striptags}} <br><br> -->
+                <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        
+                        <th scope="col">Select</th>
+                        <!-- <th scope="col">Id</th> -->
+                        <th scope="col">Permission</th>
+                        <th scope="col">Permission discription</th>
+                        
+
+                        <!-- <th scope="col">Organisation Profile</th>
+                        <th scope="col">Is Active</th> -->
+
+                      </tr>
+                    <tbody>
+                    {% for fm in roledata %}
+                      <tr>
+                      <td>
+                        {% if fm.select %}
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" checked="checked" value="{{fm.id}}" name="boxes">
+                        </div>
+                        {% else %}
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="{{fm.id}}" name="boxes">
+                        </div>
+                        {% endif %}
+                      </td>
+                        <!-- <td>{{fm.id}}</td>     -->
+                        <td>{{fm.roles}}</td>
+                        <td>{{fm.name}}</td>
+
+                        <td>
+                            <a href="{% url 'user_management:updaterole' fm.id %}" class="btn btn-warning btn-sm">Edit</a>
+                            
+                            <form action="{% url 'user_management:deleterole' fm.id %}" method="POST" class="d-inline">
+                                {% csrf_token %}
+                              <input type="submit" class="btn btn-danger btn-sm" value="Delete">
+                            </form>
+                        </td>
+                            
+                      </tr>
+                      
+                      {% endfor %}
+                    </tbody>
+                    </thead>
+                  </table>
+                  <br/>
+                  <a href="{% url 'user_management:mrole' %}" class="btn btn-danger btn-sm">OK</a>
+                  <!-- <button  class="btn btn-secondary" type="sumbit">Ok</button> -->
+            
+        {% else %}
+            <h4 class="text-center alert alert warning">No Records Found</h4>
+        {% endif %}
+
+        
+    </form>
+    
+</div>
+
+
+{% endblock %}

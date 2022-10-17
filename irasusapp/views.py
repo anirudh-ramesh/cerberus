@@ -18,10 +18,10 @@ uname = ''
 con = ''
 pwd = ''
 pwd_con = ''
-last_login = ''
+# last_login = ''
 is_admin = ''
 def register(request):
-    global em,uname,con,pwd,pwd_con,last_login
+    global em,uname,con,pwd,pwd_con
     if request.method=="POST":
         conn=db.connect(host="localhost",user="postgres",password="1234",database='battery_management')
         cursor=conn.cursor()
@@ -39,9 +39,9 @@ def register(request):
             if key=="password_conformation":
                 pwd_con=make_password(value)
         
-        last_login = datetime.now()
+        # last_login = datetime.now()
         is_admin = False
-        c="INSERT INTO irasusapp_crmuser Values('{}','{}','{}','{}','{}','{}','{}')".format(em,uname,con,pwd,pwd_con,last_login,is_admin)   
+        c="INSERT INTO irasusapp_crmuser Values('{}','{}','{}','{}','{}','{}','{}')".format(em,uname,con,pwd,pwd_con,is_admin)   
         cursor.execute(c)
         conn.commit()
         return redirect('login')
