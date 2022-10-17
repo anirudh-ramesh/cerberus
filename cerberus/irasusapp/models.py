@@ -4,7 +4,7 @@ import datetime
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.core.exceptions import ValidationError
 
-from user_management.models import Organisation,Role
+from user_management.models import Organisation
 
 class CrmUserManager(BaseUserManager):
     def create_user(self, email,username,contact, password=None, password_conformation=None):

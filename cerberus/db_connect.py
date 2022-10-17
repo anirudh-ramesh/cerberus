@@ -3,7 +3,8 @@ import psycopg2 as db
 def connect():
     conn=db.connect(host="localhost",user="postgres",password="1234",database='battery_management')
     return conn
-    
+
+#List Organisation User  
 def sql_query(id):
     conn=connect()
     cursor=conn.cursor()
@@ -16,6 +17,7 @@ def sql_query(id):
     cursor.close()    
     return new_data
 
+#Insert User Into Orgnisation
 def inset_into_db(data,id,role,select):
     conn=connect()
     cursor=conn.cursor()
@@ -29,11 +31,10 @@ def inset_into_db(data,id,role,select):
     cursor.close()
     return 
 
-
+#List Organisation Info
 def getOrgUserInfo(id):
     conn=connect()
     cursor=conn.cursor()
-    # sql= f"SELECT email,username, FROM irasusapp_crmuser WHERE EXISTS (SELECT email,serial_number,id FROM user_management_organisation_user_role WHERE user_management_organisation_user_role.serial_number = '{id}' AND irasusapp_crmuser.email = user_management_organisation_user_role.email);"
     sql = f"SELECT \
     irasusapp_crmuser.email,irasusapp_crmuser.username,user_management_organisation_user_role.id \
     FROM irasusapp_crmuser \
@@ -53,7 +54,7 @@ def getOrgUserInfo(id):
     cursor.close()
     return my_data
 
-
+#Add Organisation Profile Data
 def orgProfileAddData(id,orgprofile_id):
     conn=connect()
     cursor = conn.cursor()
@@ -65,6 +66,7 @@ def orgProfileAddData(id,orgprofile_id):
     cursor.close()
     return
 
+#List Organisation Profile
 def getOrgProfiles(id):
     conn=connect()
     cursor=conn.cursor()
@@ -102,6 +104,7 @@ def getOrgProfiles(id):
     cursor.close()
     return new_data
 
+#List Organisation Role
 def getOrgRoles(id):
     conn=connect()
     cursor=conn.cursor()
@@ -139,6 +142,7 @@ def getOrgRoles(id):
     cursor.close()
     return new_data
 
+#Update Organisation User
 def orgUserUpdateData(role,serial_number,email):
     conn=connect()
     cursor = conn.cursor()
@@ -148,6 +152,7 @@ def orgUserUpdateData(role,serial_number,email):
     cursor.close()
     return
 
+#List Organisation Permission
 def organisationmultiplePermission(id):
     conn=connect()
     cursor=conn.cursor()
@@ -174,6 +179,7 @@ def organisationmultiplePermission(id):
 
     return my_data
 
+#Insert Organisation Permission
 def insertIntoOrgnisationPermission(permission_name,role_name,id):
     conn=connect()
     cursor = conn.cursor()
@@ -185,6 +191,7 @@ def insertIntoOrgnisationPermission(permission_name,role_name,id):
     cursor.close()
     return
 
+#Update Organisation Permission
 def updateOrgAssignPermission(permission_name,role_name,id):
     conn=connect()
     cursor = conn.cursor()
@@ -195,6 +202,7 @@ def updateOrgAssignPermission(permission_name,role_name,id):
     cursor.close()
     return
 
+#Remove User From Organisation
 def removeUserFromOrg(select,serial_number,email):
     conn=connect()
     cursor = conn.cursor()

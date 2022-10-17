@@ -5,7 +5,6 @@ from irasusapp.models import Crmuser
 from user_management.models import Organisation,OrganisationProfile,Role
 
 
-
 class UserCreatedByAdmin(forms.ModelForm):
     class Meta:
         model = Crmuser
