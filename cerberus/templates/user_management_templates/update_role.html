@@ -11,21 +11,15 @@
                     <div class="input-group mb-2">
                         <div class="input-group-append">
                             <label>Role name</label>
-                            <input type='text' name='roles' value="{{fm.roles}}" class="input-register-text" required>
+                            <input type='text' name='role_name' value="{{fm.role_name}}" class="input-register-text" required>
                         </div>
                     </div>
                     <div class="input-group mb-2">
                         <div class="input-group-append">
                             <label>Permission</label>
-                            <input type='text' name='name' value="{{fm.name}}" class="input-register-text" required>
+                            <input type='text' name='permission_name' value="{{fm.permission_name}}" class="input-register-text" required>        
                         </div>
                     </div>
-                    <!-- <div class="input-group mb-2">
-                        <div class="input-group-append">
-                            <label>Last Login</label>
-                            <input type='text' name='lastlogin' value={{fm.last_login}} class="input-register-text" required>
-                        </div>
-                    </div> -->
                 {% endfor %}
                 <input type="submit" class="btn btn-success mt-3" value="Update">
                 <a href="{% url 'user_management:listrole' %}" class="btn btn-info">Back to Details</a>

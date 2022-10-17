@@ -21,10 +21,10 @@ urlpatterns= [
 
         path('addrole/<int:id>', views.createUserRole, name="role"),
         path('getrole/', views.listRole, name="listrole"),
-        path('updaterole/<int:id>/', views.updateRole, name="updaterole"),
+        path('updaterole/<str:name>/', views.updateRole, name="updaterole"),
         path('deleterole/<int:id>/', views.deleteRole, name="deleterole"),
         path('newrole/', views.listedUserRole, name="mrole"),
-        path('list/<int:id>', views.orgUserinfo, name="list"),     
+        path(r'list/<int:id>', views.orgUserinfo, name="list"),     
         
         
 ]

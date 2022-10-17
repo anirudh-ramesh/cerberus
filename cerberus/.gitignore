@@ -1,0 +1,5 @@
+user_management/migrations/
+user_management/__pycache__/*.pyc
+irasusapp/migrations/
+irasusapp/__pycache__/*.pyc
+irasusapp/migrations/__pycache__/*.pyc

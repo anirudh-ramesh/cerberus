@@ -11,43 +11,6 @@ from django.contrib.auth.hashers import make_password, check_password
 from .auth_helper import getSignInFlow, getTokenFromCode,getToken,getMsalApp,removeUserAndToken, storeUser
 
 
-
-# em=''
-# uname = ''
-# con = ''
-# pwd = ''
-# pwd_con = ''
-# is_admin = ''
-# def register(request):
-#     global em,uname,con,pwd,pwd_con
-#     if request.method=="POST":
-#         conn=db.connect(host="localhost",user="postgres",password="1234",database='battery_management')
-#         cursor=conn.cursor()
-#         d=request.POST
-        
-#         for key,value in d.items():
-#             if key=="email":
-#                 em=value
-#             if key=="username":
-#                 uname=value
-#             if key=="contact":
-#                 con=value
-#             if key=="password":
-#                 pwd=make_password(value)
-#             if key=="password_conformation":
-#                 pwd_con=make_password(value)
-        
-#         # last_login = datetime.now()
-#         is_admin = False
-#         c="INSERT INTO irasusapp_crmuser Values('{}','{}','{}','{}','{}','{}')".format(em,uname,con,pwd,pwd_con,is_admin)
-#         print(c, "======><><><><><")
-#         cursor.execute(c)
-#         conn.commit()
-#         return redirect('login')
-
-#     return render(request,'register.html')
-
-
 def register(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -86,9 +49,10 @@ def loginPage(request):
                 return redirect('home')
             else:
                 messages.info(request, "Username or Password Inccorect")
+                return redirect('login')
                 # pass
         else:
-            messages.info(request, "Username or Password Inccorect")
+            messages.info(request, "User not Found")
 
     return render(request,'login.html')  
 
@@ -102,6 +66,7 @@ def forgotPassword(request):
 
 #Add_Battery_details
 def batteryDetails(request):
+    BatteryDetail.objects.filter()
     if request.method == "POST":
         fm = BatteryDetailsFrom(request.POST)
         if fm.is_valid():
@@ -205,18 +170,3 @@ def userSignin(request):
         CreateUserForm()
     context = { 'form': form }
     return render(request, 'login.html', context)
-
-
-def userLogin(request):
-    pass
- 
-#USERPERMISSIONS ========
-
-# def userPermission(request):
-#     try:
-#         if request.method == "POST":
-#             form = UserPermissionFrom(request.method)
-#             form.is_valid()
-#             form.save()
-#     except Exception as e:
-#         print(e)
