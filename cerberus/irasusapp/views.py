@@ -69,7 +69,7 @@ def batteryDetails(request):
     try:
         serial_num = request.POST.get('battery_serial_num')
         if BatteryDetail.objects.filter(battery_serial_num=serial_num):
-            return HttpResponse('Details Already Added')
+            messages.warning('Details Already Added')
 
         if request.method == "POST":
             formData = BatteryDetail.objects.create(

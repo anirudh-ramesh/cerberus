@@ -22,14 +22,12 @@ $ cd cerberus
 
 Then go to Directory Myenv a virtual environment to install dependencies in and activate it:
 
-cd mysite/myenv
-source env/bin/activate
 
 Then Move from myenv to Project Directory
     use Command cd .. 
     Eg :- work/djangoproject/cerberus/cerberus
 
-(env)$ python manage.py runserver
+(env)$ bash irasus.sh
 
 And navigate to `http://127.0.0.1:8000/`. this is The Dashboard
 
