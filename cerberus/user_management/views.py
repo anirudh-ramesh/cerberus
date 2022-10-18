@@ -1,11 +1,12 @@
 from django.utils import timezone
 from irasusapp.models import Crmuser
-from user_management.models import Organisation, OrganisationProfile, Role
+from user_management.models import Organisation, OrganisationPermission, OrganisationProfile, Role
 from .forms import OrganisationProfileForm, UserCreatedByAdmin, OrgasationForm
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from db_connect import sql_query,inset_into_db,getOrgUserInfo,orgProfileAddData,getOrgProfiles,organisationmultiplePermission,insertIntoOrgnisationPermission
+from db_connect import sql_query,inset_into_db,getOrgUserInfo,orgProfileAddData,getOrgProfiles,organisationmultiplePermission,insertIntoOrgnisationPermission,removeUserFromOrg
 
+#This Function Used to Add User
 def addUser(request):
     form = UserCreatedByAdmin()
     if request.method == "POST":
@@ -15,14 +16,14 @@ def addUser(request):
     context = { 'form': form }
     return render(request,'user_management_templates/user_add.html',context)
 
-
+#List User
 def getUser(request):
     if request.method == "GET":
         data = list(Crmuser.objects.values())
     contex = {'user_data' : data }
     return render(request, 'user_management_templates/get_userdata.html',contex)
 
-
+#Update User
 def updateUser(request,id):
     pi =list(Crmuser.objects.filter(pk=id).values())
     if request.method == 'POST':
@@ -42,7 +43,7 @@ def updateUser(request,id):
     pi =list(Crmuser.objects.filter(pk=id).values())
     return render(request,'user_management_templates/update_user.html',{ 'form': pi })
 
-
+#Delete User
 def deleteUser(request, id):
     try:
         pi = Crmuser.objects.get(pk=id)
@@ -54,6 +55,7 @@ def deleteUser(request, id):
     except Exception as e:
         print("Error While deleting Record",e)
 
+#Add Organisation
 def addOrganisation(request):
     form = OrgasationForm()
     if request.method == "POST":
@@ -63,23 +65,22 @@ def addOrganisation(request):
     context = { 'form': form }
     return render(request,'add_organisation.html',context)
 
-
+#List Organisation
 def listOrganisation(request):
     if request.method == "GET":
         data = Organisation.objects.filter(is_active=True).values()
     contex = {'organisation_data' : data }
     return render(request, 'list_organisation_data.html',contex)
 
-
+#Update Organisation
 def updateOranisation(request,id):
     global listuser
     if request.method == 'POST':
         role=request.POST.get("role_name")
-        # list(Role.objects.filter(roles=request.POST.get("role_name")).values())
         pi = Organisation.objects.get(pk=id)
         roles = Role.objects.filter(org_id=id)
         check_boxes = request.POST.getlist('checkedvalue')
-        inset_into_db(check_boxes,id,role)
+        inset_into_db(check_boxes,id,role,True)
         fm = OrgasationForm(request.POST, instance=pi)
         if fm.is_valid():
             fm.save()
@@ -98,7 +99,7 @@ def updateOranisation(request,id):
     } 
     return render(request,'update_organisation.html',context)
 
-
+#Delete Organisation
 def deleteOraganisation(request, id):
     try:
         pi = Organisation.objects.get(pk=id)
@@ -109,7 +110,7 @@ def deleteOraganisation(request, id):
     except Exception as e:
         print("Error While deleting Record",e)
 
-
+#Add Organisation Profile
 def addOrganisationProfile(request,id):
     if request.method == "POST":
         formData = OrganisationProfile.objects.create(
@@ -137,29 +138,33 @@ def addOrganisationProfile(request,id):
         orgProfileAddData(id,formData.id)
     return render(request,'add_organisation_profile.html')
 
+#List Organisation Profile
 def listOrganisationProfile(request,id):
     if request.method == "GET":
         data = getOrgProfiles(id)
     contex = {'organisation_profile_data' : data }
     return render(request, 'list_organisation_profile.html',contex)
 
+#Add Role
 def createUserRole(request,id):
     if request.method == "POST":
         role_name=request.POST.get("roles")
         permission=request.POST.get("permission")
-        data= insertIntoOrgnisationPermission(permission,role_name,id)
         print(role_name,permission)        
         if Role.objects.filter(roles=role_name).exists():
-            messages.info(request,'Role is already taken! try another one')
+            get_id=list(Role.objects.filter(roles=role_name).values())
+            insertIntoOrgnisationPermission(permission,role_name,get_id[0].get("id"))
         else:
-            form = Role.objects.create(roles=role_name,name=permission,select=True,org_id=id)       
+            form = Role.objects.create(roles=role_name,select=True,org_id=id)
             form.save()
+            insertIntoOrgnisationPermission(permission,role_name,form.id)
     return render(request,'user_management_templates/add_user_role.html')
 
-def listRole(request):
+#List Role
+def listRole(request,role_name):
     user_roles = []
     if request.method == "GET":
-        roledata = list(Role.objects.values())
+        roledata = list(OrganisationPermission.objects.values())
     if request.method == "POST":
         id_list = request.POST.getlist('boxes')
         #Uncheck All Events
@@ -168,7 +173,7 @@ def listRole(request):
         for x in id_list:
             Role.objects.filter(pk=int(x)).update(select=True)
 
-        data = list(Role.objects.values())
+        data = list(OrganisationPermission.objects.values())
         for value in data:
             if value['select'] == True:
                 user_roles.append(value)
@@ -179,33 +184,33 @@ def listRole(request):
     return render(request,'user_management_templates/list_role.html',context)
 
 
+#Update Role
+def updateRole(request,name):
+    role_data = list(OrganisationPermission.objects.filter(role_name=name).values())
 
-def updateRole(request,id):
-    role_data = list(Role.objects.filter(pk=id).values())
     if request.method == "POST":
-        role = request.POST['roles']
-        name = request.POST['name']
-        print(name,role)
-        data = Role.objects.filter(id=id).update(roles=role, name= name)
-        role_data = [{"roles": role,"name": name}]
-        return render(request,'user_management_templates/update_role.html',{'form': role_data})
+        role_name = request.POST['role_name']
+        permission_name = request.POST['permission_name']
+        data = OrganisationPermission.objects.filter(role_name=role_data).update(role_name=role_name,permission_name=permission_name)
 
-    role_data =list(Role.objects.filter(pk=id).values())
+        role_data = [{"role_name": role_name, 'permission_name':permission_name }]
+        return render(request,'user_management_templates/update_role.html',{'form': role_data, })
+    role_data =list(OrganisationPermission.objects.filter(role_name=name).values())
     return render(request,'user_management_templates/update_role.html',{'form': role_data})
 
+#Delete Role
 def deleteRole(request,id):
     try:
-        pi = Role.objects.get(pk=id)
+        pi = OrganisationPermission.objects.get(pk=id)
         if request.method == 'POST':
             pi.delete()
             return redirect('user_management:getrole')
-
         context={}
         return render(request, "user_management_templates/list_role.html", context)
     except Exception as e:
         print("Error While deleting Record",e)
 
-
+#List User Role
 def listedUserRole(request):
     try:
         user_multiple_role = listRole(request)
@@ -217,25 +222,26 @@ def listedUserRole(request):
     except Exception as e:
         print("Error While deleting Record",e)
 
-
+#Get Organisation Details
 def orgUserinfo(request,id):
     try:
         if request.method == "GET":
             user_multiple_role = getOrgUserInfo(id)
             data = Organisation.objects.get(pk=id)
-            orgprofiledata = getOrgProfiles(id)
-            multipleOrg_role = organisationmultiplePermission(id)
+            org_profile_data = getOrgProfiles(id)
+            multiple_org_role = organisationmultiplePermission(id)
             roles = list(Role.objects.filter(org_id=id).values())
 
+        else:
+            if request.method == "POST":
+                disable_user = removeUserFromOrg(False,id,str(request.get_full_path()).split("=").pop())
         context = {
             'user_org_list': user_multiple_role,
             'data':data,
-            'orgprofiledata': orgprofiledata,
+            'orgprofiledata': org_profile_data,
             'roles': roles,
-            'multipleOrg_role': multipleOrg_role
+            'multipleOrg_role': multiple_org_role,
         }
         return render(request,"user_management_templates/user_org_list.html",context)        
     except Exception as e:
         print("Error While deleting Record",e)
-
-

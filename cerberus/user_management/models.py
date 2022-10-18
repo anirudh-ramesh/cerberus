@@ -1,4 +1,3 @@
-from email.policy import default
 from django.db import models
 import datetime
 
@@ -31,13 +30,12 @@ class OrganisationProfile(models.Model):
 
 
 class Role(models.Model):
-    name = models.CharField(max_length= 50, default='')
     roles= models.CharField(max_length= 225, default='')
     select = models.BooleanField(default=False)
     org_id = models.CharField(max_length=100, default='')
 
     def __str__(self):
-        return self.roles
+        return self.roles.upper()
 
 class Organisation(models.Model):
     serial_number = models.CharField(max_length=100, default='',primary_key=True)
@@ -58,5 +56,5 @@ class OrganisationPermission(models.Model):
     role_name = models.CharField(max_length=225, default='')
 
     def __str__(self):
-        return self.role_name 
+        return self.role_name.upper()
     

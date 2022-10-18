@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="row">
-    <div class="col-sm-6 offset">
+    <div class="col-sm-8 offset">
         <h4 class="alert alert-info">{{data}}</h4>
         <form action="" method="GET">
             {% csrf_token %}
@@ -15,6 +15,7 @@
                         <th scope="col">Email</th>
                         <th scope="col">Username</th>
                         <th scope="col">Role</th>
+                        <th scope="col">Action</th>
                     </tr>
                     <tbody>
                     {% for fm in user_org_list %}
@@ -22,8 +23,14 @@
                         <td>{{fm.email}}</td>
                         <td>{{fm.username}}</td>
                         <td>{{fm.role}}</td>
+                        <td>
+                        <form action="{% url 'user_management:list' fm.id  %}?email={{fm.email}}" method="POST">
+                          {% csrf_token %}
+                          <input type="submit" class="btn btn-danger btn-sm" value="Remove">
+                        </form>
+                        </td>
                     </tr>
-                    {% endfor %}
+                    {% endfor %}                    
                     </tbody>
                     </thead>
                 </table>
@@ -91,8 +98,7 @@
         {% endif %}
 
         <h4 >Organisation Roles</h4>
-            {% if roles %}
-                <!-- {{fm.label_tag}} {{fm}} {{fm.errors|striptags}} <br><br> -->
+            {% if multipleOrg_role %}
                 <table class="table table-hover">
                     <thead>
                       <tr>
@@ -104,9 +110,21 @@
                         <tr>
                           <td class="">{{fm.role_name}}</td>                      
                         </tr>
-                        <tr>
-                          <td class="">{{fm.permission_name}}</td>                      
+                        <tr class="permission">
+                           {% for data in fm.permission_name %} 
+                            <td>{{data}}</td> 
+                            {% endfor %}                     
                         </tr>
+                          {% for fm in form %}
+                          {% endfor %}
+                        <td>
+                          <a href="{% url 'user_management:updaterole' fm.role_name %}" class="btn btn-secondary btn-sm">Edit</a>
+                          
+                          <form action="{% url 'user_management:deleterole' fm.role_id %}" method="POST" class="d-inline">
+                              {% csrf_token %}
+                            <input type="submit" class="btn btn-danger btn-sm" value="Delete">
+                          </form>
+                      </td>
                       {% endfor %}
                     </tbody>
                     </thead>

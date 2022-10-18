@@ -1,5 +1,5 @@
 Django==4.1
-psycopg2>=2.8
+psycopg2-binary>=2.8
 msal
 django-allauth
 requests

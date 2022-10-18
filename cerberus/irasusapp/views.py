@@ -5,47 +5,11 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .forms import BatteryDetailsFrom, CreateUserForm
 from .models import Crmuser, BatteryDetail
 from django.contrib import messages
+from django.db.utils import IntegrityError
 from django.contrib.auth import logout
 import psycopg2 as db
 from django.contrib.auth.hashers import make_password, check_password
 from .auth_helper import getSignInFlow, getTokenFromCode,getToken,getMsalApp,removeUserAndToken, storeUser
-
-
-
-# em=''
-# uname = ''
-# con = ''
-# pwd = ''
-# pwd_con = ''
-# is_admin = ''
-# def register(request):
-#     global em,uname,con,pwd,pwd_con
-#     if request.method=="POST":
-#         conn=db.connect(host="localhost",user="postgres",password="1234",database='battery_management')
-#         cursor=conn.cursor()
-#         d=request.POST
-        
-#         for key,value in d.items():
-#             if key=="email":
-#                 em=value
-#             if key=="username":
-#                 uname=value
-#             if key=="contact":
-#                 con=value
-#             if key=="password":
-#                 pwd=make_password(value)
-#             if key=="password_conformation":
-#                 pwd_con=make_password(value)
-        
-#         # last_login = datetime.now()
-#         is_admin = False
-#         c="INSERT INTO irasusapp_crmuser Values('{}','{}','{}','{}','{}','{}')".format(em,uname,con,pwd,pwd_con,is_admin)
-#         print(c, "======><><><><><")
-#         cursor.execute(c)
-#         conn.commit()
-#         return redirect('login')
-
-#     return render(request,'register.html')
 
 
 def register(request):
@@ -86,9 +50,9 @@ def loginPage(request):
                 return redirect('home')
             else:
                 messages.info(request, "Username or Password Inccorect")
-                # pass
+                return redirect('login')
         else:
-            messages.info(request, "Username or Password Inccorect")
+            messages.info(request, "User not Found")
 
     return render(request,'login.html')  
 
@@ -102,22 +66,45 @@ def forgotPassword(request):
 
 #Add_Battery_details
 def batteryDetails(request):
-    if request.method == "POST":
-        fm = BatteryDetailsFrom(request.POST)
-        if fm.is_valid():
-            fm.save()
-            fm = BatteryDetailsFrom()
-    else:
-        fm = BatteryDetailsFrom()
-    context = {'submit_data': fm }
-    return render(request,'dashboard.html', context)
+    try:
+        serial_num = request.POST.get('battery_serial_num')
+        if BatteryDetail.objects.filter(battery_serial_num=serial_num):
+            messages.warning('Details Already Added')
+
+        if request.method == "POST":
+            formData = BatteryDetail.objects.create(
+                model_name = request.POST['model_name'],
+                battery_serial_num = request.POST['battery_serial_num'],
+                battery_type = request.POST['battery_type'],
+                bms_type = request.POST['bms_type'],
+                iot_type = request.POST['iot_type'],
+                iot_imei_number = request.POST['iot_imei_number'],
+                sim_number = request.POST['sim_number'],
+                warrenty_start_date = request.POST['warrenty_start_date'],
+                warrenty_duration = request.POST['warrenty_duration'],
+                assigned_owner = request.POST['assigned_owner'],
+                status = request.POST['status'],
+                battery_cell_chemistry = request.POST['battery_cell_chemistry'],
+                battery_pack_nominal_voltage = request.POST['battery_pack_nominal_voltage'],
+                battery_pack_nominal_charge_capacity = request.POST['battery_pack_nominal_charge_capacity'],
+                charging_status = request.POST['charging_status']
+            )
+            formData.save()
+        return render(request,'dashboard.html')
+    except Exception as e:
+        print("Server Error")
+
+    
 
 #Get_Battery_details
 def getBatteryDetails(request):
-    if request.method == "GET":
-        data = list(BatteryDetail.objects.values())
-    context = {'battery_data': data }
-    return render(request, 'battery_details.html',context)
+    try:
+        if request.method == "GET":
+            data = list(BatteryDetail.objects.values())
+        context = {'battery_data': data }
+        return render(request, 'battery_details.html',context)
+    except Exception as e:
+        messages.warning("Internal server error")
 
 #This Function Will Update_Battery_details/Edit
 def updateBatteryDetails(request, id):
@@ -205,18 +192,3 @@ def userSignin(request):
         CreateUserForm()
     context = { 'form': form }
     return render(request, 'login.html', context)
-
-
-def userLogin(request):
-    pass
- 
-#USERPERMISSIONS ========
-
-# def userPermission(request):
-#     try:
-#         if request.method == "POST":
-#             form = UserPermissionFrom(request.method)
-#             form.is_valid()
-#             form.save()
-#     except Exception as e:
-#         print(e)

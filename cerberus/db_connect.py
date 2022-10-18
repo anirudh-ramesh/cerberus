@@ -3,11 +3,12 @@ import psycopg2 as db
 def connect():
     conn=db.connect(host="localhost",user="postgres",password="1234",database='battery_management')
     return conn
-    
+
+#List Organisation User  
 def sql_query(id):
     conn=connect()
     cursor=conn.cursor()
-    sql= f"SELECT email FROM irasusapp_crmuser WHERE NOT EXISTS (SELECT email,serial_number FROM user_management_organisation_user_role WHERE user_management_organisation_user_role.serial_number = '{id}' AND irasusapp_crmuser.email = user_management_organisation_user_role.email) AND irasusapp_crmuser.is_admin=True;"
+    sql= f"SELECT email FROM irasusapp_crmuser WHERE NOT EXISTS (SELECT email,serial_number FROM user_management_organisation_user_role WHERE user_management_organisation_user_role.serial_number = '{id}' AND irasusapp_crmuser.email = user_management_organisation_user_role.email);"
     cursor.execute(sql)
     myresult = cursor.fetchall()
     new_data=[]
@@ -16,30 +17,29 @@ def sql_query(id):
     cursor.close()    
     return new_data
 
-def inset_into_db(data,id,role):
+#Insert User Into Orgnisation
+def inset_into_db(data,id,role,select):
     conn=connect()
     cursor=conn.cursor()
-    query = 'INSERT INTO user_management_organisation_user_role(serial_number,email,id) \
-    VALUES(%s,%s,%s) '                                                         
+    query = 'INSERT INTO user_management_organisation_user_role(serial_number,email,id,user_status) \
+    VALUES(%s,%s,%s,%s)'                                                         
     my_data = []
     for row in data:
-        my_data.append((id,row,str(role)))
+        my_data.append((id,row,str(role),select))
     cursor.executemany(query, my_data)
     conn.commit()
     cursor.close()
     return 
 
-
+#List Organisation Info
 def getOrgUserInfo(id):
     conn=connect()
-
     cursor=conn.cursor()
-    # sql= f"SELECT email,username, FROM irasusapp_crmuser WHERE EXISTS (SELECT email,serial_number,id FROM user_management_organisation_user_role WHERE user_management_organisation_user_role.serial_number = '{id}' AND irasusapp_crmuser.email = user_management_organisation_user_role.email);"
     sql = f"SELECT \
     irasusapp_crmuser.email,irasusapp_crmuser.username,user_management_organisation_user_role.id \
     FROM irasusapp_crmuser \
     LEFT JOIN user_management_organisation_user_role ON irasusapp_crmuser.email = user_management_organisation_user_role.email \
-    WHERE user_management_organisation_user_role.serial_number='{id}'"
+    WHERE user_management_organisation_user_role.serial_number='{id}'AND user_management_organisation_user_role.user_status=True"
     cursor.execute(sql)
     myresult = cursor.fetchall()
     my_data = []
@@ -49,11 +49,12 @@ def getOrgUserInfo(id):
         res["email"]=row[0]
         res["username"]=row[1]
         res["role"]=row[2]
+        res["id"]=id
         my_data.append(res)
     cursor.close()
     return my_data
 
-
+#Add Organisation Profile Data
 def orgProfileAddData(id,orgprofile_id):
     conn=connect()
     cursor = conn.cursor()
@@ -65,6 +66,7 @@ def orgProfileAddData(id,orgprofile_id):
     cursor.close()
     return
 
+#List Organisation Profile
 def getOrgProfiles(id):
     conn=connect()
     cursor=conn.cursor()
@@ -102,6 +104,7 @@ def getOrgProfiles(id):
     cursor.close()
     return new_data
 
+#List Organisation Role
 def getOrgRoles(id):
     conn=connect()
     cursor=conn.cursor()
@@ -109,7 +112,7 @@ def getOrgRoles(id):
     * \
     FROM user_management_role \
     LEFT JOIN user_management_organisation_organisation_profile ON user_management_role.id = user_management_organisation_organisation_profile.organisationprofile_id \
-    WHERE user_management_organisation_organisation_profile.organisation_id='{id}'"
+    WHERE user_management_organisation_organisation_profile.organisation_id='{id}' AND "
     cursor.execute(sql)
     myresult = cursor.fetchall()
     new_data = []
@@ -139,6 +142,7 @@ def getOrgRoles(id):
     cursor.close()
     return new_data
 
+#Update Organisation User
 def orgUserUpdateData(role,serial_number,email):
     conn=connect()
     cursor = conn.cursor()
@@ -148,6 +152,7 @@ def orgUserUpdateData(role,serial_number,email):
     cursor.close()
     return
 
+#List Organisation Permission
 def organisationmultiplePermission(id):
     conn=connect()
     cursor=conn.cursor()
@@ -171,15 +176,38 @@ def organisationmultiplePermission(id):
             res['role_id'] = row[2]
             my_data.append(res)
             role_name.append(row[1])
+
     return my_data
 
-def insertIntoOrgnisationPermission(permission_name,role_name,role_id):
+#Insert Organisation Permission
+def insertIntoOrgnisationPermission(permission_name,role_name,id):
     conn=connect()
     cursor = conn.cursor()
     sql = 'INSERT INTO user_management_organisationpermission(permission_name,role_name,role_id) \
     VALUES(%s,%s,%s)'
-    my_data = (permission_name,role_name,role_id)
+    my_data = (permission_name,role_name,id)
     cursor.execute(sql, my_data)
+    conn.commit()
+    cursor.close()
+    return
+
+#Update Organisation Permission
+def updateOrgAssignPermission(permission_name,role_name,id):
+    conn=connect()
+    cursor = conn.cursor()
+    sql = f"UPDATE user_management_organisationpermission set permission_name='{permission_name}', role_name='{role_name}' WHERE id ='{id}';"
+    my_data = (permission_name,role_name,id)
+    cursor.execute(sql,my_data)
+    conn.commit()
+    cursor.close()
+    return
+
+#Remove User From Organisation
+def removeUserFromOrg(select,serial_number,email):
+    conn=connect()
+    cursor = conn.cursor()
+    sql = f"UPDATE user_management_organisation_user_role set user_status='{select}' WHERE serial_number ='{serial_number}' AND email='{email}' ;"
+    cursor.execute(sql)
     conn.commit()
     cursor.close()
     return
