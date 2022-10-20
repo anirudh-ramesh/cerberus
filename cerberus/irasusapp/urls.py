@@ -19,7 +19,10 @@ urlpatterns= [
     path('reset<uidb64>/<token>', auth_views.PasswordResetConfirmView.as_view(template_name="password_reset_form.html"), name="password_reset_confirm"),
     path('reset_password_complete/', auth_views.PasswordResetCompleteView.as_view(template_name="password_reset_done.html"), name="password_reset_complete"),
 
-
+    path('addvehicle/', views.addVehicalDetails, name='addvehicle'),
+    path('getvehicle/', views.getVehicleDetails, name='getvehicle'),
+    path('updatevehicle/<int:id>/', views.updateVehicleDetails, name='updatevehicle'),
+    path('deletevehicle/<int:id>/', views.deleteVehicleRecord, name='deletevehicle')
     
     # path('add_permission/', views.userPermission, name="addpermission")
 ]

@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from datetime import datetime 
 # from .mixins import MessageHandler
 from .forms import CreateUserForm
-from .models import Crmuser, BatteryDetail
+from .models import Crmuser, BatteryDetail, Vehicle
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.hashers import make_password, check_password
@@ -220,3 +220,84 @@ def userSignin(request):
         CreateUserForm()
     context = { 'form': form }
     return render(request, 'login.html', context)
+
+#Add Organisation Profile
+def addVehicalDetails(request): 
+    if request.method == "POST":
+        formData = Vehicle.objects.create(
+            vehicle_model_name = request.POST['vehicle_model_name'],
+            chasis_number = request.POST['chasis_number'],
+            configuration = request.POST['configuration'],
+            vehicle_choice = request.POST['vehicle_choice'],
+            vehicle_iot_imei_number = request.POST['vehicle_iot_imei_number'],
+            vehicle_sim_number = request.POST['vehicle_sim_number'],
+            vehicle_warrenty_start_date = datetime.strptime(request.POST['vehicle_warrenty_start_date'], format),
+            vehicle_warrenty_end_date = datetime.strptime(request.POST['vehicle_warrenty_end_date'], format),
+            assigned_owner = request.POST['assigned_owner'],
+            insurance_start_date = datetime.strptime(request.POST['insurance_start_date'], format),
+            insurance_end_date = datetime.strptime(request.POST['insurance_start_date'], format)   
+        )
+        formData.save()
+    return render(request,'add_vehicle_details.html')
+
+def getVehicleDetails(request):
+    if request.method == "GET":
+        vehicle_data = list(Vehicle.objects.values())
+    context = {
+        'vehicle_data': vehicle_data
+    }
+    return render(request, 'list_vehicle_details.html',context)
+
+def updateVehicleDetails(request,id):
+    update_vehicle = list(Vehicle.objects.filter(chasis_number=id).values())
+
+    if request.method == "POST":
+        vehicle_model_name = request.POST['vehicle_model_name']
+        chasis_number = request.POST['chasis_number']
+        configuration = request.POST.get('configuration')
+        vehicle_choice = request.POST['vehicle_choice']
+        vehicle_iot_imei_number = request.POST['vehicle_iot_imei_number']
+        vehicle_sim_number = request.POST['vehicle_sim_number']
+        vehicle_warrenty_start_date = datetime.strptime(request.POST['vehicle_warrenty_start_date'], format)
+        vehicle_warrenty_end_date = datetime.strptime(request.POST['vehicle_warrenty_end_date'], format)
+        assigned_owner = request.POST['assigned_owner']
+        insurance_start_date = datetime.strptime(request.POST['insurance_start_date'], format)
+        insurance_end_date = datetime.strptime(request.POST['insurance_start_date'], format)
+
+        data = Vehicle.objects.filter(chasis_number=id).update(
+            vehicle_model_name=vehicle_model_name, chasis_number=chasis_number,
+            configuration=configuration,vehicle_choice=vehicle_choice,
+            vehicle_iot_imei_number=vehicle_iot_imei_number,vehicle_sim_number=vehicle_sim_number,
+            vehicle_warrenty_start_date=vehicle_warrenty_start_date,vehicle_warrenty_end_date=vehicle_warrenty_end_date,
+            assigned_owner=assigned_owner,insurance_start_date=insurance_start_date,
+            insurance_end_date=insurance_end_date
+        )
+
+        update_vehicle = [{
+            'vehicle_model_name':vehicle_model_name,
+            'chasis_number':chasis_number,'vehicle_choice': vehicle_choice,
+            'vehicle_iot_imei_number': vehicle_iot_imei_number,
+            'configuration': configuration,'vehicle_sim_number': vehicle_sim_number,
+            'vehicle_warrenty_start_date': vehicle_warrenty_start_date,
+            'vehicle_warrenty_end_date': vehicle_warrenty_end_date,'assigned_owner': assigned_owner,
+            'insurance_start_date': insurance_start_date,
+            'insurance_end_date': insurance_end_date
+        }]
+        print(update_vehicle, "OBJ DATA THAT UPDATE")
+
+        return render(request,'update_vehicle.html',{'update_vehicle_data': update_vehicle })
+
+    update_vehicle = list(Vehicle.objects.filter(chasis_number=id).values())
+    return render(request,'update_vehicle.html',{'update_vehicle_data': update_vehicle })
+
+#Delete_Record
+def deleteVehicleRecord(request,id):
+    try:
+        pi = Vehicle.objects.get(pk=id)
+        if request.method == 'POST':
+            pi.delete()
+            return redirect('getvehicle')
+        context = {}
+        return render(request, "list_vehicle_details.html", context)
+    except Exception as e:
+        print("Error While deleting Record",e)
