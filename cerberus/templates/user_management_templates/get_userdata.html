@@ -28,6 +28,10 @@
                                 {% csrf_token %}
                               <input type="submit" class="btn btn-danger" value="Delete">
                             </form>
+
+                            <a href="{% url 'getvehicle' %}?email={{fm.email}}" class="btn btn-warning btn-sm">Assigned Vehicle</a>
+
+                            <a href="" class="btn btn-warning btn-sm">List Vehicle</a>
                           </td>
                       </tr>
                       

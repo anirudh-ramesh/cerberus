@@ -11,6 +11,7 @@
                 <table class="table table-hover">
                     <thead>
                       <tr>
+                        <th scope="col">Select Vehicle</th>
                         <th scope="col">Vehicle Model Name</th>
                         <th scope="col">Chasis Number</th>
                         <th scope="col">Vehicle Configuration</th>
@@ -27,6 +28,17 @@
                     <tbody>
                     {% for fm in vehicle_data %}
                         <tr>
+                          <td>
+                            {% if fm.vehicle_selected %}
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" checked="checked" value="{{fm}}" name="vehicle_selected">
+                            </div>
+                            {% else %}
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" value="{{fm}}" name="vehicle_selected">
+                            </div>
+                            {% endif %}
+                          </td>
                             <td>{{fm.vehicle_model_name}}</td>
                             <td>{{fm.chasis_number}}</td>
                             <td>{{fm.configuration}}</td>
@@ -50,6 +62,11 @@
                             <a href="{% url 'data' %}?chasis_number={{fm.chasis_number}}" class="btn btn-warning btn-sm">Assigned</a>
 
                             <a href="{% url 'assinged' fm.chasis_number %}" class="btn btn-secondary btn-sm">List Battery</a>
+
+                            <form action="{% url 'getvehicle' %}?assigned_to_id={{email_id}}&=chasis_number={{fm.chasis_number}}" method="POST" class="d-inline">
+                              {% csrf_token %}
+                            <input type="submit" class="btn btn-info" value="Assigned-To-User">
+                            </form>
                           </td>              
                         </tr>
                       

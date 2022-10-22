@@ -138,7 +138,8 @@ class Vehicle(models.Model):
     assigned_owner = models.CharField(max_length=225, default='')
     insurance_start_date = models.DateField(default='',blank=True,null=True)
     insurance_end_date = models.DateField(default='',blank=True, null=True)
-    
+    vehicle_selected = models.BooleanField(default=False)
+    assigned_to = models.ForeignKey(Crmuser,default=None,on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return str(self.vehicle_model_name)

@@ -257,12 +257,22 @@ def addVehicalDetails(request):
     return render(request,'add_vehicle_details.html')
 
 def getVehicleDetails(request):
+    assigned_to_user = str(request.get_full_path()).split("?").pop()
+    email_id = assigned_to_user.split("=").pop()
     if request.method == "GET":
         vehicle_data = list(Vehicle.objects.values())
-    context = {
-        'vehicle_data': vehicle_data
-    }
-    return render(request, 'list_vehicle_details.html',context)
+    
+    #Assigned Vehicle To User
+    if request.method == "POST":
+        assigned_to_user = str(request.get_full_path()).split("?").pop()
+        email_id = assigned_to_user.split("&")[0].split("=")[1]
+        vehicle_id = assigned_to_user.split('&')[1].split("=")[2]
+        vehicle_data= list(Vehicle.objects.filter(chasis_number = vehicle_id).values())
+        for x in vehicle_data:
+            demo = Vehicle.objects.filter(pk=int(x['chasis_number'])).update(assigned_to_id=str(email_id), vehicle_selected=True)
+            return redirect('getvehicle')
+
+    return render(request, 'list_vehicle_details.html', {'vehicle_data':vehicle_data , 'email_id': email_id })
 
 def updateVehicleDetails(request,id):
     update_vehicle = list(Vehicle.objects.filter(chasis_number=id).values())
