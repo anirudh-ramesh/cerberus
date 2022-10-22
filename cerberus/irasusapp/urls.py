@@ -3,6 +3,9 @@ from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
 
+
+# app_name = 'irasusapp'
+
 urlpatterns= [
         path('register/', views.register, name="register"),
         path('', views.loginPage, name="login"),
@@ -11,7 +14,7 @@ urlpatterns= [
 
     path('dashboard/', views.batteryDetails, name="home"),
     path('signin', views.signIn, name='signin'),
-    path('getdata/', views.getBatteryDetails, name='data'),
+    path(r'getdata', views.getBatteryDetails, name='data'),
     path('update/<int:id>/', views.updateBatteryDetails, name="updatedata"),
     path('delete/<int:id>/', views.deleteRecord, name="deletedata"),
     path('reset_password/', auth_views.PasswordResetView.as_view(template_name="password_reset.html"), name="password_reset"),
@@ -22,7 +25,8 @@ urlpatterns= [
     path('addvehicle/', views.addVehicalDetails, name='addvehicle'),
     path('getvehicle/', views.getVehicleDetails, name='getvehicle'),
     path('updatevehicle/<int:id>/', views.updateVehicleDetails, name='updatevehicle'),
-    path('deletevehicle/<int:id>/', views.deleteVehicleRecord, name='deletevehicle')
+    path('deletevehicle/<int:id>/', views.deleteVehicleRecord, name='deletevehicle'),
     
-    # path('add_permission/', views.userPermission, name="addpermission")
+    
+    path(r'assigned/<int:id>', views.assignedBatteryList, name="assinged")
 ]

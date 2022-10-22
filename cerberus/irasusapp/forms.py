@@ -1,8 +1,6 @@
-from .models import BatteryDetail, Crmuser
+from .models import BatteryDetail, Crmuser, Vehicle
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django.forms import ModelForm
-from django.conf import settings
 
 class CreateUserForm(forms.ModelForm):
     class Meta:
@@ -22,3 +20,11 @@ class BatteryDetailsFrom(forms.ModelForm):
         self.fields['model_name'].empty_label = "Select"
         self.fields['bms_type'].empty_label = "Select"
         self.fields['battery_serial_num'].required = True
+
+class VehicleDetailsForm(forms.ModelForm):
+    class Meta:
+        model = Vehicle
+        fields = ['vehicle_model_name','chasis_number',
+        'configuration','vehicle_choice','vehicle_iot_imei_number',
+        'vehicle_iot_imei_number','vehicle_sim_number','vehicle_warrenty_start_date',
+        'vehicle_warrenty_end_date','assigned_owner','insurance_start_date','insurance_end_date']

@@ -1,4 +1,5 @@
 # Create your models here.
+from email.policy import default
 from django.db import models
 import datetime
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
@@ -112,6 +113,37 @@ class Crmuser(AbstractBaseUser):
             return False  
 
 
+CONFIGURATION = (
+    ('48V','48V'),
+    ('60V','60V'),
+    ('72V','72V'),
+)
+
+VEHICLE = (
+    ('2W-L', '2W-L'),
+    ('2W-H','2W-H'),
+    ('3W-Erickshaw','3W-Erickshaw'),
+    ('3W-Loader','3W-Loader'),
+)
+
+class Vehicle(models.Model):
+    vehicle_model_name = models.CharField(max_length=225, default='')
+    chasis_number = models.CharField(max_length=225, default='',primary_key=True)
+    configuration = models.CharField(max_length=20, default='', choices=CONFIGURATION)
+    vehicle_choice = models.CharField(max_length=225, default='', choices=VEHICLE)
+    vehicle_iot_imei_number = models.CharField(max_length=100)
+    vehicle_sim_number = models.CharField(max_length=20)
+    vehicle_warrenty_start_date = models.DateField(default='',blank=True,null=True)
+    vehicle_warrenty_end_date = models.DateField(default='',blank=True, null=True)
+    assigned_owner = models.CharField(max_length=225, default='')
+    insurance_start_date = models.DateField(default='',blank=True,null=True)
+    insurance_end_date = models.DateField(default='',blank=True, null=True)
+    
+
+    def __str__(self):
+        return str(self.vehicle_model_name)
+
+
 MODEL_CHOICES = (
     ('igtblu','IGTBLU'),
     ('igtred','IGTRED'),
@@ -159,40 +191,8 @@ class BatteryDetail(models.Model):
     battery_pack_nominal_voltage = models.CharField(max_length=50, default='')
     battery_pack_nominal_charge_capacity = models.CharField(max_length=50, default='')
     charging_status = models.CharField(max_length=50, default='')
-
+    vehicle_assign = models.ForeignKey(Vehicle, on_delete=models.CASCADE, null=True, blank=True)
+    is_assigned = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.model_name)
-
-    def __str__(self) -> str:
-        return f"{self.warrenty_start_date.strftime('%Y-%m-%d')}"
-
-CONFIGURATION = (
-    ('48V','48V'),
-    ('60V','60V'),
-    ('72V','72V'),
-)
-
-VEHICLE = (
-    ('2W-L', '2W-L'),
-    ('2W-H','2W-H'),
-    ('3W-Erickshaw','3W-Erickshaw'),
-    ('3W-Loader','3W-Loader'),
-)
-
-class Vehicle(models.Model):
-    vehicle_model_name = models.CharField(max_length=225, default='')
-    chasis_number = models.CharField(max_length=225, default='',primary_key=True)
-    configuration = models.CharField(max_length=20, default='', choices=CONFIGURATION)
-    vehicle_choice = models.CharField(max_length=225, default='', choices=VEHICLE)
-    vehicle_iot_imei_number = models.CharField(max_length=100)
-    vehicle_sim_number = models.CharField(max_length=20)
-    vehicle_warrenty_start_date = models.DateField(default='',blank=True,null=True)
-    vehicle_warrenty_end_date = models.DateField(default='',blank=True, null=True)
-    assigned_owner = models.CharField(max_length=225, default='')
-    insurance_start_date = models.DateField(default='',blank=True,null=True)
-    insurance_end_date = models.DateField(default='',blank=True, null=True)
-    battery_assign = models.ForeignKey(BatteryDetail, on_delete=models.CASCADE, blank=True, null=True)
-
-    def __str__(self):
-        return str(self.vehicle_model_name)

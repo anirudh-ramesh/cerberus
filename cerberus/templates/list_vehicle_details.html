@@ -4,7 +4,7 @@
 
 {% include 'status.html' %}
 
-<div class="col-sm-8">
+<div class="col-sm-12">
     <h4 class="text-center alert alert info">Vehicle Profile</h4>
     <form action="" method="GET">
         {% if vehicle_data %}
@@ -40,14 +40,17 @@
                             <td>{{fm.insurance_end_date}}</td>
                           
                             <td>
-                            <a href="{% url 'updatevehicle' fm.chasis_number %}" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="{% url 'updatevehicle' fm.chasis_number %}" class="btn btn-info btn-sm">Edit</a>
 
                             <form action="{% url 'deletevehicle' fm.chasis_number %}" method="POST" class="d-inline">
                                 {% csrf_token %}
                               <input type="submit" class="btn btn-danger" value="Delete">
                             </form>
-                          </td>
 
+                            <a href="{% url 'data' %}?chasis_number={{fm.chasis_number}}" class="btn btn-warning btn-sm">Assigned</a>
+
+                            <a href="{% url 'assinged' fm.chasis_number %}" class="btn btn-secondary btn-sm">List Battery</a>
+                          </td>              
                         </tr>
                       
                       {% endfor %}

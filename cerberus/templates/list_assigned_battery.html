@@ -7,7 +7,7 @@
 <div class="col-sm-8">
     <h4 class="text-center alert alert info">Battery Data</h4>
     <form action="" method="GET">
-        {% if battery_data %}
+        {% if assigned_battery_list %}
                 <table class="table table-hover">
                     <thead>
                       <tr>
@@ -30,9 +30,10 @@
                       </tr>
                     <tbody>
     
-                    {% for fm in battery_data %}
+                    {% for fm in assigned_battery_list %}
                       <tr>
                         <td>
+
                           {% if fm.is_assigned %}
                           <div class="form-check">
                             <input class="form-check-input" type="checkbox" checked="checked" value="{{fm}}" name="is_assigned">
@@ -57,16 +58,17 @@
                         <td>{{fm.battery_pack_nominal_charge_capacity}}</td>
                         <td>{{fm.charging_status}}</td>
                         <td>
-                          <a href="{% url 'updatedata' fm.battery_serial_num %}" class="btn btn-warning btn-sm">Edit</a>
-                          <form action="{% url 'deletedata' fm.battery_serial_num %}" method="POST" class="d-inline">
+
+                        {% if vehicle_assign_id %} 
+                          <form action="{% url 'assinged' fm.vehicle_assign_id %}?battery_serial_num={{fm.battery_serial_num}}" method="POST" class="d-inline">
                               {% csrf_token %}
-                            <input type="submit" class="btn btn-danger btn-sm" value="Delete">
+                            <input type="submit" class="btn btn-danger btn-sm" value="Remove">
                           </form>
-                          <form action="{% url 'data' %}?cahis_id={{cahis_id}}&battery_serial_num={{fm.battery_serial_num}}" method="POST">
-                            {% csrf_token %}
-                            <input type="submit" class="btn btn-secondary btn-sm" value="Add">
-                          </form>
+                        {% else %}
+                            <h4 class="text-center alert alert warning">No Assigned Battery Found</h4>
+                        {% endif %}
                         </td>
+
                       </tr>
                       {% endfor %}
                     </tbody>

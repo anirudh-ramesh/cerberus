@@ -1,7 +1,7 @@
 # Register your models here.
 
 from django.contrib import admin
-from .models import Crmuser
+from .models import BatteryDetail, Crmuser, Vehicle
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 
@@ -25,3 +25,5 @@ class UserAdmin(BaseUserAdmin):
     filter_horizontal = ()
 # Now register the new UserAdmin...
 admin.site.register(Crmuser, UserAdmin)
+admin.site.register(BatteryDetail)
+admin.site.register(Vehicle)

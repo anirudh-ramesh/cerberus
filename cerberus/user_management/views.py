@@ -84,7 +84,7 @@ def updateOranisation(request,id):
         fm = OrgasationForm(request.POST, instance=pi)
         if fm.is_valid():
             fm.save()
-        listuser = sql_query(id)    
+        listuser = sql_query(id)
     else:
         pi = Organisation.objects.get(pk=id)
         fm = OrgasationForm(instance=pi)

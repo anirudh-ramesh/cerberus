@@ -1,13 +1,15 @@
+from wsgiref.handlers import read_environ
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
-from datetime import datetime 
+from datetime import datetime
 # from .mixins import MessageHandler
-from .forms import CreateUserForm
+from .forms import CreateUserForm ,VehicleDetailsForm,BatteryDetailsFrom
 from .models import Crmuser, BatteryDetail, Vehicle
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.hashers import make_password, check_password
 from .auth_helper import getSignInFlow, getTokenFromCode,getToken,getMsalApp,removeUserAndToken, storeUser
+from db_connect import listAssignedBatteryVehicle
 
 format='%Y-%m-%d'
 
@@ -97,10 +99,24 @@ def batteryDetails(request):
 
 #Get_Battery_details
 def getBatteryDetails(request):
+    cahis_id=""
     try:
         if request.method == "GET":
             data = list(BatteryDetail.objects.values())
-        context = {'battery_data': data }
+            cahis_id = str(request.get_full_path()).split("=").pop()
+
+        # ASSIGNED BATTERY TO VEHICLE
+        if request.method == "POST":
+            vehicle_id = str(request.get_full_path()).split("?").pop()
+            cahis_id = vehicle_id.split('&')[0].split("=")[1]
+            battery_serial_id = vehicle_id.split('&')[1].split("=")[1]
+    
+            data = list(BatteryDetail.objects.filter(battery_serial_num=battery_serial_id).values())
+            for x in data:
+                demo = BatteryDetail.objects.filter(pk=int(x['battery_serial_num'])).update(vehicle_assign_id=str(cahis_id), is_assigned=True)
+            return redirect('data')
+            
+        context = { 'battery_data': data,"cahis_id": cahis_id }
         return render(request, 'battery_details.html',context)
     except Exception as e:
         messages.warning(request,"Internal server error")
@@ -301,3 +317,19 @@ def deleteVehicleRecord(request,id):
         return render(request, "list_vehicle_details.html", context)
     except Exception as e:
         print("Error While deleting Record",e)
+  
+def assignedBatteryList(request,id):
+    # Vehicle.objects.filter(chasis_number=id).values()
+    if request.method == "GET":
+        data = listAssignedBatteryVehicle(id)
+
+    if request.method == "POST": 
+        data = listAssignedBatteryVehicle(id)
+        assigned_vehicle_battery = Vehicle.objects.filter(chasis_number=id)
+        for x in data:
+            data = BatteryDetail.objects.filter(pk=x['battery_serial_num']).update(vehicle_assign_id=None, is_assigned=False)
+
+    context = {
+        'assigned_battery_list' : data
+    }
+    return render(request, 'list_assigned_battery.html',context)
