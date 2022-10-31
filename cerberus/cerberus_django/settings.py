@@ -79,6 +79,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'cerberus_django.wsgi.application'
 
+AUTH_USER_MODEL = ''
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -139,6 +140,25 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
+
+# EMail Configuration
+
+MAIL_SERVER_HOSTNAME = os.environ.get('MAIL_SERVER_HOSTNAME')
+MAIL_SERVER_PORTNUMBER = os.environ.get('MAIL_SERVER_PORTNUMBER')
+MAIL_SERVER_SECURITYFLAG = os.environ.get('MAIL_SERVER_SECURITYFLAG')
+MAIL_SERVER_USERNAME = os.environ.get('MAIL_SERVER_USERNAME')
+MAIL_SERVER_PASSWORD = os.environ.get('MAIL_SERVER_PASSWORD')
+
+# 
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
