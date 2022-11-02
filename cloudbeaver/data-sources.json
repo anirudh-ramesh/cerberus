@@ -1,51 +1,24 @@
 {
 	"folders": {},
 	"connections": {
-		"timescaledb": {
+		"postgresql-template-1": {
 			"provider": "postgresql",
 			"driver": "postgres-jdbc",
-			"name": "timescaledb",
-			"save-password": true,
-			"show-system-objects": true,
-			"read-only": false,
+			"name": "PostgreSQL (Template)",
+			"save-password": false,
+			"show-system-objects": false,
+			"read-only": true,
+			"template": true,
 			"configuration": {
-				"host": "timescaledb",
+				"host": "localhost",
 				"port": "5432",
-				"database": "DATABASE_NAME",
-				"url": "jdbc:postgresql://timescaledb:5432/DATABASE_NAME",
+				"database": "postgres",
+				"url": "jdbc:postgresql://localhost:5432/postgres",
 				"type": "dev",
 				"provider-properties": {
-					"@dbeaver-show-non-default-db@": "true"
-				},
-				"auth-model": "native"
+					"@dbeaver-show-non-default-db@": "false"
+				}
 			}
-		},
-		"mariadb": {
-			"provider": "mysql",
-			"driver": "mariaDB",
-			"name": "mariadb",
-			"save-password": true,
-			"show-system-objects": true,
-			"read-only": false,
-			"configuration": {
-				"host": "mariadb",
-				"port": "3306",
-				"database": "DATABASE_NAME",
-				"url": "jdbc:mysql://mariadb:3306/DATABASE_NAME",
-				"type": "dev",
-				"auth-model": "native"
-			}
-		}
-	},
-	"connection-types": {
-		"dev": {
-			"name": "Development",
-			"color": "255,255,255",
-			"description": "Regular development database",
-			"auto-commit": true,
-			"confirm-execute": false,
-			"confirm-data-change": false,
-			"auto-close-transactions": false
 		}
 	}
 }

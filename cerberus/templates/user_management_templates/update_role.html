@@ -1,0 +1,29 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-8 offset-2">
+        <h4 class="alert alert-info">Update Role</h4>
+            <form method="POST" action="">
+                {% csrf_token %}
+                {% for fm in form %}
+                    <div class="input-group mb-2">
+                        <div class="input-group-append">
+                            <label>Role name</label>
+                            <input type='text' name='role_name' value="{{fm.role_name}}" class="input-register-text" required>
+                        </div>
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="input-group-append">
+                            <label>Permission</label>
+                            <input type='text' name='permission_name' value="{{fm.permission_name}}" class="input-register-text" required>        
+                        </div>
+                    </div>
+                {% endfor %}
+                <input type="submit" class="btn btn-success mt-3" value="Update">
+                <a href="{% url 'user_management:listrole' %}" class="btn btn-info">Back to Details</a>
+            </form>          
+    </div>
+</div>
+{% endblock %}

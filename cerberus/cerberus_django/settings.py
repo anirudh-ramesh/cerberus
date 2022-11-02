@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'irasusapp',
+    'user_management',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -79,7 +81,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'cerberus_django.wsgi.application'
 
-AUTH_USER_MODEL = ''
+AUTH_USER_MODEL = 'irasusapp.Crmuser'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -139,7 +141,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
