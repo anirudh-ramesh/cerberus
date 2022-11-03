@@ -319,7 +319,6 @@ def updateVehicleDetails(request,id):
             'insurance_start_date': insurance_start_date,
             'insurance_end_date': insurance_end_date
         }]
-        print(update_vehicle, "OBJ DATA THAT UPDATE")
 
         return render(request,'update_vehicle.html',{'update_vehicle_data': update_vehicle })
 
@@ -373,7 +372,6 @@ def assignedVehicleToUser(request,id):
 
     #REMOVE VEHICLE FROM USER
     if request.method == "POST":
-        print("IN THE POST===============")
         assigned_vehicle = str(request.get_full_path()).split("?").pop()
         vehicle_id = assigned_vehicle.split("&")[0].split("=")[1]
         print(vehicle_id)
