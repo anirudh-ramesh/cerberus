@@ -1,5 +1,5 @@
 from django.utils import timezone
-from irasusapp.models import Crmuser
+from irasusapp.models import Crmuser, Vehicle
 from user_management.models import Organisation, OrganisationPermission, OrganisationProfile, Role
 from .forms import OrganisationProfileForm, UserCreatedByAdmin, OrgasationForm
 from django.shortcuts import render, redirect

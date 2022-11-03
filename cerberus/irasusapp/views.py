@@ -2,14 +2,16 @@ from wsgiref.handlers import read_environ
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from datetime import datetime
+from django.urls import reverse
+from user_management.models import Organisation
 # from .mixins import MessageHandler
-from .forms import CreateUserForm ,VehicleDetailsForm,BatteryDetailsFrom
+from .forms import CreateUserForm
 from .models import Crmuser, BatteryDetail, Vehicle
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.hashers import make_password, check_password
 from .auth_helper import getSignInFlow, getTokenFromCode,getToken,getMsalApp,removeUserAndToken, storeUser
-from db_connect import listAssignedBatteryVehicle
+from db_connect import listAssignedBatteryVehicle,assignedVehicleToOrganisation,getOrgAssignedVehicle,removeAssignedVehiclefromOrganisation,listAssignedVehicleToUser,removeUserVehicle
 
 format='%Y-%m-%d'
 
@@ -238,7 +240,7 @@ def userSignin(request):
     return render(request, 'login.html', context)
 
 #Add Organisation Profile
-def addVehicalDetails(request): 
+def addVehicleDetails(request): 
     if request.method == "POST":
         formData = Vehicle.objects.create(
             vehicle_model_name = request.POST['vehicle_model_name'],
@@ -258,6 +260,7 @@ def addVehicalDetails(request):
 
 def getVehicleDetails(request):
     assigned_to_user = str(request.get_full_path()).split("?").pop()
+    serial_number = assigned_to_user.split("=").pop()
     email_id = assigned_to_user.split("=").pop()
     if request.method == "GET":
         vehicle_data = list(Vehicle.objects.values())
@@ -265,6 +268,13 @@ def getVehicleDetails(request):
     #Assigned Vehicle To User
     if request.method == "POST":
         assigned_to_user = str(request.get_full_path()).split("?").pop()
+        serial_number = assigned_to_user.split("&")[0].split("=")[1]
+        chasis_number = assigned_to_user.split('&')[1].split("=")[2]
+
+        if serial_number:
+            assignedVehicleToOrganisation(serial_number,chasis_number)
+            return redirect('user_management:listorg')
+
         email_id = assigned_to_user.split("&")[0].split("=")[1]
         vehicle_id = assigned_to_user.split('&')[1].split("=")[2]
         vehicle_data= list(Vehicle.objects.filter(chasis_number = vehicle_id).values())
@@ -272,7 +282,7 @@ def getVehicleDetails(request):
             demo = Vehicle.objects.filter(pk=int(x['chasis_number'])).update(assigned_to_id=str(email_id), vehicle_selected=True)
             return redirect('getvehicle')
 
-    return render(request, 'list_vehicle_details.html', {'vehicle_data':vehicle_data , 'email_id': email_id })
+    return render(request, 'list_vehicle_details.html', {'vehicle_data':vehicle_data , 'email_id': email_id , 'serial_number': serial_number})
 
 def updateVehicleDetails(request,id):
     update_vehicle = list(Vehicle.objects.filter(chasis_number=id).values())
@@ -343,3 +353,31 @@ def assignedBatteryList(request,id):
         'assigned_battery_list' : data
     }
     return render(request, 'list_assigned_battery.html',context)
+
+def assignedOrgVehicleList(request,id):
+    org_vehicle_list = getOrgAssignedVehicle(id)
+        
+    #REMOVE VEHICLE FROM ORGANISATION
+    if request.method == "POST":
+        assigned_vehicle = str(request.get_full_path()).split("?").pop()
+        vehicle_id = assigned_vehicle.split("&")[0].split("=")[1]
+        remove_org_vehicle = removeAssignedVehiclefromOrganisation(id,vehicle_id)
+        return redirect('user_management:listorg')
+            
+    return render(request, 'list_organisation_vehicle.html',{'org_vehicle_list': org_vehicle_list})
+
+def assignedVehicleToUser(request,id):
+    user_vehicle =""
+    if request.method == "GET":
+        user_vehicle = listAssignedVehicleToUser(id)
+
+    #REMOVE VEHICLE FROM USER
+    if request.method == "POST":
+        print("IN THE POST===============")
+        assigned_vehicle = str(request.get_full_path()).split("?").pop()
+        vehicle_id = assigned_vehicle.split("&")[0].split("=")[1]
+        print(vehicle_id)
+        user_vehicle = removeUserVehicle(False,vehicle_id)
+        return redirect("user_management:getdata")
+
+    return render(request,'list_assigned_vehicle_to_user.html',{'user_vehicle':user_vehicle})

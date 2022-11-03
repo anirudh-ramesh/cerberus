@@ -22,11 +22,13 @@ urlpatterns= [
     path('reset<uidb64>/<token>', auth_views.PasswordResetConfirmView.as_view(template_name="password_reset_form.html"), name="password_reset_confirm"),
     path('reset_password_complete/', auth_views.PasswordResetCompleteView.as_view(template_name="password_reset_done.html"), name="password_reset_complete"),
 
-    path('addvehicle/', views.addVehicalDetails, name='addvehicle'),
+    path('addvehicle/', views.addVehicleDetails, name='addvehicle'),
     path(r'getvehicle', views.getVehicleDetails, name='getvehicle'),
     path('updatevehicle/<int:id>/', views.updateVehicleDetails, name='updatevehicle'),
     path('deletevehicle/<int:id>/', views.deleteVehicleRecord, name='deletevehicle'),
     
     
-    path(r'assigned/<int:id>', views.assignedBatteryList, name="assinged")
+    path(r'assigned/<int:id>', views.assignedBatteryList, name="assinged"),
+    path(r'orgvehicle/<int:id>', views.assignedOrgVehicleList, name="assingedtoorg"),
+    path(r'uservehicle/<str:id>', views.assignedVehicleToUser, name="uservehicle"),    
 ]
