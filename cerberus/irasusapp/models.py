@@ -1,6 +1,5 @@
 # Create your models here.
-from email.policy import default
-from django.db import models
+from django.contrib.gis.db import models
 import datetime
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.core.exceptions import ValidationError
@@ -112,6 +111,25 @@ class Crmuser(AbstractBaseUser):
         except:
             return False  
 
+CHOICE_TYPE = (
+    ('1', 'Entered'), 
+    ('2', 'Exit')
+)
+
+class Geofence(models.Model):
+    geofence = models.PolygonField(srid=4326, null=True, blank=True)
+    geotype = models.CharField(blank=True, max_length=100,choices=CHOICE_TYPE, null=True)
+    location = models.PointField(srid=4326, null=True, blank=True)
+    description = models.CharField(default='', max_length=200)
+    enter_latitude = models.CharField(default='', max_length=200)
+    enter_longitude = models.CharField(default='', max_length=200)
+    exit_latitude = models.CharField(default='', max_length=200, null=True)
+    exit_longitude = models.CharField(default='', max_length=200, null=True)
+    pos_address = models.CharField(default='', max_length=200)
+    geoname = models.CharField(default='', max_length=200)
+
+    def __str__(self):
+        return self.geoname
 
 CONFIGURATION = (
     ('48V','48V'),
@@ -140,6 +158,7 @@ class Vehicle(models.Model):
     insurance_end_date = models.DateField(default='',blank=True, null=True)
     vehicle_selected = models.BooleanField(default=False)
     assigned_to = models.ForeignKey(Crmuser,default=None,on_delete=models.CASCADE, null=True, blank=True)
+    geofence = models.ManyToManyField(Geofence)
 
     def __str__(self):
         return str(self.vehicle_model_name)

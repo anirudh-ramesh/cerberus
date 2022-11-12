@@ -2,16 +2,21 @@ from wsgiref.handlers import read_environ
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from datetime import datetime
-from django.urls import reverse
+import re
+import json
 from user_management.models import Organisation
 # from .mixins import MessageHandler
 from .forms import CreateUserForm
-from .models import Crmuser, BatteryDetail, Vehicle
+from .models import Crmuser, BatteryDetail, Geofence,Vehicle
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.hashers import make_password, check_password
 from .auth_helper import getSignInFlow, getTokenFromCode,getToken,getMsalApp,removeUserAndToken, storeUser
 from db_connect import listAssignedBatteryVehicle,assignedVehicleToOrganisation,getOrgAssignedVehicle,removeAssignedVehiclefromOrganisation,listAssignedVehicleToUser,removeUserVehicle
+from django.contrib.gis.geos import Point,Polygon
+from django.contrib.gis.measure import Distance
+
+
 
 format='%Y-%m-%d'
 
@@ -379,3 +384,74 @@ def assignedVehicleToUser(request,id):
         return redirect("user_management:getdata")
 
     return render(request,'list_assigned_vehicle_to_user.html',{'user_vehicle':user_vehicle})
+
+
+def addgeofenceVehicles(request):
+    polygon_coordinates = []
+    longitude_data = []
+    latitude_data = []
+    print(request.method, "=========REQUEST========")
+    if request.method == "POST":
+        print("IN THE POST===========")
+        geoname = request.POST['geoname']
+        geotype = request.POST['geotype']
+        description = request.POST['description']
+        position_add = request.POST['pos_address']
+        enter_lat =request.POST['enter_latitude']
+        newdata=json.loads(enter_lat)
+        print(newdata, "============>>>>>>>>>>>>>>>>NEWDATA")
+        coordinate_data = newdata["features"][0]['geometry']['coordinates']
+        radidus = newdata["features"][0]['properties']['radius']
+        print(coordinate_data, "======COORDINATES=============")
+
+        if newdata["features"][0]['geometry']['type'] == 'Point':
+            print("POINT")
+            longitude = coordinate_data[0]
+            latitude = coordinate_data[1]
+            circle_radius = Distance(float(radidus))
+            print(circle_radius, "=====CIRCLE")
+            location = Point(float(longitude),float(latitude),srid=4326)
+            
+            print(location, "=============LOCATION")
+            
+            # newdata = Geofence.objects.create(geoname=geoname,geotype=geotype,description=description,enter_latitude=latitude,enter_longitude=longitude,pos_address=position_add,location=location)
+            return render(request, 'geolocation_form.html')
+
+
+        if newdata["features"][0]['geometry']['type'] == 'Polygon':
+            print("POLYGONE CONDITION")
+            coordinate_polygon = newdata["features"][0]['geometry']['coordinates']
+            newdata = *((*row,) for row in coordinate_polygon[0]),
+            converted_tuple_data = list(newdata)
+            for polygon_data in converted_tuple_data:
+                print(polygon_data, "=========POLYGON-DATA======")
+                longitude = ((polygon_data[0]),(polygon_data[1]))
+                long = polygon_data[0]
+                longitude_data.append(long)
+                latitude = polygon_data[1]
+                latitude_data.append(latitude)
+                polygon_coordinates.append(longitude)
+        geofence = Polygon(((polygon_coordinates)),srid=4326)
+        newdata = Geofence.objects.create(geoname=geoname,geotype=geotype, description=description,enter_latitude=latitude_data,enter_longitude=longitude_data,pos_address=position_add,geofence=geofence)
+        print(newdata, "==========NEWDATA=========")
+        
+
+        
+        
+        # print(newdata["features"][0]['geometry']['type'], "==========LATITUEDE=========")
+        # print(newdata["features"][0]['geometry']['coordinates'], "==========LATITUEDE=========")
+
+    return render(request, 'geolocation_form.html')
+
+
+def listgeofenceData(request):
+    if request.method == "GET":
+        geofencedata = list(Geofence.objects.values())
+        print(geofencedata, "======GEOFENCE-DATA===========")
+    
+    return render(request, 'list_geofence_data.html',{ 'geofencedata': geofencedata })
+
+
+
+
+        
