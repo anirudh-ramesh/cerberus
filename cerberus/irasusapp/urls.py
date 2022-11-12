@@ -30,5 +30,9 @@ urlpatterns= [
     
     path(r'assigned/<int:id>', views.assignedBatteryList, name="assinged"),
     path(r'orgvehicle/<int:id>', views.assignedOrgVehicleList, name="assingedtoorg"),
-    path(r'uservehicle/<str:id>', views.assignedVehicleToUser, name="uservehicle"),    
+    path(r'uservehicle/<str:id>', views.assignedVehicleToUser, name="uservehicle"),
+
+    path('geofence', views.addgeofenceVehicles, name="geofence"),
+
+
 ]

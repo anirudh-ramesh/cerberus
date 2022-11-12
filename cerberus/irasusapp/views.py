@@ -390,31 +390,24 @@ def addgeofenceVehicles(request):
     polygon_coordinates = []
     longitude_data = []
     latitude_data = []
-    print(request.method, "=========REQUEST========")
     if request.method == "POST":
-        print("IN THE POST===========")
         geoname = request.POST['geoname']
         geotype = request.POST['geotype']
         description = request.POST['description']
         position_add = request.POST['pos_address']
         enter_lat =request.POST['enter_latitude']
         newdata=json.loads(enter_lat)
-        print(newdata, "============>>>>>>>>>>>>>>>>NEWDATA")
         coordinate_data = newdata["features"][0]['geometry']['coordinates']
-        radidus = newdata["features"][0]['properties']['radius']
-        print(coordinate_data, "======COORDINATES=============")
+        # radius_data = newdata["features"][0]['properties']['radius']
 
         if newdata["features"][0]['geometry']['type'] == 'Point':
             print("POINT")
             longitude = coordinate_data[0]
             latitude = coordinate_data[1]
-            circle_radius = Distance(float(radidus))
-            print(circle_radius, "=====CIRCLE")
-            location = Point(float(longitude),float(latitude),srid=4326)
-            
-            print(location, "=============LOCATION")
-            
-            # newdata = Geofence.objects.create(geoname=geoname,geotype=geotype,description=description,enter_latitude=latitude,enter_longitude=longitude,pos_address=position_add,location=location)
+            # circle_radius = Distance(float(radidus))
+            # print(circle_radius, "=====CIRCLE")
+            location = Point(float(longitude),float(latitude),srid=4326)            
+            newdata = Geofence.objects.create(geoname=geoname,geotype=geotype,description=description,enter_latitude=latitude,enter_longitude=longitude,pos_address=position_add,location=location)
             return render(request, 'geolocation_form.html')
 
 
@@ -424,7 +417,6 @@ def addgeofenceVehicles(request):
             newdata = *((*row,) for row in coordinate_polygon[0]),
             converted_tuple_data = list(newdata)
             for polygon_data in converted_tuple_data:
-                print(polygon_data, "=========POLYGON-DATA======")
                 longitude = ((polygon_data[0]),(polygon_data[1]))
                 long = polygon_data[0]
                 longitude_data.append(long)
@@ -433,22 +425,13 @@ def addgeofenceVehicles(request):
                 polygon_coordinates.append(longitude)
         geofence = Polygon(((polygon_coordinates)),srid=4326)
         newdata = Geofence.objects.create(geoname=geoname,geotype=geotype, description=description,enter_latitude=latitude_data,enter_longitude=longitude_data,pos_address=position_add,geofence=geofence)
-        print(newdata, "==========NEWDATA=========")
-        
-
-        
-        
-        # print(newdata["features"][0]['geometry']['type'], "==========LATITUEDE=========")
-        # print(newdata["features"][0]['geometry']['coordinates'], "==========LATITUEDE=========")
 
     return render(request, 'geolocation_form.html')
 
 
 def listgeofenceData(request):
     if request.method == "GET":
-        geofencedata = list(Geofence.objects.values())
-        print(geofencedata, "======GEOFENCE-DATA===========")
-    
+        geofencedata = list(Geofence.objects.values())    
     return render(request, 'list_geofence_data.html',{ 'geofencedata': geofencedata })
 
 
