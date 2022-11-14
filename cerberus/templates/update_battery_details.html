@@ -5,9 +5,125 @@
 <div class="row">
     <div class="col-sm-8 offset-2">
         <h4 class="alert alert-info">Update Battery Details</h4>
-        <form action="" method="POST">
+        
+        <form method="POST" action="">
             {% csrf_token %}
-            {{form.as_p}}
+            {% for fm in form %}
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Model Name</label>
+                        <select type="text" id="model_name" name="model_name" value="{{fm.model_name}}" class="input-register-text" required>
+
+                            <option>igtblu</option>
+                            <option>igtred</option>
+                            <option>igtred+</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Battery Serial Number</label>
+                        <input type='text' name='battery_serial_num' value="{{fm.battery_serial_num}}" class="input-register-text" required>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Battery Type</label>
+                        <select type="text" id="colorSelect" name="battery_type" value="{{fm.battery_type}}" class="input-register-text" required>
+                            <option>24</option>
+                            <option>48</option>
+                            <option>60</option>
+                            <option>72</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Bms Type</label>
+                        <select type="text" id="colorSelect" name="bms_type"  value="{{fm.bms_type}}" class="input-register-text" required>
+                            <option>ion</option>
+                            <option>electrifuel</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Iot type</label>
+                        <select type="text" id="colorSelect" name="iot_type"  value="{{fm.iot_type}}" class="input-register-text" required>
+                            <option>tarckmate</option>
+                            <option>electrifuel</option>
+                            <option>aeidth</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Iot Imei Number</label>
+                        <input type='text' name='iot_imei_number'  value="{{fm.iot_imei_number}}" class="input-register-text" required>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Sim Number</label>
+                        <input type='text' name='sim_number' value="{{fm.iot_type}}" class="input-register-text" required>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Warrenty Start Date</label>
+                        <input name='warrenty_start_date' value="{{fm.warrenty_start_date|date:'Y-m-d'}}" required>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Warrenty Duration</label>
+                        <input name='warrenty_duration' value="{{fm.warrenty_duration|date:'Y-m-d'}}" required>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Assigned Owner</label>
+                        <input type='text' name='assigned_owner'  value="{{fm.assigned_owner}}" class="input-register-text" required>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Status</label>
+                        <select type="text" id="colorSelect" name="status" value="{{fm.status}}" class="input-register-text" required>
+                            <option>in_swap_station</option>
+                            <option>in_vehicle</option>
+                            <option>idel</option>
+                            <option>damaged</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Battery Cell Chemistry</label>
+                        <input type='text' name='battery_cell_chemistry' value="{{fm.battery_cell_chemistry}}" class="input-register-text" required>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Battery Pack Nominal Voltage</label>
+                        <input type='text' name='battery_pack_nominal_voltage' value="{{fm.battery_pack_nominal_voltage}}" class="input-register-text" required>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Battery Pack Nominal Charge Capacity</label>
+                        <input type='text' name='battery_pack_nominal_charge_capacity' value="{{fm.battery_pack_nominal_charge_capacity}}" class="input-register-text" required>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Charging Status</label>
+                        <input type='text' name='charging_status' value="{{fm.charging_status}}" class="input-register-text" required>
+                    </div>
+                </div>
+
+            {% endfor %}
+
             <input type="submit" class="btn btn-success" value="Update">
             <a href="{% url 'data' %}" class="btn btn-info">Back To Details </a>
         </form>

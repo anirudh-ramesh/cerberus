@@ -1,4 +1,6 @@
-# Irasus Web Application
+# Irasus Web Application Overview
+
+This project is about Managements of Organisation and there Users With Battery Management System
 
 # Require Install
 

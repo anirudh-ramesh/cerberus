@@ -1,16 +1,15 @@
-from datetime import datetime
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
+from datetime import datetime 
 # from .mixins import MessageHandler
-from .forms import BatteryDetailsFrom, CreateUserForm
+from .forms import CreateUserForm
 from .models import Crmuser, BatteryDetail
 from django.contrib import messages
-from django.db.utils import IntegrityError
 from django.contrib.auth import logout
-import psycopg2 as db
 from django.contrib.auth.hashers import make_password, check_password
 from .auth_helper import getSignInFlow, getTokenFromCode,getToken,getMsalApp,removeUserAndToken, storeUser
 
+format='%Y-%m-%d'
 
 def register(request):
     if request.method == 'POST':
@@ -104,21 +103,50 @@ def getBatteryDetails(request):
         context = {'battery_data': data }
         return render(request, 'battery_details.html',context)
     except Exception as e:
-        messages.warning("Internal server error")
+        messages.warning(request,"Internal server error")
 
 #This Function Will Update_Battery_details/Edit
 def updateBatteryDetails(request, id):
-    if request.method == 'POST':
-        pi = BatteryDetail.objects.get(pk=id)
-        fm = BatteryDetailsFrom(request.POST, instance=pi)
-        if fm.is_valid():
-            fm.save()
-    else:
-        pi = BatteryDetail.objects.get(pk=id)
-        fm = BatteryDetailsFrom(instance=pi)
-    return render(request,'update_battery_details.html',{'form': fm})
-    
+    battery_data = BatteryDetail.objects.filter(battery_serial_num=id).values()
+    if request.method == "POST":
+        model_name = request.POST['model_name']
+        battery_serial_num = request.POST['battery_serial_num']
+        battery_type = request.POST['battery_type']
+        bms_type = request.POST['bms_type']
+        iot_type = request.POST['iot_type']
+        iot_imei_number = request.POST['iot_imei_number']
+        sim_number = request.POST['sim_number']
+        warrenty_start_date = datetime.strptime(request.POST['warrenty_start_date'],format)
+        warrenty_duration = datetime.strptime(request.POST['warrenty_duration'],format)
+        assigned_owner = request.POST['assigned_owner']
+        status = request.POST['status']
+        battery_cell_chemistry = request.POST['battery_cell_chemistry']
+        battery_pack_nominal_voltage = request.POST['battery_pack_nominal_voltage']
+        battery_pack_nominal_charge_capacity = request.POST['battery_pack_nominal_charge_capacity']
+        charging_status = request.POST['charging_status']
 
+        BatteryDetail.objects.filter(battery_serial_num=id).update(
+        model_name=model_name,battery_serial_num=battery_serial_num,battery_type=battery_type,bms_type=bms_type,
+        iot_type=iot_type,iot_imei_number=iot_imei_number,sim_number=sim_number,warrenty_start_date=warrenty_start_date,
+        warrenty_duration=warrenty_duration,assigned_owner=assigned_owner,status=status,
+        battery_cell_chemistry=battery_cell_chemistry,battery_pack_nominal_voltage=battery_pack_nominal_voltage,
+        battery_pack_nominal_charge_capacity=battery_pack_nominal_charge_capacity,
+        charging_status=charging_status
+        )
+        battery_data = [{
+            'model_name':model_name,
+            'battery_serial_num':battery_serial_num,'battery_type': battery_type,'bms_type': bms_type,
+            'iot_type': iot_type,'iot_imei_number': iot_imei_number,'sim_number': sim_number,'warrenty_start_date': warrenty_start_date,
+            'warrenty_duration': warrenty_duration,'assigned_owner': assigned_owner,'status': status,
+            'battery_cell_chemistry': battery_cell_chemistry,'battery_pack_nominal_voltage': battery_pack_nominal_voltage,
+            'battery_pack_nominal_charge_capacity' : battery_pack_nominal_charge_capacity,
+            'charging_status': charging_status
+            }]
+        return render(request,'update_battery_details.html', {'form': battery_data })
+
+    battery_data = list(BatteryDetail.objects.filter(battery_serial_num=id).values())
+    return render(request,'update_battery_details.html',{'form': battery_data})
+    
 #Delete_Record
 def deleteRecord(request,id):
     try:

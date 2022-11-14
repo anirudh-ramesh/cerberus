@@ -151,8 +151,8 @@ class BatteryDetail(models.Model):
     iot_type = models.CharField(max_length=100, default='', choices=IOT_TYPE)
     iot_imei_number = models.CharField(max_length=100)
     sim_number = models.CharField(max_length=12, default='', blank=True)
-    warrenty_start_date = models.DateField(default='',blank=True)
-    warrenty_duration = models.DateField(default='',blank=True)
+    warrenty_start_date = models.DateField(default='',blank=True,null=True)
+    warrenty_duration = models.DateField(default='',blank=True, null=True)
     assigned_owner = models.CharField(max_length=50)
     status = models.CharField(max_length=50, choices=STATUS, default='')
     battery_cell_chemistry = models.CharField(max_length=50, default='')
@@ -163,3 +163,6 @@ class BatteryDetail(models.Model):
 
     def __str__(self):
         return str(self.model_name)
+
+    def __str__(self) -> str:
+        return f"{self.warrenty_start_date.strftime('%Y-%m-%d')}"
