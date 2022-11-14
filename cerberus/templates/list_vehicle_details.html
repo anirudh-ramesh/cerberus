@@ -1,0 +1,92 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+{% include 'status.html' %}
+
+<div class="col-sm-12">
+    <h4 class="text-center alert alert info">Vehicle Profile</h4>
+    <form action="" method="GET">
+        {% if vehicle_data %}
+                <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">Select Vehicle</th>
+                        <th scope="col">Vehicle Model Name</th>
+                        <th scope="col">Chasis Number</th>
+                        <th scope="col">Vehicle Configuration</th>
+                        <th scope="col">Vehicle Choice</th>
+                        <th scope="col">Vehicle Iot Imei Number</th>
+                        <th scope="col">Vehicle Sim Number</th>
+                        <th scope="col">Vehicle Warrenty Start Date</th>
+                        <th scope="col">Vehicle Warrenty End Date</th>
+                        <th scope="col">Assigned Owner</th>
+                        <th scope="col">Insurance Start Date</th>
+                        <th scope="col">Insurance End Date</th>
+
+                      </tr>
+                    <tbody>
+                    {% for fm in vehicle_data %}
+                        <tr>
+                          <td>
+                            {% if fm.vehicle_selected %}
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" checked="checked" value="{{fm}}" name="vehicle_selected">
+                            </div>
+                            {% else %}
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" value="{{fm}}" name="vehicle_selected">
+                            </div>
+                            {% endif %}
+                          </td>
+                            <td>{{fm.vehicle_model_name}}</td>
+                            <td>{{fm.chasis_number}}</td>
+                            <td>{{fm.configuration}}</td>
+                            <td>{{fm.vehicle_choice}}</td>
+                            <td>{{fm.vehicle_iot_imei_number}}</td>
+                            <td>{{fm.vehicle_sim_number}}</td>
+                            <td>{{fm.vehicle_warrenty_start_date}}</td>
+                            <td>{{fm.vehicle_warrenty_end_date}}</td>
+                            <td>{{fm.assigned_owner}}</td>
+                            <td>{{fm.insurance_start_date}}</td>
+                            <td>{{fm.insurance_end_date}}</td>
+                          
+                            <td>
+                            <a href="{% url 'updatevehicle' fm.chasis_number %}" class="btn btn-info btn-sm">Edit</a>
+
+                            <form action="{% url 'deletevehicle' fm.chasis_number %}" method="POST" class="d-inline">
+                                {% csrf_token %}
+                              <input type="submit" class="btn btn-danger" value="Delete">
+                            </form>
+
+                            <a href="{% url 'data' %}?chasis_number={{fm.chasis_number}}" class="btn btn-warning btn-sm">Assigned</a>
+
+                            <a href="{% url 'assinged' fm.chasis_number %}" class="btn btn-secondary btn-sm">List Battery</a>
+
+                            <form action="{% url 'getvehicle' %}?assigned_to_id={{email_id}}&=chasis_number={{fm.chasis_number}}" method="POST" class="d-inline">
+                              {% csrf_token %}
+                            <input type="submit" class="btn btn-info" value="Assigned-To-User">
+                            </form>
+                            <form action="{% url 'getvehicle' %}?serial_number={{serial_number}}&=chasis_number={{fm.chasis_number}}" method="POST" class="d-inline">
+                              {% csrf_token %}
+                            <input type="submit" class="btn btn-secondary" value="Assigned-To-Organisation">
+                            </form>
+                          </td>              
+                        </tr>
+                      
+                      {% endfor %}
+                    </tbody>
+                    </thead>
+                  </table>
+            
+        {% else %}
+            <h4 class="text-center alert alert warning">No Records Found</h4>
+        {% endif %}
+
+        
+    </form>
+    
+</div>
+
+
+{% endblock %}

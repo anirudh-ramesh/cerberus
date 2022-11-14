@@ -6,12 +6,12 @@ app_name = 'user_management'
 
 urlpatterns= [
         path('adduser/', views.addUser, name="demo"),
-        path('getuser/', views.getUser, name="getdata"),
+        path(r'getuser', views.getUser, name="getdata"),
         path('updateuser/<str:id>/', views.updateUser, name="update"),
         path('deletuser/<str:id>/', views.deleteUser, name="delete"),
  
         path('addorg/', views.addOrganisation, name="addorg"),
-        path('listorg/', views.listOrganisation, name="listorg"),
+        path(r'listorg', views.listOrganisation, name="listorg"),
         path('updateorg/<int:id>/', views.updateOranisation, name="updateorg"),
         path('deleteorg/<int:id>/', views.deleteOraganisation, name="deleteorg"),
         
@@ -24,7 +24,7 @@ urlpatterns= [
         path('updaterole/<str:name>/', views.updateRole, name="updaterole"),
         path('deleterole/<int:id>/', views.deleteRole, name="deleterole"),
         path('newrole/', views.listedUserRole, name="mrole"),
-        path(r'list/<int:id>', views.orgUserinfo, name="list"),     
-        
-        
+        path(r'list/<int:id>', views.orgUserinfo, name="list"), 
+
+   
 ]

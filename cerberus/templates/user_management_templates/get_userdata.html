@@ -14,7 +14,8 @@
                       <tr>
                         <th scope="col">Username</th>
                         <th scope="col">Email</th>
-                        <th scope="col">Contact</th>           
+                        <th scope="col">Contact</th>
+                        <th scope="col">Assigned-Vehicle</th>
                       </tr>
                     <tbody>
                     {% for fm in user_data %}
@@ -28,6 +29,10 @@
                                 {% csrf_token %}
                               <input type="submit" class="btn btn-danger" value="Delete">
                             </form>
+
+                            <a href="{% url 'getvehicle' %}?email={{fm.email}}" class="btn btn-warning btn-sm">Assigned Vehicle</a>
+
+                            <a href="{% url 'uservehicle' fm.email %}" class="btn btn-warning btn-sm">List Vehicle</a>
                           </td>
                       </tr>
                       
