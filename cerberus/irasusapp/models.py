@@ -1,5 +1,5 @@
 # Create your models here.
-from django.db import models
+from django.contrib.gis.db import models
 import datetime
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.core.exceptions import ValidationError
@@ -111,6 +111,58 @@ class Crmuser(AbstractBaseUser):
         except:
             return False  
 
+CHOICE_TYPE = (
+    ('1', 'Entered'), 
+    ('2', 'Exit')
+)
+
+class Geofence(models.Model):
+    geofence = models.PolygonField(srid=4326, null=True, blank=True)
+    geotype = models.CharField(blank=True, max_length=100,choices=CHOICE_TYPE, null=True)
+    location = models.PointField(srid=4326, null=True, blank=True)
+    description = models.CharField(default='', max_length=200)
+    enter_latitude = models.CharField(default='', max_length=200)
+    enter_longitude = models.CharField(default='', max_length=200)
+    exit_latitude = models.CharField(default='', max_length=200, null=True)
+    exit_longitude = models.CharField(default='', max_length=200, null=True)
+    pos_address = models.CharField(default='', max_length=200)
+    geoname = models.CharField(default='', max_length=200)
+
+    def __str__(self):
+        return self.geoname
+
+CONFIGURATION = (
+    ('48V','48V'),
+    ('60V','60V'),
+    ('72V','72V'),
+)
+
+VEHICLE = (
+    ('2W-L', '2W-L'),
+    ('2W-H','2W-H'),
+    ('3W-Erickshaw','3W-Erickshaw'),
+    ('3W-Loader','3W-Loader'),
+)
+
+class Vehicle(models.Model):
+    vehicle_model_name = models.CharField(max_length=225, default='')
+    chasis_number = models.CharField(max_length=225, default='',primary_key=True)
+    configuration = models.CharField(max_length=20, default='', choices=CONFIGURATION)
+    vehicle_choice = models.CharField(max_length=225, default='', choices=VEHICLE)
+    vehicle_iot_imei_number = models.CharField(max_length=100)
+    vehicle_sim_number = models.CharField(max_length=20)
+    vehicle_warrenty_start_date = models.DateField(default='',blank=True,null=True)
+    vehicle_warrenty_end_date = models.DateField(default='',blank=True, null=True)
+    assigned_owner = models.CharField(max_length=225, default='')
+    insurance_start_date = models.DateField(default='',blank=True,null=True)
+    insurance_end_date = models.DateField(default='',blank=True, null=True)
+    vehicle_selected = models.BooleanField(default=False)
+    assigned_to = models.ForeignKey(Crmuser,default=None,on_delete=models.CASCADE, null=True, blank=True)
+    geofence = models.ManyToManyField(Geofence)
+
+    def __str__(self):
+        return str(self.vehicle_model_name)
+
 
 MODEL_CHOICES = (
     ('igtblu','IGTBLU'),
@@ -151,15 +203,16 @@ class BatteryDetail(models.Model):
     iot_type = models.CharField(max_length=100, default='', choices=IOT_TYPE)
     iot_imei_number = models.CharField(max_length=100)
     sim_number = models.CharField(max_length=12, default='', blank=True)
-    warrenty_start_date = models.DateField(default='',blank=True)
-    warrenty_duration = models.DateField(default='',blank=True)
+    warrenty_start_date = models.DateField(default='',blank=True,null=True)
+    warrenty_duration = models.DateField(default='',blank=True, null=True)
     assigned_owner = models.CharField(max_length=50)
     status = models.CharField(max_length=50, choices=STATUS, default='')
     battery_cell_chemistry = models.CharField(max_length=50, default='')
     battery_pack_nominal_voltage = models.CharField(max_length=50, default='')
     battery_pack_nominal_charge_capacity = models.CharField(max_length=50, default='')
     charging_status = models.CharField(max_length=50, default='')
-
+    vehicle_assign = models.ForeignKey(Vehicle, on_delete=models.CASCADE, null=True, blank=True)
+    is_assigned = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.model_name)

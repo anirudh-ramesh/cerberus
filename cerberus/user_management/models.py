@@ -45,6 +45,7 @@ class Organisation(models.Model):
     deleted_at = models.DateTimeField(default=datetime.datetime.now)
     is_active = models.BooleanField(default=True)
     organisation_profile = models.ManyToManyField(OrganisationProfile)
+    vehicle_assign = models.ManyToManyField("irasusapp.Vehicle")
     
     def __str__(self):
         return self.organisation_name

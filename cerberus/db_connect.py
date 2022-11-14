@@ -112,7 +112,7 @@ def getOrgRoles(id):
     * \
     FROM user_management_role \
     LEFT JOIN user_management_organisation_organisation_profile ON user_management_role.id = user_management_organisation_organisation_profile.organisationprofile_id \
-    WHERE user_management_organisation_organisation_profile.organisation_id='{id}' AND "
+    WHERE user_management_organisation_organisation_profile.organisation_id='{id}'"
     cursor.execute(sql)
     myresult = cursor.fetchall()
     new_data = []
@@ -206,7 +206,7 @@ def updateOrgAssignPermission(permission_name,role_name,id):
 def removeUserFromOrg(select,serial_number,email):
     conn=connect()
     cursor = conn.cursor()
-    sql = f"UPDATE user_management_organisation_user_role set user_status='{select}' WHERE serial_number ='{serial_number}' AND email='{email}' ;"
+    sql = f"UPDATE user_management_organisation_user_role set user_status='{select}' WHERE serial_number ='{serial_number}' AND email='{email}';"
     cursor.execute(sql)
     conn.commit()
     cursor.close()

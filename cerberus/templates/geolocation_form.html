@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+    	<title>Geofence</title>
+    	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+   	 	<meta charset="utf-8">
+    	
+    	<style>
+      		/* Always set the map height explicitly to define the size of the div
+       		* element that contains the map. */
+      		#map {
+        		height: 80%;
+      		}
+     		/* Optional: Makes the sample page fill the window. */
+      		html, body {
+        		height: 100%;
+        		margin: 0;
+        		padding: 0;
+      		}
+    	</style>
+
+	</head>
+  	<body>
+        <div id="map"></div>
+        <form method="POST" action="" id="">
+            {% csrf_token %}
+            <div class="input-group mb-2">
+                <div class="input-group-append">
+                    <label><b>Name</b></label>
+                    <input type='text' name='geoname' class="input-register-text" required>
+                </div>
+            </div>
+            <div class="input-group mb-2">
+                <label><b>geoType</b></label>
+                <select type="text" name="geotype" class="input-register-text" required>
+                    <option>1</option>
+                    <option>2</option>
+                </select>
+            </div>
+    
+            <div class="input-group mb-2">
+                <div class="input-group-append">
+                    <label for="description"><b>Description</b></label>
+                    <input id='desc' type="text" placeholder="description" name="description">
+                </div>
+            </div>
+            <div class="input-group mb-2">
+                <div class="input-group-append">
+                    <label for="description"><b>Position Address</b></label>
+                    <input id='pos_add' type="text" name="pos_address" >
+                </div>
+            </div>
+            <div class="input-group mb-2">
+                <div class="input-group-append">
+                    <label for="latitude"><b>Coordinates</b></label>
+                    <input id="geojson"  name="enter_latitude" required>
+                </div>
+            </div>
+               <div class="d-flex justify-content-center mt-3">
+                <button id="save">Submit</button>
+               </div>
+
+
+        </form>
+    	
+    	
+		
+    <script src="../static/js/drawMap.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR-KEY&libraries=drawing&callback=initMap"></script>
+  	</body>
+  
+    
+
+</html>

@@ -1,0 +1,109 @@
+
+{% extends 'main.html' %}
+
+{% block content %}
+
+{% include 'status.html' %}
+
+
+<br>
+
+<div class="row">
+	<div class="col-md-5">
+		<h5>Add Vehicle Details</h5>
+		<hr>
+		<div class="card card-body">
+			<a class="btn btn-primary  btn-sm btn-block" href="">Vehicle Details</a>
+			<div class="card card-body">
+				<div class="d-flex justify-content-start form_container">
+					<form method="POST" action="">
+						{% csrf_token %}
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Vehicle Model Name</label>
+								<input type='text' name='vehicle_model_name' class="input-register-text" required>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Chasis Number</label>
+								<input type='text' name='chasis_number' class="input-register-text" required>
+							</div>
+						</div>
+                        <div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Vehicle Configuration</label>
+                                <select type="text"  name="configuration" class="input-register-text" required>
+                                    <option>48V</option>
+                                    <option>60V</option>
+                                    <option>72V</option>
+                                </select>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Vehicle Choice</label>
+                                <select type="text" name="vehicle_choice" class="input-register-text" required>
+                                    <option>2W-L</option>
+                                    <option>2W-H</option>
+                                    <option>3W-Erickshaw</option>
+                                    <option>3W-Loader</option>    
+                                </select>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Vehicle Iot Imei Number</label>
+								<input type='text' name='vehicle_iot_imei_number' class="input-register-text" required>		
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Vehicle Sim Number</label>
+								<input type='text' name='vehicle_sim_number' class="input-register-text" required>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Vehicle Warrenty Start Date</label>
+								<input type='date' name='vehicle_warrenty_start_date' class="input-register-text" required>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Vehicle Warrenty End Date</label>
+								<input type='date' name='vehicle_warrenty_end_date' class="input-register-text" required>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Assigned Owner</label>
+								<input type='text' name='assigned_owner' class="input-register-text" required>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Insurance Start Date</label>
+								<input type='date' name='insurance_start_date' class="input-register-text" required>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Insurance End Date</label>
+								<input type='date' name='insurance_end_date'  ss="input-register-text" required>
+							</div>
+						</div>
+
+						<div class="d-flex justify-content-center mt-3">
+				 			<input class="btn btn-success" type="submit" value="Submit">
+				   		</div>
+
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+{% endblock %}

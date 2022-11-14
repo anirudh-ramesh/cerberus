@@ -5,11 +5,195 @@
 <div class="row">
     <div class="col-sm-8 offset-2">
         <h4 class="alert alert-info">Update Battery Details</h4>
-        <form action="" method="POST">
+        {% if form %}
+        <form method="POST" action="">
             {% csrf_token %}
-            {{form.as_p}}
+            {% for fm in form %}
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Model Name</label>
+                        <select type="text" id="model_name" name="model_name" value="{{fm.model_name}}" class="input-register-text" required>
+                            {% if fm.model_name == "igtblu" %}
+                                    <option value="igtblu" selected>igtblu</option>
+                                {% else %}
+                                    <option value="igtblu">igtblu</option>
+                                {% endif %}
+
+                                {% if fm.model_name == "igtred" %}
+                                    <option value="igtred" selected>igtred</option>
+                                {% else %}
+                                    <option value="igtred">igtred</option>
+                                {% endif %}
+
+                                {% if fm.model_name == "igtred" %}
+                                    <option value="igtred" selected>igtred</option>
+                                {% else %}
+                                    <option value="igtred">igtred</option>
+                                {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Battery Serial Number</label>
+                        <input type='text' name='battery_serial_num' value="{{fm.battery_serial_num}}" class="input-register-text" required>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Battery Type</label>
+                        <select type="text" id="colorSelect" name="battery_type" value="{{fm.battery_type}}" class="input-register-text" required>
+                            {% if fm.battery_type == "24" %}
+                                    <option value="24" selected>24</option>
+                                {% else %}
+                                    <option value="24">24</option>
+                                {% endif %}
+
+                                {% if fm.battery_type == "48" %}
+                                    <option value="48" selected>48</option>
+                                {% else %}
+                                    <option value="48">48</option>
+                                {% endif %}
+
+                                {% if fm.battery_type == "60" %}
+                                    <option value="60" selected>60</option>
+                                {% else %}
+                                    <option value="60">60</option>
+                                {% endif %}
+                                
+                                {% if fm.battery_type == "72" %}
+                                    <option value="72" selected>72</option>
+                                {% else %}
+                                    <option value="72">72</option>
+                                {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Bms Type</label>
+                        <select type="text" id="colorSelect" name="bms_type"  value="{{fm.bms_type}}" class="input-register-text" required>
+                            <option>ion</option>
+                            <option>electrifuel</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Iot type</label>
+                        <select type="text" id="colorSelect" name="iot_type"  value="{{fm.iot_type}}" class="input-register-text" required>
+                            {% if fm.iot_type == "tarckmate" %}
+                                    <option value="tarckmate" selected>tarckmate</option>
+                                {% else %}
+                                    <option value="tarckmate">tarckmate</option>
+                                {% endif %}
+                                {% if fm.iot_type == "electrifuel" %}
+                                    <option value="electrifuel" selected>electrifuel</option>
+                                {% else %}
+                                    <option value="electrifuel">electrifuel</option>
+                                {% endif %}
+                                
+                                {% if fm.iot_type == "aeidth" %}
+                                    <option value="aeidth" selected>aeidth</option>
+                                {% else %}
+                                    <option value="aeidth">aeidth</option>
+                                {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Iot Imei Number</label>
+                        <input type='text' name='iot_imei_number'  value="{{fm.iot_imei_number}}" class="input-register-text" required>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Sim Number</label>
+                        <input type='text' name='sim_number' value="{{fm.iot_type}}" class="input-register-text" required>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Warrenty Start Date</label>
+                        <input name='warrenty_start_date' value="{{fm.warrenty_start_date|date:'Y-m-d'}}" required>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Warrenty Duration</label>
+                        <input name='warrenty_duration' value="{{fm.warrenty_duration|date:'Y-m-d'}}" required>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Assigned Owner</label>
+                        <input type='text' name='assigned_owner'  value="{{fm.assigned_owner}}" class="input-register-text" required>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Status</label>
+                        <select type="text" id="colorSelect" name="status" value="{{fm.status}}" class="input-register-text" required>
+                            {% if fm.status == "in_swap_station" %}
+                                    <option value="in_swap_station" selected>in_swap_station</option>
+                                {% else %}
+                                    <option value="in_swap_station">in_swap_station</option>
+                                {% endif %}
+
+                                {% if fm.status == "in_vehicle" %}
+                                    <option value="in_vehicle" selected>in_vehicle</option>
+                                {% else %}
+                                    <option value="in_vehicle">in_vehicle</option>
+                                {% endif %}
+
+                                {% if fm.status == "idel" %}
+                                    <option value="idel" selected>idel</option>
+                                {% else %}
+                                    <option value="idel">idel</option>
+                                {% endif %}
+                                
+                                {% if fm.status == "damaged" %}
+                                    <option value="damaged" selected>damaged</option>
+                                {% else %}
+                                    <option value="damaged">damaged</option>
+                                {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Battery Cell Chemistry</label>
+                        <input type='text' name='battery_cell_chemistry' value="{{fm.battery_cell_chemistry}}" class="input-register-text" required>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Battery Pack Nominal Voltage</label>
+                        <input type='text' name='battery_pack_nominal_voltage' value="{{fm.battery_pack_nominal_voltage}}" class="input-register-text" required>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Battery Pack Nominal Charge Capacity</label>
+                        <input type='text' name='battery_pack_nominal_charge_capacity' value="{{fm.battery_pack_nominal_charge_capacity}}" class="input-register-text" required>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label>Charging Status</label>
+                        <input type='text' name='charging_status' value="{{fm.charging_status}}" class="input-register-text" required>
+                    </div>
+                </div>
+
+            {% endfor %}
+
             <input type="submit" class="btn btn-success" value="Update">
-            <a href="{% url 'data' %}" class="btn btn-info">Back To Details </a>
+            <a href="{% url 'getvehicle' %}" class="btn btn-info">Back To Details </a>
+
+        {% else %}
+            <h4 class="text-center alert alert warning">No Records Found</h4>
+        {% endif %}
         </form>
     </div>
 </div>
