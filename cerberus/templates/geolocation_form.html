@@ -62,7 +62,9 @@
 
 
         </form>
-    	
+    	{% for message in messages %}
+			<p id="messages">{{message}}</p>
+		{% endfor %}
     	
 		
     <script src="../static/js/drawMap.js"></script>
