@@ -5,7 +5,7 @@ import json
 import csv
 from user_management.models import Organisation
 # from .mixins import MessageHandler
-from .forms import CreateUserForm,AddUserToVehicle
+from .forms import CreateUserForm
 from .models import Crmuser, BatteryDetail, Geofence,Vehicle
 from django.contrib import messages
 from django.contrib.auth import logout
@@ -464,36 +464,35 @@ def addDriver(request):
 def filedForCSV(request):
     if request.method == "GET":
         files = list(Vehicle.objects.values())
-        print(files, "=============FILES=========")      
+        data= request.POST.getlist('checkedvalue')
+        print(data)
+        # print(files, "=============FILES=========GET")        
     return render(request, 'generate_csv.html', { 'files': files })
 
 def exportCSV(request):
-    # cwd = os.getcwd()
-    # print(cwd)
-    # model = list(Vehicle.objects.values())
-    # print(model, "======+MODEL===========")
-    # writer = csv.writer(open('demo.csv' 'w'))
-    # print(writer, "===============WRITER=======")
-    if request.method == "POST":
-        print("IN THE POST")
-        vehicle = list(Vehicle.objects.values().filter())
-        tablename = Vehicle._meta.model_name
+
+    getData=str(request.get_full_path()).split("?selectfield=")
+    if(getData[1]):
+        getData = getData[1].split("@=")
         
-        file_name = f'{tablename}-' + str(datetime.now().date()) + '.csv'
-        print(file_name)
-        # Create the HttpResponse object with the appropriate CSV header.
-        response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = f'attachment; filename= {file_name}'
+    vehicle = Vehicle.objects.all()
+    # 'configuration','vehicle_model_name'
+    filterdata = vehicle.values_list('configuration','vehicle_model_name')
 
-        writer = csv.writer(response)
-        headers = []
-        for field in vehicle:
-            print(field, "++++++++++FIELDS+++++++++++++++++")
-            headers.append(field.name)
-        writer.writerow(headers)
+    tablename = Vehicle._meta.model_name
+    file_name = f'{tablename}-' + str(datetime.now().date()) + '.csv'
+    print(file_name)
 
-        # writer.writerow(['Voltage'])
-        vehicle_fields = vehicle.values_list('configuration')
-        for user in vehicle_fields:
-            writer.writerow(user)
-        return response
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename= {file_name}'
+
+    writer = csv.writer(response)
+    headers = []
+    for i in getData:
+        headers.append(i)
+    writer.writerow(headers)
+
+    for i in filterdata:
+        writer.writerow(i)
+    return response

@@ -2,55 +2,56 @@
 
 {% block content %}
 
-<div class="col-sm-8">
-    <h4 class="text-center alert alert info">User Data</h4>
-    <form action="" method="GET">
-        {% if files %}
-                <!-- {{fm.label_tag}} {{fm}} {{fm.errors|striptags}} <br><br> -->
-                <table class="table table-hover">
-                    <thead>
-                      <tr>
-                        <th scope="col">Voltage</th>
-                        <th scope="col">Battery pack</th>
-                        <th scope="col">Contact</th>
-                        <th scope="col">Adhar-Proof</th>
-                        <th scope="col">Assigned-Vehicle</th>
-                      </tr>
-                    <tbody>
-                    {% for fm in files %}
-                      <tr>
-                        <td>
+<div class="row">
+	<div class="col-md-5">
+		<h5>GENERATE:</h5>
+		<hr>
+		<div class="">
+			<div class="">
+				<!-- <form action=""> -->
+					<!-- {% csrf_token %} -->
+					<div class="input-group mb-2">
+						<div class="input-group-append">
+							<label>Voltage</label>
+              <input class="form-check-input" id="voltage" type="checkbox" checked="checked" value="test" name="configuration">
+						</div>
+					</div>
+					<div class="input-group mb-2">
+						<div class="input-group-append">
+							<label>Battery Serial Number</label>
+							<input class="form-check-input"  id="battery_serial_num" name='battery_serial_num' type="checkbox" checked="checked" >
+						</div>
+					</div>
 
-                          {% if fm.vehicle_selected %}
-                          <div class="form-check">
-                            <input class="form-check-input" type="checkbox" checked="checked" value="{{fm}}" name="is_assigned">
-                          </div>
-                          {% else %}
-                          <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="{{fm}}" name="is_assigned">
-                          </div>
-                          {% endif %}
-                        </td>
+          <div class="d-flex justify-content-center mt-3 login_container">
+            <input class="btn btn-success"  id="demo222" type="submit">
+          </div>
 
-                        <td>{{fm.configuration}}</td>
-                        <!-- <td>{{fm.pancard_proof}}</td> -->
-                        <td>
-                            <p><a href="{% url 'exportcsv' %}"><button type="button">Download {{ file.file.name }}</button></a></p>
-                      </tr>
-                      
-                      {% endfor %}
-                    </tbody>
-                    </thead>
-                  </table>
-            
-        {% else %}
-            <h4 class="text-center alert alert warning">No Records Found</h4>
-        {% endif %}
-
-        
-    </form>
-    
+				<!-- </form> -->
+			</div>
+		</div>
+	</div>
 </div>
+<script>
+  
+  let object=document.getElementById('demo222')
+  object.addEventListener("click", function(){
+    let selectfield="";
+    let voltage=document.getElementById("voltage")
+    let battery_serial_num=document.getElementById("battery_serial_num")
+    
+    if(voltage.checked){
+      selectfield=selectfield?selectfield+"@=voltage":"voltage"
+    }
+
+    if(battery_serial_num.checked){
+      selectfield=selectfield?selectfield+"@=model_name":"model_name"
+    }
+    window.location=`http://localhost:8000/export_to_csv?selectfield=${selectfield}`
+
+  });
+
+</script>
 
 
 {% endblock %}
