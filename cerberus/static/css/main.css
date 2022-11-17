@@ -135,7 +135,7 @@ html {
     font-style: normal;
     line-height: 25px;
     font-size: 30px;
-    color: rgb(223, 41, 41);
+    color: rgb(87, 81, 81);
     text-align: center;
     width: 30px;
     display: inline-block;
@@ -255,7 +255,7 @@ html {
 }
 
 .col-7 {
-	flex: 0 0 auto;
+	flex: 0 0 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auto;
 	width: 58.33333333%;
 }
 
@@ -356,7 +356,7 @@ html {
 }
 .sidebar-nav {
     position: relative;
-    width: 165px;
+    width: 100px;
     height: 100%;
     top: 0;
     z-index: 10;
