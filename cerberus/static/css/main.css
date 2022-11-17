@@ -1,11 +1,11 @@
 
 #total-orders{
-    background-color: #4cb4c7;
+    background-color: #eef5f9;
 }
 
 
 #orders-delivered{
-    background-color: #7abecc;
+    background-color: #eef5f9;
 }
 
 #orders-pending{
@@ -16,7 +16,7 @@ html {
     margin: 0;
     padding: 0;
     height: 100%;
-    background: whitesmoke !important;
+    background: #f2f4f8 !important;
 }
 .user_card {
     width: 350px;
@@ -117,3 +117,28 @@ html {
   margin-top: 1%;
   
 }
+
+.main-div{
+    display: flex;
+    /* justify-content: space-between  ; */
+}
+
+.contentload{
+    background-color: #f2f4f8 !important;
+}
+
+.sidebar-link i {
+    font-style: normal;
+    line-height: 25px;
+    font-size: 30px;
+    color: gray;
+    text-align: center;
+    width: 30px;
+    display: inline-block;
+}
+
+.profile-img{
+  width: 30%;
+  height: 30%;  
+}
+

@@ -1,6 +1,8 @@
 # Create your models here.
 from django.contrib.gis.db import models
 import datetime
+import base64
+
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.core.exceptions import ValidationError
 
@@ -53,10 +55,14 @@ def password_validator(value):
             code='invalid'
         )
 
+USER_TYPE = (
+    ('Driver', 'Driver'), 
+    ('User', 'User')
+)
+
 class Crmuser(AbstractBaseUser):
     email = models.EmailField(
         verbose_name='email address',
-        max_length=20,
         unique=True,
         primary_key=True
     )
@@ -68,9 +74,14 @@ class Crmuser(AbstractBaseUser):
     created_at = models.DateTimeField(default=datetime.datetime.now, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(default=datetime.datetime.now)
+    user_type = models.CharField(max_length=100, default='', choices=USER_TYPE)
+    adhar_proof = models.ImageField(null=True, blank=True)
+    pancard_proof = models.ImageField(null=True,blank=True)
+    license_proof = models.ImageField(null=True, blank=True)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     orgs = models.ManyToManyField(Organisation)
+
 
     objects = CrmUserManager()
 
@@ -109,7 +120,8 @@ class Crmuser(AbstractBaseUser):
         try:
             return Crmuser.objects.get(email=email)
         except:
-            return False  
+            return False
+    
 
 CHOICE_TYPE = (
     ('1', 'Entered'), 

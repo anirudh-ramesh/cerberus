@@ -34,5 +34,11 @@ urlpatterns= [
 
     path('geofence', views.addgeofenceVehicles, name="geofence"),
 
+    path('driver', views.addDriver, name="addriver"),
+
+    path('getcsv', views.filedForCSV, name="fields"),
+    path('export_to_csv/', views.exportCSV, name="exportcsv")
+    
+
 
 ]

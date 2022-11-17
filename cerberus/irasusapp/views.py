@@ -1,12 +1,11 @@
-from wsgiref.handlers import read_environ
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from datetime import datetime
-import re
 import json
+import csv
 from user_management.models import Organisation
 # from .mixins import MessageHandler
-from .forms import CreateUserForm
+from .forms import CreateUserForm,AddUserToVehicle
 from .models import Crmuser, BatteryDetail, Geofence,Vehicle
 from django.contrib import messages
 from django.contrib.auth import logout
@@ -15,8 +14,13 @@ from .auth_helper import getSignInFlow, getTokenFromCode,getToken,getMsalApp,rem
 from db_connect import listAssignedBatteryVehicle,assignedVehicleToOrganisation,getOrgAssignedVehicle,removeAssignedVehiclefromOrganisation,listAssignedVehicleToUser,removeUserVehicle
 from django.contrib.gis.geos import Point,Polygon
 from django.contrib.gis.measure import Distance
+from django.contrib.gis import geos
+import base64
+from django.apps import apps
 
 
+from django.core.files.base import ContentFile
+import os
 
 format='%Y-%m-%d'
 
@@ -27,6 +31,7 @@ def register(request):
         contact = request.POST['contact']
         password1 = request.POST['password']
         password_conformation = request.POST['password_conformation']
+        aadhar_proof = request.FILES['aadhar_proof']
 
         if password1 == password_conformation:
             if Crmuser.objects.filter(username=username).exists():
@@ -37,7 +42,7 @@ def register(request):
                     messages.info(request,'Email is already taken! try another one')
                     return redirect('register')
                 else:
-                    user = Crmuser.objects.create_user(username=username, email=email, password=password1, contact=contact, password_conformation=password_conformation)
+                    user = Crmuser.objects.create_user(username=username, email=email, password=password1, contact=contact, password_conformation=password_conformation,aadhar_proof=aadhar_proof)
                     print(user)
                     user.save()
                     return redirect('login')   
@@ -428,13 +433,67 @@ def addgeofenceVehicles(request):
 
     return render(request, 'geolocation_form.html')
 
-
 def listgeofenceData(request):
     if request.method == "GET":
         geofencedata = list(Geofence.objects.values())    
     return render(request, 'list_geofence_data.html',{ 'geofencedata': geofencedata })
+    
 
+def addDriver(request):
+    if request.method == "POST":
+        # formdata = Crmuser()
+        username = request.POST.get('username')
+        email = request.POST.get('contact')
+        user_type =  request.POST.get('user_type')
+        adhar_proof = request.FILES['adhar_card'].file.read()
+        print(adhar_proof, "=====ADHAR_PROOF")
+        # decoded_data = base64.b64decode((adhar_proof))
+        # print(decoded_data, "=========DATA===============")
+        pancard_proof = request.FILES['pan_card'].file.read()
+        license_proof = request.FILES['driving_license'].file.read()
+        is_active = True
 
+        newdata = Crmuser.objects.create(
+            username=username,email=email,user_type=user_type,
+            adhar_proof=ContentFile(adhar_proof),pancard_proof=pancard_proof,
+            license_proof=license_proof,is_active=is_active
+        )
+        newdata.save()
+    return render(request, 'adddriver.html')
 
+def filedForCSV(request):
+    if request.method == "GET":
+        files = list(Vehicle.objects.values())
+        print(files, "=============FILES=========")      
+    return render(request, 'generate_csv.html', { 'files': files })
 
+def exportCSV(request):
+    # cwd = os.getcwd()
+    # print(cwd)
+    # model = list(Vehicle.objects.values())
+    # print(model, "======+MODEL===========")
+    # writer = csv.writer(open('demo.csv' 'w'))
+    # print(writer, "===============WRITER=======")
+    if request.method == "POST":
+        print("IN THE POST")
+        vehicle = list(Vehicle.objects.values().filter())
+        tablename = Vehicle._meta.model_name
         
+        file_name = f'{tablename}-' + str(datetime.now().date()) + '.csv'
+        print(file_name)
+        # Create the HttpResponse object with the appropriate CSV header.
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = f'attachment; filename= {file_name}'
+
+        writer = csv.writer(response)
+        headers = []
+        for field in vehicle:
+            print(field, "++++++++++FIELDS+++++++++++++++++")
+            headers.append(field.name)
+        writer.writerow(headers)
+
+        # writer.writerow(['Voltage'])
+        vehicle_fields = vehicle.values_list('configuration')
+        for user in vehicle_fields:
+            writer.writerow(user)
+        return response

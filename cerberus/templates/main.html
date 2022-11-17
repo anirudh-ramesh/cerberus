@@ -12,11 +12,20 @@
 </head>
 
 <body>
-    {% include 'navbar.html' %}
-    
-    {% block content %}
+    <div class="main-div">
+        <div class="contentload">
+            {% include 'navbar.html' %}
+        </div>
+        <div class="block-contect">
+            {% block content %}
 
-    {% endblock %}
+            {% endblock %}
+        </div>
+
+    </div>
+    
+    
+    
     <hr>
     <!-- <h5 style="text-align:center;">Our Footer</h5> -->
 </body>

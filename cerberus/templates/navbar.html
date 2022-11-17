@@ -1,34 +1,119 @@
 {% load i18n %}
 
-{% block head_title %}{% trans "Logout" %}{% endblock %}
+{% block head_title %}{% endblock %}
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Navbar</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Dashboard</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Organisation</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Battery</a>
-        </li>
-      </ul>
-    </div>
-    <div class="text-center">
-      <!-- <h1>{% trans "Sign Out" %}</h1>       -->
-      <form method="post" action="{% url 'logout' %}">
-        {% csrf_token %}
-        {% if redirect_field_value %}
-        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
-        {% endif %}
-        <button class="btn btn-light" type="submit">{% trans 'Logout' %}</button>
-      </form>
-      </div>
-    <!-- <span ><a  class="hello-msg" href="{% url 'logout' %}">Logout</a></span> -->
-  </nav>
+  <nav class="sidebar-nav">
+    <ul id="sidebarnav" class="in">
+      <li>
+        <div class="profile-img">
+          <img src="../static/images/profile.png" alt="user" class="w-100">
+       </div>
+      </li>
+
+       <li class="sidebar-item">
+          <a class="sidebar-link waves-effect waves-dark sidebar-link" href="app-calendar.html" aria-expanded="false"><i class="mdi mdi-calendar"></i><span class="hide-menu">Calendar</span></a>
+       </li>
+       <li class="sidebar-item">
+          <a class="sidebar-link waves-effect waves-dark sidebar-link" href="app-chats.html" aria-expanded="false"><i class="mdi mdi-comment-processing-outline"></i><span class="hide-menu">Chat Apps</span></a>
+       </li>
+       <li class="sidebar-item">
+          <a class="sidebar-link waves-effect waves-dark sidebar-link" href="app-contacts.html" aria-expanded="false"><i class="mdi mdi-account-box"></i><span class="hide-menu">Contact</span></a>
+       </li>
+       <li class="sidebar-item">
+          <a class="sidebar-link waves-effect waves-dark sidebar-link" href="app-invoice.html" aria-expanded="false"><i class="mdi mdi-book"></i><span class="hide-menu">Invoice</span></a>
+       </li>
+       <li class="sidebar-item">
+          <a class="sidebar-link waves-effect waves-dark sidebar-link" href="app-notes.html" aria-expanded="false"><i class="mdi mdi-arrange-bring-forward"></i><span class="hide-menu">Notes</span></a>
+       </li>
+       <li class="sidebar-item">
+          <a class="sidebar-link waves-effect waves-dark sidebar-link" href="app-todo.html" aria-expanded="false"><i class="mdi mdi-clipboard-text"></i><span class="hide-menu">Todo</span></a>
+       </li>
+       <li class="sidebar-item">
+          <a class="sidebar-link waves-effect waves-dark sidebar-link" href="app-taskboard.html" aria-expanded="false"><i class="mdi mdi-bulletin-board"></i><span class="hide-menu">Taskboard</span></a>
+       </li>
+       <li class="sidebar-item">
+          <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-inbox-arrow-down"></i><span class="hide-menu">Inbox </span></a>
+          <ul aria-expanded="false" class="collapse first-level">
+             <li class="sidebar-item">
+                <a href="inbox-email.html" class="sidebar-link"><i class="mdi mdi-email"></i><span class="hide-menu"> Email </span></a>
+             </li>
+             <li class="sidebar-item">
+                <a href="inbox-email-detail.html" class="sidebar-link"><i class="mdi mdi-email-alert"></i><span class="hide-menu"> Email Detail </span></a>
+             </li>
+             <li class="sidebar-item">
+                <a href="inbox-email-compose.html" class="sidebar-link"><i class="mdi mdi-email-secure"></i><span class="hide-menu"> Email Compose </span></a>
+             </li>
+          </ul>
+       </li>
+       <li class="sidebar-item">
+          <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-bookmark-plus-outline"></i><span class="hide-menu">Ticket </span></a>
+          <ul aria-expanded="false" class="collapse first-level">
+             <li class="sidebar-item">
+                <a href="ticket-list.html" class="sidebar-link"><i class="mdi mdi-book-multiple"></i><span class="hide-menu"> Ticket List </span></a>
+             </li>
+             <li class="sidebar-item">
+                <a href="ticket-detail.html" class="sidebar-link"><i class="mdi mdi-book-plus"></i><span class="hide-menu"> Ticket Detail </span></a>
+             </li>
+          </ul>
+       </li>
+       <li class="sidebar-item">
+          <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-widgets"></i><span class="hide-menu">Ui Elements </span></a>
+          <ul aria-expanded="false" class="collapse first-level">
+             <li class="sidebar-item">
+                <a href="ui-accordian.html" class="sidebar-link"><i class="mdi mdi-box-shadow"></i><span class="hide-menu"> Accordian</span></a>
+             </li>
+             <li class="sidebar-item">
+                <a href="ui-badge.html" class="sidebar-link"><i class="mdi mdi-application"></i><span class="hide-menu"> Badge</span></a>
+             </li>
+             <li class="sidebar-item">
+                <a href="ui-buttons.html" class="sidebar-link"><i class="mdi mdi-toggle-switch"></i><span class="hide-menu"> Buttons</span></a>
+             </li>
+             <li class="sidebar-item">
+                <a href="ui-modals.html" class="sidebar-link"><i class="mdi mdi-tablet"></i><span class="hide-menu"> Modals</span></a>
+             </li>
+             <li class="sidebar-item">
+                <a href="ui-tab.html" class="sidebar-link"><i class="mdi mdi-sort-variant"></i><span class="hide-menu"> Tab</span></a>
+             </li>
+             <li class="sidebar-item">
+                <a href="ui-tooltip-popover.html" class="sidebar-link"><i class="mdi mdi-image-filter-vintage"></i><span class="hide-menu"> Tooltip &amp; Popover</span></a>
+             </li>
+             <li class="sidebar-item">
+                <a href="ui-notification.html" class="sidebar-link"><i class="mdi mdi-message-bulleted"></i><span class="hide-menu"> Notification</span></a>
+             </li>
+             <li class="sidebar-item">
+                <a href="ui-progressbar.html" class="sidebar-link"><i class="mdi mdi-poll"></i><span class="hide-menu"> Progressbar</span></a>
+             </li>
+             <li class="sidebar-item">
+                <a href="ui-typography.html" class="sidebar-link"><i class="mdi mdi-format-line-spacing"></i><span class="hide-menu"> Typography</span></a>
+             </li>
+             <li class="sidebar-item">
+                <a href="ui-bootstrap.html" class="sidebar-link"><i class="mdi mdi-bootstrap"></i><span class="hide-menu"> Bootstrap Ui</span></a>
+             </li>
+             <li class="sidebar-item">
+                <a href="ui-breadcrumb.html" class="sidebar-link"><i class="mdi mdi-equal"></i><span class="hide-menu"> Breadcrumb</span></a>
+             </li>
+             <li class="sidebar-item">
+                <a href="ui-lists.html" class="sidebar-link"><i class="mdi mdi-file-video"></i><span class="hide-menu"> List Media</span></a>
+             </li>
+             <li class="sidebar-item">
+                <a href="ui-grid.html" class="sidebar-link"><i class="mdi mdi-view-module"></i><span class="hide-menu"> Grid</span></a>
+             </li>
+             <li class="sidebar-item">
+                <a href="ui-carousel.html" class="sidebar-link"><i class="mdi mdi-view-carousel"></i><span class="hide-menu"> Carousel</span></a>
+             </li>
+             <li class="sidebar-item">
+                <a href="ui-offcanvas.html" class="sidebar-link"><i class="mdi mdi-copy"></i><span class="hide-menu"> Offcanvas</span></a>
+             </li>
+             <li class="sidebar-item">
+                <a href="ui-scrollspy.html" class="sidebar-link"><i class="mdi mdi-application"></i><span class="hide-menu"> Scrollspy</span></a>
+             </li>
+             <li class="sidebar-item">
+                <a href="ui-toasts.html" class="sidebar-link"><i class="mdi mdi-credit-card-scan"></i><span class="hide-menu"> Toasts</span></a>
+             </li>
+             <li class="sidebar-item">
+                <a href="ui-spinner.html" class="sidebar-link"><i class="mdi mdi-apple-safari"></i><span class="hide-menu"> Spinner</span></a>
+             </li>
+          </ul>
+       </li>
+    </ul>
+ </nav>

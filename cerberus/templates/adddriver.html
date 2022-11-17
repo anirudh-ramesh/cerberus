@@ -1,0 +1,73 @@
+
+{% extends 'main.html' %}
+
+{% block content %}
+
+{% include 'status.html' %}
+
+
+<br>
+
+<div class="row">
+	<div class="col-md-5">
+		<h5>Add Driver Details</h5>
+		<hr>
+		<div class="card card-body">
+			<a class="btn btn-primary  btn-sm btn-block" href="">Vehicle Details</a>
+			<div class="card card-body">
+				<div class="d-flex justify-content-start form_container">
+					<form method="POST" action="" enctype="multipart/form-data">
+						{% csrf_token %}
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Username</label>
+								<input type='text' name='username' class="input-register-text" required>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Contact</label>
+								<input type='text' name='contact' class="input-register-text" required>
+							</div>
+						</div>
+                        <div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>User Type</label>
+                                <select type="text"  name="user_type" class="input-register-text" required>
+                                    <option>User</option>
+                                    <option>Driver</option>
+                                </select>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Adhar Card</label>
+								<input type='file' name='adhar_card' class="input-register-text" required>		
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Pan Card</label>
+								<input type='file' name='pan_card' class="input-register-text" required>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Driving License</label>
+								<input type='file' name='driving_license' class="input-register-text" required>
+							</div>
+						</div>
+
+						<div class="d-flex justify-content-center mt-3">
+				 			<input class="btn btn-success" type="submit" value="Submit">
+				   		</div>
+
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+{% endblock %}

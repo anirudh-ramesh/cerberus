@@ -285,3 +285,7 @@ SITE_ID = 1
 LOGIN_REDIRECT_URL = 'home'
 
 ACCOUNT_LOGOUT_REDIRECT_URL = 'login'
+
+MEDIA_URL = 'images/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images/')
