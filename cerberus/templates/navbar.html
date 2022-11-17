@@ -1,14 +1,16 @@
 {% load i18n %}
-
+{% load static %}
 {% block head_title %}{% endblock %}
+   
+  <nav class="sidebar-nav"> <div class="profile-img">
+   <img src="../static/images/profile.png" alt="user" class="w-50">
+</div> 
+  
 
-  <nav class="sidebar-nav">
     <ul id="sidebarnav" class="in">
-      <li>
-        <div class="profile-img">
-          <img src="../static/images/profile.png" alt="user" class="w-100">
-       </div>
-      </li>
+      
+        
+    
 
        <li class="sidebar-item">
           <a class="sidebar-link waves-effect waves-dark sidebar-link" href="app-calendar.html" aria-expanded="false"><i class="mdi mdi-calendar"></i><span class="hide-menu">Calendar</span></a>
@@ -116,4 +118,5 @@
           </ul>
        </li>
     </ul>
+   
  </nav>
