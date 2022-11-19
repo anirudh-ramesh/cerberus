@@ -3,22 +3,25 @@
 {% block content %}
 
 <h5>GENERATE CSV</h5>
-					<div class="input-group mb-2">
-						<div class="input-group-append">
-							<label>Voltage</label>
-              <input class="form-check-input" id="voltage" type="checkbox" checked="checked" value="test" name="configuration">
-						</div>
-					</div>
-					<div class="input-group mb-2">
-						<div class="input-group-append">
-							<label>Battery Serial Number</label>
-							<input class="form-check-input"  id="battery_serial_num" name='battery_serial_num' type="checkbox" checked="checked" >
-						</div>
-					</div>
-
-          <div class="d-flex justify-content-center mt-3 login_container">
-            <input class="btn btn-success"  id="demo222" type="submit">
-          </div>
+        <!-- <form action="" method="POST"> -->
+          <!-- {% csrf_token %} -->
+            <div class="input-group mb-2">
+              <div class="input-group-append">
+                <label>Voltage</label>
+                <input class="form-check-input" id="voltage" type="checkbox" checked="checked" value="test" name="configuration">
+              </div>
+            </div>
+            <div class="input-group mb-2">
+              <div class="input-group-append">
+                <label>Battery Serial Number</label>
+                <input class="form-check-input"  id="battery_serial_num" name='battery_serial_num' type="checkbox" checked="checked" >
+              </div>
+            </div>
+            
+            <div class="d-flex justify-content-center mt-3 login_container">
+              <input class="btn btn-success"  id="demo222" type="submit">
+            </div>
+        <!-- </form>       -->
 <script>
   
   let object=document.getElementById('demo222')
@@ -28,14 +31,13 @@
     let battery_serial_num=document.getElementById("battery_serial_num")
     
     if(voltage.checked){
-      selectfield=selectfield?selectfield+"@=voltage":"voltage"
+      selectfield=selectfield?selectfield+"@=configuration":"configuration"
     }
 
     if(battery_serial_num.checked){
-      selectfield=selectfield?selectfield+"@=model_name":"model_name"
+      selectfield=selectfield?selectfield+"@=vehicle_model_name":"vehicle_model_name"
     }
     window.location=`http://localhost:8000/export_to_csv?selectfield=${selectfield}`
-
   });
 
 </script>

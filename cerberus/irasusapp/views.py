@@ -19,7 +19,7 @@ from django.contrib.gis import geos
 from django.apps import apps
 from base64 import b64encode
 from django.core.files.base import ContentFile
-import os
+from django.db.models import F, Q
 
 format='%Y-%m-%d'
 
@@ -519,34 +519,38 @@ def filedForCSV(request):
     if request.method == "GET":
         files = list(Vehicle.objects.values())
         data= request.POST.getlist('checkedvalue')
-        print(data)
         # print(files, "=============FILES=========GET")        
-    return render(request, 'generate_csv.html', { 'files': files })
+    return render(request, 'generate_csv.html')
 
 def exportCSV(request):
 
     getData=str(request.get_full_path()).split("?selectfield=")
     if(getData[1]):
         getData = getData[1].split("@=")
+    filterData=getData
 
-    vehicle = Vehicle.objects.all()
-    # 'configuration','vehicle_model_name'
-    filterdata = vehicle.values_list('configuration','vehicle_model_name')
-
+    data = list(Vehicle.objects.filter(
+    Q(created_date='2022-11-17') |
+    Q(created_date='2022-11-19')
+    ).values_list(*filterData))
     tablename = Vehicle._meta.model_name
+
     file_name = f'{tablename}-' + str(datetime.now().date()) + '.csv'
-    print(file_name)
 
     # Create the HttpResponse object with the appropriate CSV header.
     response = HttpResponse(content_type='text/csv')
+
     response['Content-Disposition'] = f'attachment; filename= {file_name}'
 
     writer = csv.writer(response)
+
     headers = []
+
     for i in getData:
         headers.append(i)
+
     writer.writerow(headers)
 
-    for i in filterdata:
+    for i in data:
         writer.writerow(i)
     return response

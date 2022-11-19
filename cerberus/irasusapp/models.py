@@ -170,6 +170,7 @@ class Vehicle(models.Model):
     insurance_end_date = models.DateField(default='',blank=True, null=True)
     vehicle_selected = models.BooleanField(default=False)
     assigned_to = models.ForeignKey(Crmuser,default=None,on_delete=models.CASCADE, null=True, blank=True)
+    created_date = models.DateField(blank=True,null=True)
     geofence = models.ManyToManyField(Geofence)
 
     def __str__(self):
