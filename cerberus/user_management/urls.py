@@ -26,5 +26,8 @@ urlpatterns= [
         path('newrole/', views.listedUserRole, name="mrole"),
         path(r'list/<int:id>', views.orgUserinfo, name="list"), 
 
-   
+        path('addswap/', views.addSwapStation, name="addswap"),
+        path(r'listswapstation', views.listSwapstation, name="listswap"),
+        path('updateswapstation/<int:id>', views.updateSwapstationDetails, name="swapstation"),
+        path('deletewapstation/<int:id>', views.deleteSwapStation, name="deleteswapstation"),  
 ]

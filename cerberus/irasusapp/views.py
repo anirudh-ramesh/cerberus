@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from datetime import datetime
 import json
 import csv
+from django.utils import timezone
 from user_management.models import Organisation
 # from .mixins import MessageHandler
 from .forms import CreateUserForm
@@ -11,18 +12,21 @@ from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.hashers import make_password, check_password
 from .auth_helper import getSignInFlow, getTokenFromCode,getToken,getMsalApp,removeUserAndToken, storeUser
-from db_connect import listAssignedBatteryVehicle,assignedVehicleToOrganisation,getOrgAssignedVehicle,removeAssignedVehiclefromOrganisation,listAssignedVehicleToUser,removeUserVehicle
+from db_connect import listAssignedBatteryVehicle,assignedVehicleToOrganisation,getOrgAssignedVehicle,removeAssignedVehiclefromOrganisation,listAssignedVehicleToUser,removeUserVehicle,images_display
 from django.contrib.gis.geos import Point,Polygon
 from django.contrib.gis.measure import Distance
 from django.contrib.gis import geos
-import base64
 from django.apps import apps
-
-
+from base64 import b64encode
 from django.core.files.base import ContentFile
 import os
 
 format='%Y-%m-%d'
+
+
+def dashboard(request):
+    return render(request,'dashboard.html')
+
 
 def register(request):
     if request.method == 'POST':
@@ -403,14 +407,11 @@ def addgeofenceVehicles(request):
         enter_lat =request.POST['enter_latitude']
         newdata=json.loads(enter_lat)
         coordinate_data = newdata["features"][0]['geometry']['coordinates']
-        # radius_data = newdata["features"][0]['properties']['radius']
 
         if newdata["features"][0]['geometry']['type'] == 'Point':
             print("POINT")
             longitude = coordinate_data[0]
             latitude = coordinate_data[1]
-            # circle_radius = Distance(float(radidus))
-            # print(circle_radius, "=====CIRCLE")
             location = Point(float(longitude),float(latitude),srid=4326)            
             newdata = Geofence.objects.create(geoname=geoname,geotype=geotype,description=description,enter_latitude=latitude,enter_longitude=longitude,pos_address=position_add,location=location)
             return render(request, 'geolocation_form.html')
@@ -440,26 +441,79 @@ def listgeofenceData(request):
     
 
 def addDriver(request):
-    if request.method == "POST":
-        # formdata = Crmuser()
-        username = request.POST.get('username')
-        email = request.POST.get('contact')
-        user_type =  request.POST.get('user_type')
-        adhar_proof = request.FILES['adhar_card'].file.read()
-        print(adhar_proof, "=====ADHAR_PROOF")
-        # decoded_data = base64.b64decode((adhar_proof))
-        # print(decoded_data, "=========DATA===============")
-        pancard_proof = request.FILES['pan_card'].file.read()
-        license_proof = request.FILES['driving_license'].file.read()
-        is_active = True
+    try:
+        if request.method == "POST":
+            username = request.POST.get('username')
+            email = request.POST.get('contact')
+            user_type =  request.POST.get('user_type')
+            adhar_proof = request.FILES['adhar_card'].file.read()
+            pancard_proof = request.FILES['pan_card'].file.read()
+            license_proof = request.FILES['driving_license'].file.read()
+            is_active = True
 
-        newdata = Crmuser.objects.create(
-            username=username,email=email,user_type=user_type,
-            adhar_proof=ContentFile(adhar_proof),pancard_proof=pancard_proof,
-            license_proof=license_proof,is_active=is_active
-        )
-        newdata.save()
-    return render(request, 'adddriver.html')
+            newdata = Crmuser.objects.create(
+                username=username,email=email,user_type=user_type,
+                adhar_proof=adhar_proof,pancard_proof=pancard_proof,
+                license_proof=license_proof,is_active=is_active
+            )
+            newdata.save()
+        return render(request, 'adddriver.html')
+
+    except Exception as e:
+        print("Server Error")
+
+def listAddedDriver(request):
+    if request.method == "GET":
+        driverData = images_display()
+
+    context={
+            "drivers": driverData
+            }
+    return render(request, 'list_drivers.html',context)
+
+def updateDriver(request,id):
+    proofs_data = []
+    pi =list(Crmuser.objects.filter(pk=id).values())
+    for data in pi:
+        binary_data = b64encode(data['adhar_proof']).decode("utf-8")
+        proofs_data.append({'adhar_proof' : binary_data})
+        # pan_data = b64encode(data['pancard_proof']).decode("utf-8")
+        # proofs_data.append({'pancard_proof': pan_data })
+        # driving_license = b64encode(data['license_proof']).decode("utf-8")
+        # proofs_data.append({'license_proof': driving_license })
+    print(proofs_data, "============PROOFS-DATA=============")
+
+    if request.method == 'POST':
+        username = request.POST['username']
+        email = request.POST['email']
+        contact = request.POST['contact']
+        # last_login = request.POST['lastlogin']
+        isactive = request.POST.get('is_active')
+        adhar_proof = request.FILES['adhar_proof']
+        pancard_proof = request.FILES['pancard_proof']
+        license_proof = request.FILES['license_proof']
+        
+        if isactive == 'on':
+            isactive = True
+        else:
+            isactive = False
+        Crmuser.objects.filter(email=id).update(username=username,email=email,contact=contact,is_active=isactive,adhar_proof=adhar_proof,updated_at = timezone.now())
+        pi=[{"email":email ,"username":username, "contact":contact, "is_active": isactive, "adhar_proof": adhar_proof }]
+        return render(request,'update_driver.html',{ 'form': pi })
+
+    pi =list(Crmuser.objects.filter(pk=str(id)).values())
+    return render(request,'update_driver.html',{ 'form': pi })
+
+def deleteDriver(request, id):
+    try:
+        pi = Crmuser.objects.get(pk=id)
+        if request.method == 'POST':
+            pi.delete()
+            return redirect('getdrivers')
+        context = {}
+        return render(request, "update_driver.html", context)
+    except Exception as e:
+        print("Error While deleting Record",e)
 
 def filedForCSV(request):
     if request.method == "GET":
@@ -474,7 +528,7 @@ def exportCSV(request):
     getData=str(request.get_full_path()).split("?selectfield=")
     if(getData[1]):
         getData = getData[1].split("@=")
-        
+
     vehicle = Vehicle.objects.all()
     # 'configuration','vehicle_model_name'
     filterdata = vehicle.values_list('configuration','vehicle_model_name')

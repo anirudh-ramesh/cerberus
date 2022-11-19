@@ -1,4 +1,5 @@
 import psycopg2 as db
+import base64
 
 def connect():
     conn=db.connect(host="localhost",user="postgres",password="1234",database='battery_management')
@@ -347,3 +348,25 @@ def removeUserVehicle(select,chasis_number):
     cursor.execute(sql)
     conn.commit()
     cursor.close()
+
+
+#CONVERY BINARY DATA TO UTF-8 TO SHOW IMAGES
+def images_display():
+    conn=db.connect(host="localhost",user="postgres",password="1234",database='battery_management')
+    cursor = conn.cursor()
+    sql = 'SELECT adhar_proof,pancard_proof,license_proof,email,username,user_type,is_active FROM irasusapp_crmuser;'
+    cursor.execute(sql)
+    results = cursor.fetchall()
+    one_row = []
+    for value in results:
+        res={}
+        res['adhar_proof'] = base64.b64encode(value[0]).decode("utf-8")
+        res['pan_proof'] = base64.b64encode(value[1]).decode("utf-8")
+        res['driving_license'] = base64.b64encode(value[2]).decode("utf-8")
+        res['email'] = value[3]
+        res['username'] = value[4]
+        res['user_type'] = value[5]
+        res['is_active'] = value[6]
+        one_row.append(res)
+    print(one_row)
+    return one_row

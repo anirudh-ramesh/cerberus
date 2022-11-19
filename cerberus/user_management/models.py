@@ -58,4 +58,31 @@ class OrganisationPermission(models.Model):
 
     def __str__(self):
         return self.role_name.upper()
-    
+
+DOOR_CHOICES = (
+    ('1', '1'),
+    ('2', '2'),
+    ('3', '3'),
+    ('4', '4'),
+)
+
+CHARGE_SPECIFICATION = (
+    ('58V 15A', '58V 15A'),
+    ('66V 12A', '66V 12A')
+)
+
+ASSIGN_OWNER = (
+    ('LEAP', 'leap'),
+    ('CACTUS', 'cactus')
+)
+
+class Swapstation(models.Model):
+    swap_station_name = models.CharField(max_length=225, default='', blank=True)
+    imei_number = models.CharField(max_length=225, default='', blank=True, primary_key=True)
+    number_of_doors = models.CharField(max_length=225, blank=True, choices=DOOR_CHOICES)
+    charge_specification = models.CharField(max_length=225, blank=True, choices=CHARGE_SPECIFICATION)
+    configuration = models.CharField(max_length=225,blank=True)
+    assigned_owner = models.CharField(max_length=225,blank=True,choices=ASSIGN_OWNER)
+    status = models.CharField(max_length=225,default='', blank=True, null=True)
+    assigned_fleet_owner = models.CharField(max_length=225,blank=True,null=True)
+    battery_swap = models.ForeignKey("irasusapp.BatteryDetail",default=None,on_delete=models.CASCADE, null=True, blank=True)

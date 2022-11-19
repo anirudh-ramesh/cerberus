@@ -1,0 +1,120 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-8 offset-2">
+        <h4 class="alert alert-info">Update Swap-Station Details</h4>
+        {% if update_swap_station_data %}
+            <form method="POST" action="">
+                {% csrf_token %}
+                {% for fm in update_swap_station_data %}
+                    <div class="input-group mb-2">
+                        <div class="input-group-append">
+                            <label>Vehicle Model Name</label>
+                            <input type='text' name='swap_station_name' value="{{fm.swap_station_name}}" class="input-register-text" required>
+                        </div>
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="input-group-append">
+                            <label>Chasis Number</label>
+                            <input type='text' name='imei_number' value="{{fm.imei_number}}" class="input-register-text" required>
+                        </div>
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="input-group-append">
+                            <label>Number of Doors</label>
+                            <select type="text" name="number_of_doors" required>
+                                {% if fm.number_of_doors == "1" %}
+                                    <option value="1" selected>1</option>
+                                {% else %}
+                                    <option value="1">1</option>
+                                {% endif %}
+                                {% if fm.number_of_doors == "2" %}
+                                    <option value="2" selected>2</option>
+                                {% else %}
+                                    <option value="2">2</option>
+                                {% endif %}
+                                
+                                {% if fm.number_of_doors == "3" %}
+                                    <option value="3" selected>3</option>
+                                {% else %}
+                                    <option value="3">3</option>
+                                {% endif %}
+
+                                {% if fm.number_of_doors == "4" %}
+                                    <option value="4" selected>4</option>
+                                {% else %}
+                                    <option value="4">4</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="input-group-append">
+                            <label>Charge Specification</label>
+                            <select type="text" name="charge_specification" value="{{fm.charge_specification}}" class="input-register-text" required>
+                                {% if fm.charge_specification == "58V 15A" %}
+                                    <option value="58V 15A" selected>58V 15A</option>
+                                {% else %}
+                                    <option value="58V 15A">58V 15A</option>
+                                {% endif %}
+                                {% if fm.charge_specification == "66V 12A" %}
+                                    <option value="66V 12A" selected>66V 12A</option>
+                                {% else %}
+                                    <option value="66V 12A">66V 12A</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="input-group-append">
+                            <label>Vehicle Iot Imei Number</label>
+                            <input type='text' name='configuration' value="{{fm.configuration}}" class="input-register-text" required>		
+                        </div>
+                    </div>
+                    assigned_owner
+                    <div class="input-group mb-2">
+                        <div class="input-group-append">
+                            <label>Assigned Owner</label>
+                            <select type="text" name="assigned_owner" value="{{fm.assigned_owner}}" class="input-register-text" required>
+                                {% if fm.assigned_owner == "LEAP" %}
+                                    <option value="LEAP" selected>LEAP</option>
+                                {% else %}
+                                    <option value="LEAP">LEAP</option>
+                                {% endif %}
+                                {% if fm.assigned_owner == "CACTUS" %}
+                                    <option value="CACTUS" selected>CACTUS</option>
+                                {% else %}
+                                    <option value="CACTUS">CACTUS</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="input-group-append">
+                            <label>Status</label>
+                            <input type='text' name='status' value="{{fm.status}}" class="input-register-text" required>
+                        </div>
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="input-group-append">
+                            <label>Assigned Fleet Owner</label>
+                            <input type='text' name='assigned_fleet_owner' value="{{fm.assigned_fleet_owner}}" class="input-register-text" required>
+                        </div>
+                    </div>
+
+                {% endfor %}
+
+                <input type="submit" class="btn btn-success" value="Update">
+                <a href="{% url 'user_management:listswap' %}" class="btn btn-info">Back To Details </a>
+
+
+            {% else %}
+                <h4 class="text-center alert alert warning">No Records Found</h4>
+            {% endif %}
+        </form>
+    </div>
+</div>
+
+{% endblock %}

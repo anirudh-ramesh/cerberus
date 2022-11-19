@@ -2,9 +2,6 @@
 {% extends 'main.html' %}
 
 {% block content %}
-
-<!DOCTYPE html>
-<html>
    <head>
       <title>Home</title>
       <meta charset="utf-8">
@@ -15,24 +12,13 @@
       <link href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/1.8.36/css/materialdesignicons.css" rel="stylesheet">
       <link href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/1.8.36/css/materialdesignicons.min.css" rel="stylesheet">
       <link rel="stylesheet" href="assets/css/bs/dist/css/bootstrap.css" />
-      <link rel="stylesheet" href="assets/css/style.min.css">
       <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/flag-icon-css/flags/">
       <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/jquery-sparkline@2.4.0/jquery.sparkline.min.js" integrity="sha256-TKXwAzwvBOzpxaMZKl64fccBhJvyg3wrI8/joXU4VA4=" crossorigin="anonymous"></script>
    </head>
+
    <body class="body">
       <div id="main-wrapper" data-theme="light" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="mini-sidebar" data-sidebar-position="fixed" data-header-position="fixed" data-boxed-layout="full">
-         <aside class="left-sidebar">
-            <!-- Sidebar scroll-->
-            <!-- User profile -->
-
-            <!-- End Sidebar navigation -->
-            <!-- End Sidebar scroll-->
-            <!-- Bottom points-->
-            <div class="sidebar-footer">
-            </div>
-            <!-- End Bottom points-->
-         </aside>
          <div class="page-wrapper" style="display: block;">
             <!-- ============================================================== -->
             <!-- Bread crumb and right sidebar toggle -->
@@ -44,33 +30,24 @@
             </div>
             <div class="container-fluid">
                <!-- Row -->
-               
                <div class="row">
-                 
                   <div class="col-lg-4 col-md-6 mb-3">
                      <div class="card h-100">
                         <div class="card-body" >
                            <h6 class="card-title">Extracting real time insights from Energy Assets.</h6>
                            <div class="pro_gress">
-                              <div class="text-end">
-                                 <i class="ti-arrow-right text-purple"></i> 
-                              </div>
                               <h3 onclick="location.href = '/getdata'" class="text-black">Battery Packs
                               </h3>
-							  
                            </div>
                         </div>
                         <img class="card-img-top" src="../static/images/1.png" alt="Card image cap">
                      </div>
                   </div>
                   <div class="col-lg-4 col-md-6 mb-3">
-                     <div class="card">
+                     <div class="card h-100">
                         <div class="card-body" >
                            <h6 class="card-title">Extracting real time insights from Energy Assets.</h6>
                            <div class="pro_gress">
-                              <div class="text-end">
-                                 <i class="ti-arrow-right text-purple"></i> 
-                              </div>
                               <h3 class="text-black">Swaping Station</h3>
                            </div>
                         </div>
@@ -78,13 +55,10 @@
                      </div>
                   </div>
                   <div class="col-lg-4 col-md-6 mb-3">
-                     <div class="card">
+                     <div class="card h-100">
                         <div class="card-body" >
                            <h6 class="card-title">Extracting real time insights from Energy Assets.</h6>
                            <div class="pro_gress">
-                              <div class="text-end">
-                                 <!-- <i class="ti-arrow-right text-purple"></i>  -->
-                              </div>
                               <h3 onclick="location.href = '/geofence'" class="text-black">Geography</h3>
                            </div>
                         </div>
@@ -92,13 +66,10 @@
                      </div>
                   </div>
                   <div class="col-lg-4 col-md-6 mb-3">
-                     <div class="card">
+                     <div class="card h-100">
                         <div class="card-body" >
                            <h6 class="card-title">Extracting real time and actionable insights from Energy Assets.</h6>
                            <div class="pro_gress">
-                              <div class="text-end">
-                                 <i class="ti-arrow-right text-purple"></i> 
-                              </div>
                               <h3 onclick="location.href = '/getuser'" class="text-black">Users</h3>
                            </div>
                         </div>
@@ -106,13 +77,10 @@
                      </div>
                   </div>
                   <div class="col-lg-4 col-md-6 mb-3">
-                     <div class="card">
+                     <div class="card h-100">
                         <div class="card-body" >
                            <h6 class="card-title">Extracting real time and actionable insights from Energy Assets.</h6>
                            <div class="pro_gress">
-                              <div class="text-end">
-                                 <i class="ti-arrow-right text-purple"></i> 
-                              </div>
                               <h3 onclick="location.href = '/getvehicle'" class="text-black">Vehicles</h3>
                            </div>
                         </div>
@@ -120,13 +88,10 @@
                      </div>
                   </div>
                   <div class="col-lg-4 col-md-6 mb-3">
-                     <div class="card">
+                     <div class="card h-100">
                         <div class="card-body" >
                            <h6 class="card-title">Extracting real time and actionable insights</h6>
                            <div class="pro_gress">
-                              <div class="text-end">
-                                 <i class="ti-arrow-right text-purple"></i> 
-                              </div>
                               <h3 class="text-black">VCU</h3>
                            </div>
                         </div>
@@ -134,13 +99,10 @@
                      </div>
                   </div>
                   <div class="col-lg-4 col-md-6 mb-3">
-                     <div class="card">
+                     <div class="card h-100">
                         <div class="card-body" >
                            <h6 class="card-title">Extracting real time and actionable insights from Energy Assets.</h6>
                            <div class="pro_gress">
-                              <div class="text-end">
-                                 <i class="ti-arrow-right text-purple"></i> 
-                              </div>
                               <h3 class="text-black">IOT Devices</h3>
                            </div>
                         </div>
@@ -148,41 +110,30 @@
                      </div>
                   </div>
                   <div class="col-lg-4 col-md-6 mb-3">
-                     <div class="card">
+                     <div class="card h-100">
                         <div class="card-body" >
                            <h6 class="card-title">Extracting real time and actionable insights from Energy Assets.</h6>
                            <div class="pro_gress">
-                              <div class="text-end">
-                                 <i class="ti-arrow-right text-purple"></i> 
-                              </div>
-                              <h3 class="text-black">Reports</h3>
+                              <h3 onclick="location.href = '/getcsv'" class="text-black">Reports</h3>
                            </div>
                         </div>
                         <img class="card-img-top" src="../static/images/8.png" alt="Card image cap">
                      </div>
                   </div>
                   <div class="col-lg-4 col-md-6 mb-3">
-                     <div class="card">
+                     <div class="card h-100">
                         <div class="card-body" >
                            <h6 class="card-title">Extracting real time insights from Energy Assets.</h6>
                            <div class="pro_gress">
-                              <div class="text-end">
-                                 <i class="ti-arrow-right text-purple"></i> 
-                              </div>
                               <h3 class="text-black">Settings</h3>
                            </div>
                         </div>
                         <img class="card-img-top" src="../static/images/9.png" alt="Card image cap">
                      </div>
                   </div>
- 
                </div>
-          
             </div>
          </div>
       </div>
-   </body>
-</html>
-
 
 {% endblock %}

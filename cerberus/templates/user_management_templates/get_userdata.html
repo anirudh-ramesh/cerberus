@@ -2,7 +2,7 @@
 
 {% block content %}
 
-{% include 'status.html' %}
+<!-- {% include 'status.html' %} -->
 
 <div class="col-sm-8">
     <h4 class="text-center alert alert info">User Data</h4>
@@ -15,7 +15,7 @@
                         <th scope="col">Username</th>
                         <th scope="col">Email</th>
                         <th scope="col">Contact</th>
-                        <th scope="col">Adhar-Proof</th>
+                        <!-- <th scope="col">Adhar-Proof</th> -->
                         <th scope="col">Assigned-Vehicle</th>
                       </tr>
                     <tbody>
@@ -24,8 +24,8 @@
                         <td>{{fm.username}}</td>
                         <td>{{fm.email}}</td>
                         <td>{{fm.contact}}</td>
-                        <td>{{fmadhar_proof}}</td>
-                        <td><img src="{{fm.adhar_proof.url}}" alt="" class="card-img-top"></td>
+                        <!-- <td>{{fmadhar_proof}}</td> -->
+                        <!-- <td><img src="{{fm.adhar_proof.url}}" alt="" class="card-img-top"></td> -->
                         <td>
                             <a href="{% url 'user_management:update' fm.email %}" class="btn btn-warning btn-sm">Edit</a>
                             <form action="{% url 'user_management:delete' fm.email %}" method="POST" class="d-inline">

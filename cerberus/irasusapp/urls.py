@@ -12,7 +12,8 @@ urlpatterns= [
         # path('otp/', views.userOtp, name='otp'),
         path('logout/', views.logoutUser, name="logout"),
 
-    path('dashboard/', views.batteryDetails, name="home"),
+    path('dashboard/', views.dashboard, name="home"),
+    path('dashboarddata/', views.batteryDetails, name="homed"),
     path('signin', views.signIn, name='signin'),
     path(r'getdata', views.getBatteryDetails, name='data'),
     path('update/<int:id>/', views.updateBatteryDetails, name="updatedata"),
@@ -35,6 +36,10 @@ urlpatterns= [
     path('geofence', views.addgeofenceVehicles, name="geofence"),
 
     path('driver', views.addDriver, name="addriver"),
+    
+    path('listdriver', views.listAddedDriver, name="getdrivers"),
+    path('updatedriver/<str:id>', views.updateDriver, name="updatedriver"),
+    path('deletedriver/<str:id>', views.deleteDriver, name="deletedriver"),
 
     path('getcsv', views.filedForCSV, name="fields"),
     path(r'export_to_csv', views.exportCSV, name="exportcsv")
