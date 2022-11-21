@@ -168,9 +168,9 @@ a {
 }
 #main-wrapper {
     width: 100%;
-    /* overflow: hidden; */
-    /* display: flex;
-    flex-direction: column; */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
     height: 100%;
 }
 .page-wrapper {
@@ -282,9 +282,7 @@ a {
 }
 .iconlink{
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-content: center;
+    min-width: calc(205px);
     justify-content: center;
     align-items: center;
     border: 1px solid #060707;
@@ -340,6 +338,35 @@ a {
 .card {
     display: flex;
     flex-direction: row;
+}
+.card-wrap {
+    position: relative;
+    width: 50%;
+    height: 500px;
+    padding: 50px 40px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    background-color: #36807f;
+    background-position: 0% 100%;
+    background-size: auto;
+    background-repeat: no-repeat;
+}
+@media screen and (max-width: 515px){
+.card-wrap {
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    width: 100%;
+    height: auto;
+    padding: 20px 20px 100px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 0px;
+    background-size: 15%;
+}
+.login_form {
+    display: flex;
+    flex-wrap: wrap;
+}
 }
 .h-100{
     border-radius: 25px !important;
@@ -421,20 +448,7 @@ a {
     padding: 14px 12px;
 }
 }
-@media (max-width: 768px){
-   .login_form {
-    flex: 0 0 auto;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    /* align-content: center;
-    align-items: center;
-    flex-direction: column;
-    flex-wrap: wrap; */
-    }
-    
-    }
-    
+
 
 .sidebar-nav ul .sidebar-item {
     width: 100%;
@@ -483,6 +497,7 @@ a {
 .card-header:first-child {
     border-radius: var(--bs-card-inner-border-radius) var(--bs-card-inner-border-radius) 0 0;
     margin: 1rem 0;
+    background-color: #fff;
 }
 .card .card-header .card-title {
     margin-bottom: 0;
@@ -491,9 +506,10 @@ a {
 	flex: 0 0 auto;
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-content: center;
     align-items: center;
+    grid-column-gap: 8px;
 }
 
 img {
@@ -528,8 +544,15 @@ p {
     background-color: #fff;
     border: 1px solid #060707;
     appearance: none;
-    border-radius: 4px;
+    border-radius: 10px;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.form-control:focus {
+    color: #212529;
+    background-color: #fff;
+    border-color: #060707;
+    outline: 0;
+    box-shadow: none;
 }
 .form-floating>label {
     position: absolute;

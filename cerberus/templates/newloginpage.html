@@ -21,14 +21,14 @@
       <script src="https://cdn.jsdelivr.net/npm/jquery-sparkline@2.4.0/jquery.sparkline.js" integrity="sha256-UXaoZu8TFSsEGCOy3jBJ/rqmMUczmSrcCoaXT/8qItU=" crossorigin="anonymous"></script>
    </head>
    <body class="body">
-      <div id="main-wrapper" data-theme="light" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="mini-sidebar" data-sidebar-position="fixed" data-header-position="fixed" data-boxed-layout="full">
+      <div id="main-wrapper" style="justify-content: center;">
    
-         <div class="page-wrapper" style="display: block; margin-left: 0;">
+         <div class="page-wrapper" style="display: flex; overflow: auto;">
             <!-- ============================================================== -->
             <!-- Bread crumb and right sidebar toggle -->
             <!-- ============================================================== -->
             
-            <div class="container-fluid" style="display: flex; align-content: center;justify-content: center;align-items: center;width: 1000px;">
+            <div class="container-fluid" style="max-width: 1000px;">
                <!-- Row -->
                <div class="row g-0 d-flex align-items-center">
                   <div class="col-lg-6 p-0">
@@ -41,19 +41,19 @@
                            <div class="row">
                            
                               <div class="login_form  col-12">
-                                <div class="iconlink col-6 mb-3 "> 
-                                 <a href="#" class="btn-face m-b-20" role="button" data-bs-toggle="button"><img src="../static/newicons/User onboarding screens/Google.svg" alt="GOOGLE"> Login with Google</a>
-                                <a href="#" class="btn-google m-b-20">
+                                <div class="iconlink col-5 mb-3 "> 
+                                 <a href="#" class="btn-face m-b-20" role="button" data-bs-toggle="button"><img src="../static/newicons/User onboarding screens/Google.svg"> <span class="ms-2">Login with Google</span></a>
+                               
                                   
                                     
                                 </div>    
-                                 <div class="iconlink col-6 mb-3 "> 
-                                    <a href="#" class="btn-face m-b-20" role="button" data-bs-toggle="button"><img src="../static/newicons/User onboarding screens/Microsoft.svg" alt="GOOGLE"> Login with Microsoft</a>
+                                 <div class="iconlink col-5 mb-3 "> 
+                                    <a href="#" class="btn-face m-b-20" role="button" data-bs-toggle="button"><img src="../static/newicons/User onboarding screens/Microsoft.svg"> <span class="ms-2">Login with Microsoft</span></a>
                                     
                                  </div>
                               
                               </div>
-                              <div class="login_form col-12"> <p> --or--</p></div>
+                              <div class="login_form col-12 text-muted "> <p> ———— or ————</p></div>
                              
                               <div class="col-12 mb-4">
                                  <div class="form-floating">
@@ -84,8 +84,8 @@
                                     <a href="#!">Forgot password?</a>
                                  </div>
                               </div>
-                              <div class="login_form col-12 mb-3">
-                                 <button  class="btn btn-primary btn-block mb-4">Sign in</button>
+                              <div class="col-12 mb-3">
+                                 <button  class="btn btn-primary btn-block"style="width: 100%;">Sign in</button>
                               </div>
                               <p>Don't have an account? <a href="#!" class="link-info">Register here</a></p>
                            </div>
