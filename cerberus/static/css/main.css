@@ -172,6 +172,8 @@ a {
     display: flex;
     flex-direction: column;
     height: 100%;
+  
+    height: calc(var(--vh, 1vh)*100)
 }
 .page-wrapper {
     position: relative;
@@ -283,6 +285,7 @@ a {
 .iconlink{
     display: flex;
     min-width: calc(205px);
+    min-width: calc(var(--vh, 1vh)*34.12);
     justify-content: center;
     align-items: center;
     border: 1px solid #060707;
@@ -337,7 +340,7 @@ a {
 }
 .card {
     display: flex;
-    flex-direction: row;
+    
 }
 .card-wrap {
     position: relative;
@@ -490,10 +493,7 @@ a {
 	z-index: 99;
 	transition: .2s ease-in;
 }
-.card {
-    display: flex;
-    flex-direction: row;
-}
+
 .card-header:first-child {
     border-radius: var(--bs-card-inner-border-radius) var(--bs-card-inner-border-radius) 0 0;
     margin: 1rem 0;
