@@ -18,6 +18,8 @@ from django.contrib.gis.measure import Distance
 from django.contrib.gis import geos
 from django.apps import apps
 from base64 import b64encode
+import requests
+import json
 from django.core.files.base import ContentFile
 from django.db.models import F, Q
 
@@ -30,14 +32,13 @@ def dashboard(request):
 
 def register(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        email = request.POST['email']
-        contact = request.POST['contact']
-        password1 = request.POST['password']
-        password_conformation = request.POST['password_conformation']
-        aadhar_proof = request.FILES['aadhar_proof']
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        contact = request.POST.get('contact')
+        user_password = make_password(request.POST.get('password'))
+        password_conformation = password1
 
-        if password1 == password_conformation:
+        if user_password == password_conformation:
             if Crmuser.objects.filter(username=username).exists():
                 messages.info(request,'Username exists! try another username')
                 return redirect('register')
@@ -46,8 +47,7 @@ def register(request):
                     messages.info(request,'Email is already taken! try another one')
                     return redirect('register')
                 else:
-                    user = Crmuser.objects.create_user(username=username, email=email, password=password1, contact=contact, password_conformation=password_conformation,aadhar_proof=aadhar_proof)
-                    print(user)
+                    user = Crmuser.objects.create_user(username=username, email=email, password=user_password, contact=contact, password_conformation=password_conformation)
                     user.save()
                     return redirect('login')   
         else:
@@ -472,36 +472,35 @@ def listAddedDriver(request):
     return render(request, 'list_drivers.html',context)
 
 def updateDriver(request,id):
-    proofs_data = []
-    pi =list(Crmuser.objects.filter(pk=id).values())
-    for data in pi:
-        binary_data = b64encode(data['adhar_proof']).decode("utf-8")
-        proofs_data.append({'adhar_proof' : binary_data})
-        # pan_data = b64encode(data['pancard_proof']).decode("utf-8")
-        # proofs_data.append({'pancard_proof': pan_data })
-        # driving_license = b64encode(data['license_proof']).decode("utf-8")
-        # proofs_data.append({'license_proof': driving_license })
-    print(proofs_data, "============PROOFS-DATA=============")
-
+    if request.method == 'GET':
+        pi =list(Crmuser.objects.filter(pk=id).values())
+        pi[0]["adhar_proof"]=b64encode(pi[0]['adhar_proof']).decode("utf-8")
+        pi[0]["email"]=pi[0]["email"]
+        pi[0]["username"]=pi[0]["username"]
+        pi[0]["user_type"]=pi[0]["user_type"]
+        pi[0]["is_active"]=pi[0]["is_active"]
+        pi[0]["pancard_proof"]=b64encode(pi[0]['pancard_proof']).decode("utf-8")
+        pi[0]["license_proof"]=b64encode(pi[0]['license_proof']).decode("utf-8")
     if request.method == 'POST':
         username = request.POST['username']
         email = request.POST['email']
-        contact = request.POST['contact']
-        # last_login = request.POST['lastlogin']
         isactive = request.POST.get('is_active')
-        adhar_proof = request.FILES['adhar_proof']
-        pancard_proof = request.FILES['pancard_proof']
-        license_proof = request.FILES['license_proof']
-        
+        user_type = request.POST.get('user_type')
         if isactive == 'on':
             isactive = True
         else:
             isactive = False
-        Crmuser.objects.filter(email=id).update(username=username,email=email,contact=contact,is_active=isactive,adhar_proof=adhar_proof,updated_at = timezone.now())
-        pi=[{"email":email ,"username":username, "contact":contact, "is_active": isactive, "adhar_proof": adhar_proof }]
+        Crmuser.objects.filter(email=id).update(username=username,email=email,is_active=isactive,user_type=user_type,updated_at = timezone.now())
+        pi =list(Crmuser.objects.filter(pk=id).values())
+        pi[0]["adhar_proof"]=b64encode(pi[0]['adhar_proof']).decode("utf-8")
+        pi[0]["email"]=pi[0]["email"]
+        pi[0]["username"]=pi[0]["username"]
+        pi[0]["user_type"]=pi[0]["user_type"]
+        pi[0]["is_active"]=pi[0]["is_active"]
+        pi[0]["pancard_proof"]=b64encode(pi[0]['pancard_proof']).decode("utf-8")
+        pi[0]["license_proof"]=b64encode(pi[0]['license_proof']).decode("utf-8")
         return render(request,'update_driver.html',{ 'form': pi })
 
-    pi =list(Crmuser.objects.filter(pk=str(id)).values())
     return render(request,'update_driver.html',{ 'form': pi })
 
 def deleteDriver(request, id):
@@ -554,3 +553,21 @@ def exportCSV(request):
     for i in data:
         writer.writerow(i)
     return response
+
+def swapSatationDoors(request):
+    url = "http://216.48.177.157:1880/ss/open_door/"
+
+    imei = request.POST.get('imei')
+    doorid = request.POST.get('doorid')
+
+    payload = json.dumps({
+    "imei": imei,
+    "doorid": doorid
+    })
+
+    headers = {
+    'Content-Type': 'application/json'
+    }
+    response = requests.request("POST", url, headers=headers, data=payload)
+
+    return render(request, "swap_station_door.html", {'response': response}) 

@@ -368,5 +368,4 @@ def images_display():
         res['user_type'] = value[5]
         res['is_active'] = value[6]
         one_row.append(res)
-    print(one_row)
     return one_row

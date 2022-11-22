@@ -41,8 +41,10 @@ urlpatterns= [
     path('updatedriver/<str:id>', views.updateDriver, name="updatedriver"),
     path('deletedriver/<str:id>', views.deleteDriver, name="deletedriver"),
 
-    path('getcsv', views.filedForCSV, name="fields"),
-    path(r'export_to_csv', views.exportCSV, name="exportcsv")
+    path('getcsv', views.filedForCSV, name="csv"),
+    path(r'export_to_csv', views.exportCSV, name="exportcsv"),
+
+    path('open', views.swapSatationDoors, name="swapdoor"),
     
 
 

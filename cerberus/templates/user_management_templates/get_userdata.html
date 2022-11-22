@@ -37,12 +37,16 @@
 
                             <a href="{% url 'uservehicle' fm.email %}" class="btn btn-warning btn-sm">List Vehicle</a>
                           </td>
+
                       </tr>
                       
                       {% endfor %}
                     </tbody>
                     </thead>
                   </table>
+                  <div style="margin-left: 5%;">
+                    <a href="{% url 'home' %}" class="btn btn-info">Back</a>
+                  </div>
             
         {% else %}
             <h4 class="text-center alert alert warning">No Records Found</h4>

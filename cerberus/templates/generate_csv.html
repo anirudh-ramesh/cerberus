@@ -2,9 +2,10 @@
 
 {% block content %}
 
-<h5>GENERATE CSV</h5>
         <!-- <form action="" method="POST"> -->
           <!-- {% csrf_token %} -->
+          <div class="csv-report">
+            <h4><b>GENERATE CSV</b></h4>
             <div class="input-group mb-2">
               <div class="input-group-append">
                 <label>Voltage</label>
@@ -20,7 +21,11 @@
             
             <div class="d-flex justify-content-center mt-3 login_container">
               <input class="btn btn-success"  id="demo222" type="submit">
+              <div style="margin-left: 5%;">
+                <a href="{% url 'home' %}" class="btn btn-info">Back</a>
+              </div>
             </div>
+          </div>
         <!-- </form>       -->
 <script>
   

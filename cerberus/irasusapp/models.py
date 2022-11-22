@@ -25,7 +25,6 @@ class CrmUserManager(BaseUserManager):
             password_conformation=password_conformation
         )
 
-        user.set_password(password)
         # user.check_password(password)
         user.save(using=self._db)
         return user
