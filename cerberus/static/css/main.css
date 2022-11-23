@@ -387,6 +387,7 @@ a {
     --bs-card-title-spacer-y: 0.5rem;
     --bs-card-border-width: 0px;
     --bs-card-border-color: var(--bs-border-color-translucent);
+    --bs-card-valid-color: var(--bs-success);
     --bs-card-border-radius: 4px;
     --bs-card-inner-border-radius: 4px;
     --bs-card-cap-padding-y: 0.625rem;
@@ -410,7 +411,7 @@ a {
 .card .card-title {
     margin-bottom: 1rem;
     font-weight: 400;
-    font-size: 1rem;
+    /* font-size: 1rem; */
 }
 .card-img-top {
     width: 50% !important;

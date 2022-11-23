@@ -11,6 +11,57 @@
       <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
       
    </head>
+   <style>
+      /* Style all input fields */
+     
+      /* Style the submit button */
+      
+      
+    
+      
+      /* The message box is shown when the user clicks on the password field */
+      #message {
+        display:none;
+        background: #fff;
+        color:#04AA6D;
+        position: relative;
+        padding: 2px 35px ;
+        margin-bottom: -1.5rem;
+        
+      }
+      
+      #message p {
+        padding: 10px 35px;
+        font-size: 12px;
+        margin: 0;
+       
+      }
+      
+      /* Add a green text color and a checkmark when the requirements are right */
+       .valid {
+        color: green !important;
+        color:var(--bs-card-valid-color);
+      }
+      
+      .valid:before {
+        position: relative;
+        left: -20px;
+        content: "✔";
+      }
+      
+      /* Add a red text color and an "x" when the requirements are wrong */
+      .invalid {
+        color: red;
+      }
+      
+      .invalid:before {
+        position: relative;
+        left: -20px;
+        content: "✖";  
+        color: red;
+
+      }
+      </style>
    <body class="body">
       <div id="main-wrapper" style="justify-content: center;">
    
@@ -30,7 +81,7 @@
                               <h3 class="card-title">Sign Up</h3>
                            </div>
                            <div class="row">
-                              
+                              <form action="/action_page.php">
                            
                               <div class="login_form  col-12">
                                 <div class="iconlink col-5 mb-3 "> 
@@ -53,11 +104,21 @@
                               </div>
                               <div class="col-12 mb-4">
                                  <div class="form-floating">
-                                    <input type="password" class="form-control" id="password-field" placeholder="password">
+                                    <input type="password" class="form-control" id="password-field" placeholder="password" name="psw" pattern="(?=.*\d)(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase letter, and at least 8 or more characters" required>
+                                    
                                     
                                     <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
                                     <label for="floating-label">Password</label>
                                  </div>
+                                 <div id="message">
+                                    
+
+                                    <p id="length" class="invalid">Minimum 8 characters</p>
+                                    <p id="number" class="invalid">Must contains at least one number (0-9) or a symbol </p>
+                                    <p id="capital" class="invalid">must contain at least one uppercase letter (A-Z)</p>
+                                  
+                                   
+                                  </div>
                               </div>
                               <div class="col-12 mb-4">
                                 <div class="form-floating">
@@ -72,6 +133,7 @@
                                  <button  class="btn btn-primary btn-block"style="width: 100%;">Sign Up</button>
                               </div>
                               
+                              </form>
                            </div>
                            <p>Allready a member ? <a href="#!" class="link-info">Login</a></p>
                         </div>
@@ -79,6 +141,7 @@
                      </div>
                   </div>
                   <div class="col-lg-6 p-0">
+                     
                      <img src="../static/images/file1.png" alt="Trendy Pants and Shoes" class="w-100 rounded-t-5 rounded-tr-lg-0 rounded-bl-lg-5">
                   </div>
                </div>
@@ -86,7 +149,56 @@
             </div>
          </div>
       </div>
-     
+      <script>
+         var myInput = document.getElementById("password-field");
+         var capital = document.getElementById("capital");
+         var number = document.getElementById("number");
+         var length = document.getElementById("length");
+         
+         // When the user clicks on the password field, show the message box
+         myInput.onfocus = function() {
+           document.getElementById("message").style.display = "block";
+         }
+         
+         // When the user clicks outside of the password field, hide the message box
+         myInput.onblur = function() {
+           document.getElementById("message").style.display = "none";
+         }
+         
+         // When the user starts to type something inside the password field
+         myInput.onkeyup = function() {
+           
+           
+           // Validate capital letters
+           var upperCaseLetters = /[A-Z]/g;
+           if(myInput.value.match(upperCaseLetters)) {  
+             capital.classList.remove("invalid");
+             capital.classList.add("valid");
+           } else {
+             capital.classList.remove("valid");
+             capital.classList.add("invalid");
+           }
+         
+           // Validate numbers
+           var numbers = /[0-9]/g;
+           if(myInput.value.match(numbers)) {  
+             number.classList.remove("invalid");
+             number.classList.add("valid");
+           } else {
+             number.classList.remove("valid");
+             number.classList.add("invalid");
+           }
+           
+           // Validate length
+           if(myInput.value.length >= 8) {
+             length.classList.remove("invalid");
+             length.classList.add("valid");
+           } else {
+             length.classList.remove("valid");
+             length.classList.add("invalid");
+           }
+         }
+         </script>
       <script>
          $(".toggle-password").click(function() {
 
