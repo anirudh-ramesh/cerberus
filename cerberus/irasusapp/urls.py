@@ -34,6 +34,7 @@ urlpatterns= [
     path(r'uservehicle/<str:id>', views.assignedVehicleToUser, name="uservehicle"),
 
     path('geofence', views.addgeofenceVehicles, name="geofence"),
+    path('listdata', views.listgeofenceData, name="add_data"),
 
     path('driver', views.addDriver, name="addriver"),
     
@@ -45,7 +46,6 @@ urlpatterns= [
     path(r'export_to_csv', views.exportCSV, name="exportcsv"),
 
     path('open', views.swapSatationDoors, name="swapdoor"),
-    
-
+   
 
 ]
