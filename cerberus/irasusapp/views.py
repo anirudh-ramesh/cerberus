@@ -3,37 +3,43 @@ from django.http import HttpResponse, HttpResponseRedirect
 from datetime import datetime
 import json
 import csv
+from django.utils import timezone
+from irasusapp.graph_helper import get_user
 from user_management.models import Organisation
 # from .mixins import MessageHandler
-from .forms import CreateUserForm,AddUserToVehicle
+from .forms import CreateUserForm
 from .models import Crmuser, BatteryDetail, Geofence,Vehicle
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.hashers import make_password, check_password
 from .auth_helper import getSignInFlow, getTokenFromCode,getToken,getMsalApp,removeUserAndToken, storeUser
-from db_connect import listAssignedBatteryVehicle,assignedVehicleToOrganisation,getOrgAssignedVehicle,removeAssignedVehiclefromOrganisation,listAssignedVehicleToUser,removeUserVehicle
+from db_connect import listAssignedBatteryVehicle,assignedVehicleToOrganisation,getOrgAssignedVehicle,removeAssignedVehiclefromOrganisation,listAssignedVehicleToUser,removeUserVehicle,images_display
 from django.contrib.gis.geos import Point,Polygon
 from django.contrib.gis.measure import Distance
 from django.contrib.gis import geos
-import base64
 from django.apps import apps
-
-
+from base64 import b64encode
+import requests
+import json
 from django.core.files.base import ContentFile
-import os
+from django.db.models import F, Q
 
 format='%Y-%m-%d'
 
+
+def dashboard(request):
+    return render(request,'dashboard.html')
+
+##========================REGISTER========================##
 def register(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        email = request.POST['email']
-        contact = request.POST['contact']
-        password1 = request.POST['password']
-        password_conformation = request.POST['password_conformation']
-        aadhar_proof = request.FILES['aadhar_proof']
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        contact = request.POST.get('contact')
+        user_password = make_password(request.POST.get('password'))
+        password_conformation = user_password
 
-        if password1 == password_conformation:
+        if user_password == password_conformation:
             if Crmuser.objects.filter(username=username).exists():
                 messages.info(request,'Username exists! try another username')
                 return redirect('register')
@@ -42,16 +48,16 @@ def register(request):
                     messages.info(request,'Email is already taken! try another one')
                     return redirect('register')
                 else:
-                    user = Crmuser.objects.create_user(username=username, email=email, password=password1, contact=contact, password_conformation=password_conformation,aadhar_proof=aadhar_proof)
-                    print(user)
+                    user = Crmuser.objects.create_user(username=username, email=email, password=user_password, contact=contact, password_conformation=password_conformation)
                     user.save()
                     return redirect('login')   
         else:
             messages.info(request,'Password did not matched!..')
             return redirect('register')
     else:
-        return render(request, 'register.html')  
+        return render(request, 'register.html')
 
+##=====================LOGIN=====================##
 def loginPage(request):
     if request.method == "POST":
         email = request.POST.get('email')
@@ -74,8 +80,8 @@ def logoutUser(request):
     logout(request)
     return redirect('login')
 
-def forgotPassword(request):
-    pass
+
+##===============BATTERY-MANAGEMENT====================##
 
 #Add_Battery_details
 def batteryDetails(request):
@@ -205,9 +211,11 @@ def deleteRecord(request,id):
 #     return render(request, 'otp.html')
 
 
+##====================MICROSOFT-LOGIN====================##
 def home(request):
     context = intialize_context(request)
     return render(request, 'dashboard.html',context)
+
 
 def intialize_context(request):
     context={}
@@ -220,6 +228,7 @@ def intialize_context(request):
     context['user'] = request.session.get('user',{'is_authenticated':False})
     return context
 
+#SignIn for Microsoft
 def signIn(request):
     flow = getSignInFlow()
     try:
@@ -228,6 +237,7 @@ def signIn(request):
         print(e)
     return HttpResponseRedirect(flow['auth_uri'])
 
+#Sign Out for Microsoft
 def signOut(request):
     removeUserAndToken(request)
     return redirect('login')
@@ -237,6 +247,7 @@ def callBack(request):
     user = get_user(result['access_token'])
     storeUser(request,user)
     return redirect('home')
+
 
 def userSignin(request):
     if request.method == "POST":
@@ -248,6 +259,8 @@ def userSignin(request):
         CreateUserForm()
     context = { 'form': form }
     return render(request, 'login.html', context)
+
+##=======================VEHICLE-MANAGEMENT======================##
 
 #Add Organisation Profile
 def addVehicleDetails(request): 
@@ -268,6 +281,7 @@ def addVehicleDetails(request):
         formData.save()
     return render(request,'add_vehicle_details.html')
 
+#List Vehicle
 def getVehicleDetails(request):
     assigned_to_user = str(request.get_full_path()).split("?").pop()
     serial_number = assigned_to_user.split("=").pop()
@@ -294,6 +308,7 @@ def getVehicleDetails(request):
 
     return render(request, 'list_vehicle_details.html', {'vehicle_data':vehicle_data , 'email_id': email_id , 'serial_number': serial_number})
 
+#Update Vehicle
 def updateVehicleDetails(request,id):
     update_vehicle = list(Vehicle.objects.filter(chasis_number=id).values())
 
@@ -346,7 +361,8 @@ def deleteVehicleRecord(request,id):
         return render(request, "list_vehicle_details.html", context)
     except Exception as e:
         print("Error While deleting Record",e)
-  
+
+#Assigned BatteryList
 def assignedBatteryList(request,id):
     # Vehicle.objects.filter(chasis_number=id).values()
     if request.method == "GET":
@@ -363,6 +379,8 @@ def assignedBatteryList(request,id):
     }
     return render(request, 'list_assigned_battery.html',context)
 
+
+#Assigned Vehicle To Org
 def assignedOrgVehicleList(request,id):
     org_vehicle_list = getOrgAssignedVehicle(id)
         
@@ -375,6 +393,7 @@ def assignedOrgVehicleList(request,id):
             
     return render(request, 'list_organisation_vehicle.html',{'org_vehicle_list': org_vehicle_list})
 
+#Assigned Vehicle To User
 def assignedVehicleToUser(request,id):
     user_vehicle =""
     if request.method == "GET":
@@ -390,7 +409,9 @@ def assignedVehicleToUser(request,id):
 
     return render(request,'list_assigned_vehicle_to_user.html',{'user_vehicle':user_vehicle})
 
+##==================GEOFENCING===========================##
 
+#Add Geofencing
 def addgeofenceVehicles(request):
     polygon_coordinates = []
     longitude_data = []
@@ -403,14 +424,11 @@ def addgeofenceVehicles(request):
         enter_lat =request.POST['enter_latitude']
         newdata=json.loads(enter_lat)
         coordinate_data = newdata["features"][0]['geometry']['coordinates']
-        # radius_data = newdata["features"][0]['properties']['radius']
 
         if newdata["features"][0]['geometry']['type'] == 'Point':
             print("POINT")
             longitude = coordinate_data[0]
             latitude = coordinate_data[1]
-            # circle_radius = Distance(float(radidus))
-            # print(circle_radius, "=====CIRCLE")
             location = Point(float(longitude),float(latitude),srid=4326)            
             newdata = Geofence.objects.create(geoname=geoname,geotype=geotype,description=description,enter_latitude=latitude,enter_longitude=longitude,pos_address=position_add,location=location)
             return render(request, 'geolocation_form.html')
@@ -433,67 +451,152 @@ def addgeofenceVehicles(request):
 
     return render(request, 'geolocation_form.html')
 
+#list Geofencing data
 def listgeofenceData(request):
     if request.method == "GET":
         geofencedata = list(Geofence.objects.values())    
     return render(request, 'list_geofence_data.html',{ 'geofencedata': geofencedata })
-    
 
+##===================ADD-DRIVER CRUD=================##
+   
+#Add driver For Vechicle Module
 def addDriver(request):
-    if request.method == "POST":
-        # formdata = Crmuser()
-        username = request.POST.get('username')
-        email = request.POST.get('contact')
-        user_type =  request.POST.get('user_type')
-        adhar_proof = request.FILES['adhar_card'].file.read()
-        print(adhar_proof, "=====ADHAR_PROOF")
-        # decoded_data = base64.b64decode((adhar_proof))
-        # print(decoded_data, "=========DATA===============")
-        pancard_proof = request.FILES['pan_card'].file.read()
-        license_proof = request.FILES['driving_license'].file.read()
-        is_active = True
+    try:
+        if request.method == "POST":
+            username = request.POST.get('username')
+            email = request.POST.get('contact')
+            user_type =  request.POST.get('user_type')
+            adhar_proof = request.FILES['adhar_card'].file.read()
+            pancard_proof = request.FILES['pan_card'].file.read()
+            license_proof = request.FILES['driving_license'].file.read()
+            is_active = True
 
-        newdata = Crmuser.objects.create(
-            username=username,email=email,user_type=user_type,
-            adhar_proof=ContentFile(adhar_proof),pancard_proof=pancard_proof,
-            license_proof=license_proof,is_active=is_active
-        )
-        newdata.save()
-    return render(request, 'adddriver.html')
+            newdata = Crmuser.objects.create(
+                username=username,email=email,user_type=user_type,
+                adhar_proof=adhar_proof,pancard_proof=pancard_proof,
+                license_proof=license_proof,is_active=is_active
+            )
+            newdata.save()
+        return render(request, 'adddriver.html')
 
+    except Exception as e:
+        print("Server Error")
+
+#List Driver 
+def listAddedDriver(request):
+    if request.method == "GET":
+        driverData = images_display()
+
+    context={
+            "drivers": driverData
+            }
+    return render(request, 'list_drivers.html',context)
+
+#Update Driver
+def updateDriver(request,id):
+    if request.method == 'GET':
+        pi =list(Crmuser.objects.filter(pk=id).values())
+        pi[0]["adhar_proof"]=b64encode(pi[0]['adhar_proof']).decode("utf-8")
+        pi[0]["email"]=pi[0]["email"]
+        pi[0]["username"]=pi[0]["username"]
+        pi[0]["user_type"]=pi[0]["user_type"]
+        pi[0]["is_active"]=pi[0]["is_active"]
+        pi[0]["pancard_proof"]=b64encode(pi[0]['pancard_proof']).decode("utf-8")
+        pi[0]["license_proof"]=b64encode(pi[0]['license_proof']).decode("utf-8")
+    if request.method == 'POST':
+        username = request.POST['username']
+        email = request.POST['email']
+        isactive = request.POST.get('is_active')
+        user_type = request.POST.get('user_type')
+        if isactive == 'on':
+            isactive = True
+        else:
+            isactive = False
+        Crmuser.objects.filter(email=id).update(username=username,email=email,is_active=isactive,user_type=user_type,updated_at = timezone.now())
+        pi =list(Crmuser.objects.filter(pk=id).values())
+        pi[0]["adhar_proof"]=b64encode(pi[0]['adhar_proof']).decode("utf-8")
+        pi[0]["email"]=pi[0]["email"]
+        pi[0]["username"]=pi[0]["username"]
+        pi[0]["user_type"]=pi[0]["user_type"]
+        pi[0]["is_active"]=pi[0]["is_active"]
+        pi[0]["pancard_proof"]=b64encode(pi[0]['pancard_proof']).decode("utf-8")
+        pi[0]["license_proof"]=b64encode(pi[0]['license_proof']).decode("utf-8")
+        return render(request,'update_driver.html',{ 'form': pi })
+
+    return render(request,'update_driver.html',{ 'form': pi })
+
+#Delete Driver
+def deleteDriver(request, id):
+    try:
+        pi = Crmuser.objects.get(pk=id)
+        if request.method == 'POST':
+            pi.delete()
+            return redirect('getdrivers')
+        context = {}
+        return render(request, "update_driver.html", context)
+    except Exception as e:
+        print("Error While deleting Record",e)
+
+
+###===============GENERATE-CSV=========================###
+
+#Csv Data
 def filedForCSV(request):
     if request.method == "GET":
         files = list(Vehicle.objects.values())
-        print(files, "=============FILES=========")      
-    return render(request, 'generate_csv.html', { 'files': files })
+        data= request.POST.getlist('checkedvalue')
+        # print(files, "=============FILES=========GET")        
+    return render(request, 'generate_csv.html')
 
+#Generate CSV
 def exportCSV(request):
-    # cwd = os.getcwd()
-    # print(cwd)
-    # model = list(Vehicle.objects.values())
-    # print(model, "======+MODEL===========")
-    # writer = csv.writer(open('demo.csv' 'w'))
-    # print(writer, "===============WRITER=======")
-    if request.method == "POST":
-        print("IN THE POST")
-        vehicle = list(Vehicle.objects.values().filter())
-        tablename = Vehicle._meta.model_name
-        
-        file_name = f'{tablename}-' + str(datetime.now().date()) + '.csv'
-        print(file_name)
-        # Create the HttpResponse object with the appropriate CSV header.
-        response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = f'attachment; filename= {file_name}'
 
-        writer = csv.writer(response)
-        headers = []
-        for field in vehicle:
-            print(field, "++++++++++FIELDS+++++++++++++++++")
-            headers.append(field.name)
-        writer.writerow(headers)
+    getData=str(request.get_full_path()).split("?selectfield=")
+    if(getData[1]):
+        getData = getData[1].split("@=")
+    filterData=getData
 
-        # writer.writerow(['Voltage'])
-        vehicle_fields = vehicle.values_list('configuration')
-        for user in vehicle_fields:
-            writer.writerow(user)
-        return response
+    data = list(Vehicle.objects.filter(
+    Q(created_date='2022-11-17') |
+    Q(created_date='2022-11-19')
+    ).values_list(*filterData))
+    tablename = Vehicle._meta.model_name
+
+    file_name = f'{tablename}-' + str(datetime.now().date()) + '.csv'
+
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='text/csv')
+
+    response['Content-Disposition'] = f'attachment; filename= {file_name}'
+
+    writer = csv.writer(response)
+
+    headers = []
+
+    for i in getData:
+        headers.append(i)
+
+    writer.writerow(headers)
+
+    for i in data:
+        writer.writerow(i)
+    return response
+
+#Open Swap-Station Doors
+def swapSatationDoors(request):
+    url = "http://216.48.177.157:1880/ss/open_door/"
+
+    imei = request.POST.get('imei')
+    doorid = request.POST.get('doorid')
+
+    payload = json.dumps({
+    "imei": imei,
+    "doorid": doorid
+    })
+
+    headers = {
+    'Content-Type': 'application/json'
+    }
+    response = requests.request("POST", url, headers=headers, data=payload)
+
+    return render(request, "swap_station_door.html", {'response': response}) 

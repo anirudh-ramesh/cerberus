@@ -1,0 +1,64 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<!-- {% include 'status.html' %} -->
+
+<div class="col-sm-12">
+    <h4 class="text-center alert alert info">List Of Drivers</h4>
+    <form action="" method="GET">
+        {% if drivers %}
+                <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">Username</th>
+                        <th scope="col">Verified-info</th>
+                        <th scope="col">Contact</th>
+                        <th scope="col">User-Type</th>
+                        <th scope="col">Adhar-Proof</th>
+                        <th scope="col">Pan-Proof</th>
+                        <th scope="col">Driving-License</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Action</th>
+
+                      </tr>
+                    <tbody>
+                    {% for fm in drivers %}
+                      
+                        <tr>
+                            <td>{{fm.username}}</td>
+                            <td>{{fm.email}}</td>
+                            <td>{{fm.contact}}</td>
+                            <td>{{fm.user_type}}</td>
+                            <td>
+                                <img src='data:image/jpeg;base64,{{fm.adhar_proof}}' alt="no image display" style="width:100px;height:100px;" >
+                            </td>
+                            <td>
+                                <img src='data:image/jpeg;base64,{{fm.pan_proof}}' alt="no image display" style="width:100px;height:100px;" >
+                            </td>
+                            <td>
+                                <img src='data:image/jpeg;base64,{{fm.driving_license}}' alt="no image display" style="width:100px;height:100px;" >
+                            </td>
+                            <td>{{fm.is_active}}</td>
+                            <td>
+
+                                <a href="{% url 'updatedriver' fm.email %}" class="btn btn-warning btn-sm">Edit</a>
+                                
+                                <form action="{% url 'deletedriver' fm.email %}" method="POST" class="d-inline">
+                                    {% csrf_token %}
+                                  <input type="submit" class="btn btn-danger btn-sm" value="Remove">
+                                </form>
+                            </td>             
+                        </tr>
+                      
+                      {% endfor %}
+                    </tbody>
+                    </thead>
+                  </table>
+            
+        {% else %}
+            <h4 class="text-center alert alert warning">No Records Found</h4>
+        {% endif %}      
+    </form>   
+</div>
+{% endblock %}

@@ -1,0 +1,92 @@
+
+{% extends 'main.html' %}
+
+{% block content %}
+
+{% include 'status.html' %}
+
+
+<div class="row">
+	<div class="col-md-5">
+		<div class="card card-body">
+			<a class="btn btn-primary  btn-sm btn-block" href="">Add Swap-Station</a>
+			<div class="card card-body">
+				<div class="d-flex justify-content-start form_container">
+					<form method="POST" action="">
+						{% csrf_token %}
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Swap Station Name</label>
+								<input type='text' name='swap_station_name'  class="input-register-text" required>
+							</div>
+
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>IMEI Number</label>
+								<input type='text' name='imei_number'  class="input-register-text" required>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Number Of Door</label>
+                                <select type="text"  name="number_of_doors" class="input-register-text" required>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                </select>
+							</div>
+						</div>
+                        <div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Charge Specification</label>
+                                <select type="text"  name="charge_specification" class="input-register-text" required>
+                                    <option>58V 15A</option>
+                                    <option>66V 12A</option>
+                                </select>
+							</div>
+						</div>
+                        <div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Configuration</label>
+								<input type='text' name='configuration'  class="input-register-text" required>
+							</div>
+						</div>
+                        <div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Assigned Owner</label>
+                                <select type="text"  name="assigned_owner" class="input-register-text" required>
+                                    <option>LEAP</option>
+                                    <option>CACTUS</option>
+                                </select>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Status</label>
+                                <br>
+                                <label><input name="status" type="radio" value="Active" required="">Active</label>
+                                <label><input name="status" type="radio" value="Inactive" required="">Inactive</label>
+                                
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label>Assigned Fleet Owner</label>
+								<input type='text' name='assigned_fleet_owner'  class="input-register-text" required>
+							</div>
+						</div>
+				   		<div class="d-flex justify-content-center mt-3 login_container">
+				 			<input class="btn btn-success" type="submit" value="Submit">
+				   		</div>
+
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+{% endblock %}

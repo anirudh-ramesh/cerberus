@@ -25,7 +25,6 @@ class CrmUserManager(BaseUserManager):
             password_conformation=password_conformation
         )
 
-        user.set_password(password)
         # user.check_password(password)
         user.save(using=self._db)
         return user
@@ -60,6 +59,7 @@ USER_TYPE = (
     ('User', 'User')
 )
 
+#USER-TABLE
 class Crmuser(AbstractBaseUser):
     email = models.EmailField(
         verbose_name='email address',
@@ -75,9 +75,9 @@ class Crmuser(AbstractBaseUser):
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(default=datetime.datetime.now)
     user_type = models.CharField(max_length=100, default='', choices=USER_TYPE)
-    adhar_proof = models.ImageField(null=True, blank=True)
-    pancard_proof = models.ImageField(null=True,blank=True)
-    license_proof = models.ImageField(null=True, blank=True)
+    adhar_proof = models.BinaryField(null=True, blank=True)
+    pancard_proof = models.BinaryField(null=True,blank=True)
+    license_proof = models.BinaryField(null=True, blank=True)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     orgs = models.ManyToManyField(Organisation)
@@ -128,6 +128,7 @@ CHOICE_TYPE = (
     ('2', 'Exit')
 )
 
+#GEOFENCE-TABLE
 class Geofence(models.Model):
     geofence = models.PolygonField(srid=4326, null=True, blank=True)
     geotype = models.CharField(blank=True, max_length=100,choices=CHOICE_TYPE, null=True)
@@ -156,6 +157,7 @@ VEHICLE = (
     ('3W-Loader','3W-Loader'),
 )
 
+#VEHICLE-TABLE
 class Vehicle(models.Model):
     vehicle_model_name = models.CharField(max_length=225, default='')
     chasis_number = models.CharField(max_length=225, default='',primary_key=True)
@@ -170,6 +172,7 @@ class Vehicle(models.Model):
     insurance_end_date = models.DateField(default='',blank=True, null=True)
     vehicle_selected = models.BooleanField(default=False)
     assigned_to = models.ForeignKey(Crmuser,default=None,on_delete=models.CASCADE, null=True, blank=True)
+    created_date = models.DateField(blank=True,null=True)
     geofence = models.ManyToManyField(Geofence)
 
     def __str__(self):
@@ -207,6 +210,7 @@ STATUS = (
     ('damaged','DAMAGED'),
 )
 
+#BATTERY-TABLE
 class BatteryDetail(models.Model):
     model_name = models.CharField(max_length=100,default='', choices=MODEL_CHOICES, blank=True)
     battery_serial_num = models.CharField(max_length=100, primary_key=True, default='', unique=True)

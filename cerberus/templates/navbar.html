@@ -11,42 +11,48 @@
     <ul id="sidebarnav" class="in">
 
        <li class="sidebar-item">
-         <a class="sidebar-link" href="{% url 'home' %}" aria-expanded="false"><img src="../static/icons/Menu/01 - home-dasboard.svg"></img></a>
+         <a class="sidebar-link" href="{% url 'home' %}" aria-expanded="false"><img src="../static/icons/home.svg"></img></a>
           </li>
-       <li class="sidebar-item">  <a class="sidebar-link"aria-expanded="false"><img src="../static/icons/Menu/02 - Users.svg"></img></a>
+       <li class="sidebar-item">  <a class="sidebar-link"aria-expanded="false" href="{% url 'user_management:getdata' %}"><img src="../static/icons/Users.svg"></img></a>
         
        </li>
        <li class="sidebar-item">
-          <a class="sidebar-link" aria-expanded="false"><img src="../static/icons/Menu/03 - Battery.svg"></img></a>
+          <a  href="{% url 'data' %}" class="sidebar-link" aria-expanded="false"><img src="../static/icons/Battery.svg"></img></a>
        </li>
        <li class="sidebar-item">
-         <a class="sidebar-link" aria-expanded="false"><img src="../static/icons/Menu/04 - Swapping station.svg"></img></a>
+         <a class="sidebar-link" aria-expanded="false"><img src="../static/icons/Swapping station.svg"></img></a>
           
        </li>
        <li class="sidebar-item">
-          <a class="sidebar-link" href="app-notes.html" aria-expanded="false"><img src="../static/icons/Menu/05 - Geography.svg"></img></a>
+          <a class="sidebar-link" href="{% url 'geofence' %}" aria-expanded="false"><img src="../static/icons/Geography.svg"></img></a>
        </li>
        
        <li class="sidebar-item">
-         <a class="sidebar-link" href="app-todo.html" aria-expanded="false"><img src="../static/icons/Menu/06 - Vehicles.svg"></img></a>
+         <a class="sidebar-link" href="{% url 'getvehicle' %}" aria-expanded="false"><img src="../static/icons/Vehicles.svg"></img></a>
       </li>
     
       <li class="sidebar-item">
-         <a class="sidebar-link" href="app-todo.html" aria-expanded="false"><img src="../static/icons/Menu/07 - VCU.svg"></img></a>
+         <a class="sidebar-link" href="app-todo.html" aria-expanded="false"><img src="../static/icons/VCU.svg"></img></a>
       </li>
       <li class="sidebar-item">
-         <a class="sidebar-link" href="app-todo.html" aria-expanded="false"><img src="../static/icons/Menu/08 - IOT.svg"></img></a>
+         <a class="sidebar-link" href="app-todo.html" aria-expanded="false"><img src="../static/icons/IOT.svg"></img></a>
       </li>
       <li class="sidebar-item">
-         <a class="sidebar-link" href="app-todo.html" aria-expanded="false"><img src="../static/icons/Menu/09 - reports.svg"></img></a>
+         <a class="sidebar-link" href="{% url 'csv' %}" aria-expanded="false"><img src="../static/icons/reports.svg"></img></a>
       </li>
       <li class="sidebar-item">
-         <a class="sidebar-link" href="app-todo.html" aria-expanded="false"><img src="../static/icons/Menu/10 - settings.svg"></img></a>
+         <a class="sidebar-link" href="app-todo.html" aria-expanded="false"><img src="../static/icons/settings.svg"></img></a>
       </li>
       <li class="sidebar-item">
-         <a class="sidebar-link" href="app-todo.html" aria-expanded="false"><img src="../static/icons/Menu/11 - complaint.svg"></img></a>
+         <a class="sidebar-link" href="app-todo.html" aria-expanded="false"><img src="../static/icons/complaint.svg"></img></a>
       </li>
-
+      <form method="post" action="{% url 'logout' %}">
+         {% csrf_token %}
+         {% if redirect_field_value %}
+         <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+         {% endif %}
+         <button class="btn btn-dark" style="right: 12%; display: flex; position: absolute;"  type="submit">{% trans 'Logout' %}</button>
+       </form>
     </ul>
-   
+
  </aside>

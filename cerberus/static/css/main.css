@@ -1,13 +1,9 @@
-
 #total-orders{
-    background-color: #eef5f9;
+    background-color: #7CD1C0;
 }
-
-
 #orders-delivered{
-    background-color: #eef5f9;
+    background-color: #7CD1C0;
 }
-
 #orders-pending{
     background-color: #7CD1C0;
 }
@@ -16,10 +12,7 @@ html {
     margin: 0;
     padding: 0;
     height: 100%;
-    background: #f2f4f8 !important;
-   
-
-   
+    background: #f2f4f8 !important;  
 }
 a {
     color: #009efb;
@@ -29,11 +22,12 @@ a {
 	position: relative !important;
 }
 
+
 .user_card {
     width: 350px;
     margin-top: auto;
     margin-bottom: auto;
-    background: #74cfbf;
+    background: #74CFBF;
     position: relative;
     display: flex;
     justify-content: center;
@@ -44,7 +38,6 @@ a {
     -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border-radius: 5px;
-
 }
 .container{
     width: 100%;
@@ -66,12 +59,9 @@ a {
 .form_container {
     /* margin-top: 20px; */
 }
-
 #form-title{
     color: #fff;
-    
 }
-
 .login_btn {
     width: 100%;
     background: #0a7093 !important;
@@ -89,7 +79,7 @@ a {
         margin: 1em auto !important;
 }
 .input-group-text {
-    background: #f7ba5b !important;
+    background: #F7BA5B !important;
     color: whitesmoke !important;
     border: 0 !important;
     padding: 0.75rem 0.75rem !important;
@@ -100,7 +90,6 @@ a {
     box-shadow: none !important;
     outline: 0px !important;
 }
-
 #messages{
     background-color: grey;
     color: #fff;
@@ -121,14 +110,11 @@ a {
     align-items: center;
     margin: 0 1em;
 }
-
 .loginwithgoogle{
   display: flex;
   justify-content: center;
   margin-top: 1%;
-  
 }
-
 .main-div{
     display: flex;
 
@@ -139,12 +125,10 @@ a {
     
     
 }
-
 .contentload{
-    background-color: #f2f4f8 !important;
+    background-color: #F2F4F8 !important;
 }
-
-.sidebar-link i {
+/* .sidebar-link i {
     font-style: normal;
     line-height: 25px;
     font-size: 30px;
@@ -153,7 +137,7 @@ a {
     width: 30px;
     height: 30px;
     display: inline-block;
-}
+} */
 
 .profile-img{
     display: flex;
@@ -189,9 +173,10 @@ a {
 }
 .page-wrapper>.container-fluid, .page-wrapper>.container-lg, .page-wrapper>.container-md, .page-wrapper>.container-sm, .page-wrapper>.container-xl, .page-wrapper>.container-xxl {
     padding: 20px 30px;
-    min-height: calc(100vh - 180px);
+    min-height: calc(100vh - 90px) !important;
     max-width: 100%;
 }
+
 .page-wrapper>.page-titles {
     max-width: 100%;
     margin: 0 ;
@@ -411,8 +396,8 @@ a {
 }
 .card .card-title {
     margin-bottom: 1rem;
-    font-weight: 400;
-    /* font-size: 1rem; */
+    font-weight: 500 !important;
+    font-size: 1rem !important;
 }
 .card-img-top {
     width: 50% !important;
@@ -513,6 +498,7 @@ a {
 .card .card-header .card-title {
     margin-bottom: 0;
 }
+
 .login_form{
 	flex: 0 0 auto;
     width: 100%;
