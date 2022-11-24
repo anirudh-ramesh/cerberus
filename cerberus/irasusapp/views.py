@@ -4,6 +4,7 @@ from datetime import datetime
 import json
 import csv
 from django.utils import timezone
+from irasusapp.graph_helper import get_user
 from user_management.models import Organisation
 # from .mixins import MessageHandler
 from .forms import CreateUserForm
@@ -29,7 +30,7 @@ format='%Y-%m-%d'
 def dashboard(request):
     return render(request,'dashboard.html')
 
-
+##========================REGISTER========================##
 def register(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -54,8 +55,9 @@ def register(request):
             messages.info(request,'Password did not matched!..')
             return redirect('register')
     else:
-        return render(request, 'register.html')  
+        return render(request, 'register.html')
 
+##=====================LOGIN=====================##
 def loginPage(request):
     if request.method == "POST":
         email = request.POST.get('email')
@@ -78,8 +80,8 @@ def logoutUser(request):
     logout(request)
     return redirect('login')
 
-def forgotPassword(request):
-    pass
+
+##===============BATTERY-MANAGEMENT====================##
 
 #Add_Battery_details
 def batteryDetails(request):
@@ -209,9 +211,11 @@ def deleteRecord(request,id):
 #     return render(request, 'otp.html')
 
 
+##====================MICROSOFT-LOGIN====================##
 def home(request):
     context = intialize_context(request)
     return render(request, 'dashboard.html',context)
+
 
 def intialize_context(request):
     context={}
@@ -224,6 +228,7 @@ def intialize_context(request):
     context['user'] = request.session.get('user',{'is_authenticated':False})
     return context
 
+#SignIn for Microsoft
 def signIn(request):
     flow = getSignInFlow()
     try:
@@ -232,6 +237,7 @@ def signIn(request):
         print(e)
     return HttpResponseRedirect(flow['auth_uri'])
 
+#Sign Out for Microsoft
 def signOut(request):
     removeUserAndToken(request)
     return redirect('login')
@@ -241,6 +247,7 @@ def callBack(request):
     user = get_user(result['access_token'])
     storeUser(request,user)
     return redirect('home')
+
 
 def userSignin(request):
     if request.method == "POST":
@@ -252,6 +259,8 @@ def userSignin(request):
         CreateUserForm()
     context = { 'form': form }
     return render(request, 'login.html', context)
+
+##=======================VEHICLE-MANAGEMENT======================##
 
 #Add Organisation Profile
 def addVehicleDetails(request): 
@@ -272,6 +281,7 @@ def addVehicleDetails(request):
         formData.save()
     return render(request,'add_vehicle_details.html')
 
+#List Vehicle
 def getVehicleDetails(request):
     assigned_to_user = str(request.get_full_path()).split("?").pop()
     serial_number = assigned_to_user.split("=").pop()
@@ -298,6 +308,7 @@ def getVehicleDetails(request):
 
     return render(request, 'list_vehicle_details.html', {'vehicle_data':vehicle_data , 'email_id': email_id , 'serial_number': serial_number})
 
+#Update Vehicle
 def updateVehicleDetails(request,id):
     update_vehicle = list(Vehicle.objects.filter(chasis_number=id).values())
 
@@ -350,7 +361,8 @@ def deleteVehicleRecord(request,id):
         return render(request, "list_vehicle_details.html", context)
     except Exception as e:
         print("Error While deleting Record",e)
-  
+
+#Assigned BatteryList
 def assignedBatteryList(request,id):
     # Vehicle.objects.filter(chasis_number=id).values()
     if request.method == "GET":
@@ -367,6 +379,8 @@ def assignedBatteryList(request,id):
     }
     return render(request, 'list_assigned_battery.html',context)
 
+
+#Assigned Vehicle To Org
 def assignedOrgVehicleList(request,id):
     org_vehicle_list = getOrgAssignedVehicle(id)
         
@@ -379,6 +393,7 @@ def assignedOrgVehicleList(request,id):
             
     return render(request, 'list_organisation_vehicle.html',{'org_vehicle_list': org_vehicle_list})
 
+#Assigned Vehicle To User
 def assignedVehicleToUser(request,id):
     user_vehicle =""
     if request.method == "GET":
@@ -394,7 +409,9 @@ def assignedVehicleToUser(request,id):
 
     return render(request,'list_assigned_vehicle_to_user.html',{'user_vehicle':user_vehicle})
 
+##==================GEOFENCING===========================##
 
+#Add Geofencing
 def addgeofenceVehicles(request):
     polygon_coordinates = []
     longitude_data = []
@@ -434,12 +451,15 @@ def addgeofenceVehicles(request):
 
     return render(request, 'geolocation_form.html')
 
+#list Geofencing data
 def listgeofenceData(request):
     if request.method == "GET":
         geofencedata = list(Geofence.objects.values())    
     return render(request, 'list_geofence_data.html',{ 'geofencedata': geofencedata })
-    
 
+##===================ADD-DRIVER CRUD=================##
+   
+#Add driver For Vechicle Module
 def addDriver(request):
     try:
         if request.method == "POST":
@@ -462,6 +482,7 @@ def addDriver(request):
     except Exception as e:
         print("Server Error")
 
+#List Driver 
 def listAddedDriver(request):
     if request.method == "GET":
         driverData = images_display()
@@ -471,6 +492,7 @@ def listAddedDriver(request):
             }
     return render(request, 'list_drivers.html',context)
 
+#Update Driver
 def updateDriver(request,id):
     if request.method == 'GET':
         pi =list(Crmuser.objects.filter(pk=id).values())
@@ -503,6 +525,7 @@ def updateDriver(request,id):
 
     return render(request,'update_driver.html',{ 'form': pi })
 
+#Delete Driver
 def deleteDriver(request, id):
     try:
         pi = Crmuser.objects.get(pk=id)
@@ -514,6 +537,10 @@ def deleteDriver(request, id):
     except Exception as e:
         print("Error While deleting Record",e)
 
+
+###===============GENERATE-CSV=========================###
+
+#Csv Data
 def filedForCSV(request):
     if request.method == "GET":
         files = list(Vehicle.objects.values())
@@ -521,6 +548,7 @@ def filedForCSV(request):
         # print(files, "=============FILES=========GET")        
     return render(request, 'generate_csv.html')
 
+#Generate CSV
 def exportCSV(request):
 
     getData=str(request.get_full_path()).split("?selectfield=")
@@ -554,6 +582,7 @@ def exportCSV(request):
         writer.writerow(i)
     return response
 
+#Open Swap-Station Doors
 def swapSatationDoors(request):
     url = "http://216.48.177.157:1880/ss/open_door/"
 

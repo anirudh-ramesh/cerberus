@@ -59,6 +59,7 @@ USER_TYPE = (
     ('User', 'User')
 )
 
+#USER-TABLE
 class Crmuser(AbstractBaseUser):
     email = models.EmailField(
         verbose_name='email address',
@@ -127,6 +128,7 @@ CHOICE_TYPE = (
     ('2', 'Exit')
 )
 
+#GEOFENCE-TABLE
 class Geofence(models.Model):
     geofence = models.PolygonField(srid=4326, null=True, blank=True)
     geotype = models.CharField(blank=True, max_length=100,choices=CHOICE_TYPE, null=True)
@@ -155,6 +157,7 @@ VEHICLE = (
     ('3W-Loader','3W-Loader'),
 )
 
+#VEHICLE-TABLE
 class Vehicle(models.Model):
     vehicle_model_name = models.CharField(max_length=225, default='')
     chasis_number = models.CharField(max_length=225, default='',primary_key=True)
@@ -207,6 +210,7 @@ STATUS = (
     ('damaged','DAMAGED'),
 )
 
+#BATTERY-TABLE
 class BatteryDetail(models.Model):
     model_name = models.CharField(max_length=100,default='', choices=MODEL_CHOICES, blank=True)
     battery_serial_num = models.CharField(max_length=100, primary_key=True, default='', unique=True)

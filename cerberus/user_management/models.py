@@ -2,8 +2,7 @@ from django.db import models
 import datetime
 
 
-# Create your models here.
-
+#ORGANISATION-PROFILE TABLE
 class OrganisationProfile(models.Model):
     battery_pack_manufacture = models.CharField(max_length=225,default='')
     battery_pack_distributor = models.CharField(max_length=225,default='')
@@ -28,7 +27,7 @@ class OrganisationProfile(models.Model):
     def __str__(self):
         return self.battery_pack_manufacture
 
-
+#ROLE TABLE
 class Role(models.Model):
     roles= models.CharField(max_length= 225, default='')
     select = models.BooleanField(default=False)
@@ -37,6 +36,7 @@ class Role(models.Model):
     def __str__(self):
         return self.roles.upper()
 
+#ORGANISATION TABLE
 class Organisation(models.Model):
     serial_number = models.CharField(max_length=100, default='',primary_key=True)
     organisation_name = models.CharField(max_length=100, default='')
@@ -50,7 +50,7 @@ class Organisation(models.Model):
     def __str__(self):
         return self.organisation_name
 
-
+#ORGANISATION-PERMISSION
 class OrganisationPermission(models.Model):
     permission_name = models.CharField(max_length=225, default='')
     role_id = models.IntegerField(blank=True, default='')
@@ -76,6 +76,7 @@ ASSIGN_OWNER = (
     ('CACTUS', 'cactus')
 )
 
+#SWAP-STATION TABLE
 class Swapstation(models.Model):
     swap_station_name = models.CharField(max_length=225, default='', blank=True)
     imei_number = models.CharField(max_length=225, default='', blank=True, primary_key=True)

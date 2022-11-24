@@ -2,12 +2,14 @@ from django.utils import timezone
 from irasusapp.models import Crmuser, Vehicle
 from .models import Swapstation
 from user_management.models import Organisation, OrganisationPermission, OrganisationProfile, Role
-from .forms import OrganisationProfileForm, UserCreatedByAdmin, OrgasationForm
+from .forms import UserCreatedByAdmin, OrgasationForm
 from django.shortcuts import render, redirect
 from django.contrib import messages
 import json
 import requests
 from db_connect import sql_query,inset_into_db,getOrgUserInfo,orgProfileAddData,getOrgProfiles,organisationmultiplePermission,insertIntoOrgnisationPermission,removeUserFromOrg
+
+##=============USER-MANAGEMENT===============##
 
 #This Function Used to Add User
 def addUser(request):
@@ -57,6 +59,8 @@ def deleteUser(request, id):
         return render(request, "user_management_templates/get_userdata.html", context)
     except Exception as e:
         print("Error While deleting Record",e)
+
+##====================ORGANISATION-MANAGEMENT===================##
 
 #Add Organisation
 def addOrganisation(request):
@@ -147,6 +151,9 @@ def listOrganisationProfile(request,id):
         data = getOrgProfiles(id)
     contex = {'organisation_profile_data' : data }
     return render(request, 'list_organisation_profile.html',contex)
+
+
+##=================USERS-ROLE=====================##
 
 #Add Role
 def createUserRole(request,id):
@@ -249,7 +256,7 @@ def orgUserinfo(request,id):
     except Exception as e:
         print("Error While deleting Record",e)
 
-###===============SWAP-STATION-CURD=========================###
+##===============SWAP-STATION-MANAGEMENT=========================##
 
 def addSwapStation(request): 
     if request.method == "POST":
@@ -270,14 +277,12 @@ def addSwapStation(request):
 def listSwapstation(request):
     if request.method == "GET":
         data = list(Swapstation.objects.values())
-        print(data, "==============>>DATA")
     contex = {'swap_station_data' : data }
     return render(request, 'list_swapstation_data.html',contex)
 
     
 def updateSwapstationDetails(request,id):
     update_swapstation = list(Swapstation.objects.filter(imei_number=id).values())
-    print(update_swapstation, "========UPDATE==========")
 
     if request.method == "POST":
         swap_station_name = request.POST['swap_station_name']

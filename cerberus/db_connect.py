@@ -5,7 +5,7 @@ def connect():
     conn=db.connect(host="localhost",user="postgres",password="1234",database='battery_management')
     return conn
 
-#List Organisation User  
+#LIST ORGANISATION USER  
 def sql_query(id):
     conn=connect()
     cursor=conn.cursor()
@@ -18,7 +18,7 @@ def sql_query(id):
     cursor.close()    
     return new_data
 
-#Insert User Into Orgnisation
+#INSERT USER INTO ORGANISATION
 def inset_into_db(data,id,role,select):
     conn=connect()
     cursor=conn.cursor()
@@ -32,7 +32,7 @@ def inset_into_db(data,id,role,select):
     cursor.close()
     return 
 
-#List Organisation Info
+#LIST ORGANISATION INFO
 def getOrgUserInfo(id):
     conn=connect()
     cursor=conn.cursor()
@@ -55,7 +55,7 @@ def getOrgUserInfo(id):
     cursor.close()
     return my_data
 
-#Add Organisation Profile Data
+#ADD ORGANISATION PROFILE DATA
 def orgProfileAddData(id,orgprofile_id):
     conn=connect()
     cursor = conn.cursor()
@@ -67,7 +67,7 @@ def orgProfileAddData(id,orgprofile_id):
     cursor.close()
     return
 
-#List Organisation Profile
+#LIST ORGANISATION PROFILE
 def getOrgProfiles(id):
     conn=connect()
     cursor=conn.cursor()
@@ -105,7 +105,7 @@ def getOrgProfiles(id):
     cursor.close()
     return new_data
 
-#List Organisation Role
+#LIST ORGANISATION ROLE
 def getOrgRoles(id):
     conn=connect()
     cursor=conn.cursor()
@@ -143,7 +143,7 @@ def getOrgRoles(id):
     cursor.close()
     return new_data
 
-#Update Organisation User
+#UPDATE ORGANISATION USER
 def orgUserUpdateData(role,serial_number,email):
     conn=connect()
     cursor = conn.cursor()
@@ -153,7 +153,7 @@ def orgUserUpdateData(role,serial_number,email):
     cursor.close()
     return
 
-#List Organisation Permission
+#LIST ORGANISATION PERMISSION
 def organisationmultiplePermission(id):
     conn=connect()
     cursor=conn.cursor()
@@ -180,7 +180,7 @@ def organisationmultiplePermission(id):
 
     return my_data
 
-#Insert Organisation Permission
+#INSERT ORGANISATION PERMISSION
 def insertIntoOrgnisationPermission(permission_name,role_name,id):
     conn=connect()
     cursor = conn.cursor()
@@ -203,7 +203,7 @@ def updateOrgAssignPermission(permission_name,role_name,id):
     cursor.close()
     return
 
-#Remove User From Organisation
+#REMOVE USER FROM ORGANISATION
 def removeUserFromOrg(select,serial_number,email):
     conn=connect()
     cursor = conn.cursor()
@@ -253,6 +253,8 @@ def listAssignedBatteryVehicle(id):
     cursor.close()
     return my_data
 
+
+#ASSIGNED-VECHICLE-TO-ORGANISATION
 def assignedVehicleToOrganisation(id, vehicle_id):
     conn=connect()
     cursor = conn.cursor()
@@ -265,6 +267,7 @@ def assignedVehicleToOrganisation(id, vehicle_id):
     return
 
 
+#ORGANISATION-ASSIGNED-VEHICLE
 def getOrgAssignedVehicle(id):
     conn=connect()
     cursor=conn.cursor()
@@ -294,6 +297,7 @@ def getOrgAssignedVehicle(id):
     cursor.close()
     return new_data
 
+#REMOVE ASSIGNED-VEHICLE FROM ORGANISATION
 def removeAssignedVehiclefromOrganisation(org_id,vehicle_id):
     conn=connect()
     cursor = conn.cursor()
@@ -303,6 +307,7 @@ def removeAssignedVehiclefromOrganisation(org_id,vehicle_id):
     cursor.close()
     return
 
+#LIST ASSIGNED-VEHICLE
 def listAssignedVehicleToUser(id):
     conn = connect()
     cursor = conn.cursor()
@@ -340,7 +345,7 @@ def listAssignedVehicleToUser(id):
         cursor.close()
     return vehicle_data
 
-
+#REMOVE VECHILE FROM USER
 def removeUserVehicle(select,chasis_number):
     conn=connect()
     cursor = conn.cursor()
