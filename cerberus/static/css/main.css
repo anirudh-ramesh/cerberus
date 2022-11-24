@@ -130,11 +130,12 @@ a {
 }
 
 .main-div{
-    width: 100%;
-    /* overflow: hidden; */
     display: flex;
+
+    /* width: 100%;
+    overflow: hidden;
     flex-direction: row;
-    /* height: 100%; */
+    height: 100%; */
     
     
 }
@@ -171,9 +172,9 @@ a {
     
 }
 #main-wrapper {
+    display: flex;
     width: 100%;
     overflow: hidden;
-    display: flex;
     flex-direction: column;
     height: 100%;
   
@@ -183,7 +184,7 @@ a {
 .page-wrapper {
     position: relative;
     background: #eef5f9;
-    display: none;
+    display: flex;
     transition: .2s ease-in;
 }
 .page-wrapper>.container-fluid, .page-wrapper>.container-lg, .page-wrapper>.container-md, .page-wrapper>.container-sm, .page-wrapper>.container-xl, .page-wrapper>.container-xxl {
