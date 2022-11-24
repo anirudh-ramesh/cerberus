@@ -36,7 +36,7 @@ def register(request):
         email = request.POST.get('email')
         contact = request.POST.get('contact')
         user_password = make_password(request.POST.get('password'))
-        password_conformation = password1
+        password_conformation = user_password
 
         if user_password == password_conformation:
             if Crmuser.objects.filter(username=username).exists():
