@@ -31,12 +31,10 @@
                            </div>
                            <div class="row">
                            <form method="POST" action="">
-                              {% csrf_token %}
-                              {% if form.non_field_errors %}
-                              {% for error in form.non_field_errors %}
-                              {{error}}
+                              {% csrf_token %}                         
+                              {% for message in messages %}
+                              <h5 class="errors">{{ message }}</h5>
                               {% endfor %}
-                              {% endif %}
                               <div class="login_form  col-12">
                                 <div class="iconlink col-5 mb-3 ">
                                  <a href="#" class="btn-face m-b-20" role="button" data-bs-toggle="button"><img src="../static/icons/Google.svg"> <span class="ms-2">Login with Google</span></a>

@@ -4,6 +4,9 @@
 
 <div class="row">
     <div class="col-sm-4 offset-2">
+      {% for message in messages %}
+      <h5 class="errors">{{ message }}</h5>
+      {% endfor %}
         <h4 class="alert alert-info">Update Details</h4>
         <form action="" method="POST">
             {% csrf_token %}

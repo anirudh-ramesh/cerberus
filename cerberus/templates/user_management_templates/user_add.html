@@ -16,12 +16,16 @@
 </head>
 <body>
     <h2>Add User</h2>
+    {% for message in messages %}
+        <h5 class="errors">{{ message }}</h5>
+    {% endfor %}
     <form action="" method="POST">
         {% csrf_token %}
 		{% for fm in form %}
 		    {{fm.label_tag}} {{fm}} {{fm.errors|striptags}} <br><br>
 		{% endfor %}
 		<input type="Submit" name="Submit" class="btn btn-success" value="Submit">
+
     </form>
 </body>
 </html>

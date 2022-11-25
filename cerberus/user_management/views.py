@@ -6,7 +6,7 @@ from .forms import UserCreatedByAdmin, OrgasationForm
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from db_connect import sql_query,inset_into_db,getOrgUserInfo,orgProfileAddData,getOrgProfiles,organisationmultiplePermission,insertIntoOrgnisationPermission,removeUserFromOrg
-
+from common import successAndErrorMessages
 
 #This Function Used to Add User.
 def addUser(request):
@@ -16,6 +16,7 @@ def addUser(request):
         if form.is_valid():
             form.save()
     context = { 'form': form }
+    messages.success(request, successAndErrorMessages()['addUser'])
     return render(request,'user_management_templates/user_add.html',context)
 
 #This function used for Listing of users.
@@ -29,16 +30,17 @@ def getUser(request):
 def updateUser(request,id):
     pi =list(Crmuser.objects.filter(pk=id).values())
     if request.method == 'POST':
-        username = request.POST['username']
-        email = request.POST['email']
-        contact = request.POST['contact']
-        # last_login = request.POST['lastlogin']
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        contact = request.POST.get('contact')
+        # last_login = request.POST.get('lastlogin')
         isactive = request.POST.get('is_active')
         if isactive == 'on':
             isactive = True
         else:
             isactive = False
         Crmuser.objects.filter(email=id).update(username=username,email=email,contact=contact,is_active=isactive, updated_at = timezone.now())
+        messages.info(request, successAndErrorMessages()['updateUser'])
         pi=[{"email":email ,"username":username, "contact":contact, "is_active": isactive }]
         return render(request,'user_management_templates/update_user.html',{ 'form': pi })
 
@@ -53,9 +55,10 @@ def deleteUser(request, id):
             pi.delete()
             return redirect('user_management:getdata')
         context = {}
+        messages.warning(request, successAndErrorMessages()['removeUser'])
         return render(request, "user_management_templates/get_userdata.html", context)
     except Exception as e:
-        print("Error While deleting Record",e)
+        return messages.warning(request, successAndErrorMessages()['internalError'])
 
 
 #This Function Used to Add Organisation.
@@ -66,6 +69,7 @@ def addOrganisation(request):
         if form.is_valid():
             form.save()
     context = { 'form': form }
+    messages.success(request, successAndErrorMessages()['createOrganisation'])
     return render(request,'add_organisation.html',context)
 
 #Listing of Organisation.
@@ -99,7 +103,8 @@ def updateOranisation(request,id):
         'form': fm,
         'listuser': listuser,
         'role' : roles
-    } 
+    }
+    messages.info(request, successAndErrorMessages()['updateOrganisation'])
     return render(request,'update_organisation.html',context)
 
 #Delete records from Organisation.
@@ -108,7 +113,7 @@ def deleteOraganisation(request, id):
         pi = Organisation.objects.get(pk=id)
         if request.method == 'POST':
             pi.delete()
-            return redirect('user_management:listorg')
+        messages.warning(request, successAndErrorMessages()['removeOrganisation'])    
         return render(request, "list_organisation_data.html", {})
     except Exception as e:
         print("Error While deleting Record",e)
@@ -117,27 +122,28 @@ def deleteOraganisation(request, id):
 def addOrganisationProfile(request,id):
     if request.method == "POST":
         formData = OrganisationProfile.objects.create(
-            battery_pack_manufacture = request.POST['battery_pack_manufacture'],
-            battery_pack_distributor = request.POST['battery_pack_distributor'],
-            battery_pack_sub_distributor = request.POST['battery_pack_sub_distributor'],
-            battery_pack_financier = request.POST['battery_pack_financier'],
-            battery_pack_owner = request.POST['battery_pack_owner'],
-            battery_pack_operator = request.POST['battery_pack_operator'],
-            vehical_manufacture = request.POST['vehical_manufacture'],
-            vehical_distributor = request.POST['vehical_distributor'],
-            vehical_sub_distributor = request.POST['vehical_sub_distributor'],
-            vehical_retailer = request.POST['vehical_retailer'],
-            vehical_financier = request.POST['vehical_financier'],
-            vehical_owner = request.POST['vehical_owner'],
-            vehical_operator = request.POST['vehical_operator'],
-            battrey_swap_satation_manufacture = request.POST['battrey_swap_satation_manufacture'],
-            battrey_swap_satation_distributor = request.POST['battrey_swap_satation_distributor'],
-            battrey_swap_satation_sub_distributor = request.POST['battrey_swap_satation_sub_distributor'],
-            battrey_swap_satation_financier = request.POST['battrey_swap_satation_financier'],
-            battrey_swap_satation_owner = request.POST['battrey_swap_satation_owner'],
-            battrey_swap_satation_operator = request.POST['battrey_swap_satation_operator']
+            battery_pack_manufacture = request.POST.get('battery_pack_manufacture'),
+            battery_pack_distributor = request.POST.get('battery_pack_distributor'),
+            battery_pack_sub_distributor = request.POST.get('battery_pack_sub_distributor'),
+            battery_pack_financier = request.POST.get('battery_pack_financier'),
+            battery_pack_owner = request.POST.get('battery_pack_owner'),
+            battery_pack_operator = request.POST.get('battery_pack_operator'),
+            vehical_manufacture = request.POST.get('vehical_manufacture'),
+            vehical_distributor = request.POST.get('vehical_distributor'),
+            vehical_sub_distributor = request.POST.get('vehical_sub_distributor'),
+            vehical_retailer = request.POST.get('vehical_retailer'),
+            vehical_financier = request.POST.get('vehical_financier'),
+            vehical_owner = request.POST.get('vehical_owner'),
+            vehical_operator = request.POST.get('vehical_operator'),
+            battrey_swap_satation_manufacture = request.POST.get('battrey_swap_satation_manufacture'),
+            battrey_swap_satation_distributor = request.POST.get('battrey_swap_satation_distributor'),
+            battrey_swap_satation_sub_distributor = request.POST.get('battrey_swap_satation_sub_distributor'),
+            battrey_swap_satation_financier = request.POST.get('battrey_swap_satation_financier'),
+            battrey_swap_satation_owner = request.POST.get('battrey_swap_satation_owner'),
+            battrey_swap_satation_operator = request.POST.get('battrey_swap_satation_operator')
         )
         formData.save()
+        messages.success(request, successAndErrorMessages()['createOrganisationProfile'])
         orgProfileAddData(id,formData.id)
     return render(request,'add_organisation_profile.html')
 
@@ -149,6 +155,15 @@ def listOrganisationProfile(request,id):
     return render(request, 'list_organisation_profile.html',contex)
 
 
+def deleteOraganisation(request, id):
+    try:
+        pi = OrganisationProfile.objects.get(pk=id)
+        if request.method == 'POST':
+            pi.delete()
+        messages.warning(request, successAndErrorMessages()['removeOrganisationProfile'])    
+        return render(request, "list_organisation_profile.html", {})
+    except Exception as e:
+        return messages.warning(request, successAndErrorMessages()['internalError'])
 
 #Create a role and inserting into permission organisation 
 def createUserRole(request,id):
@@ -193,8 +208,8 @@ def updateRole(request,name):
     role_data = list(OrganisationPermission.objects.filter(role_name=name).values())
 
     if request.method == "POST":
-        role_name = request.POST['role_name']
-        permission_name = request.POST['permission_name']
+        role_name = request.POST.get('role_name')
+        permission_name = request.POST.get('permission_name')
         data = OrganisationPermission.objects.filter(role_name=role_data).update(role_name=role_name,permission_name=permission_name)
 
         role_data = [{"role_name": role_name, 'permission_name':permission_name }]
@@ -254,16 +269,17 @@ def orgUserinfo(request,id):
 def addSwapStation(request): 
     if request.method == "POST":
         formData = Swapstation.objects.create(
-            swap_station_name = request.POST['swap_station_name'],
-            imei_number = request.POST['imei_number'],
-            number_of_doors = request.POST['number_of_doors'],
-            charge_specification = request.POST['charge_specification'],
-            configuration = request.POST['configuration'],
-            assigned_owner = request.POST['assigned_owner'],
-            status = request.POST['status'],
-            assigned_fleet_owner = request.POST['assigned_fleet_owner'],
+            swap_station_name = request.POST.get('swap_station_name'),
+            imei_number = request.POST.get('imei_number'),
+            number_of_doors = request.POST.get('number_of_doors'),
+            charge_specification = request.POST.get('charge_specification'),
+            configuration = request.POST.get('configuration'),
+            assigned_owner = request.POST.get('assigned_owner'),
+            status = request.POST.get('status'),
+            assigned_fleet_owner = request.POST.get('assigned_fleet_owner'),
         )
         formData.save()
+        messages.success(request, successAndErrorMessages()['createSwapStation'])
     return render(request,'add_swapstation.html')
 
 #Listing swap station data.
@@ -278,14 +294,14 @@ def updateSwapstationDetails(request,id):
     update_swapstation = list(Swapstation.objects.filter(imei_number=id).values())
 
     if request.method == "POST":
-        swap_station_name = request.POST['swap_station_name']
-        imei_number = request.POST['imei_number']
-        number_of_doors = request.POST['number_of_doors']
-        charge_specification = request.POST['charge_specification']
-        configuration = request.POST['configuration']
-        assigned_owner = request.POST['assigned_owner']
-        status = request.POST['status']
-        assigned_fleet_owner = request.POST['assigned_fleet_owner']
+        swap_station_name = request.POST.get('swap_station_name')
+        imei_number = request.POST.get('imei_number')
+        number_of_doors = request.POST.get('number_of_doors')
+        charge_specification = request.POST.get('charge_specification')
+        configuration = request.POST.get('configuration')
+        assigned_owner = request.POST.get('assigned_owner')
+        status = request.POST.get('status')
+        assigned_fleet_owner = request.POST.get('assigned_fleet_owner')
 
         data = Swapstation.objects.filter(imei_number=id).update(
             swap_station_name=swap_station_name, imei_number=imei_number,
@@ -303,6 +319,7 @@ def updateSwapstationDetails(request,id):
             'assigned_fleet_owner': assigned_fleet_owner,
         }]
 
+        messages.info(request, successAndErrorMessages()['updateSwapStation'])
         return render(request,'update_swap_station.html',{'update_swap_station_data': update_swapstation })
 
     update_swapstation = list(Swapstation.objects.filter(imei_number=id).values())
@@ -316,6 +333,7 @@ def deleteSwapStation(request,id):
             pi.delete()
             return redirect('user_management:listswap')
         context={}
+        messages.info(request, successAndErrorMessages()['removeSwapStation'])
         return render(request, 'list_swapstation_data.html', context)
     except Exception as e:
         print("Error While deleting Record",e)

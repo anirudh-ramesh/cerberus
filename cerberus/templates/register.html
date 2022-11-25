@@ -70,13 +70,8 @@
 								{% csrf_token %}
 
 								<div>
-									<style>
-										.errors{
-											color: red;
-										}
-									</style>
-									{% for message in messgaes %}
-									<h5 class="errors">{{message}</h5>
+									{% for message in messages %}
+									<h5 class="errors">{{ message }}</h5>
 									{% endfor %}
 								</div>
                               <div class="login_form  col-12">
@@ -125,7 +120,7 @@
                               </form>
                            </div>
 
-                           <p>Already a member ? <a href="#!" class="link-info">Login</a></p>
+                           <p>Already a member ? <a href="{% url 'login' %}" class="link-info">Login</a></p>
                         </div>
                         
                      </div>

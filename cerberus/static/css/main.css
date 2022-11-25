@@ -391,7 +391,7 @@ a {
 .card .card-title {
     margin-bottom: 1rem;
     font-weight: 500 !important;
-    font-size: 1rem !important;
+    font-size: 2rem !important;
 }
 .card-img-top {
     width: 50% !important;
@@ -581,3 +581,7 @@ p {
 ::-webkit-scrollbar {
     display: none;
   }
+
+.errors{
+    color:rgb(106, 196, 106);
+ }

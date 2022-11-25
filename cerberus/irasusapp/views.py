@@ -25,6 +25,7 @@ from base64 import b64encode
 import requests
 import json
 from django.db.models import F, Q
+from common import successAndErrorMessages
 
 format='%Y-%m-%d'
 
@@ -39,23 +40,21 @@ def register(request):
         email = request.POST.get('email')
         # contact = request.POST.get('contact')
         user_password = request.POST.get('password')
-        print(user_password)
         password_conformation = request.POST.get('password_conformation')
-        print(password_conformation, "========>>>>>")
 
         if user_password == password_conformation:
             password = make_password(user_password)
             password_conformation = password
-            print("HERE")
             if Crmuser.objects.filter(email=email).exists():
-                messages.warning(request,'Email is already taken! try another one')
+                messages.warning(request,successAndErrorMessages()['emailTaken'])
                 return redirect('register')
             else:
                 user = Crmuser.objects.create_user(email=email, password=password, password_conformation=password_conformation)
                 user.save() 
-                return redirect('login')   
+                messages.success(request,successAndErrorMessages()['singupMessage'])
+                return render(request, 'login.html')
         else:
-            messages.error(request,'Password did not matched!..')
+            messages.error(request,successAndErrorMessages()['passwordNotMatched'])
             return redirect('register')
     else:
         return render(request, 'register.html')
@@ -70,20 +69,20 @@ def loginPage(request):
             print(password, check_password(password,crmuser.password))
             flag = check_password(password,crmuser.password)
             if flag:
-                messages.info(request,"Successfully Logged In")
+                messages.info(request,successAndErrorMessages()['loginMessage'])
                 return redirect('home')     
             else:
-                messages.info(request, "Username or Password Inccorect")
+                messages.info(request, successAndErrorMessages()['loginErrorMessage'])
                 return redirect('login')
         else:
-            messages.info(request, "User not Found")
+            messages.info(request, successAndErrorMessages()['userNotFound'])
 
     return render(request,'login.html')  
 
 #This Function is used for Logout.
 def logoutUser(request):
     logout(request)
-    messages.warning(request, "Logout Successfully.")
+    messages.warning(request, successAndErrorMessages()['logout'])
     return redirect('login')
 
 #Adding battery details to Battery table.
@@ -112,9 +111,10 @@ def batteryDetails(request):
                 charging_status = request.POST['charging_status']
             )
             formData.save()
+            messages.info(request, successAndErrorMessages()['addBattery'])
         return render(request,'dashboard.html')
     except Exception as e:
-        print("Server Error")
+        return messages.warning(request, successAndErrorMessages()['internalError'])
 
 #Listing of battery details table.
 def getBatteryDetails(request):
@@ -138,49 +138,53 @@ def getBatteryDetails(request):
         context = { 'battery_data': data,"cahis_id": cahis_id }
         return render(request, 'battery_details.html',context)
     except Exception as e:
-        messages.warning(request,"Internal server error")
+        return messages.warning(request, successAndErrorMessages()['internalError'])
 
 #This Function Will Update_Battery_details/Edit
 def updateBatteryDetails(request, id):
-    battery_data = BatteryDetail.objects.filter(battery_serial_num=id).values()
-    if request.method == "POST":
-        model_name = request.POST['model_name']
-        battery_serial_num = request.POST['battery_serial_num']
-        battery_type = request.POST['battery_type']
-        bms_type = request.POST['bms_type']
-        iot_type = request.POST['iot_type']
-        iot_imei_number = request.POST['iot_imei_number']
-        sim_number = request.POST['sim_number']
-        warrenty_start_date = datetime.strptime(request.POST['warrenty_start_date'],format)
-        warrenty_duration = datetime.strptime(request.POST['warrenty_duration'],format)
-        assigned_owner = request.POST['assigned_owner']
-        status = request.POST['status']
-        battery_cell_chemistry = request.POST['battery_cell_chemistry']
-        battery_pack_nominal_voltage = request.POST['battery_pack_nominal_voltage']
-        battery_pack_nominal_charge_capacity = request.POST['battery_pack_nominal_charge_capacity']
-        charging_status = request.POST['charging_status']
+    try:
+        battery_data = BatteryDetail.objects.filter(battery_serial_num=id).values()
+        if request.method == "POST":
+            model_name = request.POST.get('model_name')
+            battery_serial_num = request.POST.get('battery_serial_num')
+            battery_type = request.POST.get('battery_type')
+            bms_type = request.POST.get('bms_type')
+            iot_type = request.POST.get('iot_type')
+            iot_imei_number = request.POST.get('iot_imei_number')
+            sim_number = request.POST.get('sim_number')
+            warrenty_start_date = datetime.strptime(request.POST.get('warrenty_start_date'),format)
+            warrenty_duration = datetime.strptime(request.POST.get('warrenty_duration'),format)
+            assigned_owner = request.POST.get('assigned_owner')
+            status = request.POST.get('status')
+            battery_cell_chemistry = request.POST.get('battery_cell_chemistry')
+            battery_pack_nominal_voltage = request.POST.get('battery_pack_nominal_voltage')
+            battery_pack_nominal_charge_capacity = request.POST.get('battery_pack_nominal_charge_capacity')
+            charging_status = request.POST.get('charging_status')
 
-        BatteryDetail.objects.filter(battery_serial_num=id).update(
-        model_name=model_name,battery_serial_num=battery_serial_num,battery_type=battery_type,bms_type=bms_type,
-        iot_type=iot_type,iot_imei_number=iot_imei_number,sim_number=sim_number,warrenty_start_date=warrenty_start_date,
-        warrenty_duration=warrenty_duration,assigned_owner=assigned_owner,status=status,
-        battery_cell_chemistry=battery_cell_chemistry,battery_pack_nominal_voltage=battery_pack_nominal_voltage,
-        battery_pack_nominal_charge_capacity=battery_pack_nominal_charge_capacity,
-        charging_status=charging_status
-        )
-        battery_data = [{
-            'model_name':model_name,
-            'battery_serial_num':battery_serial_num,'battery_type': battery_type,'bms_type': bms_type,
-            'iot_type': iot_type,'iot_imei_number': iot_imei_number,'sim_number': sim_number,'warrenty_start_date': warrenty_start_date,
-            'warrenty_duration': warrenty_duration,'assigned_owner': assigned_owner,'status': status,
-            'battery_cell_chemistry': battery_cell_chemistry,'battery_pack_nominal_voltage': battery_pack_nominal_voltage,
-            'battery_pack_nominal_charge_capacity' : battery_pack_nominal_charge_capacity,
-            'charging_status': charging_status
-            }]
-        return render(request,'update_battery_details.html', {'form': battery_data })
+            BatteryDetail.objects.filter(battery_serial_num=id).update(
+            model_name=model_name,battery_serial_num=battery_serial_num,battery_type=battery_type,bms_type=bms_type,
+            iot_type=iot_type,iot_imei_number=iot_imei_number,sim_number=sim_number,warrenty_start_date=warrenty_start_date,
+            warrenty_duration=warrenty_duration,assigned_owner=assigned_owner,status=status,
+            battery_cell_chemistry=battery_cell_chemistry,battery_pack_nominal_voltage=battery_pack_nominal_voltage,
+            battery_pack_nominal_charge_capacity=battery_pack_nominal_charge_capacity,
+            charging_status=charging_status
+            )
+            battery_data = [{
+                'model_name':model_name,
+                'battery_serial_num':battery_serial_num,'battery_type': battery_type,'bms_type': bms_type,
+                'iot_type': iot_type,'iot_imei_number': iot_imei_number,'sim_number': sim_number,'warrenty_start_date': warrenty_start_date,
+                'warrenty_duration': warrenty_duration,'assigned_owner': assigned_owner,'status': status,
+                'battery_cell_chemistry': battery_cell_chemistry,'battery_pack_nominal_voltage': battery_pack_nominal_voltage,
+                'battery_pack_nominal_charge_capacity' : battery_pack_nominal_charge_capacity,
+                'charging_status': charging_status
+                }]
+            messages.info(request, successAndErrorMessages()['updateBatteryDetails'])
+            return render(request,'update_battery_details.html', {'form': battery_data })
 
-    battery_data = list(BatteryDetail.objects.filter(battery_serial_num=id).values())
-    return render(request,'update_battery_details.html',{'form': battery_data})
+        battery_data = list(BatteryDetail.objects.filter(battery_serial_num=id).values())
+        return render(request,'update_battery_details.html',{'form': battery_data})
+    except Exception as e:
+        return messages.warning(request, successAndErrorMessages()['internalError'])
     
 #Delete records from Battery table.
 def deleteRecord(request,id):
@@ -188,11 +192,12 @@ def deleteRecord(request,id):
         pi = BatteryDetail.objects.get(pk=id)
         if request.method == 'POST':
             pi.delete()
+            messages.success(request, successAndErrorMessages()['removeBatteryDetails'])
             return redirect('data')
         context = {}
         return render(request, "battery_details.html", context)
     except Exception as e:
-        print("Error While deleting Record",e)
+        return messages.warning(request, successAndErrorMessages()['internalError'])
 
 
 # def login_with_phone_num(request):
@@ -263,92 +268,104 @@ def userSignin(request):
 
 
 #Adding vehicle to the Vehicle table
-def addVehicleDetails(request): 
-    if request.method == "POST":
-        formData = Vehicle.objects.create(
-            vehicle_model_name = request.POST['vehicle_model_name'],
-            chasis_number = request.POST['chasis_number'],
-            configuration = request.POST['configuration'],
-            vehicle_choice = request.POST['vehicle_choice'],
-            vehicle_iot_imei_number = request.POST['vehicle_iot_imei_number'],
-            vehicle_sim_number = request.POST['vehicle_sim_number'],
-            vehicle_warrenty_start_date = datetime.strptime(request.POST['vehicle_warrenty_start_date'], format),
-            vehicle_warrenty_end_date = datetime.strptime(request.POST['vehicle_warrenty_end_date'], format),
-            assigned_owner = request.POST['assigned_owner'],
-            insurance_start_date = datetime.strptime(request.POST['insurance_start_date'], format),
-            insurance_end_date = datetime.strptime(request.POST['insurance_start_date'], format)   
-        )
-        formData.save()
-    return render(request,'add_vehicle_details.html')
+def addVehicleDetails(request):
+    try: 
+        if request.method == "POST":
+            formData = Vehicle.objects.create(
+                vehicle_model_name = request.POST.get('vehicle_model_name'),
+                chasis_number = request.POST.get('chasis_number'),
+                configuration = request.POST.get('configuration'),
+                vehicle_choice = request.POST.get('vehicle_choice'),
+                vehicle_iot_imei_number = request.POST.get('vehicle_iot_imei_number'),
+                vehicle_sim_number = request.POST.get('vehicle_sim_number'),
+                vehicle_warrenty_start_date = datetime.strptime(request.POST.get('vehicle_warrenty_start_date'), format),
+                vehicle_warrenty_end_date = datetime.strptime(request.POST.get('vehicle_warrenty_end_date'), format),
+                assigned_owner = request.POST.get('assigned_owner'),
+                insurance_start_date = datetime.strptime(request.POST.get('insurance_start_date'), format),
+                insurance_end_date = datetime.strptime(request.POST.get('insurance_start_date'), format)
+            )
+            formData.save()
+            messages.success(request, successAndErrorMessages()['addVehicle'])
+        return render(request,'add_vehicle_details.html')
+    except Exception as e:
+        return messages.warning(request, successAndErrorMessages()['internalError'])
 
 #Listing of vehile.
 def getVehicleDetails(request):
-    assigned_to_user = str(request.get_full_path()).split("?").pop()
-    serial_number = assigned_to_user.split("=").pop()
-    email_id = assigned_to_user.split("=").pop()
-    if request.method == "GET":
-        vehicle_data = list(Vehicle.objects.values())
-    
-    #Assigned Vehicle To User
-    if request.method == "POST":
+    try:
         assigned_to_user = str(request.get_full_path()).split("?").pop()
-        serial_number = assigned_to_user.split("&")[0].split("=")[1]
-        chasis_number = assigned_to_user.split('&')[1].split("=")[2]
+        serial_number = assigned_to_user.split("=").pop()
+        email_id = assigned_to_user.split("=").pop()
+        if request.method == "GET":
+            vehicle_data = list(Vehicle.objects.values())
+        
+        #Assigned Vehicle To User
+        if request.method == "POST":
+            assigned_to_user = str(request.get_full_path()).split("?").pop()
+            serial_number = assigned_to_user.split("&")[0].split("=")[1]
+            chasis_number = assigned_to_user.split('&')[1].split("=")[2]
 
-        if serial_number:
-            assignedVehicleToOrganisation(serial_number,chasis_number)
-            return redirect('user_management:listorg')
+            if serial_number:
+                assignedVehicleToOrganisation(serial_number,chasis_number)
+                return redirect('user_management:listorg')
 
-        email_id = assigned_to_user.split("&")[0].split("=")[1]
-        vehicle_id = assigned_to_user.split('&')[1].split("=")[2]
-        vehicle_data= list(Vehicle.objects.filter(chasis_number = vehicle_id).values())
-        for x in vehicle_data:
-            demo = Vehicle.objects.filter(pk=int(x['chasis_number'])).update(assigned_to_id=str(email_id), vehicle_selected=True)
-            return redirect('getvehicle')
+            email_id = assigned_to_user.split("&")[0].split("=")[1]
+            vehicle_id = assigned_to_user.split('&')[1].split("=")[2]
+            vehicle_data= list(Vehicle.objects.filter(chasis_number = vehicle_id).values())
+            for x in vehicle_data:
+                demo = Vehicle.objects.filter(pk=int(x['chasis_number'])).update(assigned_to_id=str(email_id), vehicle_selected=True)
+                messages.info(request, successAndErrorMessages()['addVehicleToUser']) 
+                return redirect('getvehicle')
 
-    return render(request, 'list_vehicle_details.html', {'vehicle_data':vehicle_data , 'email_id': email_id , 'serial_number': serial_number})
+        return render(request, 'list_vehicle_details.html', {'vehicle_data':vehicle_data , 'email_id': email_id , 'serial_number': serial_number})
+    except Exception as e:
+        return messages.warning(request, successAndErrorMessages()['internalError'])
+
 
 #This function will Update Vehicle Table.
 def updateVehicleDetails(request,id):
-    update_vehicle = list(Vehicle.objects.filter(chasis_number=id).values())
+    try:
+        update_vehicle = list(Vehicle.objects.filter(chasis_number=id).values())
 
-    if request.method == "POST":
-        vehicle_model_name = request.POST['vehicle_model_name']
-        chasis_number = request.POST['chasis_number']
-        configuration = request.POST.get('configuration')
-        vehicle_choice = request.POST['vehicle_choice']
-        vehicle_iot_imei_number = request.POST['vehicle_iot_imei_number']
-        vehicle_sim_number = request.POST['vehicle_sim_number']
-        vehicle_warrenty_start_date = datetime.strptime(request.POST['vehicle_warrenty_start_date'], format)
-        vehicle_warrenty_end_date = datetime.strptime(request.POST['vehicle_warrenty_end_date'], format)
-        assigned_owner = request.POST['assigned_owner']
-        insurance_start_date = datetime.strptime(request.POST['insurance_start_date'], format)
-        insurance_end_date = datetime.strptime(request.POST['insurance_start_date'], format)
+        if request.method == "POST":
+            vehicle_model_name = request.POST.get('vehicle_model_name')
+            chasis_number = request.POST.get('chasis_number')
+            configuration = request.POST.get('configuration')
+            vehicle_choice = request.POST.get('vehicle_choice')
+            vehicle_iot_imei_number = request.POST.get('vehicle_iot_imei_number')
+            vehicle_sim_number = request.POST.get('vehicle_sim_number')
+            vehicle_warrenty_start_date = datetime.strptime(request.POST.get('vehicle_warrenty_start_date'), format)
+            vehicle_warrenty_end_date = datetime.strptime(request.POST.get('vehicle_warrenty_end_date'), format)
+            assigned_owner = request.POST.get('assigned_owner')
+            insurance_start_date = datetime.strptime(request.POST.get('insurance_start_date'), format)
+            insurance_end_date = datetime.strptime(request.POST.get('insurance_start_date'), format)
 
-        data = Vehicle.objects.filter(chasis_number=id).update(
-            vehicle_model_name=vehicle_model_name, chasis_number=chasis_number,
-            configuration=configuration,vehicle_choice=vehicle_choice,
-            vehicle_iot_imei_number=vehicle_iot_imei_number,vehicle_sim_number=vehicle_sim_number,
-            vehicle_warrenty_start_date=vehicle_warrenty_start_date,vehicle_warrenty_end_date=vehicle_warrenty_end_date,
-            assigned_owner=assigned_owner,insurance_start_date=insurance_start_date,
-            insurance_end_date=insurance_end_date
-        )
+            data = Vehicle.objects.filter(chasis_number=id).update(
+                vehicle_model_name=vehicle_model_name, chasis_number=chasis_number,
+                configuration=configuration,vehicle_choice=vehicle_choice,
+                vehicle_iot_imei_number=vehicle_iot_imei_number,vehicle_sim_number=vehicle_sim_number,
+                vehicle_warrenty_start_date=vehicle_warrenty_start_date,vehicle_warrenty_end_date=vehicle_warrenty_end_date,
+                assigned_owner=assigned_owner,insurance_start_date=insurance_start_date,
+                insurance_end_date=insurance_end_date
+            )
 
-        update_vehicle = [{
-            'vehicle_model_name':vehicle_model_name,
-            'chasis_number':chasis_number,'vehicle_choice': vehicle_choice,
-            'vehicle_iot_imei_number': vehicle_iot_imei_number,
-            'configuration': configuration,'vehicle_sim_number': vehicle_sim_number,
-            'vehicle_warrenty_start_date': vehicle_warrenty_start_date,
-            'vehicle_warrenty_end_date': vehicle_warrenty_end_date,'assigned_owner': assigned_owner,
-            'insurance_start_date': insurance_start_date,
-            'insurance_end_date': insurance_end_date
-        }]
+            update_vehicle = [{
+                'vehicle_model_name':vehicle_model_name,
+                'chasis_number':chasis_number,'vehicle_choice': vehicle_choice,
+                'vehicle_iot_imei_number': vehicle_iot_imei_number,
+                'configuration': configuration,'vehicle_sim_number': vehicle_sim_number,
+                'vehicle_warrenty_start_date': vehicle_warrenty_start_date,
+                'vehicle_warrenty_end_date': vehicle_warrenty_end_date,'assigned_owner': assigned_owner,
+                'insurance_start_date': insurance_start_date,
+                'insurance_end_date': insurance_end_date
+            }]
+            messages.info(request, successAndErrorMessages()['updateVehicle'])
+            return render(request,'update_vehicle.html',{'update_vehicle_data': update_vehicle })
 
+        update_vehicle = list(Vehicle.objects.filter(chasis_number=id).values())
         return render(request,'update_vehicle.html',{'update_vehicle_data': update_vehicle })
-
-    update_vehicle = list(Vehicle.objects.filter(chasis_number=id).values())
-    return render(request,'update_vehicle.html',{'update_vehicle_data': update_vehicle })
+    except Exception as error:
+        return messages.warning(request, successAndErrorMessages()['internalError']) 
 
 #Delete records from Vehicle table.
 def deleteVehicleRecord(request,id):
@@ -356,57 +373,69 @@ def deleteVehicleRecord(request,id):
         pi = Vehicle.objects.get(pk=id)
         if request.method == 'POST':
             pi.delete()
+            messages.info(request, successAndErrorMessages()['removeVehicle'])
             return redirect('getvehicle')
         context = {}
         return render(request, "list_vehicle_details.html", context)
     except Exception as e:
         print("Error While deleting Record",e)
+        return messages.error(request, successAndErrorMessages()['internalError'])
 
 #Assigned BatteryList
 def assignedBatteryList(request,id):
-    if request.method == "GET":
-        data = listAssignedBatteryVehicle(id)
+    try:
+        if request.method == "GET":
+            data = listAssignedBatteryVehicle(id)
 
-    # Remove battery from vehicle.
-    if request.method == "POST": 
-        data = listAssignedBatteryVehicle(id)
-        assigned_vehicle_battery = Vehicle.objects.filter(chasis_number=id)
-        for x in data:
-            data = BatteryDetail.objects.filter(pk=x['battery_serial_num']).update(vehicle_assign_id=None, is_assigned=False)
+        # Remove battery from vehicle.
+        if request.method == "POST": 
+            data = listAssignedBatteryVehicle(id)
+            assigned_vehicle_battery = Vehicle.objects.filter(chasis_number=id)
+            for x in data:
+                data = BatteryDetail.objects.filter(pk=x['battery_serial_num']).update(vehicle_assign_id=None, is_assigned=False)
 
-    context = {
-        'assigned_battery_list' : data
-    }
-    return render(request, 'list_assigned_battery.html',context)
+        context = {
+            'assigned_battery_list' : data
+        }
+        return render(request, 'list_assigned_battery.html',context)
+    except Exception as e:
+        return messages.error(request, successAndErrorMessages()['internalError'])
 
 
 #Assigned vehicle to org
 def assignedOrgVehicleList(request,id):
-    org_vehicle_list = getOrgAssignedVehicle(id)
-        
-    #Remove vehicle from Organisation
-    if request.method == "POST":
-        assigned_vehicle = str(request.get_full_path()).split("?").pop()
-        vehicle_id = assigned_vehicle.split("&")[0].split("=")[1]
-        remove_org_vehicle = removeAssignedVehiclefromOrganisation(id,vehicle_id)
-        return redirect('user_management:listorg')
+    try:
+        org_vehicle_list = getOrgAssignedVehicle(id)
             
-    return render(request, 'list_organisation_vehicle.html',{'org_vehicle_list': org_vehicle_list})
+        #Remove vehicle from Organisation
+        if request.method == "POST":
+            assigned_vehicle = str(request.get_full_path()).split("?").pop()
+            vehicle_id = assigned_vehicle.split("&")[0].split("=")[1]
+            remove_org_vehicle = removeAssignedVehiclefromOrganisation(id,vehicle_id)
+            return redirect('user_management:listorg')
+                
+        return render(request, 'list_organisation_vehicle.html',{'org_vehicle_list': org_vehicle_list})
+    except Exception as e:
+        return messages.error(request, successAndErrorMessages()['internalError'])
 
 #Assigned vehicle to user
 def assignedVehicleToUser(request,id):
-    user_vehicle =""
-    if request.method == "GET":
-        user_vehicle = listAssignedVehicleToUser(id)
+    try:
+        user_vehicle =""
+        if request.method == "GET":
+            user_vehicle = listAssignedVehicleToUser(id)
 
-    #Remove Vehicle from User
-    if request.method == "POST":
-        assigned_vehicle = str(request.get_full_path()).split("?").pop()
-        vehicle_id = assigned_vehicle.split("&")[0].split("=")[1]
-        user_vehicle = removeUserVehicle(False,vehicle_id)
-        return redirect("user_management:getdata")
+        #Remove Vehicle from User
+        if request.method == "POST":
+            assigned_vehicle = str(request.get_full_path()).split("?").pop()
+            vehicle_id = assigned_vehicle.split("&")[0].split("=")[1]
+            user_vehicle = removeUserVehicle(False,vehicle_id)
+            messages.warning(request, successAndErrorMessages()['removeVehiclefromUser'])
+            return redirect("user_management:getdata")
 
-    return render(request,'list_assigned_vehicle_to_user.html',{'user_vehicle':user_vehicle})
+        return render(request,'list_assigned_vehicle_to_user.html',{'user_vehicle':user_vehicle})
+    except Exception as e:
+        return messages.warning(request, successAndErrorMessages()['internalError']) 
 
 #Create Geofencing Locations.
 def addgeofenceVehicles(request):
@@ -415,11 +444,11 @@ def addgeofenceVehicles(request):
         longitude_data = []
         latitude_data = []
         if request.method == "POST":
-            geoname = request.POST['geoname']
-            geotype = request.POST['geotype']
-            description = request.POST['description']
-            position_add = request.POST['pos_address']
-            enter_lat =request.POST['enter_latitude']
+            geoname = request.POST.get('geoname')
+            geotype = request.POST.get('geotype')
+            description = request.POST.get('description')
+            position_add = request.POST.get('pos_address')
+            enter_lat =request.POST.get('enter_latitude')
             newdata=json.loads(enter_lat)
             coordinate_data = newdata["features"][0]['geometry']['coordinates']
 
@@ -428,6 +457,7 @@ def addgeofenceVehicles(request):
                 latitude = coordinate_data[1]
                 location = Point(float(longitude),float(latitude),srid=4326)            
                 newdata = Geofence.objects.create(geoname=geoname,geotype=geotype,description=description,enter_latitude=latitude,enter_longitude=longitude,pos_address=position_add,location=location)
+                messages.success(request, successAndErrorMessages()['locationCreate'])
                 return render(request, 'geolocation_form.html')
 
 
@@ -446,17 +476,19 @@ def addgeofenceVehicles(request):
                     polygon_coordinates.append(longitude)
             geofence = Polygon(((polygon_coordinates)),srid=4326)
             newdata = Geofence.objects.create(geoname=geoname,geotype=geotype, description=description,enter_latitude=longitude_data,pos_address=position_add,geofence=geofence)
-
+            messages.success(request, successAndErrorMessages()['locationCreate'])
         return render(request, 'geolocation_form.html')
     except Exception as e:
-        print("Server Error")
+        return messages.warning(request, successAndErrorMessages()['internalError']) 
 
 #list Geofencing data
 def listgeofenceData(request):
-    if request.method == "GET":
-        geofencedata = list(Geofence.objects.values())
-    return render(request, 'list_geofence_data.html',{ 'geofencedata': geofencedata })
-
+    try:
+        if request.method == "GET":
+            geofencedata = list(Geofence.objects.values())
+        return render(request, 'list_geofence_data.html',{ 'geofencedata': geofencedata })
+    except Exception as e:
+        return messages.warning(request, successAndErrorMessages()['internalError'])
    
 #Add driver For Vechicle Module.
 def addDriver(request):
@@ -476,53 +508,62 @@ def addDriver(request):
                 license_proof=license_proof,is_active=is_active
             )
             newdata.save()
+            messages.success(request, successAndErrorMessages()['addDriver'])
         return render(request, 'adddriver.html')
 
     except Exception as e:
-        print("Server Error")
+        return messages.warning(request, successAndErrorMessages()['internalError'])
 
 #This function used for listing driver. 
 def listAddedDriver(request):
-    if request.method == "GET":
-        driverData = images_display()
+    try:
+        if request.method == "GET":
+            driverData = images_display()
 
-    context={
-            "drivers": driverData
-            }
-    return render(request, 'list_drivers.html',context)
+        context={
+                "drivers": driverData
+                }
+        return render(request, 'list_drivers.html',context)
+    except Exception as e:
+        return messages.warning(request, successAndErrorMessages()['internalError'])
 
 # This function will Update Driver
 def updateDriver(request,id):
-    if request.method == 'GET':
-        pi =list(Crmuser.objects.filter(pk=id).values())
-        pi[0]["adhar_proof"]=b64encode(pi[0]['adhar_proof']).decode("utf-8")
-        pi[0]["email"]=pi[0]["email"]
-        pi[0]["username"]=pi[0]["username"]
-        pi[0]["user_type"]=pi[0]["user_type"]
-        pi[0]["is_active"]=pi[0]["is_active"]
-        pi[0]["pancard_proof"]=b64encode(pi[0]['pancard_proof']).decode("utf-8")
-        pi[0]["license_proof"]=b64encode(pi[0]['license_proof']).decode("utf-8")
-    if request.method == 'POST':
-        username = request.POST['username']
-        email = request.POST['email']
-        isactive = request.POST.get('is_active')
-        user_type = request.POST.get('user_type')
-        if isactive == 'on':
-            isactive = True
-        else:
-            isactive = False
-        Crmuser.objects.filter(email=id).update(username=username,email=email,is_active=isactive,user_type=user_type,updated_at = timezone.now())
-        pi =list(Crmuser.objects.filter(pk=id).values())
-        pi[0]["adhar_proof"]=b64encode(pi[0]['adhar_proof']).decode("utf-8")
-        pi[0]["email"]=pi[0]["email"]
-        pi[0]["username"]=pi[0]["username"]
-        pi[0]["user_type"]=pi[0]["user_type"]
-        pi[0]["is_active"]=pi[0]["is_active"]
-        pi[0]["pancard_proof"]=b64encode(pi[0]['pancard_proof']).decode("utf-8")
-        pi[0]["license_proof"]=b64encode(pi[0]['license_proof']).decode("utf-8")
+    try:
+        if request.method == 'GET':
+            pi =list(Crmuser.objects.filter(pk=id).values())
+            pi[0]["adhar_proof"]=b64encode(pi[0]['adhar_proof']).decode("utf-8")
+            pi[0]["email"]=pi[0]["email"]
+            pi[0]["username"]=pi[0]["username"]
+            pi[0]["user_type"]=pi[0]["user_type"]
+            pi[0]["is_active"]=pi[0]["is_active"]
+            pi[0]["pancard_proof"]=b64encode(pi[0]['pancard_proof']).decode("utf-8")
+            pi[0]["license_proof"]=b64encode(pi[0]['license_proof']).decode("utf-8")
+        if request.method == 'POST':
+            username = request.POST['username']
+            email = request.POST['email']
+            isactive = request.POST.get('is_active')
+            user_type = request.POST.get('user_type')
+            if isactive == 'on':
+                isactive = True
+            else:
+                isactive = False
+            Crmuser.objects.filter(email=id).update(username=username,email=email,is_active=isactive,user_type=user_type,updated_at = timezone.now())
+            pi =list(Crmuser.objects.filter(pk=id).values())
+            pi[0]["adhar_proof"]=b64encode(pi[0]['adhar_proof']).decode("utf-8")
+            pi[0]["email"]=pi[0]["email"]
+            pi[0]["username"]=pi[0]["username"]
+            pi[0]["user_type"]=pi[0]["user_type"]
+            pi[0]["is_active"]=pi[0]["is_active"]
+            pi[0]["pancard_proof"]=b64encode(pi[0]['pancard_proof']).decode("utf-8")
+            pi[0]["license_proof"]=b64encode(pi[0]['license_proof']).decode("utf-8")
+            messages.info(request, successAndErrorMessages()['updateDriver'])
+            return render(request,'update_driver.html',{ 'form': pi })
+
         return render(request,'update_driver.html',{ 'form': pi })
 
-    return render(request,'update_driver.html',{ 'form': pi })
+    except Exception as error:
+        return messages.warning(request, successAndErrorMessages()['internalError'])
 
 #Delete records of driver.
 def deleteDriver(request, id):
@@ -530,12 +571,12 @@ def deleteDriver(request, id):
         pi = Crmuser.objects.get(pk=id)
         if request.method == 'POST':
             pi.delete()
+            messages.info(request, successAndErrorMessages()['removeDriver'])
             return redirect('getdrivers')
         context = {}
         return render(request, "update_driver.html", context)
     except Exception as e:
-        print("Error While deleting Record",e)
-
+        return messages.warning(request, successAndErrorMessages()['internalError'])
 
 
 #Generate CSV field vise.
@@ -543,42 +584,45 @@ def filedForCSV(request):
     if request.method == "GET":
         files = list(Vehicle.objects.values())
         data= request.POST.getlist('checkedvalue')
-        # print(files, "=============FILES=========GET")        
+        messages.info(request, successAndErrorMessages()['csvGenerate'])       
     return render(request, 'generate_csv.html')
 
 #Exporting CSV.
 def exportCSV(request):
+    try:
+        getData=str(request.get_full_path()).split("?selectfield=")
+        if(getData[1]):
+            getData = getData[1].split("@=")
+        filterData=getData
 
-    getData=str(request.get_full_path()).split("?selectfield=")
-    if(getData[1]):
-        getData = getData[1].split("@=")
-    filterData=getData
+        data = list(Vehicle.objects.filter(
+        Q(created_date='2022-11-17') |
+        Q(created_date='2022-11-19')
+        ).values_list(*filterData))
+        tablename = Vehicle._meta.model_name
 
-    data = list(Vehicle.objects.filter(
-    Q(created_date='2022-11-17') |
-    Q(created_date='2022-11-19')
-    ).values_list(*filterData))
-    tablename = Vehicle._meta.model_name
+        file_name = f'{tablename}-' + str(datetime.now().date()) + '.csv'
 
-    file_name = f'{tablename}-' + str(datetime.now().date()) + '.csv'
+        # Create the HttpResponse object with the appropriate CSV header.
+        response = HttpResponse(content_type='text/csv')
 
-    # Create the HttpResponse object with the appropriate CSV header.
-    response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = f'attachment; filename= {file_name}'
 
-    response['Content-Disposition'] = f'attachment; filename= {file_name}'
+        writer = csv.writer(response)
 
-    writer = csv.writer(response)
+        headers = []
 
-    headers = []
+        for i in getData:
+            headers.append(i)
 
-    for i in getData:
-        headers.append(i)
+        writer.writerow(headers)
 
-    writer.writerow(headers)
+        for i in data:
+            writer.writerow(i)
+        return response
 
-    for i in data:
-        writer.writerow(i)
-    return response
+    except Exception as error:
+        return messages.warning(request, successAndErrorMessages()['internalError']) 
 
 #Open swap-station doors.
 def swapSatationDoors(request):
