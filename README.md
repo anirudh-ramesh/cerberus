@@ -2,43 +2,38 @@
 
 This project is about Managements of Organisation and there Users With Battery Management System
 
-# Require Install
 
-# 1 python3
-# 2 Postgres
+## Requirements
 
-# Installment
+1. python =^3.8.x
+2. django =^4.0.1
+3. gdal = ^2.0
+4. postgresql = ^12
+5. postgis = ^2.5
 
-- pip install python3
+## Installation
 
+1. Backend installation
 
-## Setup
+    ```python
+    git clone https://github.com/anirudh-ramesh/cerberus.git
+    ```
 
-The first thing to do is to clone the repository:
+    ```python
+        Then Move to Project Directory
+        use cd command
+        Eg :- work/djangoproject/cerberus/cerberus
+    ```
 
-```
-$ git clone https://github.com/dixitIms/cerberus.git
-$ cd cerberus
+    ```python
+    pip install python3
+    ```
 
-```
+    ```to install gdal
+    pip install GDAL
+    ```
 
-Then go to Directory Myenv a virtual environment to install dependencies in and activate it:
+    ```to run project run command.
+       - bash irasus.sh
 
-
-Then Move from myenv to Project Directory
-    use Command cd .. 
-    Eg :- work/djangoproject/cerberus/cerberus
-
-(env)$ bash irasus.sh
-
-And navigate to `http://127.0.0.1:8000/`. this is The Dashboard
-
-## Walkthrough
-
-Before you interact with the application, go to 
-the Redirect URI in the Developer settings. To make it work with this
-application, use the value `http://127.0.0.1:8000/login`. This is to
-make sure you are redirected back to your site where the user login
-
-
-use the value `http://127.0.0.1:8000/register`. This redirected back to your site where the user register
+    ```

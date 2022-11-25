@@ -3,5 +3,7 @@ psycopg2>=2.8
 msal
 django-allauth
 requests
+gdal
+
 
 
