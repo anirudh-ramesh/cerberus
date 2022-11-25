@@ -1,91 +1,204 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html>
-    
-<head>
-	<title>Login</title>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
-	<link rel="stylesheet" href="{% static '/css/main.css' %}">
+   <head>
+      <title>Home</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="initial-scale=1.0, user-scalable=0, width=device-width, height=device-height, target-densityDpi=device-dpi"/>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+      <link rel="stylesheet" href="../static/css/main.css">
+      <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+      
+   </head>
+   <style>
 
-</head>
-<body>
-	<div class="container h-100">
-		<div class="d-flex justify-content-center h-100">
-			<div class="user_card">
-				<div class="d-flex justify-content-center">
-					<h3 id="form-title">REGISTER ACCOUNT</h3>
-				</div>
-				<div class="d-flex justify-content-center form_container">
+      #message {
+        display:none;
+        background: #fff;
+        color:#04AA6D;
+        position: relative;
+        padding: 2px 35px ;
+        margin-bottom: -1.5rem;
+        
+      }  
+      #message p {
+        padding: 10px 35px;
+        font-size: 12px;
+        margin: 0;  
+      }   
+      /* Add a green text color and a checkmark when the requirements are right */
+       .valid {
+        color: green !important;
+        color:var(--bs-card-valid-color);
+      }
+      
+      .valid:before {
+        position: relative;
+        left: -20px;
+        content: "✔";
+      }
+      
+      /* Add a red text color and an "x" when the requirements are wrong */
+      .invalid {
+        color: red;
+      }
+      
+      .invalid:before {
+        position: relative;
+        left: -20px;
+        content: "✖";  
+        color: red;
 
-					<form method="POST" action="" enctype="multipart/form-data">
-						{% csrf_token %}
-						<div class="input-group mb-2">
-							<div class="input-group-append">
-								<span class="input-group-text"><i class="fas fa-user"></i></span>
-								<input type='text' name='username' class="input-register-text" >
-							</div>
+      }
+      </style>
+   <body class="body">
+      <div id="main-wrapper" style="justify-content: center;">
+         <div class="page-wrapper" style="display: flex; overflow: auto;">   
+            <div class="container-fluid" style="max-width: 1000px;">
+               <div class="row g-0 d-flex align-items-center">
+                  <div class="col-lg-6 p-0">
+                     <div class="card">
+                        
+                        <div class="card-body">
+                           <div class="card-header">
+                              <h3 class="card-title">Sign Up</h3>
+                           </div>
+                           <div class="row">
+                              <form method="POST" action="">
+								{% csrf_token %}
 
-						</div>
-						<div class="input-group mb-2">
-							<div class="input-group-append">
-								<span class="input-group-text"><i class="fas fa-envelope-square"></i></span>
-								<input type='text' name='email' class="input-register-text" >
-							</div>
-						</div>
-						<div class="input-group mb-2">
-							<div class="input-group-append">
-								<span class="input-group-text"><i class="fas fa-key"></i></span>
-								<input type='text' name='contact' class="input-register-text" >
-							</div>
-						</div>
-						<div class="input-group mb-2">
-							<div class="input-group-append">
-								<span class="input-group-text"><i class="fas fa-key"></i></span>
-								<input type='password' name='password' class="input-register-text" >
-							</div>
-						</div>
-						<div class="input-group mb-2">
-							<div class="input-group-append">
-								<span class="input-group-text"><i class="fas fa-key"></i></span>
-								<input type='password' name='password_conformation' class="input-register-text" >
-							</div>
-						</div>
-				   		<div class="d-flex justify-content-center mt-3 login_container">
-				 			<input class="btn login_btn" type="submit" value="Register Account">
-				   		</div>
+								<div>
+									<style>
+										.errors{
+											color: red;
+										}
+									</style>
+									{% for message in messgaes %}
+									<h5 class="errors">{{message}</h5>
+									{% endfor %}
+								</div>
+                              <div class="login_form  col-12">
+                                <div class="iconlink col-5 mb-3 "> 
+                                 <a href="#" class="btn-face m-b-20" role="button" data-bs-toggle="button"><img src="../static/icons/Google.svg"> <span class="ms-2">Login with Google</span></a>
+                                </div>    
+                                 <div class="iconlink col-5 mb-3 "> 
+                                    <a href="#" class="btn-face m-b-20" role="button" data-bs-toggle="button"><img src="../static/icons/Microsoft.svg"> <span class="ms-2">Login with Microsoft</span></a>
+                                    
+                                 </div>
+                              
+                              </div>
+                              <div class="login_form col-12 text-muted "> <p> ———— or ————</p></div>
+                             
+                              <div class="col-12 mb-4">
+                                 <div class="form-floating">
+                                    <input type="text" name="email" class="form-control" id="floating-label1" placeholder="Email">
+                                    <label for="floating-label">Email Or Phone-Number</label>
+                                 </div>
+                              </div>
+                              <div class="col-12 mb-4">
+                                 <div class="form-floating">
+                                    <input type="password" name="password" class="form-control" id="password-field" placeholder="password" name="psw" pattern="(?=.*\d)(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase letter, and at least 8 or more characters" required>                  
+                                    <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+                                    <label for="floating-label">Password</label>
+                                 </div>
+                                 <div id="message">
+                                    <p id="length" class="invalid">Minimum 8 characters</p>
+                                    <p id="number" class="invalid">Must contains at least one number (0-9) or a symbol </p>
+                                    <p id="capital" class="invalid">must contain at least one uppercase letter (A-Z)</p> 
+                                  </div>
+                              </div>
+                              <div class="col-12 mb-4">
+                                <div class="form-floating">
+                                   <input type="password" name="password_conformation" class="form-control" id="password-field" placeholder="password">
+                                   
+                                   <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+                                   <label for="floating-label">Re-enter Password</label>
+                                </div>
+                             </div>
+                            
+							 <div class="col-12 mb-10">
+								<input class="btn login_btn" type="submit" value="Sign Up">
+							 </div>
+                              
+                              </form>
+                           </div>
 
-					</form>
-				</div>
+                           <p>Already a member ? <a href="#!" class="link-info">Login</a></p>
+                        </div>
+                        
+                     </div>
+                  </div>
+                  <div class="col-lg-6 p-0">
+                     
+                     <img src="../static/images/file1.png" alt="Trendy Pants and Shoes" class="w-100 rounded-t-5 rounded-tr-lg-0 rounded-bl-lg-5">
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <script>
+         var myInput = document.getElementById("password-field");
+         var capital = document.getElementById("capital");
+         var number = document.getElementById("number");
+         var length = document.getElementById("length");
+         
+         // When the user clicks on the password field, show the message box
+         myInput.onfocus = function() {
+           document.getElementById("message").style.display = "block";
+         }
+         
+         // When the user clicks outside of the password field, hide the message box
+         myInput.onblur = function() {
+           document.getElementById("message").style.display = "none";
+         }
+         
+         // When the user starts to type something inside the password field
+         myInput.onkeyup = function() {
+           
+           
+           // Validate capital letters
+           var upperCaseLetters = /[A-Z]/g;
+           if(myInput.value.match(upperCaseLetters)) {  
+             capital.classList.remove("invalid");
+             capital.classList.add("valid");
+           } else {
+             capital.classList.remove("valid");
+             capital.classList.add("invalid");
+           }
+         
+           // Validate numbers
+           var numbers = /[0-9]/g;
+           if(myInput.value.match(numbers)) {  
+             number.classList.remove("invalid");
+             number.classList.add("valid");
+           } else {
+             number.classList.remove("valid");
+             number.classList.add("invalid");
+           }
+           
+           // Validate length
+           if(myInput.value.length >= 8) {
+             length.classList.remove("invalid");
+             length.classList.add("valid");
+           } else {
+             length.classList.remove("valid");
+             length.classList.add("invalid");
+           }
+         }
+         </script>
+      <script>
+         $(".toggle-password").click(function() {
 
-				{{form.errors}}
-				
-				<div class="mt-4">
-					<div class="d-flex justify-content-center links">
-						Already have an account? <a href="{% url 'login' %}" class="ml-2">Login</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<script>
-						/* Because i didnt set placeholder values in forms.py they will be set here using vanilla Javascript
-		//We start indexing at one because CSRF_token is considered and input field 
-		 */
-
-		//Query All input fields
-		var form_fields = document.getElementsByTagName('input')
-		form_fields[1].placeholder='Username..';
-		form_fields[2].placeholder='Email..';
-		form_fields[3].placeholder='Contact..';
-		form_fields[4].placeholder='Enter password...';
-		form_fields[5].placeholder='Re-enter Password...';
-
-
-		for (var field in form_fields){	
-			form_fields[field].className += ' form-control'
-		}
-	</script>
-</body>
+         $(this).toggleClass("fa-eye fa-eye-slash");
+         var input = $($(this).attr("toggle"));
+         if (input.attr("type") == "password") {
+         input.attr("type", "text");
+         } else {
+         input.attr("type", "password");
+         }
+         });
+     </script>
+   </body>
 </html>

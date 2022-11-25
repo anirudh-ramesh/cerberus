@@ -46,6 +46,4 @@ urlpatterns= [
     path(r'export_to_csv', views.exportCSV, name="exportcsv"),
 
     path('open', views.swapSatationDoors, name="swapdoor"),
-   
-
 ]

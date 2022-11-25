@@ -1,3 +1,9 @@
+""" 
+   - This Modules is develop for Registration, Login, Battery_management,
+   Microsoft signup functions, Vehicle_management, Geofencing,
+   Driver_management, Generate_CSV.
+
+"""
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from datetime import datetime
@@ -5,7 +11,6 @@ import json
 import csv
 from django.utils import timezone
 from irasusapp.graph_helper import get_user
-from user_management.models import Organisation
 # from .mixins import MessageHandler
 from .forms import CreateUserForm
 from .models import Crmuser, BatteryDetail, Geofence,Vehicle
@@ -15,13 +20,10 @@ from django.contrib.auth.hashers import make_password, check_password
 from .auth_helper import getSignInFlow, getTokenFromCode,getToken,getMsalApp,removeUserAndToken, storeUser
 from db_connect import listAssignedBatteryVehicle,assignedVehicleToOrganisation,getOrgAssignedVehicle,removeAssignedVehiclefromOrganisation,listAssignedVehicleToUser,removeUserVehicle,images_display
 from django.contrib.gis.geos import Point,Polygon
-from django.contrib.gis.measure import Distance
-from django.contrib.gis import geos
 from django.apps import apps
 from base64 import b64encode
 import requests
 import json
-from django.core.files.base import ContentFile
 from django.db.models import F, Q
 
 format='%Y-%m-%d'
@@ -30,43 +32,46 @@ format='%Y-%m-%d'
 def dashboard(request):
     return render(request,'dashboard.html')
 
-##========================REGISTER========================##
+# This Function is Used for register.
 def register(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
+        # username = request.POST.get('username')
         email = request.POST.get('email')
-        contact = request.POST.get('contact')
-        user_password = make_password(request.POST.get('password'))
-        password_conformation = user_password
+        # contact = request.POST.get('contact')
+        user_password = request.POST.get('password')
+        print(user_password)
+        password_conformation = request.POST.get('password_conformation')
+        print(password_conformation, "========>>>>>")
 
         if user_password == password_conformation:
-            if Crmuser.objects.filter(username=username).exists():
-                messages.info(request,'Username exists! try another username')
+            password = make_password(user_password)
+            password_conformation = password
+            print("HERE")
+            if Crmuser.objects.filter(email=email).exists():
+                messages.warning(request,'Email is already taken! try another one')
                 return redirect('register')
             else:
-                if Crmuser.objects.filter(email=email).exists():
-                    messages.info(request,'Email is already taken! try another one')
-                    return redirect('register')
-                else:
-                    user = Crmuser.objects.create_user(username=username, email=email, password=user_password, contact=contact, password_conformation=password_conformation)
-                    user.save()
-                    return redirect('login')   
+                user = Crmuser.objects.create_user(email=email, password=password, password_conformation=password_conformation)
+                user.save() 
+                return redirect('login')   
         else:
-            messages.info(request,'Password did not matched!..')
+            messages.error(request,'Password did not matched!..')
             return redirect('register')
     else:
         return render(request, 'register.html')
 
-##=====================LOGIN=====================##
+#This Function is Used for Login.
 def loginPage(request):
     if request.method == "POST":
         email = request.POST.get('email')
         password = request.POST.get('password')
         crmuser = Crmuser.get_user_by_email(email)
         if crmuser:
+            print(password, check_password(password,crmuser.password))
             flag = check_password(password,crmuser.password)
             if flag:
-                return redirect('home')
+                messages.info(request,"Successfully Logged In")
+                return redirect('home')     
             else:
                 messages.info(request, "Username or Password Inccorect")
                 return redirect('login')
@@ -75,15 +80,13 @@ def loginPage(request):
 
     return render(request,'login.html')  
 
-#Logout
+#This Function is used for Logout.
 def logoutUser(request):
     logout(request)
+    messages.warning(request, "Logout Successfully.")
     return redirect('login')
 
-
-##===============BATTERY-MANAGEMENT====================##
-
-#Add_Battery_details
+#Adding battery details to Battery table.
 def batteryDetails(request):
     try:
         serial_num = request.POST.get('battery_serial_num')
@@ -113,9 +116,7 @@ def batteryDetails(request):
     except Exception as e:
         print("Server Error")
 
-    
-
-#Get_Battery_details
+#Listing of battery details table.
 def getBatteryDetails(request):
     cahis_id=""
     try:
@@ -181,7 +182,7 @@ def updateBatteryDetails(request, id):
     battery_data = list(BatteryDetail.objects.filter(battery_serial_num=id).values())
     return render(request,'update_battery_details.html',{'form': battery_data})
     
-#Delete_Record
+#Delete records from Battery table.
 def deleteRecord(request,id):
     try:
         pi = BatteryDetail.objects.get(pk=id)
@@ -211,7 +212,7 @@ def deleteRecord(request,id):
 #     return render(request, 'otp.html')
 
 
-##====================MICROSOFT-LOGIN====================##
+# MICROSOFT-LOGIN PART.
 def home(request):
     context = intialize_context(request)
     return render(request, 'dashboard.html',context)
@@ -260,9 +261,8 @@ def userSignin(request):
     context = { 'form': form }
     return render(request, 'login.html', context)
 
-##=======================VEHICLE-MANAGEMENT======================##
 
-#Add Organisation Profile
+#Adding vehicle to the Vehicle table
 def addVehicleDetails(request): 
     if request.method == "POST":
         formData = Vehicle.objects.create(
@@ -281,7 +281,7 @@ def addVehicleDetails(request):
         formData.save()
     return render(request,'add_vehicle_details.html')
 
-#List Vehicle
+#Listing of vehile.
 def getVehicleDetails(request):
     assigned_to_user = str(request.get_full_path()).split("?").pop()
     serial_number = assigned_to_user.split("=").pop()
@@ -308,7 +308,7 @@ def getVehicleDetails(request):
 
     return render(request, 'list_vehicle_details.html', {'vehicle_data':vehicle_data , 'email_id': email_id , 'serial_number': serial_number})
 
-#Update Vehicle
+#This function will Update Vehicle Table.
 def updateVehicleDetails(request,id):
     update_vehicle = list(Vehicle.objects.filter(chasis_number=id).values())
 
@@ -350,7 +350,7 @@ def updateVehicleDetails(request,id):
     update_vehicle = list(Vehicle.objects.filter(chasis_number=id).values())
     return render(request,'update_vehicle.html',{'update_vehicle_data': update_vehicle })
 
-#Delete_Record
+#Delete records from Vehicle table.
 def deleteVehicleRecord(request,id):
     try:
         pi = Vehicle.objects.get(pk=id)
@@ -364,10 +364,10 @@ def deleteVehicleRecord(request,id):
 
 #Assigned BatteryList
 def assignedBatteryList(request,id):
-    # Vehicle.objects.filter(chasis_number=id).values()
     if request.method == "GET":
         data = listAssignedBatteryVehicle(id)
 
+    # Remove battery from vehicle.
     if request.method == "POST": 
         data = listAssignedBatteryVehicle(id)
         assigned_vehicle_battery = Vehicle.objects.filter(chasis_number=id)
@@ -380,11 +380,11 @@ def assignedBatteryList(request,id):
     return render(request, 'list_assigned_battery.html',context)
 
 
-#Assigned Vehicle To Org
+#Assigned vehicle to org
 def assignedOrgVehicleList(request,id):
     org_vehicle_list = getOrgAssignedVehicle(id)
         
-    #REMOVE VEHICLE FROM ORGANISATION
+    #Remove vehicle from Organisation
     if request.method == "POST":
         assigned_vehicle = str(request.get_full_path()).split("?").pop()
         vehicle_id = assigned_vehicle.split("&")[0].split("=")[1]
@@ -393,73 +393,72 @@ def assignedOrgVehicleList(request,id):
             
     return render(request, 'list_organisation_vehicle.html',{'org_vehicle_list': org_vehicle_list})
 
-#Assigned Vehicle To User
+#Assigned vehicle to user
 def assignedVehicleToUser(request,id):
     user_vehicle =""
     if request.method == "GET":
         user_vehicle = listAssignedVehicleToUser(id)
 
-    #REMOVE VEHICLE FROM USER
+    #Remove Vehicle from User
     if request.method == "POST":
         assigned_vehicle = str(request.get_full_path()).split("?").pop()
         vehicle_id = assigned_vehicle.split("&")[0].split("=")[1]
-        print(vehicle_id)
         user_vehicle = removeUserVehicle(False,vehicle_id)
         return redirect("user_management:getdata")
 
     return render(request,'list_assigned_vehicle_to_user.html',{'user_vehicle':user_vehicle})
 
-##==================GEOFENCING===========================##
-
-#Add Geofencing
+#Create Geofencing Locations.
 def addgeofenceVehicles(request):
-    polygon_coordinates = []
-    longitude_data = []
-    latitude_data = []
-    if request.method == "POST":
-        geoname = request.POST['geoname']
-        geotype = request.POST['geotype']
-        description = request.POST['description']
-        position_add = request.POST['pos_address']
-        enter_lat =request.POST['enter_latitude']
-        newdata=json.loads(enter_lat)
-        coordinate_data = newdata["features"][0]['geometry']['coordinates']
+    try:
+        polygon_coordinates = []
+        longitude_data = []
+        latitude_data = []
+        if request.method == "POST":
+            geoname = request.POST['geoname']
+            geotype = request.POST['geotype']
+            description = request.POST['description']
+            position_add = request.POST['pos_address']
+            enter_lat =request.POST['enter_latitude']
+            newdata=json.loads(enter_lat)
+            coordinate_data = newdata["features"][0]['geometry']['coordinates']
 
-        if newdata["features"][0]['geometry']['type'] == 'Point':
-            print("POINT")
-            longitude = coordinate_data[0]
-            latitude = coordinate_data[1]
-            location = Point(float(longitude),float(latitude),srid=4326)            
-            newdata = Geofence.objects.create(geoname=geoname,geotype=geotype,description=description,enter_latitude=latitude,enter_longitude=longitude,pos_address=position_add,location=location)
-            return render(request, 'geolocation_form.html')
+            if newdata["features"][0]['geometry']['type'] == 'Point':
+                longitude = coordinate_data[0]
+                latitude = coordinate_data[1]
+                location = Point(float(longitude),float(latitude),srid=4326)            
+                newdata = Geofence.objects.create(geoname=geoname,geotype=geotype,description=description,enter_latitude=latitude,enter_longitude=longitude,pos_address=position_add,location=location)
+                return render(request, 'geolocation_form.html')
 
 
-        if newdata["features"][0]['geometry']['type'] == 'Polygon':
-            print("POLYGONE CONDITION")
-            coordinate_polygon = newdata["features"][0]['geometry']['coordinates']
-            newdata = *((*row,) for row in coordinate_polygon[0]),
-            converted_tuple_data = list(newdata)
-            for polygon_data in converted_tuple_data:
-                longitude = ((polygon_data[0]),(polygon_data[1]))
-                long = polygon_data[0]
-                longitude_data.append(long)
-                latitude = polygon_data[1]
-                latitude_data.append(latitude)
-                polygon_coordinates.append(longitude)
-        geofence = Polygon(((polygon_coordinates)),srid=4326)
-        newdata = Geofence.objects.create(geoname=geoname,geotype=geotype, description=description,enter_latitude=latitude_data,enter_longitude=longitude_data,pos_address=position_add,geofence=geofence)
+            if newdata["features"][0]['geometry']['type'] == 'Polygon':
+                coordinate_polygon = newdata["features"][0]['geometry']['coordinates']
+                newdata = *((*row,) for row in coordinate_polygon[0]),
+                converted_tuple_data = list(newdata)
+                for polygon_data in converted_tuple_data:
+                    res={}
+                    longitude = ((polygon_data[0]),(polygon_data[1]))
+                    res['lat'] = polygon_data[1]
+                    res['lang'] = polygon_data[0]
+                    longitude_data.append(res)
+                    latitude = polygon_data[1]
+                    latitude_data.append(latitude)
+                    polygon_coordinates.append(longitude)
+            geofence = Polygon(((polygon_coordinates)),srid=4326)
+            newdata = Geofence.objects.create(geoname=geoname,geotype=geotype, description=description,enter_latitude=longitude_data,pos_address=position_add,geofence=geofence)
 
-    return render(request, 'geolocation_form.html')
+        return render(request, 'geolocation_form.html')
+    except Exception as e:
+        print("Server Error")
 
 #list Geofencing data
 def listgeofenceData(request):
     if request.method == "GET":
-        geofencedata = list(Geofence.objects.values())    
+        geofencedata = list(Geofence.objects.values())
     return render(request, 'list_geofence_data.html',{ 'geofencedata': geofencedata })
 
-##===================ADD-DRIVER CRUD=================##
    
-#Add driver For Vechicle Module
+#Add driver For Vechicle Module.
 def addDriver(request):
     try:
         if request.method == "POST":
@@ -482,7 +481,7 @@ def addDriver(request):
     except Exception as e:
         print("Server Error")
 
-#List Driver 
+#This function used for listing driver. 
 def listAddedDriver(request):
     if request.method == "GET":
         driverData = images_display()
@@ -492,7 +491,7 @@ def listAddedDriver(request):
             }
     return render(request, 'list_drivers.html',context)
 
-#Update Driver
+# This function will Update Driver
 def updateDriver(request,id):
     if request.method == 'GET':
         pi =list(Crmuser.objects.filter(pk=id).values())
@@ -525,7 +524,7 @@ def updateDriver(request,id):
 
     return render(request,'update_driver.html',{ 'form': pi })
 
-#Delete Driver
+#Delete records of driver.
 def deleteDriver(request, id):
     try:
         pi = Crmuser.objects.get(pk=id)
@@ -538,9 +537,8 @@ def deleteDriver(request, id):
         print("Error While deleting Record",e)
 
 
-###===============GENERATE-CSV=========================###
 
-#Csv Data
+#Generate CSV field vise.
 def filedForCSV(request):
     if request.method == "GET":
         files = list(Vehicle.objects.values())
@@ -548,7 +546,7 @@ def filedForCSV(request):
         # print(files, "=============FILES=========GET")        
     return render(request, 'generate_csv.html')
 
-#Generate CSV
+#Exporting CSV.
 def exportCSV(request):
 
     getData=str(request.get_full_path()).split("?selectfield=")
@@ -582,7 +580,7 @@ def exportCSV(request):
         writer.writerow(i)
     return response
 
-#Open Swap-Station Doors
+#Open swap-station doors.
 def swapSatationDoors(request):
     url = "http://216.48.177.157:1880/ss/open_door/"
 

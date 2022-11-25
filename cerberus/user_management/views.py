@@ -1,17 +1,14 @@
 from django.utils import timezone
-from irasusapp.models import Crmuser, Vehicle
+from irasusapp.models import Crmuser
 from .models import Swapstation
 from user_management.models import Organisation, OrganisationPermission, OrganisationProfile, Role
 from .forms import UserCreatedByAdmin, OrgasationForm
 from django.shortcuts import render, redirect
 from django.contrib import messages
-import json
-import requests
 from db_connect import sql_query,inset_into_db,getOrgUserInfo,orgProfileAddData,getOrgProfiles,organisationmultiplePermission,insertIntoOrgnisationPermission,removeUserFromOrg
 
-##=============USER-MANAGEMENT===============##
 
-#This Function Used to Add User
+#This Function Used to Add User.
 def addUser(request):
     form = UserCreatedByAdmin()
     if request.method == "POST":
@@ -21,14 +18,14 @@ def addUser(request):
     context = { 'form': form }
     return render(request,'user_management_templates/user_add.html',context)
 
-#List User
+#This function used for Listing of users.
 def getUser(request):
     if request.method == "GET":
         data = list(Crmuser.objects.values())
     contex = {'user_data' : data }
     return render(request, 'user_management_templates/get_userdata.html',contex)
 
-#Update User
+#This function will update Users.
 def updateUser(request,id):
     pi =list(Crmuser.objects.filter(pk=id).values())
     if request.method == 'POST':
@@ -48,7 +45,7 @@ def updateUser(request,id):
     pi =list(Crmuser.objects.filter(pk=id).values())
     return render(request,'user_management_templates/update_user.html',{ 'form': pi })
 
-#Delete User
+#Delete records from User table.
 def deleteUser(request, id):
     try:
         pi = Crmuser.objects.get(pk=id)
@@ -60,9 +57,8 @@ def deleteUser(request, id):
     except Exception as e:
         print("Error While deleting Record",e)
 
-##====================ORGANISATION-MANAGEMENT===================##
 
-#Add Organisation
+#This Function Used to Add Organisation.
 def addOrganisation(request):
     form = OrgasationForm()
     if request.method == "POST":
@@ -72,14 +68,14 @@ def addOrganisation(request):
     context = { 'form': form }
     return render(request,'add_organisation.html',context)
 
-#List Organisation
+#Listing of Organisation.
 def listOrganisation(request):
     if request.method == "GET":
         data = Organisation.objects.filter(is_active=True).values()
     contex = {'organisation_data' : data }
     return render(request, 'list_organisation_data.html',contex)
 
-#Update Organisation
+#This function will update Organisation.
 def updateOranisation(request,id):
     global listuser
     if request.method == 'POST':
@@ -106,7 +102,7 @@ def updateOranisation(request,id):
     } 
     return render(request,'update_organisation.html',context)
 
-#Delete Organisation
+#Delete records from Organisation.
 def deleteOraganisation(request, id):
     try:
         pi = Organisation.objects.get(pk=id)
@@ -117,7 +113,7 @@ def deleteOraganisation(request, id):
     except Exception as e:
         print("Error While deleting Record",e)
 
-#Add Organisation Profile
+#Adding organisation profile data.
 def addOrganisationProfile(request,id):
     if request.method == "POST":
         formData = OrganisationProfile.objects.create(
@@ -145,7 +141,7 @@ def addOrganisationProfile(request,id):
         orgProfileAddData(id,formData.id)
     return render(request,'add_organisation_profile.html')
 
-#List Organisation Profile
+#Listing of organisation profile
 def listOrganisationProfile(request,id):
     if request.method == "GET":
         data = getOrgProfiles(id)
@@ -153,14 +149,12 @@ def listOrganisationProfile(request,id):
     return render(request, 'list_organisation_profile.html',contex)
 
 
-##=================USERS-ROLE=====================##
 
-#Add Role
+#Create a role and inserting into permission organisation 
 def createUserRole(request,id):
     if request.method == "POST":
         role_name=request.POST.get("roles")
         permission=request.POST.get("permission")
-        print(role_name,permission)        
         if Role.objects.filter(roles=role_name).exists():
             get_id=list(Role.objects.filter(roles=role_name).values())
             insertIntoOrgnisationPermission(permission,role_name,get_id[0].get("id"))
@@ -170,8 +164,8 @@ def createUserRole(request,id):
             insertIntoOrgnisationPermission(permission,role_name,form.id)
     return render(request,'user_management_templates/add_user_role.html')
 
-#List Role
-def listRole(request,role_name):
+#This function is used to get listing role. 
+def listRole(request):
     user_roles = []
     if request.method == "GET":
         roledata = list(OrganisationPermission.objects.values())
@@ -194,7 +188,7 @@ def listRole(request,role_name):
     return render(request,'user_management_templates/list_role.html',context)
 
 
-#Update Role
+#This function will update role.
 def updateRole(request,name):
     role_data = list(OrganisationPermission.objects.filter(role_name=name).values())
 
@@ -208,7 +202,7 @@ def updateRole(request,name):
     role_data =list(OrganisationPermission.objects.filter(role_name=name).values())
     return render(request,'user_management_templates/update_role.html',{'form': role_data})
 
-#Delete Role
+#Delete records from Organisation permission.
 def deleteRole(request,id):
     try:
         pi = OrganisationPermission.objects.get(pk=id)
@@ -220,7 +214,7 @@ def deleteRole(request,id):
     except Exception as e:
         print("Error While deleting Record",e)
 
-#List User Role
+#This function is used for listing user role.
 def listedUserRole(request):
     try:
         user_multiple_role = listRole(request)
@@ -232,7 +226,7 @@ def listedUserRole(request):
     except Exception as e:
         print("Error While deleting Record",e)
 
-#Get Organisation Details
+#Get Organisation Details.
 def orgUserinfo(request,id):
     try:
         if request.method == "GET":
@@ -256,8 +250,7 @@ def orgUserinfo(request,id):
     except Exception as e:
         print("Error While deleting Record",e)
 
-##===============SWAP-STATION-MANAGEMENT=========================##
-
+#This function is used for adding swap station data.
 def addSwapStation(request): 
     if request.method == "POST":
         formData = Swapstation.objects.create(
@@ -273,14 +266,14 @@ def addSwapStation(request):
         formData.save()
     return render(request,'add_swapstation.html')
 
-
+#Listing swap station data.
 def listSwapstation(request):
     if request.method == "GET":
         data = list(Swapstation.objects.values())
     contex = {'swap_station_data' : data }
     return render(request, 'list_swapstation_data.html',contex)
 
-    
+#This function is used to update swap station data.
 def updateSwapstationDetails(request,id):
     update_swapstation = list(Swapstation.objects.filter(imei_number=id).values())
 
@@ -315,7 +308,7 @@ def updateSwapstationDetails(request,id):
     update_swapstation = list(Swapstation.objects.filter(imei_number=id).values())
     return render(request,'update_swap_station.html',{'update_swap_station_data': update_swapstation })
 
-
+#delete records from swap station table.
 def deleteSwapStation(request,id):
     try:
         pi = Swapstation.objects.get(pk=id)
