@@ -3,7 +3,7 @@ import json
 
 
 # logging.getLogger("msal").setLevel(logging.WARN)
-credential = json.load(open('microsoft_config.json', 'r'))
+credential = json.load(open('./microsoft_config.json', 'r'))
 scopes = credential['scopes']
 
 def loadCache(request):

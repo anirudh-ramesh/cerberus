@@ -1,15 +1,32 @@
-FROM python:3.8
+# ARG PYTHON_VERSION=3.9.14
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-RUN mkdir /code
-WORKDIR /code
-RUN pip install --upgrade pip
-COPY requirements.txt /code/
+# FROM python:${PYTHON_VERSION}
 
-RUN pip install -r requirements.txt
-COPY . /code/
+# MAINTAINER Anirudh Ramesh
 
-EXPOSE 8000
+# ENV PYTHONDONTWRITEBYTECODE=1
+# ENV PYTHONUNBUFFERED=1
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# WORKDIR /cerberus
+
+# COPY requirements.txt /cerberus/
+
+# RUN pip install -r requirements.txt
+
+# COPY . /cerberus/
+
+# RUN apt update &&\
+#   apt install -y binutils libproj-dev gdal-bin
+# RUN apt install -y binutils libproj-dev gdal-bin
+# RUN apt install -y postgresql
+# RUN apt install -y postgis postgresql-postgis
+# RUN pipenv install --deploy --ignore-pipfile --system
+
+
+
+# RUN python3 manage.py makemigrations
+# RUN python3 manage.py migrate
+
+# RUN python3 create_table.py
+
+# RUN python3 manage.py runserver

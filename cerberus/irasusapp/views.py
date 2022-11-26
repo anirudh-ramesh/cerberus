@@ -16,8 +16,8 @@ from .forms import CreateUserForm
 from .models import Crmuser, BatteryDetail, Geofence,Vehicle
 from django.contrib import messages
 from django.contrib.auth import logout
-from django.contrib.auth.hashers import make_password, check_password
-from .auth_helper import getSignInFlow, getTokenFromCode,getToken,getMsalApp,removeUserAndToken, storeUser
+from django.contrib.auth.hashers import make_password, check_password 
+from irasusapp.auth_helper import getSignInFlow, getTokenFromCode,getToken,getMsalApp,removeUserAndToken, storeUser
 from db_connect import listAssignedBatteryVehicle,assignedVehicleToOrganisation,getOrgAssignedVehicle,removeAssignedVehiclefromOrganisation,listAssignedVehicleToUser,removeUserVehicle,images_display
 from django.contrib.gis.geos import Point,Polygon
 from django.apps import apps
