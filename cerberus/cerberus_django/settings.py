@@ -73,13 +73,19 @@ AUTH_USER_MODEL = 'irasusapp.Crmuser'
 
 DATABASES = {
     'default': {    
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'battery_management',
-        'USER': 'postgres',
-        'PASSWORD': '1234',
-        'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
-        'PORT': '5432',
+        # 'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        # 'NAME': 'battery_management',
+        # 'USER': 'postgres',
+        # 'PASSWORD': '1234',
+        # 'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
+        # 'PORT': '5432',
         # 'ATOMATIC_REQUESTS':True
+                'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('DB_ENV_DB', 'postgres'),
+        'USER': os.environ.get('DB_ENV_POSTGRES_USER', 'myprojectuser'),
+        'PASSWORD': os.environ.get('DB_ENV_POSTGRES_PASSWORD', 'password'),
+        'HOST': os.environ.get('DB_PORT_5432_TCP_ADDR', 'db'),
+        'PORT': os.environ.get('DB_PORT_5432_TCP_PORT', ''),
     }
 }
 
