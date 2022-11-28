@@ -112,7 +112,7 @@ def batteryDetails(request):
             )
             formData.save()
             messages.info(request, successAndErrorMessages()['addBattery'])
-        return render(request,'dashboard.html')
+        return render(request,'add_battery_details.html')
     except Exception as e:
         return messages.warning(request, successAndErrorMessages()['internalError'])
 

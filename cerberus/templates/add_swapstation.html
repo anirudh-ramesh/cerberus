@@ -15,9 +15,6 @@
 					<form method="POST" action="">
 						{% csrf_token %}
 						
-						{% for message in messages %}
-						<h5 class="errors">{{ message }}</h5>
-						{% endfor %}
 						<div class="input-group mb-2">
 							<div class="input-group-append">
 								<label>Swap Station Name</label>
@@ -85,7 +82,13 @@
 				 			<input class="btn btn-success" type="submit" value="Submit">
 				   		</div>
 
+						   <div class="d-flex justify-content-center mt-3 login_container">
+							<a href="{% url 'user_management:listswap' %}" class="btn btn-info btn-sm">Back</a>
+						  </div>
+						   
+
 					</form>
+					
 				</div>
 			</div>
 		</div>
