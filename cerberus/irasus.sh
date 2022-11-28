@@ -3,7 +3,6 @@
 pip install -r requirements.txt
 sudo apt-get install gdal-bin python-gdal
 sudo apt install postgis postgresql-12-postgis-2.5
-touch user_management/migrations/_init_it.py
 python3 manage.py makemigrations
 python3 manage.py migrate
 

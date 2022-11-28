@@ -13,7 +13,7 @@ SECRET_KEY = '_vvm%*oyb$cc35z&)i8&-kb-^#c@zp*jf(mjhhops6kr!h++ll'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -51,7 +51,7 @@ ROOT_URLCONF = 'cerberus_django.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS':  [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -73,13 +73,19 @@ AUTH_USER_MODEL = 'irasusapp.Crmuser'
 
 DATABASES = {
     'default': {    
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'battery_management',
-        'USER': 'postgres',
-        'PASSWORD': '1234',
-        'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
-        'PORT': '5432',
+        # 'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        # 'NAME': 'battery_management',
+        # 'USER': 'postgres',
+        # 'PASSWORD': '1234',
+        # 'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
+        # 'PORT': '5432',
         # 'ATOMATIC_REQUESTS':True
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'myprojectuser',
+        'HOST': 'db',
+        'PORT': 5432,
+        'PASSWORD': 'password'
     }
 }
 

@@ -1,7 +1,7 @@
 import psycopg2 as db
 
 def connect():
-    conn=db.connect(host="localhost",user="postgres",password="1234",database='battery_management')
+    conn=db.connect(host="db",user="myprojectuser",password="password",database='postgres',port=5432)
     return conn
 
 
@@ -13,9 +13,7 @@ def manualTable():
         email VARCHAR(255) NOT NULL, \
         serial_number VARCHAR(255) NOT NULL, \
         id VARCHAR(200) NOT NULL, \
-        user_status boolean, \
-        FOREIGN KEY(email) REFERENCES irasusapp_crmuser (email), \
-        FOREIGN KEY(serial_number) REFERENCES user_management_organisation (serial_number))"
+        user_status boolean)"
     cursor.execute(sql)
     conn.commit()
 

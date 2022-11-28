@@ -1,32 +1,31 @@
-# ARG PYTHON_VERSION=3.9.14
+ARG PYTHON_VERSION=3.9.14
 
-# FROM python:${PYTHON_VERSION}
+FROM python:${PYTHON_VERSION}
 
-# MAINTAINER Anirudh Ramesh
+MAINTAINER Anirudh Ramesh
 
-# ENV PYTHONDONTWRITEBYTECODE=1
-# ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-# WORKDIR /cerberus
+WORKDIR /app
 
-# COPY requirements.txt /cerberus/
+COPY requirements.txt /app/
 
-# RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt
 
-# COPY . /cerberus/
+COPY . /app/
 
-# RUN apt update &&\
-#   apt install -y binutils libproj-dev gdal-bin
+RUN apt update &&\
+  apt install -y binutils libproj-dev gdal-bin
 # RUN apt install -y binutils libproj-dev gdal-bin
-# RUN apt install -y postgresql
-# RUN apt install -y postgis postgresql-postgis
-# RUN pipenv install --deploy --ignore-pipfile --system
+# #RUN apt install -y postgresql
+RUN apt install -y postgis postgresql-postgis
+
+RUN adduser --disabled-password --gecos '' myuser
+
+# RUN python3 cerberus/manage.py makemigrations
+# RUN python3 cerberus/manage.py migrate
 
 
+# RUN python3 cerberus/manage.py runserver
 
-# RUN python3 manage.py makemigrations
-# RUN python3 manage.py migrate
-
-# RUN python3 create_table.py
-
-# RUN python3 manage.py runserver

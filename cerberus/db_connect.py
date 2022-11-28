@@ -2,9 +2,9 @@ import psycopg2 as db
 import base64
 
 def connect():
-    conn=db.connect(host="localhost",user="postgres",password="1234",database='battery_management')
+    conn=db.connect(host="db",user="myprojectuser",password="password",database='postgres',port=5432)
     return conn
-
+# psql -h db -p 5432 -U myprojectuser -d postgres
 #LIST ORGANISATION USER  
 def sql_query(id):
     conn=connect()

@@ -14,7 +14,7 @@ urlpatterns= [
 
     path('dashboard/', views.dashboard, name="home"),
     path('dashboarddata/', views.batteryDetails, name="homed"),
-    path('signin', views.signIn, name='signin'),
+    # path('signin', views.signIn, name='signin'),
     path(r'getdata', views.getBatteryDetails, name='data'),
     path('update/<int:id>/', views.updateBatteryDetails, name="updatedata"),
     path('delete/<int:id>/', views.deleteRecord, name="deletedata"),
@@ -33,8 +33,8 @@ urlpatterns= [
     path(r'orgvehicle/<int:id>', views.assignedOrgVehicleList, name="assingedtoorg"),
     path(r'uservehicle/<str:id>', views.assignedVehicleToUser, name="uservehicle"),
 
-    path('geofence', views.addgeofenceVehicles, name="geofence"),
-    path('listdata', views.listgeofenceData, name="add_data"),
+    # path('geofence', views.addgeofenceVehicles, name="geofence"),
+    # path('listdata', views.listgeofenceData, name="add_data"),
 
     path('driver', views.addDriver, name="addriver"),
     
