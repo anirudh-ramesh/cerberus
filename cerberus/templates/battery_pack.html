@@ -1,0 +1,343 @@
+<head>
+   <title>Home</title>
+   <meta charset="utf-8">
+   <meta name="viewport" content="initial-scale=1.0, user-scalable=0, width=device-width, height=device-height, target-densityDpi=device-dpi"/>
+   <link rel="stylesheet" href="assets/css/bs/dist/css/bootstrap.css" />
+   <link rel="stylesheet" href="../static/css/main.css">
+   <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/jquery-sparkline@2.4.0/jquery.sparkline.min.js" integrity="sha256-TKXwAzwvBOzpxaMZKl64fccBhJvyg3wrI8/joXU4VA4=" crossorigin="anonymous"></script>
+</head>
+<body class="body">
+   <div id="main-wrapper"style="flex-direction:row !important;">
+      <aside class="sidebar-nav">
+         <div class="profile-img">
+            <img src="../static/images/profile.png" alt="user" class="w-50">
+         </div>
+         <ul id="sidebarnav" class="in">
+            <li class="sidebar-item">
+               <a class="sidebar-link" href="{% url 'home' %}" aria-expanded="false"><img src="../static/icons/home.svg"></img></a>
+            </li>
+            <li class="sidebar-item">  <a class="sidebar-link"aria-expanded="false" href="{% url 'user_management:getdata' %}"><img src="../static/icons/Users.svg"></img></a>
+            </li>
+            <li class="sidebar-item">
+               <a  href="{% url 'data' %}" class="sidebar-link" aria-expanded="false"><img src="../static/icons/Battery.svg"></img></a>
+            </li>
+            <li class="sidebar-item">
+               <a class="sidebar-link" aria-expanded="false"><img src="../static/icons/Swapping station.svg"></img></a>
+            </li>
+            <li class="sidebar-item">
+               <a class="sidebar-link" href="{% url 'geofence' %}" aria-expanded="false"><img src="../static/icons/Geography.svg"></img></a>
+            </li>
+            <li class="sidebar-item">
+               <a class="sidebar-link" href="{% url 'getvehicle' %}" aria-expanded="false"><img src="../static/icons/Vehicles.svg"></img></a>
+            </li>
+            <li class="sidebar-item">
+               <a class="sidebar-link" href="app-todo.html" aria-expanded="false"><img src="../static/icons/VCU.svg"></img></a>
+            </li>
+            <li class="sidebar-item">
+               <a class="sidebar-link" href="app-todo.html" aria-expanded="false"><img src="../static/icons/IOT.svg"></img></a>
+            </li>
+            <li class="sidebar-item">
+               <a class="sidebar-link" href="{% url 'csv' %}" aria-expanded="false"><img src="../static/icons/reports.svg"></img></a>
+            </li>
+            <li class="sidebar-item">
+               <a class="sidebar-link" href="app-todo.html" aria-expanded="false"><img src="../static/icons/settings.svg"></img></a>
+            </li>
+            <li class="sidebar-item">
+               <a class="sidebar-link" href="app-todo.html" aria-expanded="false"><img src="../static/icons/complaint.svg"></img></a>
+            </li>
+         </ul>
+         <div class="sidebar-footer"> 
+         </div>
+      </aside>
+      <div class="page-wrapper" style="display: block;">
+         <!-- ============================================================== -->
+         <!-- Bread crumb and right sidebar toggle -->
+         <!-- ============================================================== -->
+         
+         <div class="d-flex justify-content-center">
+            <!-- -------------------------------------------------------------- -->
+            <!-- Left Part -->
+            <!-- -------------------------------------------------------------- -->
+         
+            <div class="left-panel-wrap">
+               <div class="page-titles"style="padding: 20px 0;">
+                  <div class="col-lg-4 justify-content-start">Title Goes Here</h3>
+                  </div>
+               </div>
+               <div class="searchbar">
+                  <input type="text" class="form-control" placeholder="Search Tasks Here" aria-describedby="search">
+               </div>
+               <div class="d-flex justify-content-center h-100">
+                  <ul class="list-group list-group-full">
+                     <li class="list-group-item d-flex"> Lithium-ion batteries <span
+                         class="badge bg-info ms-auto">6</span></li>
+                     <li class="list-group-item d-flex"> Nickel-metal hybrid </li>
+                    
+                     <li class="list-group-item d-flex"> Battery packs <span
+                         class="badge bg-danger ms-auto">3</span></li>
+                     <li class="list-group-item d-flex active"> Discharged batteries <span
+                         class="badge bg-success ms-auto">10</span></li>
+                         <li class="list-group-item d-flex"> Lead-acid batteries</li>
+                 </ul>
+                
+               </div>
+            </div>
+
+            <!-- -------------------------------------------------------------- -->
+            <!-- Right Part -->
+            <!-- -------------------------------------------------------------- -->
+            <div class="right-panel-wrap overflow-auto">
+               <div class="page-titles">
+                  <div class="col-lg-4 justify-content-start">
+                     <h3 class="text-themecolor mb-0">BATTERY PACK</h3>
+                  </div>
+               </div>
+               <div id="todo-list-container">
+                  <!-- Todo list-->
+                  <div class="todo-listing">
+                     <div id="all-todo-container" class="p-3">
+                        <!-- Item 1 -->
+                        <div class="
+                           todo-item
+                           all-todo-list
+                           p-3
+                           border-bottom
+                           position-relative
+                           ">
+                           <div class="inner-item d-flex align-items-start">
+                              <div class="w-100">
+                                 <!-- Checkbox -->
+                                 <div class="
+                                    checkbox checkbox-info
+                                    d-flex
+                                    align-items-start
+                                    form-check
+                                    ">
+                                    <input type="checkbox" class="form-check-input flex-shrink-0 me-3" id="checkbox1">
+                                    <label class="form-check-label" for="checkbox1"></label>
+                                    <div>
+                                       <div class="content-todo">
+                                          <h5 class="font-weight-medium fs-4 todo-header" data-todo-header="Meeting with Mr.Jojo Sukla at 5.00PM">
+                                             Meeting with Mr.Jojo Sukla at 5.00PM
+                                          </h5>
+                                          <div class="todo-subtext text-muted fs-3" data-todosubtext-html="<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. </p>" data-todosubtexttext="{&quot;ops&quot;:[{&quot;insert&quot;:&quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. \n&quot;}]}">
+                                             Lorem ipsum dolor sit amet, consectetur
+                                             adipiscing elit. Morbi pulvinar feugiat
+                                             consequat. Duis lacus nibh, sagittis id varius
+                                             vel, aliquet non augue.
+                                          </div>
+                                          <span class="todo-time fs-2 text-muted"><i class="icon-calender me-1"></i>14 Fab
+                                          2020</span>
+                                       </div>
+                                    </div>
+                                  
+                                 </div>
+                                 <!-- Content -->
+                              </div>
+                           </div>
+                        </div>
+                        <!-- ./Item 1 -->
+                        <!-- Item 2 -->
+                        <div class="
+                           todo-item
+                           all-todo-list
+                           p-3
+                           border-bottom
+                           position-relative
+                           current-task-done
+                           ">
+                           <div class="inner-item d-flex align-items-start">
+                              <div class="w-100">
+                                 <!-- Checkbox -->
+                                 <div class="
+                                    checkbox checkbox-info
+                                    d-flex
+                                    align-items-start
+                                    form-check
+                                    ">
+                                    <input type="checkbox" class="form-check-input flex-shrink-0 me-3" id="checkbox2" checked="">
+                                    <label class="form-check-label" for="checkbox2"></label>
+                                    <div>
+                                       <!-- Content -->
+                                       <div class="content-todo">
+                                          <h5 class="font-weight-medium fs-4 todo-header" data-todo-header="Book a ticket at night">
+                                             Book a ticket at night
+                                          </h5>
+                                          <div class="todo-subtext text-muted fs-3" data-todosubtext-html="<p>Blandit tempus porttitor aasfs. Integer posuere erat a ante venenatis tempus porttitor aasfs. Integer posuere erat a ante venenatis.  </p>" data-todosubtexttext="{&quot;ops&quot;:[{&quot;insert&quot;:&quot;Blandit tempus porttitor aasfs. Integer posuere erat a ante venenatis tempus porttitor aasfs. Integer posuere erat a ante venenatis.  \n&quot;}]}">
+                                             Blandit tempus porttitor aasfs. Integer posuere
+                                             erat a ante venenatis tempus porttitor aasfs.
+                                             Integer posuere erat a ante venenatis.
+                                          </div>
+                                          <span class="todo-time fs-2 text-muted"><i class="icon-calender me-1"></i>01 Jan
+                                          2020</span>
+                                       </div>
+                                    </div>
+                             
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <!-- ./Item 2 -->
+                        <!-- Item 3 -->
+                        <div class="
+                           todo-item
+                           all-todo-list
+                           p-3
+                           border-bottom
+                           position-relative
+                           current-task-important
+                           ">
+                           <div class="inner-item d-flex align-items-start">
+                              <div class="w-100">
+                                 <!-- Checkbox -->
+                                 <div class="
+                                    checkbox checkbox-info
+                                    d-flex
+                                    align-items-start
+                                    form-check
+                                    ">
+                                    <input type="checkbox" class="form-check-input flex-shrink-0 me-3" id="checkbox3">
+                                    <label class="form-check-label" for="checkbox3"></label>
+                                    <div>
+                                       <!-- Content -->
+                                       <div class="content-todo">
+                                          <h5 class="font-weight-medium fs-4 todo-header" data-todo-header="Give Review for design in material pro Vue Admin">
+                                             Give Review for design in material pro Vue Admin
+                                          </h5>
+                                          <div class="todo-subtext text-muted fs-3" data-todosubtext-html="<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue.Integer posuere erat a ante venenatis tempus porttitor aasfs. Integer posuere erat a ante venenatis. </p>" data-todosubtexttext="{&quot;ops&quot;:[{&quot;insert&quot;:&quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue.Integer posuere erat a ante venenatis tempus porttitor aasfs. Integer posuere erat a ante venenatis. \n&quot;}]}">
+                                             Lorem ipsum dolor sit amet, consectetur
+                                             adipiscing elit. Morbi pulvinar feugiat
+                                             consequat. Duis lacus nibh, sagittis id varius
+                                             vel, aliquet non augue. Integer posuere erat a
+                                             ante venenatis tempus porttitor aasfs. Integer
+                                             posuere erat a ante venenatis.
+                                          </div>
+                                          <span class="todo-time fs-2 text-muted"><i class="icon-calender me-1"></i>19 Mar
+                                          2020</span>
+                                       </div>
+                                    </div>
+                                  
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <!-- ./Item 3 -->
+                        <!-- Item 4 -->
+                        <div class="
+                           todo-item
+                           all-todo-list
+                           p-3
+                           border-bottom
+                           position-relative
+                           current-todo-delete
+                           ">
+                           <div class="inner-item d-flex align-items-start">
+                              <div class="w-100">
+                                 <!-- Checkbox -->
+                                 <div class="
+                                    checkbox checkbox-info
+                                    d-flex
+                                    align-items-start
+                                    form-check
+                                    ">
+                                    <input type="checkbox" class="form-check-input flex-shrink-0 me-3" id="checkbox4">
+                                    <label class="form-check-label" for="checkbox4"></label>
+                                    <div>
+                                       <!-- Content -->
+                                       <div class="content-todo">
+                                          <h5 class="font-weight-medium fs-4 todo-header" data-todo-header="Give salary to employee">
+                                             Give salary to employee
+                                          </h5>
+                                          <div class="todo-subtext text-muted fs-3" data-todosubtext-html="<p>Integer posuere erat a ante venenatis.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. </p>" data-todosubtexttext="{&quot;ops&quot;:[{&quot;insert&quot;:&quot;Integer posuere erat a ante venenatis.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. \n&quot;}]}">
+                                             Integer posuere erat a ante venenatis.Lorem
+                                             ipsum dolor sit amet, consectetur adipiscing
+                                             elit. Morbi pulvinar feugiat consequat. Duis
+                                             lacus nibh, sagittis id varius vel, aliquet non
+                                             augue.
+                                          </div>
+                                          <span class="todo-time fs-2 text-muted"><i class="icon-calender me-1"></i>31 Jan
+                                          2020</span>
+                                       </div>
+                                    </div>
+                                   
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <!-- ./Item 4 -->
+                        <!-- Item 5 -->
+                        <div class="
+                           todo-item
+                           all-todo-list
+                           p-3
+                           border-bottom
+                           position-relative
+                           current-task-important
+                           ">
+                           <div class="inner-item d-flex align-items-start">
+                              <div class="w-100">
+                                 <!-- Checkbox -->
+                                 <div class="
+                                    checkbox checkbox-info
+                                    d-flex
+                                    align-items-start
+                                    form-check
+                                    ">
+                                    <input type="checkbox" class="form-check-input flex-shrink-0 me-3" id="checkbox5">
+                                    <label class="form-check-label" for="checkbox5"></label>
+                                    <div>
+                                       <!-- Content -->
+                                       <div class="content-todo">
+                                          <h5 class="font-weight-medium fs-4 todo-header" data-todo-header="Launch new template using Vuejs within 20 hours">
+                                             Launch new template using Vuejs within 20 hours
+                                          </h5>
+                                          <div class="todo-subtext text-muted fs-3" data-todosubtext-html="<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. </p>" data-todosubtexttext="{&quot;ops&quot;:[{&quot;insert&quot;:&quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. \n&quot;}]}">
+                                             Lorem ipsum dolor sit amet, consectetur
+                                             adipiscing elit. Morbi pulvinar feugiat
+                                             consequat. Duis lacus nibh, sagittis id varius
+                                             vel, aliquet non augue.
+                                          </div>
+                                          <span class="todo-time fs-2 text-muted"><i class="icon-calender me-1"></i>20 Oct
+                                          2020</span>
+                                       </div>
+                                    </div>
+                                   
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <!-- ./Item 5 -->
+                     </div>
+                     <!-- Modal -->
+                     <div class="modal fade" id="todoShowListItem" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                           <div class="modal-content border-0">
+                              <div class="modal-header bg-light d-flex">
+                                 <h5 class="modal-title task-heading"></h5>
+                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                 <div class="compose-box">
+                                    <div class="compose-content">
+                                       <label class="mb-0 fs-4">Task Details</label>
+                                       <p class="task-text text-muted"></p>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="modal-footer">
+                                 <button class="btn btn-danger btn-block" data-bs-dismiss="modal">
+                                 Close
+                                 </button>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</body>
+</html>

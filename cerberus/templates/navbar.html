@@ -3,6 +3,7 @@
 {% block head_title %}{% endblock %}
    
   <aside class="sidebar-nav"> 
+   
    <div class="profile-img">
    <img src="../static/images/profile.png" alt="user" class="w-50">
    </div> 
@@ -46,13 +47,17 @@
       <li class="sidebar-item">
          <a class="sidebar-link" href="app-todo.html" aria-expanded="false"><img src="../static/icons/complaint.svg"></img></a>
       </li>
-      <form method="post" action="{% url 'logout' %}">
-         {% csrf_token %}
-         {% if redirect_field_value %}
-         <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
-         {% endif %}
-         <button class="btn btn-dark" style="right: 12%; display: flex; position: absolute;"  type="submit">{% trans 'Logout' %}</button>
-       </form>
+   
     </ul>
+    <div class="sidebar-footer"> 
+      <form method="post" action="{% url 'logout' %}">
+      {% csrf_token %}
+      {% if redirect_field_value %}
+      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+      {% endif %}
+      <button class="btn btn-dark" type="submit">{% trans 'Logout' %}</button>
+    </form>
 
+   </div>
+   
  </aside>
