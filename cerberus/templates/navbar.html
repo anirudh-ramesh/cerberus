@@ -5,9 +5,8 @@
   <aside class="sidebar-nav"> 
    <div class="profile-img">
    <img src="../static/images/profile.png" alt="user" class="w-50">
-   </div> 
-    
-
+   </div>
+   <h6 style="font-size: 10px;">{{email}}</h6>
     <ul id="sidebarnav" class="in">
 
        <li class="sidebar-item">
@@ -20,7 +19,7 @@
           <a  href="{% url 'data' %}" class="sidebar-link" aria-expanded="false"><img src="../static/icons/Battery.svg"></img></a>
        </li>
        <li class="sidebar-item">
-         <a class="sidebar-link" aria-expanded="false"><img src="../static/icons/Swapping station.svg"></img></a>
+         <a class="sidebar-link" href="{% url 'user_management:listswap' %}" aria-expanded="false"><img src="../static/icons/Swapping station.svg"></img></a>
           
        </li>
        <li class="sidebar-item">
@@ -32,7 +31,7 @@
       </li>
     
       <li class="sidebar-item">
-         <a class="sidebar-link" href="app-todo.html" aria-expanded="false"><img src="../static/icons/VCU.svg"></img></a>
+         <a class="sidebar-link" href="{% url 'user_management:listorg' %}" aria-expanded="false"><img src="../static/icons/VCU.svg"></img></a>
       </li>
       <li class="sidebar-item">
          <a class="sidebar-link" href="app-todo.html" aria-expanded="false"><img src="../static/icons/IOT.svg"></img></a>

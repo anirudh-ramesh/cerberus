@@ -13,7 +13,7 @@ from django.utils import timezone
 from irasusapp.graph_helper import get_user
 # from .mixins import MessageHandler
 from .forms import CreateUserForm
-from .models import Crmuser, BatteryDetail,Vehicle
+from .models import Crmuser, BatteryDetail, Geofence,Vehicle
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.hashers import make_password, check_password 
@@ -70,7 +70,7 @@ def loginPage(request):
             flag = check_password(password,crmuser.password)
             if flag:
                 messages.info(request,successAndErrorMessages()['loginMessage'])
-                return redirect('home')     
+                return render(request,'dashboard.html', {'email':email})     
             else:
                 messages.info(request, successAndErrorMessages()['loginErrorMessage'])
                 return redirect('login')
@@ -438,57 +438,58 @@ def assignedVehicleToUser(request,id):
         return messages.warning(request, successAndErrorMessages()['internalError']) 
 
 #Create Geofencing Locations.
-# def addgeofenceVehicles(request):
-#     try:
-#         polygon_coordinates = []
-#         longitude_data = []
-#         latitude_data = []
-#         if request.method == "POST":
-#             geoname = request.POST.get('geoname')
-#             geotype = request.POST.get('geotype')
-#             description = request.POST.get('description')
-#             position_add = request.POST.get('pos_address')
-#             enter_lat =request.POST.get('enter_latitude')
-#             newdata=json.loads(enter_lat)
-#             coordinate_data = newdata["features"][0]['geometry']['coordinates']
+def addgeofenceVehicles(request):
+    try:
+        polygon_coordinates = []
+        longitude_data = []
+        latitude_data = []
+        if request.method == "POST":
+            geoname = request.POST.get('geoname')
+            geotype = request.POST.get('geotype')
+            description = request.POST.get('description')
+            position_add = request.POST.get('pos_address')
+            enter_lat =request.POST.get('enter_latitude')
+            newdata=json.loads(enter_lat)
+            coordinate_data = newdata["features"][0]['geometry']['coordinates']
 
-#             if newdata["features"][0]['geometry']['type'] == 'Point':
-#                 longitude = coordinate_data[0]
-#                 latitude = coordinate_data[1]
-#                 location = Point(float(longitude),float(latitude),srid=4326)            
-#                 newdata = Geofence.objects.create(geoname=geoname,geotype=geotype,description=description,enter_latitude=latitude,enter_longitude=longitude,pos_address=position_add,location=location)
-#                 messages.success(request, successAndErrorMessages()['locationCreate'])
-#                 return render(request, 'geolocation_form.html')
+            if newdata["features"][0]['geometry']['type'] == 'Point':
+                longitude = coordinate_data[0]
+                latitude = coordinate_data[1]
+                location = Point(float(longitude),float(latitude),srid=4326)            
+                newdata = Geofence.objects.create(geoname=geoname,geotype=geotype,description=description,enter_latitude=latitude,enter_longitude=longitude,pos_address=position_add,location=location)
+                messages.success(request, successAndErrorMessages()['locationCreate'])
+                return render(request, 'geolocation_form.html')
 
 
-#             if newdata["features"][0]['geometry']['type'] == 'Polygon':
-#                 coordinate_polygon = newdata["features"][0]['geometry']['coordinates']
-#                 newdata = *((*row,) for row in coordinate_polygon[0]),
-#                 converted_tuple_data = list(newdata)
-#                 for polygon_data in converted_tuple_data:
-#                     res={}
-#                     longitude = ((polygon_data[0]),(polygon_data[1]))
-#                     res['lat'] = polygon_data[1]
-#                     res['lang'] = polygon_data[0]
-#                     longitude_data.append(res)
-#                     latitude = polygon_data[1]
-#                     latitude_data.append(latitude)
-#                     polygon_coordinates.append(longitude)
-#             geofence = Polygon(((polygon_coordinates)),srid=4326)
-#             newdata = Geofence.objects.create(geoname=geoname,geotype=geotype, description=description,enter_latitude=longitude_data,pos_address=position_add,geofence=geofence)
-#             messages.success(request, successAndErrorMessages()['locationCreate'])
-#         return render(request, 'geolocation_form.html')
-#     except Exception as e:
-#         return messages.warning(request, successAndErrorMessages()['internalError']) 
+            if newdata["features"][0]['geometry']['type'] == 'Polygon':
+                coordinate_polygon = newdata["features"][0]['geometry']['coordinates']
+                newdata = *((*row,) for row in coordinate_polygon[0]),
+                converted_tuple_data = list(newdata)
+                for polygon_data in converted_tuple_data:
+                    res={}
+                    longitude = ((polygon_data[0]),(polygon_data[1]))
+                    res['lat'] = polygon_data[1]
+                    res['lang'] = polygon_data[0]
+                    longitude_data.append(res)
+                    latitude = polygon_data[1]
+                    latitude_data.append(latitude)
+                    polygon_coordinates.append(longitude)
+            geofence = Polygon(((polygon_coordinates)),srid=4326)
+            print("GEOFENCE", geofence)
+            newdata = Geofence.objects.create(geoname=geoname,geotype=geotype, description=description,enter_latitude=longitude_data,pos_address=position_add,geofence=geofence)
+            # messages.success(request, successAndErrorMessages()['locationCreate'])
+            return render(request, 'geolocation_form.html')
+    except Exception as e:
+        return messages.warning(request, successAndErrorMessages()['internalError']) 
 
-#list Geofencing data
-# def listgeofenceData(request):
-#     try:
-#         if request.method == "GET":
-#             geofencedata = list(Geofence.objects.values())
-#         return render(request, 'list_geofence_data.html',{ 'geofencedata': geofencedata })
-#     except Exception as e:
-#         return messages.warning(request, successAndErrorMessages()['internalError'])
+# list Geofencing data
+def listgeofenceData(request):
+    try:
+        if request.method == "GET":
+            geofencedata = list(Geofence.objects.values())
+        return render(request, 'list_geofence_data.html',{ 'geofencedata': geofencedata })
+    except Exception as e:
+        return messages.warning(request, successAndErrorMessages()['internalError'])
    
 #Add driver For Vechicle Module.
 def addDriver(request):
