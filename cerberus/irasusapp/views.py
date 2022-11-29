@@ -13,7 +13,7 @@ from django.utils import timezone
 from irasusapp.graph_helper import get_user
 # from .mixins import MessageHandler
 from .forms import CreateUserForm
-from .models import Crmuser, BatteryDetail, Geofence,Vehicle
+from .models import Crmuser, BatteryDetail, Geofence, IotDevices,Vehicle
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.hashers import make_password, check_password 
@@ -90,29 +90,30 @@ def batteryDetails(request):
     try:
         serial_num = request.POST.get('battery_serial_num')
         if BatteryDetail.objects.filter(battery_serial_num=serial_num):
-            messages.warning('Details Already Added')
-
-        if request.method == "POST":
-            formData = BatteryDetail.objects.create(
-                model_name = request.POST['model_name'],
-                battery_serial_num = request.POST['battery_serial_num'],
-                battery_type = request.POST['battery_type'],
-                bms_type = request.POST['bms_type'],
-                iot_type = request.POST['iot_type'],
-                iot_imei_number = request.POST['iot_imei_number'],
-                sim_number = request.POST['sim_number'],
-                warrenty_start_date = request.POST['warrenty_start_date'],
-                warrenty_duration = request.POST['warrenty_duration'],
-                assigned_owner = request.POST['assigned_owner'],
-                status = request.POST['status'],
-                battery_cell_chemistry = request.POST['battery_cell_chemistry'],
-                battery_pack_nominal_voltage = request.POST['battery_pack_nominal_voltage'],
-                battery_pack_nominal_charge_capacity = request.POST['battery_pack_nominal_charge_capacity'],
-                charging_status = request.POST['charging_status']
-            )
-            formData.save()
-            messages.info(request, successAndErrorMessages()['addBattery'])
-        return render(request,'add_battery_details.html')
+            messages.warning(request, successAndErrorMessages()['alreadyAdded'])
+            return render(request,'add_battery_details.html')
+        else:
+            if request.method == "POST":
+                formData = BatteryDetail.objects.create(
+                    model_name = request.POST['model_name'],
+                    battery_serial_num = request.POST['battery_serial_num'],
+                    battery_type = request.POST['battery_type'],
+                    bms_type = request.POST['bms_type'],
+                    iot_type = request.POST['iot_type'],
+                    iot_imei_number = request.POST['iot_imei_number'],
+                    sim_number = request.POST['sim_number'],
+                    warrenty_start_date = request.POST['warrenty_start_date'],
+                    warrenty_duration = request.POST['warrenty_duration'],
+                    assigned_owner = request.POST['assigned_owner'],
+                    status = request.POST['status'],
+                    battery_cell_chemistry = request.POST['battery_cell_chemistry'],
+                    battery_pack_nominal_voltage = request.POST['battery_pack_nominal_voltage'],
+                    battery_pack_nominal_charge_capacity = request.POST['battery_pack_nominal_charge_capacity'],
+                    charging_status = request.POST['charging_status']
+                )
+                formData.save()
+                messages.info(request, successAndErrorMessages()['addBattery'])
+            return render(request,'add_battery_details.html')
     except Exception as e:
         return messages.warning(request, successAndErrorMessages()['internalError'])
 
@@ -199,6 +200,69 @@ def deleteRecord(request,id):
     except Exception as e:
         return messages.warning(request, successAndErrorMessages()['internalError'])
 
+def addIotDevice(request):
+    try:
+        iot_imei_number = request.POST.get('imei_number')
+        if IotDevices.objects.filter(imei_number = iot_imei_number):
+            messages.warning(request, successAndErrorMessages()['alreadyAdded'])
+            return render(request,'add_IOT_devices.html')
+        else:
+            if request.method == "POST":
+                formData = IotDevices.objects.create(
+                    imei_number = request.POST.get('imei_number'),
+                    hardware_version = request.POST.get('hardware_version'),
+                    firmware_version = request.POST.get('firmware_version'),
+                )
+                formData.save()
+                messages.info(request, successAndErrorMessages()['deivceAdded'])
+            return render(request,'add_IOT_devices.html')
+    except Exception as e:
+        return messages.warning(request, successAndErrorMessages()['internalError'])
+
+
+def listIotDevice(request):
+    try:
+        if request.method == "GET":
+            iotdevicedata = list(IotDevices.objects.values())
+        return render(request, 'list_IOT_devices.html',{ 'iot_device_data': iotdevicedata })
+    except Exception as e:
+        return messages.warning(request, successAndErrorMessages()['internalError'])
+
+def updateIOTDevice(request,id):
+    try:
+        update_iot_device = list(IotDevices.objects.filter(imei_number=id).values())
+        if request.method == "POST":
+            imei_number = request.POST.get('imei_number')
+            hardware_version = request.POST.get('hardware_version')
+            firmware_version = request.POST.get('firmware_version')
+            
+            data = IotDevices.objects.filter(imei_number=id).update(
+                imei_number=imei_number, hardware_version=hardware_version,
+                firmware_version=firmware_version
+            )
+            update_iot_device = [{
+                'imei_number':imei_number,
+                'hardware_version':hardware_version,
+                'firmware_version': firmware_version,
+            }]
+            messages.info(request, successAndErrorMessages()['deviceUpdate'])
+            return render(request,'update_IOT_device.html',{'update_IOT_data': update_iot_device })
+
+        update_iot_device = list(IotDevices.objects.filter(imei_number=id).values())
+        return render(request,'update_IOT_device.html',{'update_IOT_data': update_iot_device })
+    except Exception as error:
+        return messages.warning(request, successAndErrorMessages()['internalError']) 
+
+def deleteIOTDeviceRecord(request,id):
+    try:
+        pi = IotDevices.objects.get(pk=id)
+        if request.method == 'POST':
+            pi.delete()
+            messages.success(request, successAndErrorMessages()['removeDevice'])
+        context = {}
+        return render(request, "list_IOT_devices.html", context)
+    except Exception as e:
+        return messages.warning(request, successAndErrorMessages()['internalError'])
 
 # def login_with_phone_num(request):
 #     if request.method == "POST":
@@ -624,6 +688,12 @@ def exportCSV(request):
 
     except Exception as error:
         return messages.warning(request, successAndErrorMessages()['internalError']) 
+
+def settings(request):
+    return render(request, 'settings.html')
+
+def VCU(request):
+    return render(request, 'settings.html')
 
 #Open swap-station doors.
 def swapSatationDoors(request):

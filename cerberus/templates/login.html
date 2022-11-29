@@ -30,13 +30,14 @@
                               <h3 class="card-title">Login</h3>
                            </div>
                            <div class="row">
-                              <!-- {% if messages %}
-                                 {% for message in messages %}
-                                 <h5 class="errors">{{ message }}</h5>
-                                 {% endfor %}
-                              {% endif %} -->
                            <form method="POST" action="">
-                              {% csrf_token %}                         
+                              {% csrf_token %}
+
+                                 {% if messages %}
+                                    {% for message in messages %}
+                                       <div class = "alert alert-{{message.tags}}">{{message}}</div>
+                                    {% endfor %}
+                                 {% endif %}                    
                               <div class="login_form  col-12">
                                 <div class="iconlink col-5 mb-3 ">
                                  <a href="#" class="btn-face m-b-20" role="button" data-bs-toggle="button"><img src="../static/icons/Google.svg"> <span class="ms-2">Login with Google</span></a>

@@ -28,6 +28,7 @@ def successAndErrorMessages():
         "removeVehicle": "Vehicle Remove Successfully",
         "assignBattery" : "Battery Assign To Vehicle Successfully",
         "batteryRemovefrom" : "Remove Battery Successfully",
+        "alreadyAdded": "Details Already Added For This Serial Number",
 
         "addBattery": "Battery Added Successfully",
         "updateBatteryDetails" : "Battery Details Update Successfully",
@@ -53,5 +54,11 @@ def successAndErrorMessages():
         "createSwapStation": "Swap-Station Create Successfully",
         "updateSwapStation": "Swap-Station Update Successfully",
         "removeSwapStation": "Swap-Station remove Successfully",
+
+        "deivceAdded" : "Device Added Successfully",
+        "deviceUpdate": "Device Update Successfully",
+        "removeDevice": "Device Deleted Successfully",
+        "devicealreadyAdded": "Device Already Added",
+
     }
     return response

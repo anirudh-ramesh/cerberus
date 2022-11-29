@@ -46,4 +46,17 @@ urlpatterns= [
     path(r'export_to_csv', views.exportCSV, name="exportcsv"),
 
     path('open', views.swapSatationDoors, name="swapdoor"),
+
+    path('adddevice', views.addIotDevice, name="adddevice"),
+
+    path('listdevice', views.listIotDevice, name="listdevice"),
+    path('updatedevice/<int:id>/', views.updateIOTDevice, name="updatedevice"),
+    path('delettedevice/<int:id>/', views.deleteIOTDeviceRecord, name="deletetedevice"),
+
+    path('settings', views.settings, name="settings"),
+
+
+    
+    
+    
 ]

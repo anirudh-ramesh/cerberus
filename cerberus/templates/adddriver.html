@@ -5,9 +5,7 @@
 
 {% include 'status.html' %}
 
-
 <br>
-
 <div class="row">
 	<div class="col-md-5">
 		<h5>Add Driver Details</h5>
@@ -19,9 +17,11 @@
 					<form method="POST" action="" enctype="multipart/form-data">
 						{% csrf_token %}
 
-						{% for message in messages %}
-						<h5 class="errors">{{ message }}</h5>
-						{% endfor %}
+						{% if messages %}
+							{% for message in messages %}
+							<div class = "alert alert-{{message.tags}}">{{message}}</div>
+							{% endfor %}
+					 	{% endif %}
 						<div class="input-group mb-2">
 							<div class="input-group-append">
 								<label>Username</label>

@@ -4,10 +4,7 @@
 {% block content %}
 
 {% include 'status.html' %}
-
-
 <br>
-
 <div class="row">
 	<div class="col-md-5">
 		<hr>
@@ -17,9 +14,12 @@
 
 				<form action="" method="POST">
 					{% csrf_token %}
-					{% for fm in form %}
-						{{fm.label_tag}} {{fm}} {{fm.errors|striptags}} <br><br>
-					{% endfor %}
+					
+					{% if messages %}
+							{% for message in messages %}
+							<div class = "alert alert-{{message.tags}}">{{message}}</div>
+							{% endfor %}
+					 	{% endif %}
 					<input type="Submit" name="Submit" class="btn btn-success" value="Submit" >
 					<!-- {% if messages %}
 					{% for message in messages %}

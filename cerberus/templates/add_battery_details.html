@@ -17,6 +17,11 @@
 			<div class="card card-body">
 				<form method="POST" action="">
 					{% csrf_token %}
+					{% if messages %}
+						{% for message in messages %}
+							<div class = "alert alert-{{message.tags}}">{{message}}</div>
+						{% endfor %}
+					{% endif %}
 					<div class="input-group mb-2">
 						<div class="input-group-append">
 							<label>Model Name</label>
@@ -78,13 +83,13 @@
 					<div class="input-group mb-2">
 						<div class="input-group-append">
 							<label>Warrenty Start Date</label>
-							<input type='text' name='warrenty_start_date' class="input-register-text" required>
+							<input type='date' name='warrenty_start_date' class="input-register-text" required>
 						</div>
 					</div>
 					<div class="input-group mb-2">
 						<div class="input-group-append">
 							<label>Warrenty Duration</label>
-							<input type='text' name='warrenty_duration' class="input-register-text" required>
+							<input type='date' name='warrenty_duration' class="input-register-text" required>
 						</div>
 					</div>
 					<div class="input-group mb-2">
@@ -136,7 +141,7 @@
                        <div class="d-flex justify-content-center mt-3 login_container">
 						<a href="{% url 'data' %}" class="btn btn-info btn-sm">Back</a>
                       </div>
-
+					  
 
 				</form>
 			</div>
