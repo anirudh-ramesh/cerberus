@@ -442,7 +442,9 @@ a {
 
 }
 
-
+.col-md-5{
+    max-width: 100% !important;
+}
 .sidebar-nav ul .sidebar-item {
     width: 100%;
     margin-bottom: 10px;
