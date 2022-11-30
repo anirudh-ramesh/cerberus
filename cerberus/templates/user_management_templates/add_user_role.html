@@ -3,9 +3,9 @@
 {% block content %}
 
 <div class="row">
-    <div class="col-sm-8 offset-2">
-        <h4 class="alert alert-info">Add User Role</h4>
-        <form method="POST" action="">
+    <div class="col-sm-8">
+        <h4 class="add_user alert alert-info">Add User Role</h4>
+        <form class="formt" method="POST" action="">
             {% csrf_token %}
             <div class="input-group mb-2">
                 <div class="input-group-append">
@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div>
-                <input class="btn login_btn" type="submit" value="Create Role">
+                <input class="btn login_btn btn-sm" type="submit" value="Create Role">
               </div>
         </form>
     </div>

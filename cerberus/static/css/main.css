@@ -27,16 +27,16 @@ a {
     width: 350px;
     margin-top: auto;
     margin-bottom: auto;
-    background: #74CFBF;
+    /* background: #74CFBF; */
     position: relative;
     display: flex;
     justify-content: center;
     text-align: center;
     flex-direction: column;
     padding: 1em;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
+    /* -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
+    /* -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
     border-radius: 5px;
 }
 .container{
@@ -442,9 +442,10 @@ a {
 
 }
 
-.col-md-5{
+.col-md-5 {
     max-width: 100% !important;
 }
+
 .sidebar-nav ul .sidebar-item {
     width: 100%;
     margin-bottom: 10px;
@@ -584,6 +585,75 @@ p {
     display: none;
   }
 
-.errors{
-    color:rgb(106, 196, 106);
- }
+.organisationdata{
+    width: 100% ;
+    align-items: center;
+}
+.data{
+    width: 100%;
+}
+
+.organisationform{
+    justify-content: space-around;
+}
+.both{
+    margin-right: 10px;
+    width: 50%;
+}
+.input-group  {
+    width: 120%;
+}
+.input-register-text{
+    width: 50%;
+    margin-left: 0%;
+    border-radius: 10px;
+    border: 1px solid black 
+}
+.input-register-texts{
+    width: 50%;
+    margin-left: 0%;
+    border-radius: 10px;
+    border: 1px solid black 
+}
+.input-group-append{
+    width: 100%;
+}
+.card_Bettery{
+    width: 230%;
+}
+.card_subb{
+    width: 100%;
+}
+
+.label_form{
+    margin-right: 0px;
+    width: 41%;
+}
+.label_formm{
+    margin-right: 0px;
+    width: 50%;
+}
+.rowd{
+    width: 120%;
+}
+.label_formtt{
+    margin-right: 10px;
+    width: 50%;
+}
+.input-group-appendd{
+    width: 117%;
+}
+.label_formmt{
+    margin-right: 10px;
+    width: 50%;
+}
+.formt{
+    width: 139%;
+}
+.add_user{
+    width: 150%;
+}
+.login{
+    margin-right: 15px;
+    width: 25%;
+}

@@ -4,30 +4,28 @@
 
 <div class="row">
     <div class="col-sm-8 offset-2">
-        {% for message in messages %}
-            <h5 class="errors">{{ message }}</h5>
-        {% endfor %}
+       
         <h4 class="alert alert-info">Update Vehicle Details</h4>
         {% if update_vehicle_data %}
 
-            <form method="POST" action="">
+            <form class="formt" method="POST" action="">
                 {% csrf_token %}
                 {% for fm in update_vehicle_data %}
                     <div class="input-group mb-2">
                         <div class="input-group-append">
-                            <label>Vehicle Model Name</label>
+                            <label class="label_formm">Vehicle Model Name</label>
                             <input type='text' name='vehicle_model_name' value="{{fm.vehicle_model_name}}" class="input-register-text" required>
                         </div>
                     </div>
                     <div class="input-group mb-2">
                         <div class="input-group-append">
-                            <label>Chasis Number</label>
+                            <label class="label_formm">Chasis Number</label>
                             <input type='text' name='chasis_number' value="{{fm.chasis_number}}" class="input-register-text" required>
                         </div>
                     </div>
                     <div class="input-group mb-2">
                         <div class="input-group-append">
-                            <label>Vehicle Configuration</label>
+                            <label class="label_formm">Vehicle Configuration</label>
                             <select type="text" name="configuration" required>
                                 {% if fm.configuration == "48V" %}
                                     <option value="48V" selected>48V</option>
@@ -51,7 +49,7 @@
                     </div>
                     <div class="input-group mb-2">
                         <div class="input-group-append">
-                            <label>Vehicle Choice</label>
+                            <label class="label_formm">Vehicle Choice</label>
                             <select type="text" name="vehicle_choice" value="{{fm.vehicle_choice}}" class="input-register-text" required>
                                 {% if fm.vehicle_choice == "2W-L" %}
                                     <option value="2W-L" selected>2W-L</option>
@@ -81,51 +79,51 @@
                     </div>
                     <div class="input-group mb-2">
                         <div class="input-group-append">
-                            <label>Vehicle Iot Imei Number</label>
+                            <label class="label_formm">Vehicle Iot Imei Number</label>
                             <input type='text' name='vehicle_iot_imei_number' value="{{fm.vehicle_iot_imei_number}}" class="input-register-text" required>		
                         </div>
                     </div>
                     <div class="input-group mb-2">
                         <div class="input-group-append">
-                            <label>Vehicle Sim Number</label>
+                            <label class="label_formm">Vehicle Sim Number</label>
                             <input type='text' name='vehicle_sim_number' value="{{fm.vehicle_sim_number}}" class="input-register-text" required>
                         </div>
                     </div>
                     <div class="input-group mb-2">
                         <div class="input-group-append">
-                            <label>Vehicle Warrenty Start Date</label>
+                            <label class="label_formm">Vehicle Warrenty Start Date</label>
                             <input type='date' name='vehicle_warrenty_start_date' value="{{fm.vehicle_warrenty_start_date|date:'Y-m-d'}}" class="input-register-text" required>
                         </div>
                     </div>
                     <div class="input-group mb-2">
                         <div class="input-group-append">
-                            <label>Vehicle Warrenty End Date</label>
+                            <label class="label_formm">Vehicle Warrenty End Date</label>
                             <input type='date' name='vehicle_warrenty_end_date' value="{{fm.vehicle_warrenty_end_date|date:'Y-m-d'}}" class="input-register-text" required>
                         </div>
                     </div>
                     <div class="input-group mb-2">
                         <div class="input-group-append">
-                            <label>Assigned Owner</label>
+                            <label class="label_formm">Assigned Owner</label>
                             <input type='text' name='assigned_owner' value="{{fm.assigned_owner}}" class="input-register-text" required>
                         </div>
                     </div>
                     <div class="input-group mb-2">
                         <div class="input-group-append">
-                            <label>Insurance Start Date</label>
+                            <label class="label_formm">Insurance Start Date</label>
                             <input type='date' name='insurance_start_date' value="{{fm.insurance_start_date|date:'Y-m-d'}}" class="input-register-text" required>
                         </div>
                     </div>
                     <div class="input-group mb-2">
                         <div class="input-group-append">
-                            <label>Insurance End Date</label>
+                            <label class="label_formm">Insurance End Date</label>
                             <input type='date' name='insurance_end_date' value="{{fm.insurance_end_date|date:'Y-m-d'}}" class="input-register-text" required>
                         </div>
                     </div>
 
                 {% endfor %}
 
-                <input type="submit" class="btn btn-success" value="Update">
-                <a href="{% url 'getvehicle' %}" class="btn btn-info">Back To Details </a>
+                <input type="submit" class="btn btn-success btn-sm" value="Update">
+                <a href="{% url 'getvehicle' %}" class="btn btn-info  btn-sm">Back To Details </a>
 
 
             {% else %}
