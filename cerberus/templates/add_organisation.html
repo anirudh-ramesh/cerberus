@@ -19,15 +19,18 @@
 							{% for message in messages %}
 							<div class = "alert alert-{{message.tags}}">{{message}}</div>
 							{% endfor %}
-					 	{% endif %}
-					<input type="Submit" name="Submit" class="btn btn-success" value="Submit" >
+					{% endif %}
+
+					{{form.as_p}}
+					<input type="Submit" name="Submit" class="btn btn-success btn-sm" value="Submit" >
+					<a href="{% url 'user_management:listorg' %}" class="btn btn-secondary btn-sm">Back</a>
 					<!-- {% if messages %}
 					{% for message in messages %}
 						<h5 class="errors">{{ message }}</h5>
 					{% endfor %}
 					{% endif %} -->
 				</form>
-				<a href="{% url 'user_management:addprofile' %}" class="btn btn-dark btn-sm">Add Organisation Profile</a>
+				
 			</div>
 		</div>
 	</div>

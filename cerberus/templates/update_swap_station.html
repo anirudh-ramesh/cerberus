@@ -109,12 +109,12 @@
 
                 {% endfor %}
 
-                <input type="submit" class="btn btn-success" value="Update">
-                <a href="{% url 'user_management:listswap' %}" class="btn btn-info">Back To Details </a>
+                <input type="submit" class="btn btn-success btn-sm" value="Update">
+                <a href="{% url 'user_management:listswap' %}" class="btn btn-info btn-sm">Back To Details </a>
 
 
             {% else %}
-                <h4 class="text-center alert alert warning">No Records Found</h4>
+                <h4 class="text-center alert alert warning btn-sm">No Records Found</h4>
             {% endif %}
         </form>
     </div>

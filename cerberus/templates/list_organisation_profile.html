@@ -1,33 +1,62 @@
+
 {% extends 'main.html' %}
 
 {% block content %}
 
 {% include 'status.html' %}
 
-<div class="col-sm-8">
-    <h4 class="text-center alert alert info">Organisation Profile</h4>
+<div class="col-sm-12">
+    <h4 class="text-center alert alert info">Organisaiotion Profile Data</h4>
     <form action="" method="GET">
-      {{organisation_profile_data}}
         {% if organisation_profile_data %}
                 <table class="table table-hover">
                     <thead>
-                      <tr>
-                        <th scope="col">Serial Number</th>
-                        <th scope="col">Organisation Name</th>
-                        <th scope="col">Organisation Profile</th>
-                        <th scope="col">Is Active</th>
-
+                      <tr>                  
+                        <th scope="col">Battery Pack Manufacture</th>
+                        <th scope="col">Battery Pack Distributor</th> 
+                        <th scope="col">Battery Pack Sub Distributor</th>
+                        <th scope="col">Battery Pack Financier</th>
+                        <th scope="col">Battery Pack Owner</th>
+                        <th scope="col">Battery Pack Opertator</th>
+                        <th scope="col">Vehicle Manufacture</th>
+                        <th scope="col">Vehicle Distributor</th>
+                        <th scope="col">Vehicle Sub Distributor</th>
+                        <th scope="col">Vehicle Retailer</th>
+                        <th scope="col">Vehicle Financier</th>
+                        <th scope="col">Battery Swap Station Manufacture</th>
+                        <th scope="col">Battery Swap Station Distributor</th>
+                        <th scope="col">Battery Swap Station SUb  Distributor</th>
+                        <th scope="col">Battery Swap Station Financier</th>
+                        <th scope="col">Battery Swap Station Owner</th>
+                        <th scope="col">Battery Swap Station Opertator</th>
                       </tr>
                     <tbody>
                     {% for fm in organisation_profile_data %}
                         <tr>
-                            {{fm}}
-                            <!-- <td>{{fm.serial_number}}</td>
-                            <td>{{fm.organisation_name}}</td>
-                            <td>{{fm.organisation_profile}}</td>
-                            <td>{{fm.is_active}}</td> -->
-
-                          </tr>
+                            <td>{{fm.battery_pack_manufacture}}</td>
+                            <td>{{fm.battery_pack_distributor}}</td>
+                            <td>{{fm.battery_pack_sub_distributor}}</td>
+                            <td>{{fm.battery_pack_financier}}</td>
+                            <td>{{fm.battery_pack_owner}}</td>
+                            <td>{{fm.battery_pack_operator}}</td>
+                            <td>{{fm.battery_pack_operator}}</td>
+                            <td>{{fm.vehical_distributor}}</td>
+                            <td>{{fm.vehical_sub_distributor}}</td>
+                            <td>{{fm.vehical_owner}}</td>
+                            <td>{{fm.vehical_operator}}</td>
+                            <td>{{fm.battrey_swap_satation_manufacture}}</td>
+                            <td>{{fm.battrey_swap_satation_distributor}}</td>
+                            <td>{{fm.battrey_swap_satation_sub_distributor}}</td>
+                            <td>{{fm.battrey_swap_satation_financier}}</td>
+                            <td>{{fm.battrey_swap_satation_owner}}</td>
+                            <td>{{fm.battrey_swap_satation_operator}}</td>
+                            <td>
+                                <form action="" method="POST" class="d-inline">
+                                    {% csrf_token %}
+                                    <input type="submit" class="btn btn-danger btn-sm" value="Remove">
+                                </form>
+                            </td>             
+                        </tr>
                       
                       {% endfor %}
                     </tbody>
@@ -37,6 +66,8 @@
         {% else %}
             <h4 class="text-center alert alert warning">No Records Found</h4>
         {% endif %}
+
+        <a href="{% url 'home' %}" class="btn btn-secondary">Back To Home</a>
 
         
     </form>
