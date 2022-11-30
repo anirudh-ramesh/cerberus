@@ -18,7 +18,7 @@ from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.hashers import make_password, check_password 
 # from irasusapp.auth_helper import getSignInFlow, getTokenFromCode,getToken,getMsalApp,removeUserAndToken, storeUser
-from db_connect import listAssignedBatteryVehicle,assignedVehicleToOrganisation,getOrgAssignedVehicle,removeAssignedVehiclefromOrganisation,listAssignedVehicleToUser,removeUserVehicle,images_display
+from db_connect import listAssignedBatteryVehicle,assignedVehicleToOrganisation,getOrgAssignedVehicle,removeAssignedVehiclefromOrganisation,listAssignedVehicleToUser,removeUserVehicle,images_display ,iotDevice
 from django.contrib.gis.geos import Point,Polygon
 from django.apps import apps
 from base64 import b64encode
@@ -95,21 +95,21 @@ def batteryDetails(request):
         else:
             if request.method == "POST":
                 formData = BatteryDetail.objects.create(
-                    model_name = request.POST['model_name'],
-                    battery_serial_num = request.POST['battery_serial_num'],
-                    battery_type = request.POST['battery_type'],
-                    bms_type = request.POST['bms_type'],
-                    iot_type = request.POST['iot_type'],
-                    iot_imei_number = request.POST['iot_imei_number'],
-                    sim_number = request.POST['sim_number'],
-                    warrenty_start_date = request.POST['warrenty_start_date'],
-                    warrenty_duration = request.POST['warrenty_duration'],
-                    assigned_owner = request.POST['assigned_owner'],
-                    status = request.POST['status'],
-                    battery_cell_chemistry = request.POST['battery_cell_chemistry'],
-                    battery_pack_nominal_voltage = request.POST['battery_pack_nominal_voltage'],
-                    battery_pack_nominal_charge_capacity = request.POST['battery_pack_nominal_charge_capacity'],
-                    charging_status = request.POST['charging_status']
+                    model_name = request.POST.get('model_name'),
+                    battery_serial_num = request.POST.get('battery_serial_num'),
+                    battery_type = request.POST.get('battery_type'),
+                    bms_type = request.POST.get('bms_type'),
+                    iot_type = request.POST.get('iot_type'),
+                    # iot_imei_number = request.POST.get('iot_imei_number'),
+                    sim_number = request.POST.get('sim_number'),
+                    warrenty_start_date = request.POST.get('warrenty_start_date'),
+                    warrenty_duration = request.POST.get('warrenty_duration'),
+                    assigned_owner = request.POST.get('assigned_owner'),
+                    status = request.POST.get('status'),
+                    battery_cell_chemistry = request.POST.get('battery_cell_chemistry'),
+                    battery_pack_nominal_voltage = request.POST.get('battery_pack_nominal_voltage'),
+                    battery_pack_nominal_charge_capacity = request.POST.get('battery_pack_nominal_charge_capacity'),
+                    charging_status = request.POST.get('charging_status')
                 )
                 formData.save()
                 messages.info(request, successAndErrorMessages()['addBattery'])
@@ -194,7 +194,6 @@ def deleteRecord(request,id):
         if request.method == 'POST':
             pi.delete()
             messages.success(request, successAndErrorMessages()['removeBatteryDetails'])
-            return redirect('data')
         context = {}
         return render(request, "battery_details.html", context)
     except Exception as e:
@@ -224,9 +223,18 @@ def listIotDevice(request):
     try:
         if request.method == "GET":
             iotdevicedata = list(IotDevices.objects.values())
-        return render(request, 'list_IOT_devices.html',{ 'iot_device_data': iotdevicedata })
+            batteryWithIotDevice = iotDevice(iotdevicedata)
+
+            #REMOVE BATTERY TO IOT-DEVICE
+            if ("action" in request.get_full_path()):
+                get_full_path = str(request.get_full_path()).split("?").pop()
+                imei_number =get_full_path.split("&action")[0].split("=")[1]
+                BatteryDetail.objects.filter(iot_imei_number_id=imei_number).update(iot_imei_number_id=None)
+                messages.success(request, successAndErrorMessages()['removeDeviceFromBattery'])
+                return redirect('listdevice')    
+        return render(request, 'list_IOT_devices.html',{ 'iot_device_data': batteryWithIotDevice })
     except Exception as e:
-        return messages.warning(request, successAndErrorMessages()['internalError'])
+        messages.warning(request, successAndErrorMessages()['internalError'])
 
 def updateIOTDevice(request,id):
     try:
@@ -259,11 +267,37 @@ def deleteIOTDeviceRecord(request,id):
         if request.method == 'POST':
             pi.delete()
             messages.success(request, successAndErrorMessages()['removeDevice'])
-        context = {}
-        return render(request, "list_IOT_devices.html", context)
+            return redirect('listdevice')
     except Exception as e:
         return messages.warning(request, successAndErrorMessages()['internalError'])
 
+def assignedIotDeviceToBattery(request):
+    
+    obj = BatteryDetail.objects.all()
+    get_full_path = str(request.get_full_path()).split("?").pop()
+    if("action" in get_full_path):
+        print(get_full_path.split("&action")[0].split("="))
+    
+    #ASSIGN BATTERY TO IOT-DEVICE
+    if request.method == "POST":
+        if("action" in get_full_path and "add" in get_full_path):
+            print("action")
+            get_full_path = str(request.get_full_path()).split("?").pop()
+            imei_number =get_full_path.split("&action")[0].split("=")[1]
+            battery_serial_number = request.POST.get('name_of_select')
+
+            already_assign = list(BatteryDetail.objects.filter(battery_serial_num = battery_serial_number).values())
+            for x in already_assign:
+                if x['iot_imei_number_id'] is not None:
+                    messages.success(request, successAndErrorMessages()['deviceAlreadyAdded'])
+                    return redirect('iotdevice')
+                else:
+                    assignData=BatteryDetail.objects.filter(pk=battery_serial_number).update(iot_imei_number_id=imei_number)
+                    messages.success(request, successAndErrorMessages()['deviceAddToBattery'])
+                    return redirect('iotdevice')
+    context = { 'assinged_iot_device': obj }
+    return render(request,'assigned_iot_device_to_battery.html', context)
+    
 # def login_with_phone_num(request):
 #     if request.method == "POST":
 #         phone_number = request.POST.get("phone_number")
@@ -693,7 +727,7 @@ def settings(request):
     return render(request, 'settings.html')
 
 def VCU(request):
-    return render(request, 'settings.html')
+    return render(request, 'VCU.html')
 
 #Open swap-station doors.
 def swapSatationDoors(request):

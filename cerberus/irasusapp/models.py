@@ -172,6 +172,13 @@ class Vehicle(models.Model):
     def __str__(self):
         return str(self.vehicle_model_name)
 
+class IotDevices(models.Model):
+    imei_number = models.CharField(max_length=225, blank=True, primary_key=True)
+    hardware_version = models.CharField(max_length=225, blank=True, null=True)
+    firmware_version = models.CharField(max_length=225, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.imei_number)
 
 MODEL_CHOICES = (
     ('igtblu','IGTBLU'),
@@ -211,7 +218,7 @@ class BatteryDetail(models.Model):
     battery_type = models.CharField(max_length=100, default='', choices=BATTERY_TYPES)
     bms_type = models.CharField(max_length=100, default='', choices=BMS_TYPE)
     iot_type = models.CharField(max_length=100, default='', choices=IOT_TYPE)
-    iot_imei_number = models.CharField(max_length=100)
+    iot_imei_number = models.ForeignKey(IotDevices, on_delete=models.CASCADE, null=True, blank=True)
     sim_number = models.CharField(max_length=12, default='', blank=True)
     warrenty_start_date = models.DateField(default='',blank=True,null=True)
     warrenty_duration = models.DateField(default='',blank=True, null=True)
@@ -227,11 +234,5 @@ class BatteryDetail(models.Model):
     def __str__(self):
         return str(self.model_name)
 
-class IotDevices(models.Model):
-    imei_number = models.CharField(max_length=225, blank=True, primary_key=True)
-    hardware_version = models.CharField(max_length=225, blank=True, null=True)
-    firmware_version = models.CharField(max_length=225, blank=True, null=True)
 
-    def __str__(self):
-        return str(self.imei_number)
 

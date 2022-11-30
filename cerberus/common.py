@@ -59,6 +59,8 @@ def successAndErrorMessages():
         "deviceUpdate": "Device Update Successfully",
         "removeDevice": "Device Deleted Successfully",
         "devicealreadyAdded": "Device Already Added",
-
+        "deviceAddToBattery": "Device Added To Battery Successfully.",
+        "deviceAlreadyAdded": "This IOT-Device Already Added.",
+        "removeDeviceFromBattery": "Device Remove From Battery Successfully.",
     }
     return response

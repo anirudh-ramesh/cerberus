@@ -18,20 +18,32 @@
                         <th scope="col">Iot Imei-Number</th>
                         <th scope="col">Hardware Version</th>
                         <th scope="col">Firmware Version</th>
+                        <th scope="col">Assigned Battery Id</th>
+                        <th scope="col">Assigned Battery Model</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Action</th>
                       </tr>
                     <tbody>
                     {% for fm in iot_device_data %}
                         <tr>
-                            <td>{{fm.imei_number}}</td>  
+                            <td>{{fm.iot_imei_number_id}}</td>  
                             <td>{{fm.hardware_version}}</td>
                             <td>{{fm.firmware_version}}</td>
+                            <td>{{fm.battery_serial_num}}</td>
+                            <td>{{fm.model_name}}</td>
+                            <td>{{fm.assign}}</td>
                             <td>
-                            <a href="{% url 'updatedevice' fm.imei_number %}" class="btn btn-info btn-sm">Edit</a>
+                            <a href="{% url 'updatedevice' fm.iot_imei_number_id %}" class="btn btn-info btn-sm">Edit</a>
 
-                            <form action="{% url 'deletetedevice' fm.imei_number %}" method="POST" class="d-inline">
+                            <form action="{% url 'deletetedevice' fm.iot_imei_number_id %}" method="POST" class="d-inline">
                                 {% csrf_token %}
                               <input type="submit" class="btn btn-danger btn-sm" value="Delete">
                             </form>
+                            {% if fm.assign %}
+                            <a href="{% url 'listdevice' %}?imei_number={{fm.iot_imei_number_id}}&action='remove'" class="btn btn-secondary btn-sm">Remove-To-Battery</a>
+                            {% else %}
+                            <a href="{% url 'iotdevice' %}?imei_number={{fm.iot_imei_number_id}}&action='add'" class="btn btn-secondary btn-sm"> Assing-To-Battery</a>
+                            {% endif %}
                           </td>              
                         </tr>         
                       {% endfor %}
