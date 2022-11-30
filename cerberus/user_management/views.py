@@ -145,7 +145,7 @@ def addOrganisationProfile(request,id):
         formData.save()
         messages.success(request, successAndErrorMessages()['createOrganisationProfile'])
         orgProfileAddData(id,formData.id)
-    return render(request,'add_organisation_profile.html')
+    return render(request,'add_organisation_profile.html',{ 'id': id })
 
 #Listing of organisation profile
 def listOrganisationProfile(request,id):
