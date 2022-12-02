@@ -2,50 +2,59 @@
 
 {% block content %}
 
+{% include 'status.html' %}
+
 <div class="row">
     <div class="col-md-5">
         <h4 class="alert alert-info">Update IOT-Device Details</h4>
-        {% if update_IOT_data %}
-            <form method="POST" action="">
-                {% csrf_token %}
+        <div class="card card-body">
+            {% if update_IOT_data %}
+                <form method="POST" action="">
+                    {% csrf_token %}
 
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class = "alert alert-{{message.tags}}">{{message}}</div>
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class = "alert alert-{{message.tags}}">{{message}}</div>
+                            {% endfor %}
+                        {% endif %}
+                    
+                    {% for fm in update_IOT_data %}
+                        <div class="input-group mb-2">
+                            <div class="input-group-append">
+                                <label>IOT Imei-Number</label>
+                                <input type='text' name='imei_number' value="{{fm.imei_number}}" class="input-register-text" required>
+                            </div>
+                        </div>
+                        <div class="input-group mb-2">
+                            <div class="input-group-append">
+                                <label>Hardware Version</label>
+                                <input type='text' name='hardware_version' value="{{fm.hardware_version}}" class="input-register-text" required>
+                            </div>
+                        </div>
+
+                        <div class="input-group mb-2">
+                            <div class="input-group-append">
+                                <label>Firmware Version</label>
+                                <input type='text' name='firmware_version' value="{{fm.firmware_version}}" class="input-register-text" required>		
+                            </div>
+                        </div>
+
                     {% endfor %}
+                    
+                    <div class="submit-button">
+                        <div class="submit-div">
+                            <input type="submit" class="btn btn-success btn-sm" value="Update">
+                        </div>
+                        <div class="back-div">
+                            <a href="{% url 'listdevice' %}" class="btn btn-info btn-sm">Back</a>
+                        </div> 
+                    </div>
+                    
+                {% else %}
+                    <h4 class="text-center alert alert warning">No Records Found</h4>
                 {% endif %}
-                
-                {% for fm in update_IOT_data %}
-                    <div class="input-group mb-2">
-                        <div class="input-group-append">
-                            <label>IOT Imei-Number</label>
-                            <input type='text' name='imei_number' value="{{fm.imei_number}}" class="input-register-text" required>
-                        </div>
-                    </div>
-                    <div class="input-group mb-2">
-                        <div class="input-group-append">
-                            <label>Hardware Version</label>
-                            <input type='text' name='hardware_version' value="{{fm.hardware_version}}" class="input-register-text" required>
-                        </div>
-                    </div>
-
-                    <div class="input-group mb-2">
-                        <div class="input-group-append">
-                            <label>Firmware Version</label>
-                            <input type='text' name='firmware_version' value="{{fm.firmware_version}}" class="input-register-text" required>		
-                        </div>
-                    </div>
-
-                {% endfor %}
-
-                <input type="submit" class="btn btn-success btn-sm" value="Update">
-                <a href="{% url 'listdevice' %}" class="btn btn-info btn-sm">Back To Details </a>
-
-
-            {% else %}
-                <h4 class="text-center alert alert warning">No Records Found</h4>
-            {% endif %}
-        </form>
+            </form>
+        </div>
     </div>
 </div>
 

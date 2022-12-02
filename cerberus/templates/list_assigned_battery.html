@@ -5,7 +5,7 @@
 {% include 'status.html' %}
 
 <div class="col-sm-8">
-    <h4 class="text-center alert alert info">Assignedd Battery List</h4>
+    <h4 class="text-center alert alert info">Assigned Battery List</h4>
     <form action="" method="GET">
         {% if assigned_battery_list %}
                 <table class="table table-hover">
@@ -58,7 +58,7 @@
                         <td>{{fm.battery_pack_nominal_charge_capacity}}</td>
                         <td>{{fm.charging_status}}</td>
                         <td>
-                        {% if vehicle_assign_id %} 
+                        {% if fm.vehicle_assign_id %} 
                           <form action="{% url 'assinged' fm.vehicle_assign_id %}?battery_serial_num={{fm.battery_serial_num}}" method="POST" class="d-inline">
                               {% csrf_token %}
                             <input type="submit" class="btn btn-danger btn-sm" value="Remove">

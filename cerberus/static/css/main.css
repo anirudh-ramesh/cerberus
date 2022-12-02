@@ -751,3 +751,15 @@ label{
     padding: .5rem;
     background-color: #fff;
 }
+
+.sign_up_class{
+    width: 100%!important;
+    border-radius: 20px;
+    height: 66vh;
+}
+
+.login_img_div{
+    width: 100%!important;
+    border-radius: 20px;
+    height: 65vh;
+}

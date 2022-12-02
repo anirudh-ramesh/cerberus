@@ -17,7 +17,7 @@ def addUser(request):
         if form.is_valid():
             form.save()
     context = { 'form': form }
-    messages.success(request, successAndErrorMessages()['addUser'])
+    messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['addUser'])
     return render(request,'user_management_templates/user_add.html',context)
 
 #This function used for Listing of users.
@@ -41,7 +41,7 @@ def updateUser(request,id):
         else:
             isactive = False
         Crmuser.objects.filter(email=id).update(username=username,email=email,contact=contact,is_active=isactive, updated_at = timezone.now())
-        messages.info(request, successAndErrorMessages()['updateUser'])
+        messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['updateUser'])
         pi=[{"email":email ,"username":username, "contact":contact, "is_active": isactive }]
         return render(request,'user_management_templates/update_user.html',{ 'form': pi })
 
@@ -54,12 +54,12 @@ def deleteUser(request, id):
         pi = Crmuser.objects.get(pk=id)
         if request.method == 'POST':
             pi.delete()
-            messages.warning(request, successAndErrorMessages()['removeUser'])
+            messages.add_message(request, messages.WARNING, successAndErrorMessages()['removeUser'])
             return redirect('user_management:getdata')
         context = {} 
         return render(request, "user_management_templates/get_userdata.html", context)
     except Exception as e:
-        return messages.warning(request, successAndErrorMessages()['internalError'])
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
 
 #This Function Used to Add Organisation.
@@ -70,7 +70,7 @@ def addOrganisation(request):
         if form.is_valid():
             form.save()
     context = { 'form': form }
-    messages.success(request, successAndErrorMessages()['createOrganisation'])
+    messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['createOrganisation'])
     return render(request,'add_organisation.html',context)
 
 #Listing of Organisation.
@@ -105,7 +105,7 @@ def updateOranisation(request,id):
         'listuser': listuser,
         'role' : roles
     }
-    messages.info(request, successAndErrorMessages()['updateOrganisation'])
+    messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['updateOrganisation'])
     return render(request,'update_organisation.html',context)
 
 #Delete records from Organisation.
@@ -114,12 +114,12 @@ def deleteOraganisation(request, id):
         pi = Organisation.objects.get(pk=id)
         if request.method == 'POST':
             pi.delete()
-            messages.warning(request, successAndErrorMessages()['removeOrganisation'])
+            messages.add_message(request, messages.WARNING, successAndErrorMessages()['removeOrganisation'])
             return redirect('user_management:listorg')
         context = {} 
         return render(request, "list_organisation_data.html", context)
     except Exception as e:
-        return messages.warning(request, successAndErrorMessages()['internalError'])
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
 #Adding organisation profile data.
 def addOrganisationProfile(request,id):
@@ -146,8 +146,8 @@ def addOrganisationProfile(request,id):
             battrey_swap_satation_operator = request.POST.get('battrey_swap_satation_operator')
         )
         formData.save()
-        messages.success(request, successAndErrorMessages()['createOrganisationProfile'])
         orgProfileAddData(id,formData.id)
+        messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['createOrganisationProfile'])
     return render(request,'add_organisation_profile.html',{ 'id': id })
 
 #Listing of organisation profile
@@ -163,10 +163,10 @@ def deleteOraganisationProfile(request, id):
         pi = OrganisationProfile.objects.get(pk=id)
         if request.method == 'POST':
             pi.delete()
-        messages.warning(request, successAndErrorMessages()['removeOrganisationProfile'])    
+        messages.add_message(request, messages.WARNING,successAndErrorMessages()['removeOrganisationProfile'])    
         return render(request, "list_organisation_profile.html", {})
     except Exception as e:
-        return messages.warning(request, successAndErrorMessages()['internalError'])
+        return messages.add_message(request,messages.WARNING, successAndErrorMessages()['internalError'])
 
 #Create a role and inserting into permission organisation 
 def createUserRole(request,id):
@@ -200,7 +200,7 @@ def listRole(request):
             if value['select'] == True:
                 user_roles.append(value)
             else:
-                messages.info(request,'No data found')
+                messages.add_message(request, messages.WARNING, successAndErrorMessages()['dataNotFound'])
         return user_roles       
     context = { 'roledata' : roledata }
     return render(request,'user_management_templates/list_role.html',context)
@@ -230,7 +230,7 @@ def deleteRole(request,id):
         context={}
         return render(request, "user_management_templates/list_role.html", context)
     except Exception as e:
-        print("Error While deleting Record",e)
+        return messages.add_message(request,messages.WARNING, successAndErrorMessages()['internalError'])
 
 #This function is used for listing user role.
 def listedUserRole(request):
@@ -242,7 +242,7 @@ def listedUserRole(request):
         }
         return render(request,"user_management_templates/user_multiple_role.html",context)        
     except Exception as e:
-        print("Error While deleting Record",e)
+        return messages.add_message(request,messages.WARNING, successAndErrorMessages()['internalError'])
 
 #Get Organisation Details.
 def orgUserinfo(request,id):
@@ -266,7 +266,7 @@ def orgUserinfo(request,id):
         }
         return render(request,"user_management_templates/user_org_list.html",context)        
     except Exception as e:
-        print("Error While deleting Record",e)
+        return messages.add_message(request,messages.WARNING, successAndErrorMessages()['internalError'])
 
 #This function is used for adding swap station data.
 def addSwapStation(request): 
@@ -282,7 +282,7 @@ def addSwapStation(request):
             assigned_fleet_owner = request.POST.get('assigned_fleet_owner'),
         )
         formData.save()
-        messages.success(request, successAndErrorMessages()['createSwapStation'])
+        messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['createSwapStation'])
     return render(request,'add_swapstation.html')
 
 #Listing swap station data.
@@ -322,7 +322,7 @@ def updateSwapstationDetails(request,id):
             'assigned_fleet_owner': assigned_fleet_owner,
         }]
 
-        messages.info(request, successAndErrorMessages()['updateSwapStation'])
+        messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['updateSwapStation'])
         return render(request,'update_swap_station.html',{'update_swap_station_data': update_swapstation })
 
     update_swapstation = list(Swapstation.objects.filter(imei_number=id).values())
@@ -334,9 +334,10 @@ def deleteSwapStation(request,id):
         pi = Swapstation.objects.get(pk=id)
         if request.method == 'POST':
             pi.delete()
+            messages.add_message(request, messages.ERROR, successAndErrorMessages()['removeSwapStation'])
             return redirect('user_management:listswap')
         context={}
         messages.info(request, successAndErrorMessages()['removeSwapStation'])
         return render(request, 'list_swapstation_data.html', context)
     except Exception as e:
-        print("Error While deleting Record",e)
+        return messages.add_message(request,messages.WARNING, successAndErrorMessages()['internalError'])

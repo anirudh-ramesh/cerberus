@@ -2,7 +2,7 @@ import psycopg2 as db
 import base64
 
 def connect():
-    conn=db.connect(host="db",user="myprojectuser",password="password",database='postgres')
+    conn=db.connect(host="localhost",user="postgres",password="1234",database='battery_management')
     return conn
     
 # psql -h db -p 5432 -U myprojectuser -d postgres
@@ -216,43 +216,47 @@ def removeUserFromOrg(select,serial_number,email):
 
 #ASSIGNED BATTERY DATA
 def listAssignedBatteryVehicle(id):
-    conn=connect()
-    cursor = conn.cursor()
-    sql = f"SELECT \
-    irasusapp_batterydetail.model_name, irasusapp_batterydetail.battery_serial_num, irasusapp_batterydetail.battery_type, \
-    irasusapp_batterydetail.bms_type,irasusapp_batterydetail.iot_type,irasusapp_batterydetail.iot_imei_number,irasusapp_batterydetail.sim_number,\
-    irasusapp_batterydetail.warrenty_start_date,irasusapp_batterydetail.warrenty_duration, irasusapp_batterydetail.assigned_owner,irasusapp_batterydetail.status,\
-    irasusapp_batterydetail.battery_cell_chemistry,irasusapp_batterydetail.battery_pack_nominal_voltage,\
-    irasusapp_batterydetail.battery_pack_nominal_charge_capacity, irasusapp_batterydetail.charging_status, irasusapp_batterydetail.vehicle_assign_id,irasusapp_batterydetail.is_assigned\
-    FROM irasusapp_batterydetail \
-    RIGHT JOIN irasusapp_vehicle ON irasusapp_vehicle.chasis_number = irasusapp_batterydetail.vehicle_assign_id \
-    WHERE irasusapp_vehicle.chasis_number='{id}'"
-    cursor.execute(sql)
-    myresult = cursor.fetchall()
-    my_data = []
-    for data in myresult:
-        res= {}
-        res["model_name"] = str(data[0])
-        res["battery_serial_num"] = data[1]
-        res["battery_type"] = data[2]
-        res["bms_type"] = data[3]
-        res["iot_type"] = data[4]
-        res["iot_imei_number"] = data[5]
-        res["sim_number"]= data[6]
-        res["warrenty_start_date"] = data[7]
-        res["warrenty_duration"] = data[8]
-        res["assigned_owner"] = data[9]
-        res["status"] = data[10]
-        res["battery_cell_chemistry"] = data[11]
-        res["battery_pack_nominal_voltage"] = data[12]
-        res["battery_pack_nominal_charge_capacity"] = data[13]
-        res["charging_status"] = data[14]
-        res["vehicle_assign_id"] = data[15]
-        res["is_assigned"] = data[16]
-        my_data.append(res)
+    try:
+        conn=connect()
+        cursor = conn.cursor()
+        sql = f"SELECT \
+        irasusapp_batterydetail.model_name, irasusapp_batterydetail.battery_serial_num, irasusapp_batterydetail.battery_type, \
+        irasusapp_batterydetail.bms_type,irasusapp_batterydetail.iot_type,irasusapp_batterydetail.iot_imei_number_id,irasusapp_batterydetail.sim_number,\
+        irasusapp_batterydetail.warrenty_start_date,irasusapp_batterydetail.warrenty_duration, irasusapp_batterydetail.assigned_owner,irasusapp_batterydetail.status,\
+        irasusapp_batterydetail.battery_cell_chemistry,irasusapp_batterydetail.battery_pack_nominal_voltage,\
+        irasusapp_batterydetail.battery_pack_nominal_charge_capacity, irasusapp_batterydetail.charging_status, irasusapp_batterydetail.vehicle_assign_id,irasusapp_batterydetail.is_assigned\
+        FROM irasusapp_batterydetail \
+        RIGHT JOIN irasusapp_vehicle ON irasusapp_vehicle.chasis_number = irasusapp_batterydetail.vehicle_assign_id \
+        WHERE irasusapp_vehicle.chasis_number='{id}'"
+        cursor.execute(sql)
+        myresult = cursor.fetchall()
+        my_data = []
+        for data in myresult:
+            res= {}
+            res["model_name"] = str(data[0])
+            res["battery_serial_num"] = data[1]
+            res["battery_type"] = data[2]
+            res["bms_type"] = data[3]
+            res["iot_type"] = data[4]
+            res["iot_imei_number"] = data[5]
+            res["sim_number"]= data[6]
+            res["warrenty_start_date"] = data[7]
+            res["warrenty_duration"] = data[8]
+            res["assigned_owner"] = data[9]
+            res["status"] = data[10]
+            res["battery_cell_chemistry"] = data[11]
+            res["battery_pack_nominal_voltage"] = data[12]
+            res["battery_pack_nominal_charge_capacity"] = data[13]
+            res["charging_status"] = data[14]
+            res["vehicle_assign_id"] = data[15]
+            res["is_assigned"] = data[16]
+            print(my_data, "BATTERY-LIST==============>>>>")
+            my_data.append(res)
 
-    cursor.close()
-    return my_data
+        cursor.close()
+        return my_data
+    except Exception as e:
+        print(e)
 
 
 #ASSIGNED-VECHICLE-TO-ORGANISATION
