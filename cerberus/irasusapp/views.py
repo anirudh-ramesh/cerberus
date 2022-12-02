@@ -46,15 +46,15 @@ def register(request):
             password = make_password(user_password)
             password_conformation = password
             if Crmuser.objects.filter(email=email).exists():
-                messages.warning(request,successAndErrorMessages()['emailTaken'])
+                messages.add_message(request,messages.WARNING, successAndErrorMessages()['emailTaken'])
                 return redirect('register')
             else:
                 user = Crmuser.objects.create_user(email=email, password=password, password_conformation=password_conformation)
-                user.save() 
-                messages.success(request,successAndErrorMessages()['singupMessage'])
+                user.save()
+                messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['singupMessage'])
                 return render(request, 'login.html')
         else:
-            messages.error(request,successAndErrorMessages()['passwordNotMatched'])
+            messages.add_message(request,messages.WARNING, successAndErrorMessages()['passwordNotMatched'])
             return redirect('register')
     else:
         return render(request, 'register.html')
@@ -69,20 +69,20 @@ def loginPage(request):
             print(password, check_password(password,crmuser.password))
             flag = check_password(password,crmuser.password)
             if flag:
-                messages.info(request,successAndErrorMessages()['loginMessage'])
-                return render(request,'dashboard.html', {'email':email})     
+                return render(request,'dashboard.html',{'email':email })     
             else:
-                messages.info(request, successAndErrorMessages()['loginErrorMessage'])
+                messages.add_message(request, messages.INFO, successAndErrorMessages()['loginErrorMessage'])
                 return redirect('login')
         else:
-            messages.info(request, successAndErrorMessages()['userNotFound'])
+            messages.add_message(request, messages.INFO, successAndErrorMessages()['userNotFound'])
+            return render(request,'login.html')
 
     return render(request,'login.html')  
 
 #This Function is used for Logout.
 def logoutUser(request):
     logout(request)
-    messages.warning(request, successAndErrorMessages()['logout'])
+    messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['logout'])
     return redirect('login')
 
 #Adding battery details to Battery table.
@@ -90,7 +90,7 @@ def batteryDetails(request):
     try:
         serial_num = request.POST.get('battery_serial_num')
         if BatteryDetail.objects.filter(battery_serial_num=serial_num):
-            messages.warning(request, successAndErrorMessages()['alreadyAdded'])
+            messages.add_message(request, messages.WARNING, successAndErrorMessages()['alreadyAdded'])
             return render(request,'add_battery_details.html')
         else:
             if request.method == "POST":
@@ -112,10 +112,10 @@ def batteryDetails(request):
                     charging_status = request.POST.get('charging_status')
                 )
                 formData.save()
-                messages.info(request, successAndErrorMessages()['addBattery'])
+                messages.add_message(request, messages.INFO, successAndErrorMessages()['addBattery'])
             return render(request,'add_battery_details.html')
     except Exception as e:
-        return messages.warning(request, successAndErrorMessages()['internalError'])
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
 #Listing of battery details table.
 def getBatteryDetails(request):
@@ -139,7 +139,7 @@ def getBatteryDetails(request):
         context = { 'battery_data': data,"cahis_id": cahis_id }
         return render(request, 'battery_details.html',context)
     except Exception as e:
-        return messages.warning(request, successAndErrorMessages()['internalError'])
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
 #This Function Will Update_Battery_details/Edit
 def updateBatteryDetails(request, id):
@@ -179,13 +179,13 @@ def updateBatteryDetails(request, id):
                 'battery_pack_nominal_charge_capacity' : battery_pack_nominal_charge_capacity,
                 'charging_status': charging_status
                 }]
-            messages.info(request, successAndErrorMessages()['updateBatteryDetails'])
+            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['updateBatteryDetails'])
             return render(request,'update_battery_details.html', {'form': battery_data })
 
         battery_data = list(BatteryDetail.objects.filter(battery_serial_num=id).values())
         return render(request,'update_battery_details.html',{'form': battery_data})
     except Exception as e:
-        return messages.warning(request, successAndErrorMessages()['internalError'])
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
     
 #Delete records from Battery table.
 def deleteRecord(request,id):
@@ -193,17 +193,17 @@ def deleteRecord(request,id):
         pi = BatteryDetail.objects.get(pk=id)
         if request.method == 'POST':
             pi.delete()
-            messages.success(request, successAndErrorMessages()['removeBatteryDetails'])
+            messages.add_message(request, messages.ERROR, successAndErrorMessages()['removeBatteryDetails'])
         context = {}
         return render(request, "battery_details.html", context)
     except Exception as e:
-        return messages.warning(request, successAndErrorMessages()['internalError'])
+        messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
 def addIotDevice(request):
     try:
         iot_imei_number = request.POST.get('imei_number')
         if IotDevices.objects.filter(imei_number = iot_imei_number):
-            messages.warning(request, successAndErrorMessages()['alreadyAdded'])
+            messages.add_message(request, messages.WARNING, successAndErrorMessages()['alreadyAdded'])
             return render(request,'add_IOT_devices.html')
         else:
             if request.method == "POST":
@@ -213,10 +213,10 @@ def addIotDevice(request):
                     firmware_version = request.POST.get('firmware_version'),
                 )
                 formData.save()
-                messages.info(request, successAndErrorMessages()['deivceAdded'])
+                messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['deivceAdded'])
             return render(request,'add_IOT_devices.html')
     except Exception as e:
-        return messages.warning(request, successAndErrorMessages()['internalError'])
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
 
 def listIotDevice(request):
@@ -230,11 +230,11 @@ def listIotDevice(request):
                 get_full_path = str(request.get_full_path()).split("?").pop()
                 imei_number =get_full_path.split("&action")[0].split("=")[1]
                 BatteryDetail.objects.filter(iot_imei_number_id=imei_number).update(iot_imei_number_id=None)
-                messages.success(request, successAndErrorMessages()['removeDeviceFromBattery'])
+                messages.add_message(request, messages.DANGER, successAndErrorMessages()['removeDeviceFromBattery'])
                 return redirect('listdevice')
         return render(request, 'list_IOT_devices.html',{ 'iot_device_data': batteryWithIotDevice })
     except Exception as e:
-        messages.warning(request, successAndErrorMessages()['internalError'])
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
 def updateIOTDevice(request,id):
     try:
@@ -253,23 +253,23 @@ def updateIOTDevice(request,id):
                 'hardware_version':hardware_version,
                 'firmware_version': firmware_version,
             }]
-            messages.info(request, successAndErrorMessages()['deviceUpdate'])
+            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['deviceUpdate'])
             return render(request,'update_IOT_device.html',{'update_IOT_data': update_iot_device })
 
         update_iot_device = list(IotDevices.objects.filter(imei_number=id).values())
         return render(request,'update_IOT_device.html',{'update_IOT_data': update_iot_device })
     except Exception as error:
-        return messages.warning(request, successAndErrorMessages()['internalError']) 
+        return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError']) 
 
 def deleteIOTDeviceRecord(request,id):
     try:
         pi = IotDevices.objects.get(pk=id)
         if request.method == 'POST':
             pi.delete()
-            messages.success(request, successAndErrorMessages()['removeDevice'])
+            messages.add_message(request, messages.DANGER, successAndErrorMessages()['removeDevice'])
             return redirect('listdevice')
     except Exception as e:
-        return messages.warning(request, successAndErrorMessages()['internalError'])
+        return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError']) 
 
 def assignedIotDeviceToBattery(request):
     
@@ -289,11 +289,11 @@ def assignedIotDeviceToBattery(request):
             already_assign = list(BatteryDetail.objects.filter(battery_serial_num = battery_serial_number).values())
             for x in already_assign:
                 if x['iot_imei_number_id'] is not None:
-                    messages.success(request, successAndErrorMessages()['deviceAlreadyAdded'])
+                    messages.add_message(request, messages.WARNING, successAndErrorMessages()['deviceAlreadyAdded'])
                     return redirect('iotdevice')
                 else:
                     assignData=BatteryDetail.objects.filter(pk=battery_serial_number).update(iot_imei_number_id=imei_number)
-                    messages.success(request, successAndErrorMessages()['deviceAddToBattery'])
+                    messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['deviceAddToBattery'])
                     return redirect('iotdevice')
     context = { 'assinged_iot_device': obj }
     return render(request,'assigned_iot_device_to_battery.html', context)
@@ -383,10 +383,10 @@ def addVehicleDetails(request):
                 insurance_end_date = datetime.strptime(request.POST.get('insurance_start_date'), format)
             )
             formData.save()
-            messages.success(request, successAndErrorMessages()['addVehicle'])
+            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['addVehicle'])
         return render(request,'add_vehicle_details.html')
     except Exception as e:
-        return messages.warning(request, successAndErrorMessages()['internalError'])
+        return messages.warning(request, messages.ERROR, successAndErrorMessages()['internalError'])
 
 #Listing of vehile.
 def getVehicleDetails(request):
@@ -412,12 +412,12 @@ def getVehicleDetails(request):
             vehicle_data= list(Vehicle.objects.filter(chasis_number = vehicle_id).values())
             for x in vehicle_data:
                 demo = Vehicle.objects.filter(pk=int(x['chasis_number'])).update(assigned_to_id=str(email_id), vehicle_selected=True)
-                messages.info(request, successAndErrorMessages()['addVehicleToUser']) 
+                messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['addVehicleToUser'])
                 return redirect('getvehicle')
 
         return render(request, 'list_vehicle_details.html', {'vehicle_data':vehicle_data , 'email_id': email_id , 'serial_number': serial_number})
     except Exception as e:
-        return messages.warning(request, successAndErrorMessages()['internalError'])
+        return messages.warning(request, messages.ERROR,successAndErrorMessages()['internalError'])
 
 
 #This function will Update Vehicle Table.
@@ -457,13 +457,13 @@ def updateVehicleDetails(request,id):
                 'insurance_start_date': insurance_start_date,
                 'insurance_end_date': insurance_end_date
             }]
-            messages.info(request, successAndErrorMessages()['updateVehicle'])
+            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['updateVehicle'])
             return render(request,'update_vehicle.html',{'update_vehicle_data': update_vehicle })
 
         update_vehicle = list(Vehicle.objects.filter(chasis_number=id).values())
         return render(request,'update_vehicle.html',{'update_vehicle_data': update_vehicle })
     except Exception as error:
-        return messages.warning(request, successAndErrorMessages()['internalError']) 
+        return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError'])
 
 #Delete records from Vehicle table.
 def deleteVehicleRecord(request,id):
@@ -471,7 +471,7 @@ def deleteVehicleRecord(request,id):
         pi = Vehicle.objects.get(pk=id)
         if request.method == 'POST':
             pi.delete()
-            messages.info(request, successAndErrorMessages()['removeVehicle'])
+            messages.add_message(request, messages.ERROR, successAndErrorMessages()['removeVehicle'])
             return redirect('getvehicle')
         context = {}
         return render(request, "list_vehicle_details.html", context)
@@ -483,7 +483,9 @@ def deleteVehicleRecord(request,id):
 def assignedBatteryList(request,id):
     try:
         if request.method == "GET":
+            print("IN THE GET")
             data = listAssignedBatteryVehicle(id)
+            print(data, "========>>>>>>>>>DATA")
 
         # Remove battery from vehicle.
         if request.method == "POST": 
@@ -497,7 +499,7 @@ def assignedBatteryList(request,id):
         }
         return render(request, 'list_assigned_battery.html',context)
     except Exception as e:
-        return messages.error(request, successAndErrorMessages()['internalError'])
+        return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError'])
 
 
 #Assigned vehicle to org
@@ -514,7 +516,7 @@ def assignedOrgVehicleList(request,id):
                 
         return render(request, 'list_organisation_vehicle.html',{'org_vehicle_list': org_vehicle_list})
     except Exception as e:
-        return messages.error(request, successAndErrorMessages()['internalError'])
+        return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError'])
 
 #Assigned vehicle to user
 def assignedVehicleToUser(request,id):
@@ -528,12 +530,12 @@ def assignedVehicleToUser(request,id):
             assigned_vehicle = str(request.get_full_path()).split("?").pop()
             vehicle_id = assigned_vehicle.split("&")[0].split("=")[1]
             user_vehicle = removeUserVehicle(False,vehicle_id)
-            messages.warning(request, successAndErrorMessages()['removeVehiclefromUser'])
+            messages.add_message(request, messages.WARNING, successAndErrorMessages()['removeVehiclefromUser'])
             return redirect("user_management:getdata")
 
         return render(request,'list_assigned_vehicle_to_user.html',{'user_vehicle':user_vehicle})
     except Exception as e:
-        return messages.warning(request, successAndErrorMessages()['internalError']) 
+       return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError'])
 
 #Create Geofencing Locations.
 # def addgeofenceVehicles(request):
@@ -555,7 +557,7 @@ def assignedVehicleToUser(request,id):
 #                 latitude = coordinate_data[1]
 #                 location = Point(float(longitude),float(latitude),srid=4326)            
 #                 newdata = Geofence.objects.create(geoname=geoname,geotype=geotype,description=description,enter_latitude=latitude,enter_longitude=longitude,pos_address=position_add,location=location)
-#                 messages.success(request, successAndErrorMessages()['locationCreate'])
+#                  messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['locationCreate'])
 #                 return render(request, 'geolocation_form.html')
 
 
@@ -575,10 +577,10 @@ def assignedVehicleToUser(request,id):
 #             geofence = Polygon(((polygon_coordinates)),srid=4326)
 #             print("GEOFENCE", geofence)
 #             newdata = Geofence.objects.create(geoname=geoname,geotype=geotype, description=description,enter_latitude=longitude_data,pos_address=position_add,geofence=geofence)
-#             # messages.success(request, successAndErrorMessages()['locationCreate'])
+#             messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['locationCreate'])
 #             return render(request, 'geolocation_form.html')
 #     except Exception as e:
-#         return messages.warning(request, successAndErrorMessages()['internalError']) 
+#         return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError']) 
 
 # # list Geofencing data
 # def listgeofenceData(request):
@@ -587,7 +589,7 @@ def assignedVehicleToUser(request,id):
 #             geofencedata = list(Geofence.objects.values())
 #         return render(request, 'list_geofence_data.html',{ 'geofencedata': geofencedata })
 #     except Exception as e:
-#         return messages.warning(request, successAndErrorMessages()['internalError'])
+#         return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError'])
    
 #Add driver For Vechicle Module.
 def addDriver(request):
@@ -607,11 +609,11 @@ def addDriver(request):
                 license_proof=license_proof,is_active=is_active
             )
             newdata.save()
-            messages.success(request, successAndErrorMessages()['addDriver'])
+            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['addDriver']) 
         return render(request, 'adddriver.html')
 
     except Exception as e:
-        return messages.warning(request, successAndErrorMessages()['internalError'])
+        return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError']) 
 
 #This function used for listing driver. 
 def listAddedDriver(request):
@@ -624,7 +626,7 @@ def listAddedDriver(request):
                 }
         return render(request, 'list_drivers.html',context)
     except Exception as e:
-        return messages.warning(request, successAndErrorMessages()['internalError'])
+        return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError']) 
 
 # This function will Update Driver
 def updateDriver(request,id):
@@ -656,13 +658,13 @@ def updateDriver(request,id):
             pi[0]["is_active"]=pi[0]["is_active"]
             pi[0]["pancard_proof"]=b64encode(pi[0]['pancard_proof']).decode("utf-8")
             pi[0]["license_proof"]=b64encode(pi[0]['license_proof']).decode("utf-8")
-            messages.info(request, successAndErrorMessages()['updateDriver'])
+            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['updateDriver']) 
             return render(request,'update_driver.html',{ 'form': pi })
 
         return render(request,'update_driver.html',{ 'form': pi })
 
     except Exception as error:
-        return messages.warning(request, successAndErrorMessages()['internalError'])
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
 #Delete records of driver.
 def deleteDriver(request, id):
@@ -670,12 +672,12 @@ def deleteDriver(request, id):
         pi = Crmuser.objects.get(pk=id)
         if request.method == 'POST':
             pi.delete()
-            messages.info(request, successAndErrorMessages()['removeDriver'])
+            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['removeDriver']) 
             return redirect('getdrivers')
         context = {}
         return render(request, "update_driver.html", context)
     except Exception as e:
-        return messages.warning(request, successAndErrorMessages()['internalError'])
+        return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError'])
 
 
 #Generate CSV field vise.
@@ -683,7 +685,7 @@ def filedForCSV(request):
     if request.method == "GET":
         files = list(Vehicle.objects.values())
         data= request.POST.getlist('checkedvalue')
-        messages.info(request, successAndErrorMessages()['csvGenerate'])       
+        messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['csvGenerate']) 
     return render(request, 'generate_csv.html')
 
 #Exporting CSV.
@@ -721,7 +723,7 @@ def exportCSV(request):
         return response
 
     except Exception as error:
-        return messages.warning(request, successAndErrorMessages()['internalError']) 
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError']) 
 
 def settings(request):
     return render(request, 'settings.html')

@@ -15,17 +15,21 @@
     <title>Document</title>
 </head>
 <body>
-    <h2>Add User</h2>
+    <div class="col-md-5">
 
-    <form action="" method="POST">
-        {% csrf_token %}
-		{% for fm in form %}
-		    {{fm.label_tag}} {{fm}} {{fm.errors|striptags}} <br><br>
-		{% endfor %}
-		<input type="Submit" name="Submit" class="btn btn-success" value="Submit">
+        <h4 class="submit-button">Add User</h4>
+        <hr>
 
-    </form>
-    <a href="{% url 'user_management:getdata' %}" class="btn btn-info">Back</a>
+        <form action="" method="POST">
+            {% csrf_token %}
+            {% for fm in form %}
+                {{fm.label_tag}} {{fm}} {{fm.errors|striptags}} <br><br>
+            {% endfor %}
+
+            <input type="Submit" name="Submit" class="btn btn-success btn-sm" value="Submit">
+            <a href="{% url 'user_management:getdata' %}" class="btn btn-info btn-sm">Back</a>
+        </form>
+    </div>
 </body>
 </html>
 

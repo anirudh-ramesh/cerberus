@@ -9,8 +9,10 @@
 
 <div class="row">
 	<div class="col-md-5">
-		<h5>Add Vehicle Details</h5>
-		<hr>
+		<div class="battery">
+			<h5 class="battery-header">Add Vehicle Details</h5>
+			<hr>
+		</div>
 		<div class="card_Bettery card-body">
 			<a class="btn btn-primary  btn-sm btn-block" href="">Vehicle Details</a>
 			<div class="card_subb card-body">
@@ -95,15 +97,17 @@
 						<div class="input-group mb-2">
 							<div class="input-group-append">
 								<label class="label_formm">Insurance End Date</label>
-								<input type='date' name='insurance_end_date'  ss="input-register-text" required>
+								<input type='date' name='insurance_end_date'  class="input-register-text" required>
 							</div>
 						</div>
 
-						<div class="d-flex justify-content-center mt-3">
-				 			<input class="btn btn-success" type="submit" value="Submit">
-				   		</div>
-						<div class="d-flex justify-content-center mt-3">
-						    <a href="{% url 'getvehicle' %}" class="btn btn-info btn-sm">back</a>
+						<div class="submit-button">
+							<div class="submit-div">
+								<input class="btn btn-success btn-sm" type="submit" value="Submit">
+							  </div>
+						   <div class="back-div">
+							   <a href="{% url 'getvehicle' %}" class="btn btn-info btn-sm">back</a>
+						   </div>
 						</div>
 
 					</form>

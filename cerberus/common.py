@@ -62,5 +62,6 @@ def successAndErrorMessages():
         "deviceAddToBattery": "Device Added To Battery Successfully.",
         "deviceAlreadyAdded": "This IOT-Device Already Added.",
         "removeDeviceFromBattery": "Device Remove From Battery Successfully.",
+        "dataNotFound": "Data Not Found"
     }
     return response
