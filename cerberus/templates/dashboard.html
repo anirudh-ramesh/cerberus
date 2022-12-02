@@ -1,132 +1,155 @@
-
 {% extends 'main.html' %}
-
 {% block content %}
-   <head>
-      <title>Home</title>
-      <meta charset="utf-8">
-      <meta name="viewport" content="initial-scale=1.0, user-scalable=0, width=device-width, height=device-height, target-densityDpi=device-dpi"/>
-      <link rel="stylesheet" href="assets/css/bs/dist/css/bootstrap.css" />
-      <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/jquery-sparkline@2.4.0/jquery.sparkline.min.js" integrity="sha256-TKXwAzwvBOzpxaMZKl64fccBhJvyg3wrI8/joXU4VA4=" crossorigin="anonymous"></script>
-   </head>
-   <body class="body">
-      <div id="main-wrapper">
-         <div class="page-wrapper" style="display: block;">
-            <!-- ============================================================== -->
-            <!-- Bread crumb and right sidebar toggle -->
-            <!-- ============================================================== -->
-            <div class="page-titles">
-               <div class="col-lg-4 justify-content-start">
-                  <h3 class="text-themecolor mb-0">Dashboard</h3>
+<head>
+   <title>Home</title>
+   <meta charset="utf-8">
+   <meta name="viewport" content="initial-scale=1.0, user-scalable=0, width=device-width, height=device-height, target-densityDpi=device-dpi"/>
+   <link rel="stylesheet" href="assets/css/bs/dist/css/bootstrap.css" />
+   <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/jquery-sparkline@2.4.0/jquery.sparkline.min.js" integrity="sha256-TKXwAzwvBOzpxaMZKl64fccBhJvyg3wrI8/joXU4VA4=" crossorigin="anonymous"></script>
+</head>
+<body class="body">
+   <div id="main-wrapper">
+   <div class="page-wrapper" style="display: block;">
+      <!-- ============================================================== -->
+      <!-- Bread crumb and right sidebar toggle -->
+      <!-- ============================================================== -->
+      <div class="page-titles">
+         <div class="col-lg-4 justify-content-start">
+            <h3 class="text-themecolor mb-0">Dashboard</h3>
+         </div>
+      </div>
+      <div class="container-fluid">
+         <!-- Row -->
+         <div class="row">
+            <div class="col-lg-4 col-md-6 mb-3">
+               <div class="card card-list">
+                  <div class="card-body bg-white" >
+                     <h5>Extracting real time insights from Energy Assets.</h5>
+                     <div class="pro_gress">
+                        <h3 onclick="location.href = '/getdata'" class="text-black">Battery Packs
+                        </h3>
+                     </div>
+                  </div>
+                  <div class="center-img">
+                     <img class="card-img" src="../static/images/Battery Packs.svg" alt="Card image cap">
+                  </div>
                </div>
             </div>
-            <div class="container-fluid">
-               <!-- Row -->
-               <div class="row">
-                  <div class="col-lg-4 col-md-6 mb-3">
-                     <div class="card h-100">
-                        <div class="card-body" >
-                           <h5>Extracting real time insights from Energy Assets.</h5>
-                           <div class="pro_gress">
-                              <h3 onclick="location.href = '/getdata'" class="text-black">Battery Packs
-                              </h3>
-                           </div>
-                        </div>
-                        <img class="card-img-top" src="../static/images/Battery Packs.svg" alt="Card image cap">
+            <div class="col-lg-4 col-md-6 mb-3">
+               <div class="card card-list">
+                  <div class="card-body bg-white" >
+                     <h5>Extracting real time insights from Energy Assets.</h5>
+                     <div class="pro_gress">
+                        <h3 onclick="location.href = '/listswapstation'" class="text-black">Swaping Station</h3>
                      </div>
                   </div>
-                  <div class="col-lg-4 col-md-6 mb-3">
-                     <div class="card h-100">
-                        <div class="card-body" >
-                           <h5>Extracting real time insights from Energy Assets.</h5>
-                           <div class="pro_gress">
-                              <h3 onclick="location.href = '/listswapstation'" class="text-black">Swaping Station</h3>
-                           </div>
-                        </div>
-                        <img class="card-img-top" src="../static/images/Swapping Station.svg" alt="Card image cap">
+                  <div class="center-img">
+                     <img class="card-img" src="../static/images/Swapping Station.svg" alt="Card image cap">
+                  </div>
+               </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-3">
+               <div class="card card-list">
+                  <div class="card-body bg-white" >
+                     <h5>
+                     Extracting real time insights from Energy Assets.</h6>
+                     <div class="pro_gress">
+                        <h3 onclick="location.href = '/geofence'" class="text-black">Geography</h3>
                      </div>
                   </div>
-                  <div class="col-lg-4 col-md-6 mb-3">
-                     <div class="card h-100">
-                        <div class="card-body" >
-                           <h5>Extracting real time insights from Energy Assets.</h6>
-                           <div class="pro_gress">
-                              <h3 onclick="location.href = '/geofence'" class="text-black">Geography</h3>
-                           </div>
-                        </div>
-                        <img class="card-img-top" src="../static/images/Geography.svg" alt="Card image cap">
+                  <div class="center-img">
+                     <img class="card-img" src="../static/images/Geography.svg" alt="Card image cap">
+                  </div>
+               </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-3">
+               <div class="card card-list">
+                  <div class="card-body bg-white" >
+                     <h5>
+                     Extracting real time and actionable insights from Energy Assets.</h6>
+                     <div class="pro_gress">
+                        <h3 onclick="location.href = '/getuser'" class="text-black">Users</h3>
                      </div>
                   </div>
-                  <div class="col-lg-4 col-md-6 mb-3">
-                     <div class="card h-100">
-                        <div class="card-body" >
-                           <h5>Extracting real time and actionable insights from Energy Assets.</h6>
-                           <div class="pro_gress">
-                              <h3 onclick="location.href = '/getuser'" class="text-black">Users</h3>
-                           </div>
-                        </div>
-                        <img class="card-img-top" src="../static/images/users.svg" alt="Card image cap">
+                  <div class="center-img">
+                     <img class="card-img" src="../static/images/users.svg" alt="Card image cap">
+                  </div>
+               
+            </div></div>
+            <div class="col-lg-4 col-md-6 mb-3">
+               <div class="card card-list">
+                  <div class="card-body bg-white" >
+                     <h5>
+                     Extracting real time and actionable insights from Energy Assets.</h6>
+                     <div class="pro_gress">
+                        <h3 onclick="location.href = '/getvehicle'" class="text-black">Vehicles</h3>
                      </div>
                   </div>
-                  <div class="col-lg-4 col-md-6 mb-3">
-                     <div class="card h-100">
-                        <div class="card-body" >
-                           <h5>Extracting real time and actionable insights from Energy Assets.</h6>
-                           <div class="pro_gress">
-                              <h3 onclick="location.href = '/getvehicle'" class="text-black">Vehicles</h3>
-                           </div>
-                        </div>
-                        <img class="card-img-top" src="../static/images/vehicles.svg" alt="Card image cap">
+                  <div class="center-img">
+                     <img class="card-img" src="../static/images/vehicles.svg" alt="Card image cap">
+                  </div>
+               </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-3">
+               <div class="card card-list">
+                  <div class="card-body bg-white" >
+                     <h5>
+                     Extracting real time and actionable insights</h6>
+                     <div class="pro_gress">
+                        <h3 class="text-black">VCU</h3>
                      </div>
                   </div>
-                  <div class="col-lg-4 col-md-6 mb-3">
-                     <div class="card h-100">
-                        <div class="card-body" >
-                           <h5>Extracting real time and actionable insights</h6>
-                           <div class="pro_gress">
-                              <h3 class="text-black">VCU</h3>
-                           </div>
+                     <div class="center-img">
+                        <img class="card-img" src="../static/images/vcu.svg" alt="Card image cap">
+                     
+                  </div>
+               </div>
+            </div>
+               <div class="col-lg-4 col-md-6 mb-3">
+                  <div class="card card-list">
+                     <div class="card-body bg-white" >
+                        <h5>
+                        Extracting real time and actionable insights from Energy Assets.</h6>
+                        <div class="pro_gress">
+                           <h3 class="text-black">IOT Devices</h3>
                         </div>
-                        <img class="card-img-top" src="../static/images/vcu.svg" alt="Card image cap">
+                     </div>
+                     <div class="center-img">
+                        <img class="card-img" src="../static/images/iot devices.svg" alt="Card image cap">
                      </div>
                   </div>
-                  <div class="col-lg-4 col-md-6 mb-3">
-                     <div class="card h-100">
-                        <div class="card-body" >
-                           <h5>Extracting real time and actionable insights from Energy Assets.</h6>
-                           <div class="pro_gress">
-                              <h3 class="text-black">IOT Devices</h3>
-                           </div>
+               </div>
+               <div class="col-lg-4 col-md-6 mb-3">
+                  <div class="card card-list">
+                     <div class="card-body bg-white" >
+                        <h5>
+                        Extracting real time and actionable insights from Energy Assets.</h6>
+                        <div class="pro_gress">
+                           <h3 onclick="location.href = '/getcsv'" class="text-black">Reports</h3>
                         </div>
-                        <img class="card-img-top" src="../static/images/iot devices.svg" alt="Card image cap">
+                     </div>
+                     <div class="center-img">
+                        <img class="card-img" src="../static/images/reports.svg" alt="Card image cap">
                      </div>
                   </div>
-                  <div class="col-lg-4 col-md-6 mb-3">
-                     <div class="card h-100">
-                        <div class="card-body" >
-                           <h5>Extracting real time and actionable insights from Energy Assets.</h6>
-                           <div class="pro_gress">
-                              <h3 onclick="location.href = '/getcsv'" class="text-black">Reports</h3>
-                           </div>
+               </div>
+               <div class="col-lg-4 col-md-6 mb-3">
+                  <div class="card card-list">
+                     <div class="card-body bg-white" >
+                        <h5>
+                        Extracting real time insights from Energy Assets.</h6>
+                        <div class="pro_gress">
+                           <h3 class="text-black">Settings</h3>
                         </div>
-                        <img class="card-img-top" src="../static/images/reports.svg" alt="Card image cap">
                      </div>
-                  </div>
-                  <div class="col-lg-4 col-md-6 mb-3">
-                     <div class="card h-100">
-                        <div class="card-body" >
-                           <h5>Extracting real time insights from Energy Assets.</h6>
-                           <div class="pro_gress">
-                              <h3 class="text-black">Settings</h3>
-                           </div>
-                        </div>
-                        <img class="card-img-top" src="../static/images/settings.svg" alt="Card image cap">
+                     <div class="center-img">
+                        <img class="card-img" src="../static/images/settings.svg" alt="Card image cap">
                      </div>
                   </div>
                </div>
             </div>
          </div>
       </div>
-
-{% endblock %}
+   </div>
+   {% endblock %}

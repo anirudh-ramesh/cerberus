@@ -41,7 +41,7 @@
                             </td>
                             <td>{{fm.is_active}}</td>
                             <td>
-
+                                <a href="{% url 'driver' fm.email %}" class="btn btn-warning btn-sm">Add-Data</a>
                                 <a href="{% url 'updatedriver' fm.email %}" class="btn btn-warning btn-sm">Edit</a>
                                 
                                 <form action="{% url 'deletedriver' fm.email %}" method="POST" class="d-inline">

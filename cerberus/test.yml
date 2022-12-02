@@ -1,0 +1,186 @@
+version: "3.9"
+
+networks:
+
+    khyber:
+
+        external: false
+
+        driver: bridge
+
+volumes:
+
+    timescaledb:
+
+        external: false
+
+services:
+
+    git:
+        image: git_sample_app_docker_compose:1.0
+        container_name: git_sample_app_docker_compose
+        build: .
+        command: git -C /build clone https://github.com/anirudh-ramesh/cerberus.git
+        - ./build:/build
+
+    # timescaledb:
+
+    #     logging:
+
+    #         driver: local
+
+    #         options:
+    #             max-size: "20m"
+    #             max-file: "5"
+    #             compress: "true"
+
+    #     restart: unless-stopped
+
+    #     networks:
+    #         - khyber
+
+    #     # ports:
+    #         # - "${POSTGRESQL_PORTNUMBER:-5432}:5432"
+
+    #     container_name: timescaledb
+
+    #     volumes:
+    #         - "timescaledb:${PGDATA}"
+
+    #     build:
+    #         context: ./timescaledb
+    #         args:
+    #             - TIMESCALEDB_VERSION=${TIMESCALEDB_VERSION}
+
+    #     # image: timescale/timescaledb:${TIMESCALEDB_VERSION}
+    #     image: irasus/timescaledb:${IRASUS_TIMESCALEDB_VERSION}
+
+    #     environment:
+    #         - POSTGRES_DB=${DATABASE_NAME}
+    #         - POSTGRES_USER=${USER_NAME}
+    #         - POSTGRES_PASSWORD=${PASSWORD}
+    #         - TZ=${TZ}
+    #         - PGDATA=${PGDATA}
+    #         - POSTGRES_REPLICA_USER_NAME=${POSTGRES_REPLICA_USER_NAME}
+    #         - POSTGRES_REPLICA_PASSWORD=${POSTGRES_REPLICA_PASSWORD}
+    #         - POSTGRES_REPLICA_DESTINATION=timescaledb_1
+    #         - POSTGRES_REPLICA_NAME=replica1
+    #         - POSTGRES_REPLICA_COMMIT_SYNCHRONOUS=off
+    #         - POSTGRESQL_PORTNUMBER=${POSTGRESQL_PORTNUMBER}
+    #         - TS_TUNE_MAX_CONNS=200
+    #         - TIMESCALEDB_TELEMETRY=off
+
+    #     profiles: ["all"]
+
+    django:
+
+        logging:
+
+            driver: local
+
+            options:
+                max-size: "20m"
+                max-file: "5"
+                compress: "true"
+
+        restart: unless-stopped
+
+        networks:
+            - khyber
+
+        container_name: django
+
+        volumes:
+            - .:/django
+
+        build:
+            context: ./django
+
+        command: "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+
+        ports:
+            - 8000:8000
+
+        image: irasus/django:${IRASUS_DJANGO_VERSION}
+
+        environment:    
+            - TZ=${TZ}
+
+
+
+    # nginx:
+
+    #     logging:
+
+    #         driver: local
+
+    #         options:
+    #             max-size: "20m"
+    #             max-file: "5"
+    #             compress: "true"
+
+    #     restart: on-failure
+
+    #     networks:
+    #         - khyber
+
+    #     ports:
+    #         - "${HTTP_PORTNUMBER:-80}:80"
+
+    #     container_name: nginx
+
+    #     volumes:
+    #         - "./nginx/nginx.conf:/etc/nginx/nginx.conf"
+    #         - "./nginx/services:/etc/nginx/conf.d/"
+
+    #     # build:
+    #     #     context: ./nginx
+    #     #     args:
+    #     #         - NGINX_VERSION=${NGINX_VERSION}
+
+    #     image: nginx:${NGINX_VERSION}
+    #     # image: irasus/nginx:${IRASUS_NGINX_VERSION}
+
+    #     # environment:
+    #         # - DOMAIN_NAME=${DOMAIN_NAME}
+    #         # - SUBDOMAIN_PREFIX=${SUBDOMAIN_PREFIX}
+    #         # - SUBDOMAIN_SUFFIX=${SUBDOMAIN_SUFFIX}
+
+    #     depends_on:
+    #         - django
+    #         - cloudbeaver
+
+    # cloudbeaver:
+
+    #     logging:
+
+    #         driver: local
+
+    #         options:
+    #             max-size: "20m"
+    #             max-file: "5"
+    #             compress: "true"
+
+    #     restart: unless-stopped
+
+    #     networks:
+    #         - khyber
+
+    #     # ports:
+    #         # - "8978:8978"
+
+    #     container_name: cloudbeaver
+
+    #     volumes:
+    #         - "./cloudbeaver/cloudbeaver.conf:/opt/cloudbeaver/workspace/.data/.cloudbeaver.runtime.conf"
+    #         - "./cloudbeaver:/opt/cloudbeaver/workspace/GlobalConfiguration/.dbeaver"
+
+    #     image: dbeaver/cloudbeaver:${CLOUDBEAVER_VERSION}
+
+    #     environment:
+    #         - CB_LOCAL_HOST_ADDR=0.0.0.0
+
+    #     depends_on:
+    #         - timescaledb
+
+    #     profiles: ["all"]

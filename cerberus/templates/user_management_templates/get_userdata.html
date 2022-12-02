@@ -6,6 +6,10 @@
 
 <div class="col-sm-8">
     <h4 class="text-center alert alert info">User Data</h4>
+    <div>
+      <a href="{% url 'user_management:demo' %}" class="btn btn-secondary">Add-User</a>
+      <a href="{% url 'home' %}" class="btn btn-info">Home</a>
+    </div>
     <form action="" method="GET">
         {% if user_data %}
                 <!-- {{fm.label_tag}} {{fm}} {{fm.errors|striptags}} <br><br> -->
@@ -44,16 +48,16 @@
                     </tbody>
                     </thead>
                   </table>
-                  <div style="margin-left: 5%;">
-                    <a href="{% url 'home' %}" class="btn btn-info">Back</a>
-                  </div>
+                  
             
         {% else %}
             <h4 class="text-center alert alert warning">No Records Found</h4>
         {% endif %}
 
-        
+                  
     </form>
+
+    
     
 </div>
 

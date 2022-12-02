@@ -4,23 +4,30 @@
 {% block content %}
 
 {% include 'status.html' %}
-
-
 <br>
-
 <div class="row">
 	<div class="col-md-5">
 		<hr>
 		<div class="card card-body">
 			<a class="btn btn-primary  btn-sm btn-block" href="">Add Organisation Details</a>
 			<div class="card card-body">
+
 				<form action="" method="POST">
 					{% csrf_token %}
-					{% for fm in form %}
-						{{fm.label_tag}} {{fm}} {{fm.errors|striptags}} <br><br>
+					
+					{% if messages %}
+							{% for message in messages %}
+							<div class = "alert alert-{{message.tags}}">{{message}}</div>
+							{% endfor %}
+					 	{% endif %}
+					<input type="Submit" name="Submit" class="btn btn-success" value="Submit" >
+					<!-- {% if messages %}
+					{% for message in messages %}
+						<h5 class="errors">{{ message }}</h5>
 					{% endfor %}
-					<input type="Submit" name="Submit" class="btn btn-success" value="Submit">
+					{% endif %} -->
 				</form>
+				<a href="{% url 'user_management:addprofile' %}" class="btn btn-dark btn-sm">Add Organisation Profile</a>
 			</div>
 		</div>
 	</div>

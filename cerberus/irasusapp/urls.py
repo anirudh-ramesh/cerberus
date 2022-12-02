@@ -14,7 +14,7 @@ urlpatterns= [
 
     path('dashboard/', views.dashboard, name="home"),
     path('dashboarddata/', views.batteryDetails, name="homed"),
-    path('signin', views.signIn, name='signin'),
+    # path('signin', views.signIn, name='signin'),
     path(r'getdata', views.getBatteryDetails, name='data'),
     path('update/<int:id>/', views.updateBatteryDetails, name="updatedata"),
     path('delete/<int:id>/', views.deleteRecord, name="deletedata"),
@@ -46,6 +46,17 @@ urlpatterns= [
     path(r'export_to_csv', views.exportCSV, name="exportcsv"),
 
     path('open', views.swapSatationDoors, name="swapdoor"),
-   
 
+    path('adddevice', views.addIotDevice, name="adddevice"),
+
+    path('listdevice', views.listIotDevice, name="listdevice"),
+    path('updatedevice/<int:id>/', views.updateIOTDevice, name="updatedevice"),
+    path('delettedevice/<int:id>/', views.deleteIOTDeviceRecord, name="deletetedevice"),
+
+    path('settings', views.settings, name="settings"),
+
+
+    
+    
+    
 ]

@@ -6,9 +6,8 @@
    
    <div class="profile-img">
    <img src="../static/images/profile.png" alt="user" class="w-50">
-   </div> 
-    
-
+   </div>
+   <h6 style="font-size: 10px;">{{email}}</h6>
     <ul id="sidebarnav" class="in">
 
        <li class="sidebar-item">
@@ -21,11 +20,11 @@
           <a  href="{% url 'data' %}" class="sidebar-link" aria-expanded="false"><img src="../static/icons/Battery.svg"></img></a>
        </li>
        <li class="sidebar-item">
-         <a class="sidebar-link" aria-expanded="false"><img src="../static/icons/Swapping station.svg"></img></a>
+         <a class="sidebar-link" href="{% url 'user_management:listswap' %}" aria-expanded="false"><img src="../static/icons/Swapping station.svg"></img></a>
           
        </li>
        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'geofence' %}" aria-expanded="false"><img src="../static/icons/Geography.svg"></img></a>
+          <a class="sidebar-link" href="" aria-expanded="false"><img src="../static/icons/Geography.svg"></img></a>
        </li>
        
        <li class="sidebar-item">
@@ -33,19 +32,19 @@
       </li>
     
       <li class="sidebar-item">
-         <a class="sidebar-link" href="app-todo.html" aria-expanded="false"><img src="../static/icons/VCU.svg"></img></a>
+         <a class="sidebar-link" href="{% url 'user_management:listorg' %}" aria-expanded="false"><img src="../static/icons/VCU.svg"></img></a>
       </li>
       <li class="sidebar-item">
-         <a class="sidebar-link" href="app-todo.html" aria-expanded="false"><img src="../static/icons/IOT.svg"></img></a>
+         <a class="sidebar-link" href="{% url 'listdevice' %}" aria-expanded="false"><img src="../static/icons/IOT.svg"></img></a>
       </li>
       <li class="sidebar-item">
          <a class="sidebar-link" href="{% url 'csv' %}" aria-expanded="false"><img src="../static/icons/reports.svg"></img></a>
       </li>
       <li class="sidebar-item">
-         <a class="sidebar-link" href="app-todo.html" aria-expanded="false"><img src="../static/icons/settings.svg"></img></a>
+         <a class="sidebar-link" href="{% url 'settings' %}" aria-expanded="false"><img src="../static/icons/settings.svg"></img></a>
       </li>
       <li class="sidebar-item">
-         <a class="sidebar-link" href="app-todo.html" aria-expanded="false"><img src="../static/icons/complaint.svg"></img></a>
+         <a class="sidebar-link" href="http://osticket.igt-ev.com:8080/" aria-expanded="false"><img src="../static/icons/complaint.svg"></img></a>
       </li>
    
     </ul>

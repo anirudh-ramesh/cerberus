@@ -4,7 +4,7 @@ import base64
 def connect():
     conn=db.connect(host="localhost",user="postgres",password="1234",database='battery_management')
     return conn
-
+# psql -h db -p 5432 -U myprojectuser -d postgres
 #LIST ORGANISATION USER  
 def sql_query(id):
     conn=connect()

@@ -9,7 +9,7 @@ from django.core.exceptions import ValidationError
 from user_management.models import Organisation
 
 class CrmUserManager(BaseUserManager):
-    def create_user(self, email,username,contact, password=None, password_conformation=None):
+    def create_user(self, email,password=None, password_conformation=None):
         """
         Creates and saves a superuser with the given email,username,contact
         and password.
@@ -19,8 +19,6 @@ class CrmUserManager(BaseUserManager):
 
         user = self.model(
             email=self.normalize_email(email),
-            username=username,
-            contact=contact,
             password=password,
             password_conformation=password_conformation
         )
@@ -37,8 +35,6 @@ class CrmUserManager(BaseUserManager):
         user = self.create_user(
             email,
             password=password,
-            username=username,
-            contact=contact,
             password_conformation=password_conformation
             
         )
@@ -128,16 +124,14 @@ CHOICE_TYPE = (
     ('2', 'Exit')
 )
 
-#GEOFENCE-TABLE
+# GEOFENCE-TABLE
 class Geofence(models.Model):
     geofence = models.PolygonField(srid=4326, null=True, blank=True)
     geotype = models.CharField(blank=True, max_length=100,choices=CHOICE_TYPE, null=True)
     location = models.PointField(srid=4326, null=True, blank=True)
     description = models.CharField(default='', max_length=200)
-    enter_latitude = models.CharField(default='', max_length=200)
-    enter_longitude = models.CharField(default='', max_length=200)
-    exit_latitude = models.CharField(default='', max_length=200, null=True)
-    exit_longitude = models.CharField(default='', max_length=200, null=True)
+    enter_latitude = models.CharField(default='', max_length=5000, null=True, blank=True)
+    enter_longitude = models.CharField(default='', max_length=200, null=True, blank=True)
     pos_address = models.CharField(default='', max_length=200)
     geoname = models.CharField(default='', max_length=200)
 
@@ -232,3 +226,12 @@ class BatteryDetail(models.Model):
 
     def __str__(self):
         return str(self.model_name)
+
+class IotDevices(models.Model):
+    imei_number = models.CharField(max_length=225, blank=True, primary_key=True)
+    hardware_version = models.CharField(max_length=225, blank=True, null=True)
+    firmware_version = models.CharField(max_length=225, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.imei_number)
+

@@ -40,11 +40,12 @@
                            <div class="row">
                            <form method="POST" action="">
                               {% csrf_token %}
-                              {% if form.non_field_errors %}
-                              {% for error in form.non_field_errors %}
-                              {{error}}
-                              {% endfor %}
-                              {% endif %}
+
+                                 {% if messages %}
+                                    {% for message in messages %}
+                                       <div class = "alert alert-{{message.tags}}">{{message}}</div>
+                                    {% endfor %}
+                                 {% endif %}                    
                               <div class="login_form  col-12">
                                 <div class="iconlink col-5 mb-3 ">
                                  <a href="#" class="btn-face m-b-20" role="button" data-bs-toggle="button"><img src="../static/icons/Google.svg"> <span class="ms-2">Login with Google</span></a>
@@ -55,7 +56,7 @@
                                     <a href="#" class="btn-face m-b-20" role="button" data-bs-toggle="button"><img src="../static/icons/Microsoft.svg"> <span class="ms-2">Login with Microsoft</span></a>
                                  </div>
                               </div>
-                              <div class="login_form col-12 text-muted "> <p> ———— or ————</p></div>                             
+                              <div class="logiform-floatingn_form col-12 text-muted "> <p> ———— or ————</p></div>                             
                               <div class="col-12 mb-4">
                                  <div class="form-floating">
                                     <input type="text" class="form-control" name="email" id="floating-label1" placeholder="Email">
