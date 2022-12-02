@@ -444,7 +444,7 @@ a {
     padding: 14px 12px;
 }
 #main-wrapper[data-layout=vertical][data-sidebartype=mini-sidebar] .page-wrapper {
-    /* margin-left: 65px; */
+    margin-left: 65px;
 }
 
 }
@@ -607,9 +607,9 @@ p {
     margin-right: 10px;
     width: 50%;
 }
-.input-group  {
+/* .input-group  {
     width: 120%;
-}
+} */
 .input-register-text{
     width: 50%;
     margin-left: 0%;
@@ -663,4 +663,91 @@ p {
 .login{
     margin-right: 15px;
     width: 25%;
+}
+
+.csv-report{
+    display: flex;
+    flex-direction: column;
+    margin: 5vw 5vw 5vh 5vw;
+    width: 100%
+}
+
+.submit-button{
+    display: flex;
+    justify-content: center;
+    padding:1vw;
+}
+
+.submit-div{
+    display: flex;
+    margin-right: 3%
+}
+.back-div{
+    margin-left: 3%
+}
+
+.battery-header{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.card_Bettery{
+    width: 100%;
+}
+
+.update-swap-station-div{
+    display: flex;
+    justify-content: center;
+    position: relative;
+    left: 30%
+}
+
+.input-group  {
+    width: 120%;
+}
+
+@media (min-width: 768px){
+    .col-md-5{
+        max-width: 100% !important;
+        flex: 0% !important;
+    }
+}
+
+label{
+    width: 35%;
+} 
+
+.justify-content-center {
+    justify-content: center !important;
+}
+
+.list-group-item {
+    background-color: var(--bs-list-group-bg);
+    border: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color);
+    color: var(--bs-list-group-color);
+    display: block;
+    padding: var(--bs-list-group-item-padding-y) var(--bs-list-group-item-padding-x);
+    position: relative;
+    border-radius: 0px;
+}
+
+.list-group-item:hover {
+    text-decoration: none;
+    background-color: #052F4F ;
+    color: #fff;
+    box-shadow: rgb(58 53 65 / 56%) 0px 6px 18px -8px;
+}
+
+.list-group-item+.list-group-item {
+    border-top-width: 0;
+}
+
+.right-panel-wrap{
+    display: flex;
+    width: 100%;
+    overflow-y: auto;
+    height: calc(100vh - 130px);
+    padding: .5rem;
+    background-color: #fff;
 }
