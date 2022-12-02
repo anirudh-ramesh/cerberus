@@ -5,60 +5,58 @@
 <!-- {% include 'status.html' %} -->
 
 <div class="">
-    <h4 class="text-center alert alert info">User Data</h4>
-    <div>
-      <a href="{% url 'user_management:demo' %}" class="btn btn-secondary btn-sm">Add-User</a>
-      <a href="{% url 'home' %}" class="btn btn-info btn-sm">Home</a>
-    </div>
-    <form action="" method="GET">
-        {% if user_data %}
-                <!-- {{fm.label_tag}} {{fm}} {{fm.errors|striptags}} <br><br> -->
-                <table class="table table-hover">
-                    <thead>
-                      <tr>
-                        <th scope="col">Username</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Contact</th>
-                        <!-- <th scope="col">Adhar-Proof</th> -->
-                        <th scope="col">Assigned-Vehicle</th>
-                      </tr>
-                    <tbody>
-                    {% for fm in user_data %}
-                      <tr>
-                        <td>{{fm.username}}</td>
-                        <td>{{fm.email}}</td>
-                        <td>{{fm.contact}}</td>
-                        <!-- <td>{{fmadhar_proof}}</td> -->
-                        <!-- <td><img src="{{fm.adhar_proof.url}}" alt="" class="card-img-top"></td> -->
-                        <td>
-                            <a href="{% url 'user_management:update' fm.email %}" class="btn btn-secondary btn-sm">Edit</a>
-                            <form action="{% url 'user_management:delete' fm.email %}" method="POST" class="d-inline">
-                                {% csrf_token %}
-                              <input type="submit" class="btn btn-danger btn-sm" value="Delete">
-                            </form>
+  <h4 class="text-center alert alert info">User Data</h4>
+  <div>
+    <a href="{% url 'user_management:demo' %}" class="btn btn-secondary btn-sm">Add-User</a>
+    <a href="{% url 'home' %}" class="btn btn-info btn-sm">Home</a>
+  </div>
+  <form action="" method="GET">
+    {% if user_data %}
+    <!-- {{fm.label_tag}} {{fm}} {{fm.errors|striptags}} <br><br> -->
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Username</th>
+          <th scope="col">Email</th>
+          <th scope="col">Contact</th>
+          <!-- <th scope="col">Adhar-Proof</th> -->
+          <!-- <th scope="col">Assigned-Vehicle</th> -->
+          <th scope="col">Action</th>
 
-                            <a href="{% url 'getvehicle' %}?email={{fm.email}}" class="btn btn-secondary btn-sm">Assigned Vehicle</a>
+        </tr>
+      <tbody>
+        {% for fm in user_data %}
+        <tr>
+          <td>{{fm.username}}</td>
+          <td>{{fm.email}}</td>
+          <td>{{fm.contact}}</td>
+          <!-- <td>{{fmadhar_proof}}</td> -->
+          <!-- <td><img src="{{fm.adhar_proof.url}}" alt="" class="card-img-top"></td> -->
+          <td>
+            <a href="{% url 'user_management:update' fm.email %}" class="btn btn-secondary btn-sm">Edit</a>
+          </td>
+          <td>
+            <a href="{% url 'user_management:delete' fm.email %}" class="btn btn-danger btn-sm">Delete</a>
+          </td>
 
-                            <a href="{% url 'uservehicle' fm.email %}" class="btn btn-secondary btn-sm">List Vehicle</a>
-                          </td>
+          <td>
+            <a href="{% url 'getvehicle' %}?email={{fm.email}}" class="btn btn-secondary btn-sm">Assigned Vehicle</a>
+          </td>
+          <td>
+            <a href="{% url 'uservehicle' fm.email %}" class="btn btn-secondary btn-sm">List Vehicle</a>
+          </td>
+        </tr>
 
-                      </tr>
-                      
-                      {% endfor %}
-                    </tbody>
-                    </thead>
-                  </table>
-                  
-            
-        {% else %}
-            <h4 class="text-center alert alert warning">No Records Found</h4>
-        {% endif %}
+        {% endfor %}
+      </tbody>
+      </thead>
+    </table>
+    {% else %}
+    <h4 class="text-center alert alert warning">No Records Found</h4>
+    {% endif %}
 
-                  
-    </form>
+  </form>
 
-    
-    
 </div>
 
 

@@ -56,8 +56,8 @@ def deleteUser(request, id):
             pi.delete()
             messages.add_message(request, messages.WARNING, successAndErrorMessages()['removeUser'])
             return redirect('user_management:getdata')
-        context = {} 
-        return render(request, "user_management_templates/get_userdata.html", context)
+        context = {'item': pi} 
+        return render(request, "delete.html", context)
     except Exception as e:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
