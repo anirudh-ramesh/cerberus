@@ -2,7 +2,7 @@ import psycopg2 as db
 import base64
 
 def connect():
-    conn=db.connect(host="localhost",user="postgres",password="1234",database='battery_management')
+    conn=db.connect(host="db",user="myprojectuser",password="password",database='postgres')
     return conn
     
 # psql -h db -p 5432 -U myprojectuser -d postgres
@@ -377,33 +377,36 @@ def images_display():
     return one_row
 
 def iotDevice(iotList):
-    conn = connect()
-    cursor = conn.cursor()
-    sql = f"SELECT irasusapp_batterydetail.model_name,irasusapp_batterydetail.battery_serial_num, irasusapp_batterydetail.iot_imei_number_id FROM irasusapp_batterydetail \
-        LEFT JOIN irasusapp_iotdevices ON irasusapp_iotdevices.imei_number = irasusapp_batterydetail.iot_imei_number_id \
-        "    
-    cursor.execute(sql)
-    myresult = cursor.fetchall()
-    new_data=[]
-    for iot in iotList:
-        res={}
-        continueForLoop=False
-        for data in myresult:
-            if(data[2] == iot["imei_number"]):
-                res["model_name"]=data[0]
-                res["battery_serial_num"]=data[1]
-                res["iot_imei_number_id"]=iot["imei_number"]
-                res["hardware_version"]=iot["hardware_version"]
-                res["firmware_version"]=iot["firmware_version"]
-                res["assign"] = True
-                new_data.append(res)
-                continueForLoop=True
+    try:
+        conn = connect()
+        cursor = conn.cursor()
+        sql = f"SELECT irasusapp_batterydetail.model_name,irasusapp_batterydetail.battery_serial_num, irasusapp_batterydetail.iot_imei_number_id FROM irasusapp_batterydetail \
+            LEFT JOIN irasusapp_iotdevices ON irasusapp_iotdevices.imei_number = irasusapp_batterydetail.iot_imei_number_id \
+        "
+        cursor.execute(sql)
+        myresult = cursor.fetchall()
+        new_data=[]
+        for iot in iotList:
+            res={}
+            continueForLoop=False
+            for data in myresult:
+                if(data[2] == iot["imei_number"]):
+                    res["model_name"]=data[0]
+                    res["battery_serial_num"]=data[1]
+                    res["iot_imei_number_id"]=iot["imei_number"]
+                    res["hardware_version"]=iot["hardware_version"]
+                    res["firmware_version"]=iot["firmware_version"]
+                    res["assign"] = True
+                    new_data.append(res)
+                    continueForLoop=True
+                    continue
+            if(continueForLoop):
                 continue
-        if(continueForLoop):
-            continue
-        res["iot_imei_number_id"]=iot["imei_number"]
-        res["hardware_version"]=iot["hardware_version"]
-        res["firmware_version"]=iot["firmware_version"]
-        res["assign"] = False
-        new_data.append(res)
-    return new_data
+            res["iot_imei_number_id"]=iot["imei_number"]
+            res["hardware_version"]=iot["hardware_version"]
+            res["firmware_version"]=iot["firmware_version"]
+            res["assign"] = False
+            new_data.append(res)
+        return new_data
+    except Exception as e:
+        print(e)    

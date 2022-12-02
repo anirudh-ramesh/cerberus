@@ -4,6 +4,7 @@ from .models import Swapstation
 from user_management.models import Organisation, OrganisationPermission, OrganisationProfile, Role
 from .forms import UserCreatedByAdmin, OrgasationForm
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from db_connect import sql_query,inset_into_db,getOrgUserInfo,orgProfileAddData,getOrgProfiles,organisationmultiplePermission,insertIntoOrgnisationPermission,removeUserFromOrg
 from common import successAndErrorMessages
@@ -53,9 +54,9 @@ def deleteUser(request, id):
         pi = Crmuser.objects.get(pk=id)
         if request.method == 'POST':
             pi.delete()
+            messages.warning(request, successAndErrorMessages()['removeUser'])
             return redirect('user_management:getdata')
-        context = {}
-        messages.warning(request, successAndErrorMessages()['removeUser'])
+        context = {} 
         return render(request, "user_management_templates/get_userdata.html", context)
     except Exception as e:
         return messages.warning(request, successAndErrorMessages()['internalError'])
@@ -113,10 +114,12 @@ def deleteOraganisation(request, id):
         pi = Organisation.objects.get(pk=id)
         if request.method == 'POST':
             pi.delete()
-        messages.warning(request, successAndErrorMessages()['removeOrganisation'])    
-        return render(request, "list_organisation_data.html", {})
+            messages.warning(request, successAndErrorMessages()['removeOrganisation'])
+            return redirect('user_management:listorg')
+        context = {} 
+        return render(request, "list_organisation_data.html", context)
     except Exception as e:
-        print("Error While deleting Record",e)
+        return messages.warning(request, successAndErrorMessages()['internalError'])
 
 #Adding organisation profile data.
 def addOrganisationProfile(request,id):
@@ -155,7 +158,7 @@ def listOrganisationProfile(request,id):
     return render(request, 'list_organisation_profile.html',contex)
 
 
-def deleteOraganisation(request, id):
+def deleteOraganisationProfile(request, id):
     try:
         pi = OrganisationProfile.objects.get(pk=id)
         if request.method == 'POST':

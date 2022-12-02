@@ -5,6 +5,8 @@
 {% include 'status.html' %}
 
 <div class="col-sm-8">
+    <a href="{% url 'homed' %}" class="btn btn-info btn-sm">Add-Battery-Data</a>
+    <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Home</a>
     <h4 class="text-center alert alert info">Battery Data</h4>
     <form action="" method="GET">
         {% if battery_data %}
@@ -77,11 +79,7 @@
             <h4 class="text-center alert alert warning">No Data Found</h4>
         {% endif %}
 
-        
-    </form>
-    <a href="{% url 'homed' %}" class="btn btn-info btn-sm">Add-Battery-Data</a>
-    <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Home</a>
-    
+    </form>    
 </div>
 
 

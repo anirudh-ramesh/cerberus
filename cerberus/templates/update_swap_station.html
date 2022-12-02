@@ -9,24 +9,24 @@
         {% endfor %}
         <h4 class="alert alert-info">Update Swap-Station Details</h4>
         {% if update_swap_station_data %}
-            <form method="POST" action="">
+            <form class="formt" method="POST" action="">
                 {% csrf_token %}
                 {% for fm in update_swap_station_data %}
                     <div class="input-group mb-2">
                         <div class="input-group-append">
-                            <label>Vehicle Model Name</label>
-                            <input type='text' name='swap_station_name' value="{{fm.swap_station_name}}" class="input-register-text" required>
+                            <label class="label_formmt">Vehicle Model Name</label>
+                            <input type='text' name='swap_station_name' value="{{fm.swap_station_name}}" class="input-register-texts" required>
                         </div>
                     </div>
                     <div class="input-group mb-2">
                         <div class="input-group-append">
-                            <label>Chasis Number</label>
-                            <input type='text' name='imei_number' value="{{fm.imei_number}}" class="input-register-text" required>
+                            <label class="label_formm">Chasis Number</label>
+                            <input type='text' name='imei_number' value="{{fm.imei_number}}" class="input-register-texts" required>
                         </div>
                     </div>
                     <div class="input-group mb-2">
                         <div class="input-group-append">
-                            <label>Number of Doors</label>
+                            <label class="label_formm">Number of Doors</label>
                             <select type="text" name="number_of_doors" required>
                                 {% if fm.number_of_doors == "1" %}
                                     <option value="1" selected>1</option>
@@ -55,8 +55,8 @@
                     </div>
                     <div class="input-group mb-2">
                         <div class="input-group-append">
-                            <label>Charge Specification</label>
-                            <select type="text" name="charge_specification" value="{{fm.charge_specification}}" class="input-register-text" required>
+                            <label class="label_formm">Charge Specification</label>
+                            <select type="text" name="charge_specification" value="{{fm.charge_specification}}" class="input-register-texts" required>
                                 {% if fm.charge_specification == "58V 15A" %}
                                     <option value="58V 15A" selected>58V 15A</option>
                                 {% else %}
@@ -72,15 +72,15 @@
                     </div>
                     <div class="input-group mb-2">
                         <div class="input-group-append">
-                            <label>Vehicle Iot Imei Number</label>
-                            <input type='text' name='configuration' value="{{fm.configuration}}" class="input-register-text" required>		
+                            <label class="label_formm">Vehicle Iot Imei Number</label>
+                            <input type='text' name='configuration' value="{{fm.configuration}}" class="input-register-texts" required>		
                         </div>
                     </div>
                     assigned_owner
                     <div class="input-group mb-2">
                         <div class="input-group-append">
-                            <label>Assigned Owner</label>
-                            <select type="text" name="assigned_owner" value="{{fm.assigned_owner}}" class="input-register-text" required>
+                            <label class="label_formm">Assigned Owner</label>
+                            <select type="text" name="assigned_owner" value="{{fm.assigned_owner}}" class="input-register-texts" required>
                                 {% if fm.assigned_owner == "LEAP" %}
                                     <option value="LEAP" selected>LEAP</option>
                                 {% else %}
@@ -96,25 +96,25 @@
                     </div>
                     <div class="input-group mb-2">
                         <div class="input-group-append">
-                            <label>Status</label>
-                            <input type='text' name='status' value="{{fm.status}}" class="input-register-text" required>
+                            <label class="label_formm">Status</label>
+                            <input type='text' name='status' value="{{fm.status}}" class="input-register-texts" required>
                         </div>
                     </div>
                     <div class="input-group mb-2">
                         <div class="input-group-append">
-                            <label>Assigned Fleet Owner</label>
-                            <input type='text' name='assigned_fleet_owner' value="{{fm.assigned_fleet_owner}}" class="input-register-text" required>
+                            <label class="label_formm">Assigned Fleet Owner</label>
+                            <input type='text' name='assigned_fleet_owner' value="{{fm.assigned_fleet_owner}}" class="input-register-texts" required>
                         </div>
                     </div>
 
                 {% endfor %}
 
-                <input type="submit" class="btn btn-success" value="Update">
-                <a href="{% url 'user_management:listswap' %}" class="btn btn-info">Back To Details </a>
+                <input type="submit" class="btn btn-success btn-sm" value="Update">
+                <a href="{% url 'user_management:listswap' %}" class="btn btn-info btn-sm">Back To Details </a>
 
 
             {% else %}
-                <h4 class="text-center alert alert warning">No Records Found</h4>
+                <h4 class="text-center alert alert warning btn-sm">No Records Found</h4>
             {% endif %}
         </form>
     </div>
