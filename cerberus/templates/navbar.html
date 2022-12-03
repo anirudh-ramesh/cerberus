@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load static %}
 {% block head_title %}{% endblock %}
-   
+
   <aside class="sidebar-nav"> 
    <div class="profile-img">
    <img src="../static/images/profile.png" alt="user" class="w-50">
@@ -23,7 +23,7 @@
           
        </li>
        <li class="sidebar-item">
-          <a class="sidebar-link" href="" aria-expanded="false"><img src="../static/icons/Geography.svg"></img></a>
+          <a class="sidebar-link" href="{% url 'geofence' %}" aria-expanded="false"><img src="../static/icons/Geography.svg"></img></a>
        </li>
        
        <li class="sidebar-item">
