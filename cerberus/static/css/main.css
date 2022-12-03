@@ -56,7 +56,9 @@ a {
 .p_center{
     text-align: center;
 }
-
+/* .form_container {
+    margin-top: 20px;
+} */
 #form-title{
     color: #fff;
 }
@@ -117,13 +119,20 @@ a {
     width: 100%;
     /* overflow: hidden; */
     display: flex;
-    flex-direction: row;
+    /* flex-direction: row; */
     /* height: 100%; */
     
     
 }
 .contentload{
     background-color: #F2F4F8 !important;
+    position: fixed;
+    height: 100% !important;
+    z-index: 5;
+}
+.block-contect{
+    width: 80%;
+    margin-left: 5%;
 }
 /* .sidebar-link i {
     font-style: normal;
@@ -601,11 +610,22 @@ p {
 /* .input-group  {
     width: 120%;
 } */
+.form_swap{
+    width: 70%;
+    margin-left: 18%;
+
+}
 .input-register-text{
-    width: 50%;
+    width: 30%;
     margin-left: 0%;
     border-radius: 10px;
     border: 1px solid black 
+}
+.input-register-text_battery{
+    width: 30%;
+    margin-left: 0%;
+    border-radius: 10px;
+    border: 1px solid black
 }
 .input-register-texts{
     width: 50%;
@@ -629,7 +649,7 @@ p {
 }
 .label_formm{
     margin-right: 0px;
-    width: 50%;
+    /* width: 50%; */
 }
 .rowd{
     width: 120%;
@@ -754,3 +774,19 @@ label{
     border-radius: 20px;
     height: 65vh;
 }
+
+.Card_status{
+    width: 50%;
+}
+.row_status{
+    width: 100% !important;
+}
+.nav_page{
+    width: 100%;
+}
+.csv-report{
+    padding: 5%;
+}
+.btn-block{
+    width: 50%;
+    margin-left: 20%;}
