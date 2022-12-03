@@ -401,7 +401,7 @@ a {
     font-size: 2rem !important;
 }
 .card-img-top {
-    width: 50% !important;
+    width: 42% !important;
     border-top-right-radius: var(--bs-card-inner-border-radius);
     padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
     object-fit: contain;
@@ -746,7 +746,7 @@ p {
 }
 
 label{
-    width: 15%;
+    width: 20%;
 } 
 
 .justify-content-center {
@@ -808,7 +808,7 @@ label{
     padding: 5%;
 }
 .btn-block{
-    width: 34%;
+    width: 40%;
     margin-left: 0%;
 }
 .alert-info{
