@@ -1,79 +1,97 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
 <!DOCTYPE html>
 <html>
-	<head>
-    	<title>Geofence</title>
-    	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-   	 	<meta charset="utf-8">    	
-    	<style>
-      		#map {
-        		height: 80%;
-      		}
-      		html, body {
-        		height: 100%;
-        		margin: 0;
-        		padding: 0;
-      		}
-    	</style>
 
-	</head>
-  	<body>
-        <div id="map"></div>
-        <form method="POST" action="" id="">
-            {% csrf_token %}
+<head>
+    <title>Geofence</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta charset="utf-8">
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
 
-            {% if messages %}
+</head>
+
+<body>
+    <h4 class="d-flex justify-content-center mt-3">Create Location</h4>
+    <div class="geolocation_map">
+        <div id="map">
+        </div>
+        <div class="fromdata">
+            <form method="POST" action="" id="">
+                {% csrf_token %}
+
+                {% if messages %}
                 {% for message in messages %}
-                <div class = "alert alert-{{message.tags}}">{{message}}</div>
+                <div class="alert alert">{{message}}</div>
                 {% endfor %}
-			{% endif %}
-            <div class="input-group mb-2">
-                <div class="input-group-append">
-                    <label><b>Name</b></label>
-                    <input type='text' name='geoname' class="input-register-text" required>
+                {% endif %}
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label><b>Name</b></label>
+                        <input type='text' name='geoname' class="input-register-text" required>
+                    </div>
                 </div>
-            </div>
-            <div class="input-group mb-2">
-                <label><b>geoType</b></label>
-                <select type="text" name="geotype" class="input-register-text" required>
-                    <option>1</option>
-                    <option>2</option>
-                </select>
-            </div>
-    
-            <div class="input-group mb-2">
-                <div class="input-group-append">
-                    <label for="description"><b>Description</b></label>
-                    <input id='desc' type="text" placeholder="description" name="description">
+                <div class="input-group mb-2">
+                    <label><b>geoType</b></label>
+                    <select type="text" name="geotype" class="input-register-text" required>
+                        <option>1</option>
+                        <option>2</option>
+                    </select>
                 </div>
-            </div>
-            <div class="input-group mb-2">
-                <div class="input-group-append">
-                    <label for="description"><b>Position Address</b></label>
-                    <input id='pos_add' type="text" name="pos_address" >
-                </div>
-            </div>
-            <div class="input-group mb-2">
-                <div class="input-group-append">
-                    <label for="latitude"><b>Coordinates</b></label>
-                    <input id="geojson"  name="enter_latitude" required>
-                </div>
-            </div>
-               <div class="d-flex justify-content-center mt-3">
-                <button class="btn-btn-success" id="save">Submit</button>     
-               </div> 
 
-               <div class="d-flex justify-content-center mt-3">
-                <a href="{% url 'home' %}" class="btn btn-info">Back</a>
-                </div>     
-               </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label for="description"><b>Description</b></label>
+                        <input id='desc' type="text" placeholder="description" class="input-register-text"
+                            name="description">
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label for="description"><b>Position Address</b></label>
+                        <input id='pos_add' type="text" class="input-register-text" name="pos_address">
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-append">
+                        <label for="latitude"><b>Coordinates</b></label>
+                        <input id="geojson" class="input-register-text" name="enter_latitude" required>
+                    </div>
+                </div>
+
+                <div class="submit-button">
+
+                    <div class="d-flex justify-content-center mt-3">
+                        <button class="btn-btn-success btn-sm" id="save">Submit</button>
+                    </div>
+
+                    <div class="d-flex justify-content-center mt-3">
+                        <a href="{% url 'home' %}" class="btn btn-info btn-sm">Back</a>
+                    </div>
+                </div>
+            </div>
 
         </form>
-    	
-    	
-		
+        </div>
+            
+
+    </div>
+
     <script src="../static/js/drawMap.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBqY1ZuIisvFmyKR3fAx6DVrkAsAZR1CM4&libraries=drawing&callback=initMap"></script>
-  	</body>
+</body>
 
 </html>
+
+{% endblock %}

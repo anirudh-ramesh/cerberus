@@ -558,7 +558,7 @@ def addgeofenceVehicles(request):
                 location = Point(float(longitude),float(latitude),srid=4326)            
                 newdata = Geofence.objects.create(geoname=geoname,geotype=geotype,description=description,enter_latitude=latitude,enter_longitude=longitude,pos_address=position_add,location=location)
                 messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['locationCreate'])
-                return render(request, 'geolocation_form.html')
+                return redirect('geofence')
 
 
             if newdata["features"][0]['geometry']['type'] == 'Polygon':
@@ -578,6 +578,7 @@ def addgeofenceVehicles(request):
             print("GEOFENCE", geofence)
             newdata = Geofence.objects.create(geoname=geoname,geotype=geotype, description=description,enter_latitude=longitude_data,pos_address=position_add,geofence=geofence)
             messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['locationCreate'])
+            return redirect('geofence')
         return render(request, 'geolocation_form.html')
     except Exception as e:
         return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError']) 

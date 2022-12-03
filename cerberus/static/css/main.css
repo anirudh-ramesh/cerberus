@@ -839,3 +839,13 @@ margin-left: -17% !important;
     width: 100% !important;
     margin-left: -13%;
 }
+#map{
+    width: 50vw;
+    height: 64vh;
+    margin-left: 2vw
+}
+.fromdata{
+    display: flex;
+    flex-direction: column;
+    margin-left: 2vw
+}
