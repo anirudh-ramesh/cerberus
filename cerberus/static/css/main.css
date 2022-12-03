@@ -167,8 +167,8 @@ a {
     display: flex;
     flex-direction: column;
     height: 100%;
-  
-    
+    margin-left: 6%;
+    padding: 2%;   
 }
 
 .page-wrapper {
@@ -789,4 +789,16 @@ label{
 }
 .btn-block{
     width: 50%;
-    margin-left: 20%;}
+    margin-left: 20%;
+}
+.dashboard{
+    cursor: pointer;
+}
+.heading_text{
+    font-size: 15px;
+    margin-top: 25%;
+}
+.text-black{
+    font-size: 20px;
+    margin-top: 20%;
+}
