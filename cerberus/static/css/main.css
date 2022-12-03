@@ -380,7 +380,7 @@ a {
     --bs-card-cap-padding-y: 0.625rem;
     --bs-card-cap-padding-x: 1.25rem;
     --bs-card-cap-bg: rgba(0, 0, 0, 0.03);
-    --bs-card-bg: #fff;
+    /* --bs-card-bg: #fff; */
     --bs-card-img-overlay-padding: 1rem;
     --bs-card-group-margin: 15px;
     position: relative;
@@ -598,7 +598,7 @@ p {
 }
 .data{
     width: 100%;
-}
+    background-color:none;}
 
 .organisationform{
     justify-content: space-around;
@@ -615,17 +615,34 @@ p {
     margin-left: 18%;
 
 }
+.org_prof{
+    width: 50%;
+}
 .input-register-text{
-    width: 30%;
+    width: 24%;
     margin-left: 0%;
     border-radius: 10px;
     border: 1px solid black 
 }
+.organisation_profile{
+    width: 44%;
+    margin-left: 0%;
+    border-radius: 10px !important;
+    border: 1px solid black 
+}
 .input-register-text_battery{
-    width: 30%;
+    width: 20%;
     margin-left: 0%;
     border-radius: 10px;
     border: 1px solid black
+}
+.label_form_battery{
+    margin-right: 0px;
+    width: 17%;
+}
+.add_battery_details{
+    width: 45% !important;
+    margin-left: 0% !important;
 }
 .input-register-texts{
     width: 50%;
@@ -645,7 +662,7 @@ p {
 
 .label_form{
     margin-right: 0px;
-    width: 41%;
+    width: 18%;
 }
 .label_formm{
     margin-right: 0px;
@@ -685,9 +702,11 @@ p {
 
 .submit-button{
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     padding:1vw;
+    margin-left: 10%;
 }
+
 
 .submit-div{
     display: flex;
@@ -700,7 +719,8 @@ p {
 .battery-header{
     width: 100%;
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
+    margin-left: 17%;
 }
 
 .card_Bettery{
@@ -726,7 +746,7 @@ p {
 }
 
 label{
-    width: 35%;
+    width: 15%;
 } 
 
 .justify-content-center {
@@ -788,8 +808,20 @@ label{
     padding: 5%;
 }
 .btn-block{
-    width: 50%;
-    margin-left: 20%;
+    width: 34%;
+    margin-left: 0%;
+}
+.alert-info{
+    width: 65% !important;
+}
+.udate_button{
+    margin-left: 10%;
+}
+.update_battery_page{
+    margin-left: 7% !important;
+}
+.add_vehicle{
+margin-left: -17% !important;
 }
 .dashboard{
     cursor: pointer;
@@ -801,4 +833,8 @@ label{
 .text-black{
     font-size: 20px;
     margin-top: 20%;
+}
+.swap_station{
+    width: 100% !important;
+    margin-left: -13%;
 }

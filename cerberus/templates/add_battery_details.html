@@ -16,7 +16,7 @@
 		</div>
 		
 		<div class="card_Bettery card-body">
-			<a class="btn btn-primary  btn-sm btn-block" href="">Add Bettery Details</a>
+			<a class="btn btn-primary  btn-sm btn-block add_battery_details" href="">Add Bettery Details</a>
 			<div class="card_subb card-body">
 				<form class="form" method="POST" action="">
 					{% csrf_token %}
@@ -27,7 +27,7 @@
 					{% endif %}
 					<div class="input-group mb-2">
 						<div class="input-group-append">
-							<label class="label_form">Model Name</label>
+							<label class="label_form_battery">Model Name</label>
 							<select type="text" id="colorSelect" name="model_name" class="input-register-text_battery" required>
 								<option>igtblu</option>
 								<option>igtred</option>
@@ -37,13 +37,13 @@
 					</div>
 					<div class="input-group mb-2">
 						<div class="input-group-append">
-							<label class="label_form">Battery Serial Number</label>
+							<label class="label_form_battery">Battery Serial Number</label>
 							<input type='text' name='battery_serial_num' class="input-register-text_battery" required>
 						</div>
 					</div>
 					<div class="input-group mb-2">
 						<div class="input-group-append">
-							<label class="label_form">Battery Type</label>
+							<label class="label_form_battery">Battery Type</label>
 							<select type="text" id="colorSelect" name="battery_type" class="input-register-text_battery" required>
 								<option>24</option>
 								<option>48</option>
@@ -54,7 +54,7 @@
 					</div>
 					<div class="input-group mb-2">
 						<div class="input-group-append">
-							<label class="label_form">Bms Type</label>
+							<label class="label_form_battery">Bms Type</label>
 							<select type="text" id="colorSelect" name="bms_type" class="input-register-text_battery" required>
 								<option>ion</option>
 								<option>electrifuel</option>
@@ -63,7 +63,7 @@
 					</div>
 					<div class="input-group mb-2">
 						<div class="input-group-append">
-							<label class="label_form">Iot type</label>
+							<label class="label_form_battery">Iot type</label>
 							<select type="text" id="colorSelect" name="iot_type" class="input-register-text_battery" required>
 								<option>tarckmate</option>
 								<option>electrifuel</option>
@@ -73,37 +73,37 @@
 					</div>
 					<!-- <div class="input-group mb-2">
 						<div class="input-group-append">
-							<label class="label_form">Iot Imei Number</label>
+							<label class="label_form_battery">Iot Imei Number</label>
 							<input type='text' name='iot_imei_number' class="input-register-text_battery" required>
 						</div>
 					</div> -->
 					<div class="input-group mb-2">
 						<div class="input-group-append">
-							<label class="label_form">Sim Number</label>
+							<label class="label_form_battery">Sim Number</label>
 							<input type='text' name='sim_number' class="input-register-text_battery" required>
 						</div>
 					</div>
 					<div class="input-group mb-2">
 						<div class="input-group-append">
-							<label class="label_form">Warrenty Start Date</label>
+							<label class="label_form_battery">Warrenty Start Date</label>
 							<input type='date' name='warrenty_start_date' class="input-register-text_battery" required>
 						</div>
 					</div>
 					<div class="input-group mb-2">
 						<div class="input-group-append">
-							<label class="label_form">Warrenty Duration</label>
+							<label class="label_form_battery">Warrenty Duration</label>
 							<input type='date' name='warrenty_duration' class="input-register-text_battery" required>
 						</div>
 					</div>
 					<div class="input-group mb-2">
 						<div class="input-group-append">
-							<label class="label_form">Assigned Owner</label>
+							<label class="label_form_battery">Assigned Owner</label>
 							<input type='text' name='assigned_owner' class="input-register-text_battery" required>
 						</div>
 					</div>
 					<div class="input-group mb-2">
 						<div class="input-group-append">
-							<label class="label_form">Status</label>
+							<label class="label_form_battery">Status</label>
 							<select type="text" id="colorSelect" name="status" class="input-register-text_battery" required>
 								<option>in_swap_station</option>
 								<option>in_vehicle</option>
@@ -114,25 +114,25 @@
 					</div>
 					<div class="input-group mb-2">
 						<div class="input-group-append">
-							<label class="label_form">Battery Cell Chemistry</label>
+							<label class="label_form_battery">Battery Cell Chemistry</label>
 							<input type='text' name='battery_cell_chemistry' class="input-register-text_battery" required>
 						</div>
 					</div>
 					<div class="input-group mb-2">
 						<div class="input-group-append">
-							<label class="label_form">Battery Pack Nominal Voltage</label>
+							<label class="label_form_battery">Battery Pack Nominal Voltage</label>
 							<input type='text' name='battery_pack_nominal_voltage' class="input-register-text_battery" required>
 						</div>
 					</div>
 					<div class="input-group mb-2">
 						<div class="input-group-append">
-							<label class="label_form">Battery Pack Nominal Charge Capacity</label>
+							<label class="label_form_battery">Battery Pack Nominal Charge Capacity</label>
 							<input type='text' name='battery_pack_nominal_charge_capacity' class="input-register-text_battery" required>
 						</div>
 					</div>
 					<div class="input-group mb-2">
 						<div class="input-group-append">
-							<label class="label_form">Charging Status</label>
+							<label class="label_form_battery">Charging Status</label>
 							<input type='text' name='charging_status' class="input-register-text_battery" required>
 						</div>
 					</div>
