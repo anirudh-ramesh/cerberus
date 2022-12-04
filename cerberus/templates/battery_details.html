@@ -60,10 +60,9 @@
                         <!-- <td>{{fm.iot_imei_number}}</td> -->
                         <td>
                           <a href="{% url 'updatedata' fm.battery_serial_num %}" class="btn btn-warning btn-sm">Edit</a>
-                          <form action="{% url 'deletedata' fm.battery_serial_num %}" method="POST" class="d-inline">
-                              {% csrf_token %}
-                            <input type="submit" class="btn btn-danger btn-sm" value="Delete">
-                          </form>
+
+                          <a href="{% url 'deletedata' fm.battery_serial_num %}" class="btn btn-danger btn-sm">Delete</a>
+
                           <form action="{% url 'data' %}?cahis_id={{cahis_id}}&battery_serial_num={{fm.battery_serial_num}}" method="POST">
                             {% csrf_token %}
                             <input type="submit" class="btn btn-secondary btn-sm" value="Add">

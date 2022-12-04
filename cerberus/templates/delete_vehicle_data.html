@@ -1,0 +1,21 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+{% include 'status.html' %}
+
+<div class="">
+  <h4 class="text-center alert alert info">Vehicle Data</h4>
+
+    <p>Are you sure you want to delete <b>"{{vehicle_data}} ?"</b></p>
+
+    <form action="{% url 'deletevehicle' vehicle_data.chasis_number %}" method="POST" class="d-inline">
+        {% csrf_token %}
+      <input type="submit" class="btn btn-danger btn-sm" value="Delete">
+      <td>
+        <a href="{% url 'getvehicle' %}" class="btn btn-secondary btn-sm">Back</a>
+      </td>
+    </form>
+</div>
+
+{% endblock %}

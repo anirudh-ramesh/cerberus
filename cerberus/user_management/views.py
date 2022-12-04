@@ -116,8 +116,8 @@ def deleteOraganisation(request, id):
             pi.delete()
             messages.add_message(request, messages.WARNING, successAndErrorMessages()['removeOrganisation'])
             return redirect('user_management:listorg')
-        context = {} 
-        return render(request, "list_organisation_data.html", context)
+        context = {'delete_organisation' : pi} 
+        return render(request, "delete_organisation.html", context)
     except Exception as e:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
@@ -163,8 +163,10 @@ def deleteOraganisationProfile(request, id):
         pi = OrganisationProfile.objects.get(pk=id)
         if request.method == 'POST':
             pi.delete()
-        messages.add_message(request, messages.WARNING,successAndErrorMessages()['removeOrganisationProfile'])    
-        return render(request, "list_organisation_profile.html", {})
+            messages.add_message(request, messages.WARNING,successAndErrorMessages()['removeOrganisationProfile'])
+            return redirect('user_management:listorg')
+        context = { 'organisation_profile_delete': pi }
+        return render(request, "delete_organisation_profile.html", context)
     except Exception as e:
         return messages.add_message(request,messages.WARNING, successAndErrorMessages()['internalError'])
 
@@ -336,8 +338,8 @@ def deleteSwapStation(request,id):
             pi.delete()
             messages.add_message(request, messages.ERROR, successAndErrorMessages()['removeSwapStation'])
             return redirect('user_management:listswap')
-        context={}
+        context={'delete_swap_station': pi}
         messages.info(request, successAndErrorMessages()['removeSwapStation'])
-        return render(request, 'list_swapstation_data.html', context)
+        return render(request, 'delete_swapstation_data.html', context)
     except Exception as e:
         return messages.add_message(request,messages.WARNING, successAndErrorMessages()['internalError'])

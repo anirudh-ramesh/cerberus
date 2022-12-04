@@ -40,7 +40,7 @@ urlpatterns= [
     
     path('listdriver', views.listAddedDriver, name="getdrivers"),
     path('updatedriver/<str:id>', views.updateDriver, name="updatedriver"),
-    path('deletedriver/<str:id>', views.deleteDriver, name="deletedriver"),
+    path('deletedriver/<str:id>', views.deleteDriver, name="driverdelete"),
 
     path('getcsv', views.filedForCSV, name="csv"),
     path(r'export_to_csv', views.exportCSV, name="exportcsv"),
@@ -51,11 +51,14 @@ urlpatterns= [
 
     path('listdevice', views.listIotDevice, name="listdevice"),
     path('updatedevice/<int:id>/', views.updateIOTDevice, name="updatedevice"),
-    path('delettedevice/<int:id>/', views.deleteIOTDeviceRecord, name="deletetedevice"),
+    path('deletedevice/<int:id>/', views.deleteIOTDeviceRecord, name="devicedelete"),
 
     path('settings', views.settings, name="settings"),
     path('vehicledetails', views.VCU, name="details"),
     path(r'assignediot', views.assignedIotDeviceToBattery, name="iotdevice"),
+
+    path('bettrypack', views.battery_pack_menu, name="battery_data"),
+    path('subpack', views.battery_pack_sub_menu, name="sub_data")
 
 
     

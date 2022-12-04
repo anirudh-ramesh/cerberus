@@ -50,14 +50,12 @@
                             <td>{{fm.battrey_swap_satation_financier}}</td>
                             <td>{{fm.battrey_swap_satation_owner}}</td>
                             <td>{{fm.battrey_swap_satation_operator}}</td>
+                            
                             <td>
-                                <form action="" method="POST" class="d-inline">
-                                    {% csrf_token %}
-                                    <input type="submit" class="btn btn-danger btn-sm" value="Remove">
-                                </form>
-                            </td>             
+                              <a href="{% url 'user_management:deleteorgprofile' fm.id %}" class="btn btn-danger btn-sm">Delete</a>             
+                            </td>
                         </tr>
-                      
+                     
                       {% endfor %}
                     </tbody>
                     </thead>

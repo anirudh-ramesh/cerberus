@@ -1,0 +1,22 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+{% include 'status.html' %}
+
+<div class="">
+  <h4 class="text-center alert alert info">Driver Data</h4>
+
+    <p>Are you sure you want to delete <b>"{{delete_driver.username}} ?"</b></p>
+
+    <form action="{% url 'driverdelete' delete_driver.email %}" method="POST" class="d-inline">
+        {% csrf_token %}
+
+        <td>
+            <a href="{% url 'getdrivers' %}" class="btn btn-secondary btn-sm">Back</a>
+        </td>
+      <input type="submit" class="btn btn-danger btn-sm" value="Remove">
+    </form>
+</div>
+
+{% endblock %}

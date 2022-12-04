@@ -1,0 +1,24 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+{% include 'status.html' %}
+
+<div class="">
+  <h4 class="text-center alert alert info">IOT-Device Data</h4>
+
+    <p>Are you sure you want to delete <b>"{{iot_device}} ?"</b></p>
+    <form action="{% url 'devicedelete' iot_device.imei_number %}" method="POST" class="d-inline">
+      {% csrf_token %}
+
+    <input type="submit" class="btn btn-danger btn-sm" value="Delete">
+    <td>
+        <a href="{% url 'listdevice' %}" class="btn btn-secondary btn-sm">Back</a>
+    </td>
+  </form>
+
+
+</div>
+
+
+{% endblock %}

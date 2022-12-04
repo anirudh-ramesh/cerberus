@@ -79,10 +79,12 @@ def getOrgProfiles(id):
     WHERE user_management_organisation_organisation_profile.organisation_id='{id}'"
     cursor.execute(sql)
     myresult = cursor.fetchall()
+    print(myresult, "============>>>>MY_RESULT")
     new_data = []
     for row in myresult:
         res={}
         print(row[2])
+        res['id']= str(row[0])
         res["battery_pack_manufacture"] = str(row[1])
         res["battery_pack_distributor"] = row[2]
         res["battery_pack_sub_distributor"] = row[3]
@@ -103,6 +105,7 @@ def getOrgProfiles(id):
         res["battrey_swap_satation_owner"] = row[18]
         res["battrey_swap_satation_operator"] = row[19]
         new_data.append(res)
+        print(new_data, "=========")
     cursor.close()
     return new_data
 
@@ -362,23 +365,26 @@ def removeUserVehicle(select,chasis_number):
 
 #CONVERY BINARY DATA TO UTF-8 TO SHOW IMAGES
 def images_display():
-    conn=db.connect(host="localhost",user="postgres",password="1234",database='battery_management')
-    cursor = conn.cursor()
-    sql = 'SELECT adhar_proof,pancard_proof,license_proof,email,username,user_type,is_active FROM irasusapp_crmuser;'
-    cursor.execute(sql)
-    results = cursor.fetchall()
-    one_row = []
-    for value in results:
-        res={}
-        res['adhar_proof'] = base64.b64encode(value[0]).decode("utf-8")
-        res['pan_proof'] = base64.b64encode(value[1]).decode("utf-8")
-        res['driving_license'] = base64.b64encode(value[2]).decode("utf-8")
-        res['email'] = value[3]
-        res['username'] = value[4]
-        res['user_type'] = value[5]
-        res['is_active'] = value[6]
-        one_row.append(res)
-    return one_row
+    try:
+        conn=db.connect(host="localhost",user="postgres",password="1234",database='battery_management')
+        cursor = conn.cursor()
+        sql = 'SELECT adhar_proof,pancard_proof,license_proof,email,username,user_type,is_active FROM irasusapp_crmuser;'
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        one_row = []
+        for value in results:
+            res={}
+            res['adhar_proof'] = base64.b64encode(value[0]).decode("utf-8")
+            res['pan_proof'] = base64.b64encode(value[1]).decode("utf-8")
+            res['driving_license'] = base64.b64encode(value[2]).decode("utf-8")
+            res['email'] = value[3]
+            res['username'] = value[4]
+            res['user_type'] = value[5]
+            res['is_active'] = value[6]
+            one_row.append(res)
+        return one_row
+    except Exception as e:
+        print(e)
 
 def iotDevice(iotList):
     try:

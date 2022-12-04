@@ -186,18 +186,20 @@ def updateBatteryDetails(request, id):
         return render(request,'update_battery_details.html',{'form': battery_data})
     except Exception as e:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
-    
+
 #Delete records from Battery table.
-def deleteRecord(request,id):
+def deleteRecord(request, id):
     try:
         pi = BatteryDetail.objects.get(pk=id)
         if request.method == 'POST':
             pi.delete()
-            messages.add_message(request, messages.ERROR, successAndErrorMessages()['removeBatteryDetails'])
-        context = {}
-        return render(request, "battery_details.html", context)
+            messages.add_message(request, messages.WARNING, successAndErrorMessages()['removeBatteryDetails'])
+            return redirect('data')
+        context = {'item': pi} 
+        return render(request, "delete_battery_data.html", context)
     except Exception as e:
-        messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
+
 
 def addIotDevice(request):
     try:
@@ -264,11 +266,15 @@ def updateIOTDevice(request,id):
 def deleteIOTDeviceRecord(request,id):
     try:
         pi = IotDevices.objects.get(pk=id)
+        print(pi.imei_number, "======>>")
         if request.method == 'POST':
             pi.delete()
-            messages.add_message(request, messages.DANGER, successAndErrorMessages()['removeDevice'])
+            messages.add_message(request, messages.ERROR, successAndErrorMessages()['removeDevice'])
             return redirect('listdevice')
+        context={"iot_device": pi }
+        return render(request, 'delete_iot_device.html', context)
     except Exception as e:
+        print(e)
         return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError']) 
 
 def assignedIotDeviceToBattery(request):
@@ -473,8 +479,8 @@ def deleteVehicleRecord(request,id):
             pi.delete()
             messages.add_message(request, messages.ERROR, successAndErrorMessages()['removeVehicle'])
             return redirect('getvehicle')
-        context = {}
-        return render(request, "list_vehicle_details.html", context)
+        context = {'vehicle_data' : pi}
+        return render(request, "delete_vehicle_data.html", context)
     except Exception as e:
         print("Error While deleting Record",e)
         return messages.error(request, successAndErrorMessages()['internalError'])
@@ -485,7 +491,6 @@ def assignedBatteryList(request,id):
         if request.method == "GET":
             print("IN THE GET")
             data = listAssignedBatteryVehicle(id)
-            print(data, "========>>>>>>>>>DATA")
 
         # Remove battery from vehicle.
         if request.method == "POST": 
@@ -621,6 +626,7 @@ def listAddedDriver(request):
     try:
         if request.method == "GET":
             driverData = images_display()
+            print(driverData, "=========>>>")
 
         context={
                 "drivers": driverData
@@ -671,13 +677,15 @@ def updateDriver(request,id):
 def deleteDriver(request, id):
     try:
         pi = Crmuser.objects.get(pk=id)
+        print(pi)
         if request.method == 'POST':
             pi.delete()
             messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['removeDriver']) 
             return redirect('getdrivers')
-        context = {}
-        return render(request, "update_driver.html", context)
+        context = {'delete_driver' : pi}
+        return render(request, "delete_driver.html", context)
     except Exception as e:
+        print(e)
         return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError'])
 
 
@@ -749,4 +757,11 @@ def swapSatationDoors(request):
     }
     response = requests.request("POST", url, headers=headers, data=payload)
 
-    return render(request, "swap_station_door.html", {'response': response}) 
+    return render(request, "swap_station_door.html", {'response': response})
+
+
+def battery_pack_menu(request):
+    return render(request, "battery_pack.html")
+
+def battery_pack_sub_menu(request):
+    return render(request, "battery_submenu_pack.html")

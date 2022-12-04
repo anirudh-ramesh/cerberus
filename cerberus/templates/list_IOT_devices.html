@@ -35,10 +35,8 @@
                             <td>
                             <a href="{% url 'updatedevice' fm.iot_imei_number_id %}" class="btn btn-info btn-sm">Edit</a>
 
-                            <form action="{% url 'deletetedevice' fm.iot_imei_number_id %}" method="POST" class="d-inline">
-                                {% csrf_token %}
-                              <input type="submit" class="btn btn-danger btn-sm" value="Delete">
-                            </form>
+                            <a href="{% url 'devicedelete' fm.iot_imei_number_id %}" class="btn btn-danger btn-sm">Delete</a>
+
                             {% if fm.assign %}
                             <a href="{% url 'listdevice' %}?imei_number={{fm.iot_imei_number_id}}&action='remove'" class="btn btn-secondary btn-sm">Remove-To-Battery</a>
                             {% else %}

@@ -15,6 +15,7 @@ def manualTable():
         id VARCHAR(200) NOT NULL, \
         user_status boolean)"
     cursor.execute(sql)
+    print("Table is creted")
     conn.commit()
 
 manualTable()
