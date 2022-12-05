@@ -125,18 +125,18 @@ CHOICE_TYPE = (
 )
 
 # GEOFENCE-TABLE
-class Geofence(models.Model):
-    geofence = models.PolygonField(srid=4326, null=True, blank=True)
-    geotype = models.CharField(blank=True, max_length=100,choices=CHOICE_TYPE, null=True)
-    location = models.PointField(srid=4326, null=True, blank=True)
-    description = models.CharField(default='', max_length=200)
-    enter_latitude = models.CharField(default='', max_length=5000, null=True, blank=True)
-    enter_longitude = models.CharField(default='', max_length=200, null=True, blank=True)
-    pos_address = models.CharField(default='', max_length=200)
-    geoname = models.CharField(default='', max_length=200)
+# class Geofence(models.Model):
+#     geofence = models.PolygonField(srid=4326, null=True, blank=True)
+#     geotype = models.CharField(blank=True, max_length=100,choices=CHOICE_TYPE, null=True)
+#     location = models.PointField(srid=4326, null=True, blank=True)
+#     description = models.CharField(default='', max_length=200)
+#     enter_latitude = models.CharField(default='', max_length=5000, null=True, blank=True)
+#     enter_longitude = models.CharField(default='', max_length=200, null=True, blank=True)
+#     pos_address = models.CharField(default='', max_length=200)
+#     geoname = models.CharField(default='', max_length=200)
 
-    def __str__(self):
-        return self.geoname
+#     def __str__(self):
+#         return self.geoname
 
 CONFIGURATION = (
     ('48V','48V'),

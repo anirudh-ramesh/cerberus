@@ -33,8 +33,8 @@ urlpatterns= [
     path(r'orgvehicle/<int:id>', views.assignedOrgVehicleList, name="assingedtoorg"),
     path(r'uservehicle/<str:id>', views.assignedVehicleToUser, name="uservehicle"),
 
-    path('geofence', views.addgeofenceVehicles, name="geofence"),
-    path('listdata', views.listgeofenceData, name="add_data"),
+    # path('geofence', views.addgeofenceVehicles, name="geofence"),
+    # path('listdata', views.listgeofenceData, name="add_data"),
 
     path('driver', views.addDriver, name="addriver"),
     
@@ -57,7 +57,7 @@ urlpatterns= [
     path('vehicledetails', views.VCU, name="details"),
     path(r'assignediot', views.assignedIotDeviceToBattery, name="iotdevice"),
 
-    path('bettrypack', views.battery_pack_menu, name="battery_data"),
+    path(r'bettrypack', views.battery_pack_menu, name="battery_data"),
     path('subpack', views.battery_pack_sub_menu, name="sub_data")
 
 
