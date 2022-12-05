@@ -493,3 +493,11 @@ img {
 .list-group_menu{
     margin-left: -10% !important;
 }
+.sub_pack{
+    display: flex;
+    margin-top: 2%;
+    cursor: pointer;
+}
+.li, .sub_pack :hover{
+    background-color: black;
+}
