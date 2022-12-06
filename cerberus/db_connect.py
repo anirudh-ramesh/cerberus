@@ -8,16 +8,19 @@ def connect():
 # psql -h db -p 5432 -U myprojectuser -d postgres
 #LIST ORGANISATION USER  
 def sql_query(id):
-    conn=connect()
-    cursor=conn.cursor()
-    sql= f"SELECT email FROM irasusapp_crmuser WHERE NOT EXISTS (SELECT email,serial_number FROM user_management_organisation_user_role WHERE user_management_organisation_user_role.serial_number = '{id}' AND irasusapp_crmuser.email = user_management_organisation_user_role.email);"
-    cursor.execute(sql)
-    myresult = cursor.fetchall()
-    new_data=[]
-    for data in myresult:
-        new_data.append(data[0])
-    cursor.close()    
-    return new_data
+    try:
+        conn=connect()
+        cursor=conn.cursor()
+        sql= f"SELECT email FROM irasusapp_crmuser WHERE NOT EXISTS (SELECT email,serial_number FROM user_management_organisation_user_role WHERE user_management_organisation_user_role.serial_number = '{id}' AND irasusapp_crmuser.email = user_management_organisation_user_role.email);"
+        cursor.execute(sql)
+        myresult = cursor.fetchall()
+        new_data=[]
+        for data in myresult:
+            new_data.append(data[0])
+        cursor.close()    
+        return new_data
+    except Exception as e:
+        print(e)
 
 #INSERT USER INTO ORGANISATION
 def inset_into_db(data,id,role,select):

@@ -9,6 +9,13 @@
     <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Home</a>
     <h4 class="text-center alert alert info">Battery Data</h4>
     <form action="" method="GET">
+      
+      {% if messages %}
+        {% for message in messages %}
+        <div class = "alert alert-{{message.tags}}">{{message}}</div>
+        {% endfor %}
+      {% endif %}
+
         {% if battery_data %}
                 <table class="table table-hover">
                     <thead>

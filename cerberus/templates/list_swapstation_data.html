@@ -7,6 +7,13 @@
 <div class="col-sm-12">
     <h4><b>Swap-Station Details</b></h4>
     <form action="" method="GET">
+
+      {% if messages %}
+        {% for message in messages %}
+        <div class = "alert alert-{{message.tags}}">{{message}}</div>
+        {% endfor %}
+      {% endif %}
+      
         {% if swap_station_data %}
                 <table class="table table-hover">
                     <thead>

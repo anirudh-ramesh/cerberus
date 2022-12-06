@@ -9,12 +9,12 @@
   <div>
     <a href="{% url 'home' %}" class="btn btn-info btn-sm">Home</a>
   </div>
-    <p>Are you sure you want to delete <b>"{{iot_device}}"</b></p>
-    <form action="{% url 'deletetedevice' iot_device.imei_number %}" method="POST" class="d-inline">
+    <p>Are you sure you want to delete <b>"{{item}}"</b></p>
+    <form action="{% url 'user_management:delete' item.email %}" method="POST" class="d-inline">
       {% csrf_token %}
 
         <td>
-          <a href="{% url 'listdevice' %}" class="btn btn-secondary btn-sm">Back</a>
+          <a href="{% url 'user_management:getdata' %}" class="btn btn-secondary btn-sm">Back</a>
         </td>
     <input type="submit" class="btn btn-danger btn-sm" value="Delete">
   </form>

@@ -14,21 +14,14 @@
 
 				<form action="" method="POST">
 					{% csrf_token %}
-					
-					<!-- {% if messages %}
-							{% for message in messages %}
-							<div class = "alert alert-{{message.tags}}">{{message}}</div>
-							{% endfor %}
-					{% endif %} -->
+										
 
-					{{form.as_p}}
+					{% for fm in form %}
+                		{{fm.label_tag}} {{fm}} {{fm.errors|striptags}} <br><br>
+            		{% endfor %}
 					<input type="Submit" name="Submit" class="btn btn-success btn-sm" value="Submit" >
 					<a href="{% url 'user_management:listorg' %}" class="btn btn-secondary btn-sm">Back</a>
-					<!-- {% if messages %}
-					{% for message in messages %}
-						<h5 class="errors">{{ message }}</h5>
-					{% endfor %}
-					{% endif %} -->
+
 				</form>
 				
 			</div>

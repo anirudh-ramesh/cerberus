@@ -692,7 +692,6 @@ def filedForCSV(request):
     if request.method == "GET":
         files = list(Vehicle.objects.values())
         data= request.POST.getlist('checkedvalue')
-        messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['csvGenerate']) 
     return render(request, 'generate_csv.html')
 
 #Exporting CSV.

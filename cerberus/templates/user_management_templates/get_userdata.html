@@ -32,19 +32,19 @@
           <td>{{fm.contact}}</td>
           <!-- <td>{{fmadhar_proof}}</td> -->
           <!-- <td><img src="{{fm.adhar_proof.url}}" alt="" class="card-img-top"></td> -->
-          <td>
-            <a href="{% url 'user_management:update' fm.email %}" class="btn btn-secondary btn-sm">Edit</a>
-          </td>
-          <td>
-            <a href="{% url 'user_management:delete' fm.email %}" class="btn btn-danger btn-sm">Delete</a>
-          </td>
 
           <td>
+            <a href="{% url 'user_management:update' fm.email %}" class="btn btn-secondary btn-sm">Edit</a>
+
+            <a href="{% url 'user_management:delete' fm.email %}" class="btn btn-danger btn-sm">Delete</a>
+
             <a href="{% url 'getvehicle' %}?email={{fm.email}}" class="btn btn-secondary btn-sm">Assigned Vehicle</a>
+
+            <a href="{% url 'uservehicle' fm.email %}" class="btn btn-primary btn-sm">User Vehicle</a>
+  
+
           </td>
-          <td>
-            <a href="{% url 'uservehicle' fm.email %}" class="btn btn-secondary btn-sm">List Vehicle</a>
-          </td>
+            
         </tr>
 
         {% endfor %}

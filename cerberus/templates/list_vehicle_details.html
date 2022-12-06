@@ -10,6 +10,12 @@
     <a href="{% url 'addvehicle' %}" class="btn btn-info btn-sm">Add-Vehicle</a>
     <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Home</a>
     <form action="" method="GET">
+      {% if messages %}
+        {% for message in messages %}
+        <div class = "alert alert-{{message.tags}}">{{message}}</div>
+        {% endfor %}
+      {% endif %}
+      
         {% if vehicle_data %}
                 <table class="table table-hover">
                     <thead>

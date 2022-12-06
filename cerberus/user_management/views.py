@@ -69,6 +69,7 @@ def addOrganisation(request):
         form = OrgasationForm(request.POST)
         if form.is_valid():
             form.save()
+        return redirect("user_management:listorg")
     context = { 'form': form }
     messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['createOrganisation'])
     return render(request,'add_organisation.html',context)

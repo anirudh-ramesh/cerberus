@@ -11,6 +11,12 @@
     <a href="{% url 'adddevice' %}" class="btn btn-secondary btn-sm">Add-IOT-Device</a>
     
     <form action="" method="GET">
+      {% if messages %}
+        {% for message in messages %}
+        <div class = "alert alert-{{message.tags}}">{{message}}</div>
+        {% endfor %}
+      {% endif %}
+      
         {% if iot_device_data %}
                 <table class="table table-hover">
                     <thead>
