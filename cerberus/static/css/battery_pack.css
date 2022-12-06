@@ -313,6 +313,16 @@ img {
     scroll-behavior: smooth;
     align-items: center;
     overflow-y: scroll;
+    scroll-behavior: smooth;
+    height: 100%;
+}
+.left-panel-wrap::-webkit-scrollbar{
+    width: 5px;
+    height: 8px;
+    background-color: rgb(254, 254, 254);
+}
+.left-panel-wrap::-webkit-scrollbar-thumb{
+    background: #000;
 }
 .panel-dropdown{
     display: flex !important;
@@ -437,17 +447,20 @@ img {
     flex-direction: row;
 }
 
+.battery_list_allmenu{
+    background-color: white;
+}
 .battery_list_menu{
     width: 15vw;
-    font-size: 16px;
-    background-color: #fff;
+    font-size: 20px;
+    /* background-color: #fff; */
     padding: 0.5rem;
-    box-shadow: 1px 1px 17px -1px rgb(204 192 188 / 69%);
-    margin-top:16%
+    /* box-shadow: 1px 1px 17px -1px rgb(204 192 188 / 69%); */
+    margin-top:16vw
 
 }
 
-.right_data_menu{
+.card_container{
     display: flex;
     flex-direction: row;
 
@@ -487,4 +500,13 @@ img {
     display: flex;
     justify-content: center;
     font-size: 1vw;
+}
+.img_icon{
+    height: 23%;
+    width: 12%;
+    margin-top: 17px;
+    margin-right: 5%;
+}
+.list-group_menu{
+    margin-left: -10% !important;
 }

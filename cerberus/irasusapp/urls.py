@@ -58,7 +58,7 @@ urlpatterns= [
     path(r'assignediot', views.assignedIotDeviceToBattery, name="iotdevice"),
 
     path(r'bettrypack', views.battery_pack_menu, name="battery_data"),
-    path('subpack', views.battery_pack_sub_menu, name="sub_data")
+    path(r'subpack', views.battery_pack_sub_menu, name="sub_data")
 
 
     

@@ -78,7 +78,14 @@
             <div class="row page-titles mb-0">
                <div class="col-md-5 col-12 align-self-center">
                   <h3 class="text-themecolor mb-0">BATTERY PACK</h3>
+                  <form action="{% url 'battery_data' %}" method="GET">
+                     <label  class="">Charging Status
+                        <input type="search" name="charging_status" value="{{filter_filed.charging_status}}" class="bd-form-input" ></label>
+                     <label for="">Nominal Voltage
+                        <input type="search" name="battery_pack_nominal_voltage" value="{{filter_filed.battery_pack_nominal_voltage}}" class="bd-form-input" >
 
+                     <button type="submit" class="btn btn-primary btn-sm" onclick="">Search</button>
+                  </form>  
                </div>
                <div class="col-md-5 col-4 align-self-center">
 
@@ -94,9 +101,9 @@
                         <table class="table table-hover">
                            <thead>
                            <tbody>
-                              {% for fm in battery_data %}
+                              {% for fm in filter_data %}
                                <tr>
-                                 <a href="{% url 'battery_data' %}?battery_id={{fm.battery_serial_num}}" class="group_item link_line">{{fm.battery_serial_num}}</a>            
+                                 <a href="{% url 'battery_data' %}?battery_serial_num={{fm.battery_serial_num}}" class="group_item link_line">{{fm.battery_serial_num}}</a>            
                                </tr>
                              
                              {% endfor %}
@@ -110,7 +117,7 @@
 
                <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
                <div class="container">
-                  {% for fm in filter_data %}
+                  {% for fm in battery_data %}
                   <div class="selected_battery">Selected Battery :{{fm.battery_serial_num}}</div>
                   <main class="grid">
                     <article>
@@ -128,14 +135,14 @@
                    <article>
                      <div class="text">
                        <h3>Energy Capacity</h3>
-                       <p>{{fm.battery_pack_nominal_charge_capacity}}</p>
+                       <p>{{fm.bms_type}}</p>
                      </div>
                    </article>
 
                    <article>
                      <div class="text">
                        <h3>Charge Capacity</h3>
-                       <p>{{fm.charging_status}}</p>
+                       <p>{{fm.status}}</p>
                      </div>
                    </article>
 
