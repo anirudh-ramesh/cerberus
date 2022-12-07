@@ -173,6 +173,7 @@ a {
 
 .page-wrapper {
     position: relative;
+    background: #eef5f9;
     display: none;
     transition: .2s ease-in;
 }
@@ -607,14 +608,14 @@ p {
   }
   
   ::-webkit-scrollbar-track {
-    background-color: #dee2e6;
+    background-color: lightgrey;
     border-radius: 100px;
   }
   
   ::-webkit-scrollbar-thumb {
     border: 5px solid transparent;
     border-radius: 100px;
-    background-color: #adb5bd;
+    background-color: white;
     background-clip: content-box;
   }
 .organisationdata{
@@ -888,8 +889,4 @@ margin-left: -17% !important;
     display: flex;
     flex-direction: column;
     margin-left: 2vw
-}
-
-.roledata{
-    display: flex !important;
 }
