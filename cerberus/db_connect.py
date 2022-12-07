@@ -2,7 +2,7 @@ import psycopg2 as db
 import base64
 
 def connect():
-    conn=db.connect(host="db",user="myprojectuser",password="password",database='postgres')
+    conn=db.connect(host="db",user="my_username",password="password",database='postgres')
     return conn
     
 # psql -h db -p 5432 -U myprojectuser -d postgres
@@ -85,7 +85,6 @@ def getOrgProfiles(id):
     WHERE user_management_organisation_organisation_profile.organisation_id='{id}'"
     cursor.execute(sql)
     myresult = cursor.fetchall()
-    print(myresult, "============>>>>MY_RESULT")
     new_data = []
     for row in myresult:
         res={}
@@ -111,7 +110,6 @@ def getOrgProfiles(id):
         res["battrey_swap_satation_owner"] = row[18]
         res["battrey_swap_satation_operator"] = row[19]
         new_data.append(res)
-        print(new_data, "=========")
     cursor.close()
     return new_data
 
@@ -259,7 +257,6 @@ def listAssignedBatteryVehicle(id):
             res["charging_status"] = data[14]
             res["vehicle_assign_id"] = data[15]
             res["is_assigned"] = data[16]
-            print(my_data, "BATTERY-LIST==============>>>>")
             my_data.append(res)
 
         cursor.close()

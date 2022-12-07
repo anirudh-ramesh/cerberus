@@ -80,9 +80,9 @@ DATABASES = {
         # 'HOST': 'localhost',
         # 'PORT': '5432',
         # 'ATOMATIC_REQUESTS':True
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'postgres',
-        'USER': 'myprojectuser',
+        'USER': 'my_username',
         'HOST': 'db',
         'PORT': 5432,
         'PASSWORD': 'password'

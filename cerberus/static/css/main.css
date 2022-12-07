@@ -173,7 +173,7 @@ a {
 
 .page-wrapper {
     position: relative;
-    background: #eef5f9;
+    /* background: #eef5f9; */
     display: none;
     transition: .2s ease-in;
 }

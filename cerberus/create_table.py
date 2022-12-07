@@ -1,7 +1,7 @@
 import psycopg2 as db
 
 def connect():
-    conn=db.connect(host="db",user="myprojectuser",password="password",database='postgres')
+    conn=db.connect(host="db",user="my_username",password="password",database='postgres')
     return conn
 
 

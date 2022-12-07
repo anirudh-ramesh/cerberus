@@ -34,7 +34,7 @@ urlpatterns= [
     path(r'uservehicle/<str:id>', views.assignedVehicleToUser, name="uservehicle"),
 
     path('geofence', views.addgeofenceVehicles, name="geofence"),
-    # path('listdata', views.listgeofenceData, name="add_data"),
+    path('listdata', views.listgeofenceData, name="add_data"),
 
     path('driver', views.addDriver, name="addriver"),
     
