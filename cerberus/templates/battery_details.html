@@ -3,12 +3,8 @@
 {% block content %}
 
 {% include 'status.html' %}
-<script>
-  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-  return new Tooltip(tooltipTriggerEl);
-});
-</script>
+
+
 <div class="col-sm-12">
     <a href="{% url 'homed' %}" class="btn btn-info btn-sm">Add-Battery-Data</a>
     <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Home</a>
@@ -77,15 +73,6 @@ var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
                           <a class="table-link" aria-expanded="false" href=""><img src="../static/icons/add-88.svg"value="Add"></a>
                         
                           <a class="table-link" aria-expanded="false" href="{% url 'battery_data' %}"><img src="../static/icons/data-update.svg"/></a>
-                          <a href="{% url 'updatedata' fm.battery_serial_num %}" class="btn btn-warning btn-sm">Edit</a>
-                          <a href="{% url 'deletedata' fm.battery_serial_num %}" class="btn btn-danger btn-sm">Delete</a>
-
-                          <form action="{% url 'data' %}?cahis_id={{cahis_id}}&battery_serial_num={{fm.battery_serial_num}}" method="POST">
-                            {% csrf_token %}
-                            <input type="submit" class="btn btn-secondary btn-sm" value="Add">
-                          </form>
-
-                          <a href="{% url 'battery_data' %}" class="btn btn-info btn-sm">Battery-Pack</a>
                         </td>
                       </tr>
                       {% endfor %}

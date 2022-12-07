@@ -6,9 +6,6 @@
 
 <div class="">
   <h4 class="text-center alert alert info">User Data</h4>
-  <div>
-    <a href="{% url 'home' %}" class="btn btn-info btn-sm">Home</a>
-  </div>
     <p>Are you sure you want to delete <b>"{{item}}"</b></p>
     <form action="{% url 'user_management:delete' item.email %}" method="POST" class="d-inline">
       {% csrf_token %}

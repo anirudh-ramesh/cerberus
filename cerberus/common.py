@@ -53,7 +53,7 @@ def successAndErrorMessages():
 
         "deivceAdded" : "Device is added successfully",
         "deviceUpdate": "Device is update successfully",
-        "removeevice": "Device is deleted successfully",
+        "removeDevice": "Device is deleted successfully",
         "devicealreadyAdded": "Device is already added",
         "deviceAddToBattery": "Device is added To battery successfully.",
         "deviceAlreadyAdded": "This IOT-Device is already added.",

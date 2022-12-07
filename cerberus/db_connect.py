@@ -2,7 +2,7 @@ import psycopg2 as db
 import base64
 
 def connect():
-    conn=db.connect(host="localhost",user="postgres",password="1234",database='battery_management')
+    conn=db.connect(host="db",user="myprojectuser",password="password",database='postgres')
     return conn
     
 # psql -h db -p 5432 -U myprojectuser -d postgres
@@ -38,26 +38,29 @@ def inset_into_db(data,id,role,select):
 
 #LIST ORGANISATION INFO
 def getOrgUserInfo(id):
-    conn=connect()
-    cursor=conn.cursor()
-    sql = f"SELECT \
-    irasusapp_crmuser.email,irasusapp_crmuser.username,user_management_organisation_user_role.id \
-    FROM irasusapp_crmuser \
-    LEFT JOIN user_management_organisation_user_role ON irasusapp_crmuser.email = user_management_organisation_user_role.email \
-    WHERE user_management_organisation_user_role.serial_number='{id}'AND user_management_organisation_user_role.user_status=True"
-    cursor.execute(sql)
-    myresult = cursor.fetchall()
-    my_data = []
-    for row in myresult:
-        res={}
-        print(row)
-        res["email"]=row[0]
-        res["username"]=row[1]
-        res["role"]=row[2]
-        res["id"]=id
-        my_data.append(res)
-    cursor.close()
-    return my_data
+    try:
+        conn=connect()
+        cursor=conn.cursor()
+        sql = f"SELECT \
+        irasusapp_crmuser.email,irasusapp_crmuser.username,user_management_organisation_user_role.id \
+        FROM irasusapp_crmuser \
+        LEFT JOIN user_management_organisation_user_role ON irasusapp_crmuser.email = user_management_organisation_user_role.email \
+        WHERE user_management_organisation_user_role.serial_number='{id}'AND user_management_organisation_user_role.user_status=True"
+        cursor.execute(sql)
+        myresult = cursor.fetchall()
+        my_data = []
+        for row in myresult:
+            res={}
+            print(row)
+            res["email"]=row[0]
+            res["username"]=row[1]
+            res["role"]=row[2]
+            res["id"]=id
+            my_data.append(res)
+        cursor.close()
+        return my_data
+    except Exception as e:
+        print(e)
 
 #ADD ORGANISATION PROFILE DATA
 def orgProfileAddData(id,orgprofile_id):

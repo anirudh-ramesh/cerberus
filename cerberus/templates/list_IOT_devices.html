@@ -6,14 +6,15 @@
 
 <div class="col-sm-12">
    
-    <h4 class="text-center alert alert info">IOT-Device Data</h4>
+    <h4 class="text-center alert alert info">List IOT-Device Data</h4>
     <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Home</a>
     <a href="{% url 'adddevice' %}" class="btn btn-secondary btn-sm">Add-IOT-Device</a>
     
     <form action="" method="GET">
+          
       {% if messages %}
         {% for message in messages %}
-        <div class = "alert alert-{{message.tags}}">{{message}}</div>
+          <div class = "alert alert-{{message.tags}}">{{message}}</div>
         {% endfor %}
       {% endif %}
       
@@ -38,10 +39,11 @@
                             <td>{{fm.battery_serial_num}}</td>
                             <td>{{fm.model_name}}</td>
                             <td>{{fm.assign}}</td>
-                            <td>
-                            <a href="{% url 'updatedevice' fm.iot_imei_number_id %}" class="btn btn-info btn-sm">Edit</a>
 
-                            <a href="{% url 'devicedelete' fm.iot_imei_number_id %}" class="btn btn-danger btn-sm">Delete</a>
+                            <td style="display: flex;">
+                              <a class="table-link" aria-expanded="false" href="{% url 'updatedevice' fm.iot_imei_number_id %}"><img src="../static/icons/edit.svg"></a>
+
+                              <a class="table-link" aria-expanded="false" href="{% url 'devicedelete' fm.iot_imei_number_id %}"><img src="../static/icons/delete.svg"></a>
 
                             {% if fm.assign %}
                             <a href="{% url 'listdevice' %}?imei_number={{fm.iot_imei_number_id}}&action='remove'" class="btn btn-secondary btn-sm">Remove-To-Battery</a>

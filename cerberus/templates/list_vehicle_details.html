@@ -32,6 +32,7 @@
                         <th scope="col">Assigned Owner</th>
                         <th scope="col">Insurance Start Date</th>
                         <th scope="col">Insurance End Date</th>
+                        <th scope="col">Action</th>
 
                       </tr>
                     <tbody>
@@ -60,7 +61,7 @@
                             <td>{{fm.insurance_start_date}}</td>
                             <td>{{fm.insurance_end_date}}</td>
                           
-                            <td>
+                            <td style="display: flex;">
 
                             <a href="{% url 'updatevehicle' fm.chasis_number %}" class="btn btn-info btn-sm">Edit</a>
 

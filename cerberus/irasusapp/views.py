@@ -259,21 +259,19 @@ def updateIOTDevice(request,id):
         update_iot_device = list(IotDevices.objects.filter(imei_number=id).values())
         return render(request,'update_IOT_device.html',{'update_IOT_data': update_iot_device })
     except Exception as error:
-        return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError']) 
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError']) 
 
 def deleteIOTDeviceRecord(request,id):
     try:
         pi = IotDevices.objects.get(pk=id)
-        print(pi.imei_number, "======>>")
         if request.method == 'POST':
             pi.delete()
-            messages.add_message(request, messages.ERROR, successAndErrorMessages()['removeDevice'])
+            messages.add_message(request, messages.WARNING, successAndErrorMessages()['removeDevice'])
             return redirect('listdevice')
         context={"iot_device": pi }
         return render(request, 'delete_iot_device.html', context)
     except Exception as e:
-        print(e)
-        return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError']) 
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError']) 
 
 def assignedIotDeviceToBattery(request):
     
