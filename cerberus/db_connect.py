@@ -8,16 +8,19 @@ def connect():
 # psql -h db -p 5432 -U myprojectuser -d postgres
 #LIST ORGANISATION USER  
 def sql_query(id):
-    conn=connect()
-    cursor=conn.cursor()
-    sql= f"SELECT email FROM irasusapp_crmuser WHERE NOT EXISTS (SELECT email,serial_number FROM user_management_organisation_user_role WHERE user_management_organisation_user_role.serial_number = '{id}' AND irasusapp_crmuser.email = user_management_organisation_user_role.email);"
-    cursor.execute(sql)
-    myresult = cursor.fetchall()
-    new_data=[]
-    for data in myresult:
-        new_data.append(data[0])
-    cursor.close()    
-    return new_data
+    try:
+        conn=connect()
+        cursor=conn.cursor()
+        sql= f"SELECT email FROM irasusapp_crmuser WHERE NOT EXISTS (SELECT email,serial_number FROM user_management_organisation_user_role WHERE user_management_organisation_user_role.serial_number = '{id}' AND irasusapp_crmuser.email = user_management_organisation_user_role.email);"
+        cursor.execute(sql)
+        myresult = cursor.fetchall()
+        new_data=[]
+        for data in myresult:
+            new_data.append(data[0])
+        cursor.close()    
+        return new_data
+    except Exception as e:
+        print(e)
 
 #INSERT USER INTO ORGANISATION
 def inset_into_db(data,id,role,select):
@@ -35,26 +38,29 @@ def inset_into_db(data,id,role,select):
 
 #LIST ORGANISATION INFO
 def getOrgUserInfo(id):
-    conn=connect()
-    cursor=conn.cursor()
-    sql = f"SELECT \
-    irasusapp_crmuser.email,irasusapp_crmuser.username,user_management_organisation_user_role.id \
-    FROM irasusapp_crmuser \
-    LEFT JOIN user_management_organisation_user_role ON irasusapp_crmuser.email = user_management_organisation_user_role.email \
-    WHERE user_management_organisation_user_role.serial_number='{id}'AND user_management_organisation_user_role.user_status=True"
-    cursor.execute(sql)
-    myresult = cursor.fetchall()
-    my_data = []
-    for row in myresult:
-        res={}
-        print(row)
-        res["email"]=row[0]
-        res["username"]=row[1]
-        res["role"]=row[2]
-        res["id"]=id
-        my_data.append(res)
-    cursor.close()
-    return my_data
+    try:
+        conn=connect()
+        cursor=conn.cursor()
+        sql = f"SELECT \
+        irasusapp_crmuser.email,irasusapp_crmuser.username,user_management_organisation_user_role.id \
+        FROM irasusapp_crmuser \
+        LEFT JOIN user_management_organisation_user_role ON irasusapp_crmuser.email = user_management_organisation_user_role.email \
+        WHERE user_management_organisation_user_role.serial_number='{id}'AND user_management_organisation_user_role.user_status=True"
+        cursor.execute(sql)
+        myresult = cursor.fetchall()
+        my_data = []
+        for row in myresult:
+            res={}
+            print(row)
+            res["email"]=row[0]
+            res["username"]=row[1]
+            res["role"]=row[2]
+            res["id"]=id
+            my_data.append(res)
+        cursor.close()
+        return my_data
+    except Exception as e:
+        print(e)
 
 #ADD ORGANISATION PROFILE DATA
 def orgProfileAddData(id,orgprofile_id):
@@ -79,7 +85,6 @@ def getOrgProfiles(id):
     WHERE user_management_organisation_organisation_profile.organisation_id='{id}'"
     cursor.execute(sql)
     myresult = cursor.fetchall()
-    print(myresult, "============>>>>MY_RESULT")
     new_data = []
     for row in myresult:
         res={}
@@ -105,7 +110,6 @@ def getOrgProfiles(id):
         res["battrey_swap_satation_owner"] = row[18]
         res["battrey_swap_satation_operator"] = row[19]
         new_data.append(res)
-        print(new_data, "=========")
     cursor.close()
     return new_data
 
@@ -253,7 +257,6 @@ def listAssignedBatteryVehicle(id):
             res["charging_status"] = data[14]
             res["vehicle_assign_id"] = data[15]
             res["is_assigned"] = data[16]
-            print(my_data, "BATTERY-LIST==============>>>>")
             my_data.append(res)
 
         cursor.close()

@@ -4,9 +4,6 @@
 
 <div class="row">
     <div class="col-sm-4 offset-2">
-      {% for message in messages %}
-      <h5 class="errors">{{ message }}</h5>
-      {% endfor %}
         <h4 class="alert alert-info">Update Details</h4>
         <form action="" method="POST">
             {% csrf_token %}
@@ -44,8 +41,8 @@
                       {% endfor %}
                 </tbody>
                 </table>
-                <input type="submit" class="btn btn-success" value="Update">
-                <a href="{% url 'user_management:listorg' %}" class="btn btn-info">Back to Details</a>
+                <input type="submit" class="btn btn-success btn-sm" value="Update">
+                <a href="{% url 'user_management:listorg' %}" class="btn btn-info btn-sm">Back to Details</a>
             </form>
     </div>
 </div>

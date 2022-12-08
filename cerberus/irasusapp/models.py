@@ -66,7 +66,7 @@ class Crmuser(AbstractBaseUser):
     contact = models.CharField(max_length=12, default='')
     password = models.CharField(max_length=100,default='', validators=[password_validator])
     password_conformation = models.CharField(max_length=100,default='',validators=[password_validator])
-    last_login = models.DateField(auto_now_add=True)
+    last_login = models.DateTimeField(verbose_name="last login",auto_now=True)
     created_at = models.DateTimeField(default=datetime.datetime.now, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(default=datetime.datetime.now)
@@ -75,7 +75,7 @@ class Crmuser(AbstractBaseUser):
     pancard_proof = models.BinaryField(null=True,blank=True)
     license_proof = models.BinaryField(null=True, blank=True)
     is_admin = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     orgs = models.ManyToManyField(Organisation)
 
 
@@ -125,18 +125,18 @@ CHOICE_TYPE = (
 )
 
 # GEOFENCE-TABLE
-# class Geofence(models.Model):
-#     geofence = models.PolygonField(srid=4326, null=True, blank=True)
-#     geotype = models.CharField(blank=True, max_length=100,choices=CHOICE_TYPE, null=True)
-#     location = models.PointField(srid=4326, null=True, blank=True)
-#     description = models.CharField(default='', max_length=200)
-#     enter_latitude = models.CharField(default='', max_length=5000, null=True, blank=True)
-#     enter_longitude = models.CharField(default='', max_length=200, null=True, blank=True)
-#     pos_address = models.CharField(default='', max_length=200)
-#     geoname = models.CharField(default='', max_length=200)
+class Geofence(models.Model):
+    geofence = models.PolygonField(srid=4326, null=True, blank=True)
+    geotype = models.CharField(blank=True, max_length=100,choices=CHOICE_TYPE, null=True)
+    location = models.PointField(srid=4326, null=True, blank=True)
+    description = models.CharField(default='', max_length=200)
+    enter_latitude = models.CharField(default='', max_length=5000, null=True, blank=True)
+    enter_longitude = models.CharField(default='', max_length=200, null=True, blank=True)
+    pos_address = models.CharField(default='', max_length=200)
+    geoname = models.CharField(default='', max_length=200)
 
-#     def __str__(self):
-#         return self.geoname
+    def __str__(self):
+        return self.geoname
 
 CONFIGURATION = (
     ('48V','48V'),

@@ -69,6 +69,7 @@ def addOrganisation(request):
         form = OrgasationForm(request.POST)
         if form.is_valid():
             form.save()
+        return redirect("user_management:listorg")
     context = { 'form': form }
     messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['createOrganisation'])
     return render(request,'add_organisation.html',context)
@@ -336,7 +337,7 @@ def deleteSwapStation(request,id):
         pi = Swapstation.objects.get(pk=id)
         if request.method == 'POST':
             pi.delete()
-            messages.add_message(request, messages.ERROR, successAndErrorMessages()['removeSwapStation'])
+            messages.add_message(request, messages.WARNING, successAndErrorMessages()['removeSwapStation'])
             return redirect('user_management:listswap')
         context={'delete_swap_station': pi}
         messages.info(request, successAndErrorMessages()['removeSwapStation'])

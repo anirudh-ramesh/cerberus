@@ -73,19 +73,19 @@ AUTH_USER_MODEL = 'irasusapp.Crmuser'
 
 DATABASES = {
     'default': {    
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'battery_management',
+        'USER': 'postgres',
+        'PASSWORD': '1234',
+        'HOST': 'localhost',
+        'PORT': '5432',
+        'ATOMATIC_REQUESTS':True
         # 'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        # 'NAME': 'battery_management',
-        # 'USER': 'postgres',
-        # 'PASSWORD': '1234',
-        # 'HOST': 'localhost',
-        # 'PORT': '5432',
-        # 'ATOMATIC_REQUESTS':True
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'myprojectuser',
-        'HOST': 'db',
-        'PORT': 5432,
-        'PASSWORD': 'password'
+        # 'NAME': 'postgres',
+        # 'USER': 'my_username',
+        # 'HOST': 'db',
+        # 'PORT': 5432,
+        # 'PASSWORD': 'password'
     }
 }
 
@@ -134,11 +134,12 @@ STATICFILES_DIRS = [
 
 #SMTP Configuration
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'dixit.ims.in@gmail.com'
+EMAIL_HOST_PASSWORD = 'stzdqauxtrrstewp'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'dixitjethava1111@gmail.com'
-EMAIL_HOST_PASSWORD = 'dixit@123'
 
 # Authentication backends
 AUTHENTICATION_BACKENDS = [

@@ -10,10 +10,8 @@ from datetime import datetime
 import json
 import csv
 from django.utils import timezone
-from irasusapp.graph_helper import get_user
 # from .mixins import MessageHandler
-from .forms import CreateUserForm
-from .models import Crmuser, BatteryDetail, IotDevices,Vehicle
+from .models import Crmuser, BatteryDetail, IotDevices,Vehicle,Geofence
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.hashers import make_password, check_password 
@@ -21,8 +19,8 @@ from django.contrib.auth.hashers import make_password, check_password
 from db_connect import listAssignedBatteryVehicle,assignedVehicleToOrganisation,getOrgAssignedVehicle,removeAssignedVehiclefromOrganisation,listAssignedVehicleToUser,removeUserVehicle,images_display ,iotDevice
 from django.contrib.gis.geos import Point,Polygon
 from base64 import b64encode
-from django.contrib.auth.decorators import login_required
 import requests
+from urllib import parse
 import json
 from django.db.models import F, Q
 from common import successAndErrorMessages
@@ -52,7 +50,7 @@ def register(request):
                 user = Crmuser.objects.create_user(email=email, password=password, password_conformation=password_conformation)
                 user.save()
                 messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['singupMessage'])
-                return render(request, 'login.html')
+                return redirect('login')
         else:
             messages.add_message(request,messages.WARNING, successAndErrorMessages()['passwordNotMatched'])
             return redirect('register')
@@ -63,14 +61,20 @@ def register(request):
 def loginPage(request):
     if request.method == "POST":
         email = request.POST.get('email')
+        print(email)
         password = request.POST.get('password')
+        print(password)
         crmuser = Crmuser.get_user_by_email(email)
         if crmuser:
             print(password, check_password(password,crmuser.password))
             flag = check_password(password,crmuser.password)
+            print(flag)
             if flag:
+                print("IN THIS")
+                messages.add_message(request,messages.INFO,successAndErrorMessages()['loginMessage'])
                 return render(request,'dashboard.html',{'email':email })     
             else:
+                print("ELSE IN")
                 messages.add_message(request, messages.INFO, successAndErrorMessages()['loginErrorMessage'])
                 return redirect('login')
         else:
@@ -84,6 +88,7 @@ def logoutUser(request):
     logout(request)
     messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['logout'])
     return redirect('login')
+
 
 #Adding battery details to Battery table.
 def batteryDetails(request):
@@ -261,21 +266,19 @@ def updateIOTDevice(request,id):
         update_iot_device = list(IotDevices.objects.filter(imei_number=id).values())
         return render(request,'update_IOT_device.html',{'update_IOT_data': update_iot_device })
     except Exception as error:
-        return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError']) 
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError']) 
 
 def deleteIOTDeviceRecord(request,id):
     try:
         pi = IotDevices.objects.get(pk=id)
-        print(pi.imei_number, "======>>")
         if request.method == 'POST':
             pi.delete()
-            messages.add_message(request, messages.ERROR, successAndErrorMessages()['removeDevice'])
+            messages.add_message(request, messages.WARNING, successAndErrorMessages()['removeDevice'])
             return redirect('listdevice')
         context={"iot_device": pi }
         return render(request, 'delete_iot_device.html', context)
     except Exception as e:
-        print(e)
-        return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError']) 
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError']) 
 
 def assignedIotDeviceToBattery(request):
     
@@ -545,57 +548,57 @@ def assignedVehicleToUser(request,id):
 #Create Geofencing Locations.
 def addgeofenceVehicles(request):
     try:
-        # polygon_coordinates = []
-        # longitude_data = []
-        # latitude_data = []
-        # if request.method == "POST":
-        #     geoname = request.POST.get('geoname')
-        #     geotype = request.POST.get('geotype')
-        #     description = request.POST.get('description')
-        #     position_add = request.POST.get('pos_address')
-        #     enter_lat =request.POST.get('enter_latitude')
-        #     newdata=json.loads(enter_lat)
-        #     coordinate_data = newdata["features"][0]['geometry']['coordinates']
+        polygon_coordinates = []
+        longitude_data = []
+        latitude_data = []
+        if request.method == "POST":
+            geoname = request.POST.get('geoname')
+            geotype = request.POST.get('geotype')
+            description = request.POST.get('description')
+            position_add = request.POST.get('pos_address')
+            enter_lat =request.POST.get('enter_latitude')
+            newdata=json.loads(enter_lat)
+            coordinate_data = newdata["features"][0]['geometry']['coordinates']
 
-        #     if newdata["features"][0]['geometry']['type'] == 'Point':
-        #         longitude = coordinate_data[0]
-        #         latitude = coordinate_data[1]
-        #         location = Point(float(longitude),float(latitude),srid=4326)            
-        #         newdata = Geofence.objects.create(geoname=geoname,geotype=geotype,description=description,enter_latitude=latitude,enter_longitude=longitude,pos_address=position_add,location=location)
-        #         messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['locationCreate'])
-        #         return redirect('geofence')
+            if newdata["features"][0]['geometry']['type'] == 'Point':
+                longitude = coordinate_data[0]
+                latitude = coordinate_data[1]
+                location = Point(float(longitude),float(latitude),srid=4326)            
+                newdata = Geofence.objects.create(geoname=geoname,geotype=geotype,description=description,enter_latitude=latitude,enter_longitude=longitude,pos_address=position_add,location=location)
+                messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['locationCreate'])
+                return redirect('geofence')
 
 
-        #     if newdata["features"][0]['geometry']['type'] == 'Polygon':
-        #         coordinate_polygon = newdata["features"][0]['geometry']['coordinates']
-        #         newdata = *((*row,) for row in coordinate_polygon[0]),
-        #         converted_tuple_data = list(newdata)
-        #         for polygon_data in converted_tuple_data:
-        #             res={}
-        #             longitude = ((polygon_data[0]),(polygon_data[1]))
-        #             res['lat'] = polygon_data[1]
-        #             res['lang'] = polygon_data[0]
-        #             longitude_data.append(res)
-        #             latitude = polygon_data[1]
-        #             latitude_data.append(latitude)
-        #             polygon_coordinates.append(longitude)
-        #     geofence = Polygon(((polygon_coordinates)),srid=4326)
-        #     print("GEOFENCE", geofence)
-        #     newdata = Geofence.objects.create(geoname=geoname,geotype=geotype, description=description,enter_latitude=longitude_data,pos_address=position_add,geofence=geofence)
-        #     messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['locationCreate'])
-        #     return redirect('geofence')
+            if newdata["features"][0]['geometry']['type'] == 'Polygon':
+                coordinate_polygon = newdata["features"][0]['geometry']['coordinates']
+                newdata = *((*row,) for row in coordinate_polygon[0]),
+                converted_tuple_data = list(newdata)
+                for polygon_data in converted_tuple_data:
+                    res={}
+                    longitude = ((polygon_data[0]),(polygon_data[1]))
+                    res['lat'] = polygon_data[1]
+                    res['lang'] = polygon_data[0]
+                    longitude_data.append(res)
+                    latitude = polygon_data[1]
+                    latitude_data.append(latitude)
+                    polygon_coordinates.append(longitude)
+            geofence = Polygon(((polygon_coordinates)),srid=4326)
+            print("GEOFENCE", geofence)
+            newdata = Geofence.objects.create(geoname=geoname,geotype=geotype, description=description,enter_latitude=longitude_data,pos_address=position_add,geofence=geofence)
+            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['locationCreate'])
+            return redirect('geofence')
         return render(request, 'geolocation_form.html')
     except Exception as e:
         return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError']) 
 
-# # # list Geofencing data
-# def listgeofenceData(request):
-#     try:
-#         if request.method == "GET":
-#             geofencedata = list(Geofence.objects.values())
-#         return render(request, 'list_geofence_data.html',{ 'geofencedata': geofencedata })
-#     except Exception as e:
-#         return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError'])
+#list Geofencing data
+def listgeofenceData(request):
+    try:
+        if request.method == "GET":
+            geofencedata = list(Geofence.objects.values())
+        return render(request, 'list_geofence_data.html',{ 'geofencedata': geofencedata })
+    except Exception as e:
+        return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError'])
    
 #Add driver For Vechicle Module.
 def addDriver(request):
@@ -694,7 +697,6 @@ def filedForCSV(request):
     if request.method == "GET":
         files = list(Vehicle.objects.values())
         data= request.POST.getlist('checkedvalue')
-        messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['csvGenerate']) 
     return render(request, 'generate_csv.html')
 
 #Exporting CSV.
@@ -761,6 +763,54 @@ def swapSatationDoors(request):
 
 
 def battery_pack_menu(request):
+
+    res={"battery_data": [],"filter_data":[], 'batteries':[] , 'session_filter_data':[]}
+    demo = BatteryDetail.objects.all()
+    
+    try:
+        charging_status = request.GET.get('charging_status')
+        voltage = request.GET.get('battery_pack_nominal_voltage')
+        charge_capacity = request.GET.get('battery_pack_nominal_charge_capacity')
+        battery_type = request.GET.get('bms_type')
+         
+        filters = {}
+        for key, value in request.GET.items():
+            if value != '' and key != "battery_serial_num" :
+                filters[key] = value
+
+        if(filters):
+            request.session['battery_session_data'] = filters
+        favs = request.session.get('battery_session_data')
+        res['filter_filed'] = favs is not {} and favs or []
+        filters_data = BatteryDetail.objects.filter(**filters).values()
+        res['filter_data'] = filters_data
+
+
+        getData=str(request.get_full_path()) 
+        if("battery_serial_num" in getData):
+            getData = getData.split("battery_serial_num=")[1]
+            filter_battery =  list(BatteryDetail.objects.filter(battery_serial_num=getData).values())
+            res['battery_data']=filter_battery
+            
+            for data in filter_battery:
+
+                if(data["charging_status"] == "FULL CHARGE"):
+                    res['battery_data'][0]["charging_status"]="100%"
+                elif(data["charging_status"] == "HALF CHARGE"):
+                    res['battery_data'][0]["charging_status"]="70%"
+                elif(data["charging_status"] == "INITIAL"):
+                    res['battery_data'][0]["charging_status"]="50%"
+                else:
+                    res['battery_data'][0]["charging_status"]="40%"
+                      
+        context = res
+        return render(request, "battery_pack.html",context)
+    except Exception as e:
+        return render(request, "battery_pack.html")
+
+#Not using now. 
+def battery_pack_sub_menu(request):
+    query = request.GET.get('q')
     res={"battery_data": [],"filter_data":[]}
     try:
         getData=str(request.get_full_path())
@@ -804,10 +854,6 @@ def battery_pack_menu(request):
                     break
             res['battery_data']=battery_data
         context = res
-        return render(request, "battery_pack.html", context)
+        return render(request, "battery_submenu_pack.html", context)
     except Exception as e:
-        print(e)
-        return render(request, "battery_pack.html", context)
-
-def battery_pack_sub_menu(request):
-    return render(request, "battery_submenu_pack.html")
+        return render(request, "battery_submenu_pack.html", context)

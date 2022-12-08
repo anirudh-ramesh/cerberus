@@ -7,6 +7,13 @@
 <div class="col-sm-12">
     <h4 class="text-center alert alert info">Vehicle Assigned To Organisaiotion</h4>
     <form action="" method="GET">
+
+        {% if messages %}
+          {% for message in messages %}
+          <div class = "alert alert-{{message.tags}}">{{message}}</div>
+          {% endfor %}
+        {% endif %}
+        
         {% if user_vehicle %}
                 <table class="table table-hover">
                     <thead>

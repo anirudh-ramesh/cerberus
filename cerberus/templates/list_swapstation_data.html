@@ -4,12 +4,19 @@
 
 {% include 'status.html' %}
 
-<div class="col-sm-12"> 
-    <h4 class="text-center"><b>Swap-Station Details</b></h4>
-    <a href="{% url 'user_management:addswap' %}" class="btn btn-info btn-sm">Add-Swap-Station</a>
-    <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Home</a>
+<div class="col-sm-12">
+  <a href="{% url 'user_management:addswap' %}" class="btn btn-info btn-sm">Add-Swap-Station</a>
+        <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Home</a>
 
+    <h4 class="text-center">Swap-Station Details</h4>
     <form action="" method="GET">
+
+      {% if messages %}
+        {% for message in messages %}
+        <div class = "alert alert-{{message.tags}}">{{message}}</div>
+        {% endfor %}
+      {% endif %}
+      
         {% if swap_station_data %}
                 <table class="table table-hover">
                     <thead>
@@ -38,10 +45,11 @@
                             <td>{{fm.assigned_fleet_owner}}</td>
 
                           
-                            <td>
-                            <a href="{% url 'user_management:swapstation' fm.imei_number %}" class="btn btn-info btn-sm">Edit</a>
+                          <td style="display: flex;">
+                            <a class="table-link" aria-expanded="false" href="{% url 'user_management:swapstation' fm.imei_number %}"><img src="../static/icons/edit.svg"></a>
 
-                            <a href="{% url 'user_management:deleteswapstation' fm.imei_number %}" class="btn btn-danger btn-sm">Delete</a>
+                            <a class="table-link" aria-expanded="false" href="{% url 'user_management:deleteswapstation' fm.imei_number %}"><img src="../static/icons/delete.svg"></a>
+
                           </td>              
                         </tr>
                       
@@ -54,7 +62,10 @@
             <h4 class="text-center alert alert warning">No Records Found</h4>
         {% endif %}
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4e90159409633d4ae143b6ab984ad198ad8bcf38
     </form>
     
 </div>

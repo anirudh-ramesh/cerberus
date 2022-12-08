@@ -19,7 +19,7 @@ RUN apt update &&\
   apt install -y binutils libproj-dev gdal-bin
 # RUN apt install -y binutils libproj-dev gdal-bin
 # #RUN apt install -y postgresql
-RUN apt install -y postgis postgresql-postgis
+# RUN apt install -y postgis postgresql-postgis
 
 RUN adduser --disabled-password --gecos '' myuser
 

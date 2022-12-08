@@ -3,18 +3,21 @@
 {% block content %}
 
 {% include 'status.html' %}
-<script>
-  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-  return new Tooltip(tooltipTriggerEl);
-});
-</script>
+
+
 <div class="col-sm-12">
     <a href="{% url 'homed' %}" class="btn btn-info btn-sm">Add-Battery-Data</a>
     <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Home</a>
     <h4 class="text-center alert alert info">Battery Data</h4>
-    <div class="card"style="border-radius: 0px;">
+    <div class="card card-2"style="border-radius: 0px;">
     <form action="" method="GET">
+      
+      {% if messages %}
+        {% for message in messages %}
+        <div class = "alert alert-{{message.tags}}">{{message}}</div>
+        {% endfor %}
+      {% endif %}
+
         {% if battery_data %}
        
                 <table class="table table-hover">
@@ -70,7 +73,6 @@ var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
                           <a class="table-link" aria-expanded="false" href=""><img src="../static/icons/add-88.svg"value="Add"></a>
                         
                           <a class="table-link" aria-expanded="false" href="{% url 'battery_data' %}"><img src="../static/icons/data-update.svg"/></a>
-                          
                         </td>
                       </tr>
                       {% endfor %}
