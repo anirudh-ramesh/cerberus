@@ -66,7 +66,7 @@ class Crmuser(AbstractBaseUser):
     contact = models.CharField(max_length=12, default='')
     password = models.CharField(max_length=100,default='', validators=[password_validator])
     password_conformation = models.CharField(max_length=100,default='',validators=[password_validator])
-    last_login = models.DateField(auto_now_add=True)
+    last_login = models.DateTimeField(verbose_name="last login",auto_now=True)
     created_at = models.DateTimeField(default=datetime.datetime.now, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(default=datetime.datetime.now)
@@ -75,7 +75,7 @@ class Crmuser(AbstractBaseUser):
     pancard_proof = models.BinaryField(null=True,blank=True)
     license_proof = models.BinaryField(null=True, blank=True)
     is_admin = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     orgs = models.ManyToManyField(Organisation)
 
 

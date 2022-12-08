@@ -50,7 +50,7 @@ def register(request):
                 user = Crmuser.objects.create_user(email=email, password=password, password_conformation=password_conformation)
                 user.save()
                 messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['singupMessage'])
-                return render(request, 'login.html')
+                return redirect('login')
         else:
             messages.add_message(request,messages.WARNING, successAndErrorMessages()['passwordNotMatched'])
             return redirect('register')
@@ -61,14 +61,20 @@ def register(request):
 def loginPage(request):
     if request.method == "POST":
         email = request.POST.get('email')
+        print(email)
         password = request.POST.get('password')
+        print(password)
         crmuser = Crmuser.get_user_by_email(email)
         if crmuser:
             print(password, check_password(password,crmuser.password))
             flag = check_password(password,crmuser.password)
+            print(flag)
             if flag:
+                print("IN THIS")
+                messages.add_message(request,messages.INFO,successAndErrorMessages()['loginMessage'])
                 return render(request,'dashboard.html',{'email':email })     
             else:
+                print("ELSE IN")
                 messages.add_message(request, messages.INFO, successAndErrorMessages()['loginErrorMessage'])
                 return redirect('login')
         else:
@@ -82,6 +88,7 @@ def logoutUser(request):
     logout(request)
     messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['logout'])
     return redirect('login')
+
 
 #Adding battery details to Battery table.
 def batteryDetails(request):
