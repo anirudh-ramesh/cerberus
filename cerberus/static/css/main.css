@@ -330,7 +330,7 @@ a {
 	min-height: 100%;
 	max-width: 100%;
 }
-.card {
+.card-2 {
     display: flex;
     overflow-x: auto;
     
@@ -415,12 +415,21 @@ a {
     font-size: 2rem !important;
 }
 .card-img-top {
-    width: 42% !important;
+    width: 30% !important;
     border-top-right-radius: var(--bs-card-inner-border-radius);
     padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
     object-fit: contain;
     height: 240px;
+    -webkit-transition: .3s ease;
+    transition: .3s ease;
 }
+
+.card-img-top:hover {
+    -ms-transform: scale(1.5); /* IE 9 */
+    -webkit-transform: scale(1.5); /* Safari 3-8 */
+    transform: scale(1.5); 
+}
+
 .text-end {
     text-align: right !important;
 }
@@ -890,3 +899,8 @@ margin-left: -17% !important;
     flex-direction: column;
     margin-left: 2vw
 }
+
+.active, .active:hover {
+    background-color: white;
+    color: white;
+  }
