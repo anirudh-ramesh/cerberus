@@ -25,8 +25,8 @@ urlpatterns= [
 
     path('addvehicle/', views.addVehicleDetails, name='addvehicle'),
     path(r'getvehicle', views.getVehicleDetails, name='getvehicle'),
-    path('updatevehicle/<int:id>/', views.updateVehicleDetails, name='updatevehicle'),
-    path('deletevehicle/<int:id>/', views.deleteVehicleRecord, name='deletevehicle'),
+    path('updatevehicle/<int:id>', views.updateVehicleDetails, name='updatevehicle'),
+    path('deletevehicle/<int:id>', views.deleteVehicleRecord, name='deletevehicle'),
     
     
     path(r'assigned/<int:id>', views.assignedBatteryList, name="assinged"),
@@ -50,8 +50,8 @@ urlpatterns= [
     path('adddevice', views.addIotDevice, name="adddevice"),
 
     path('listdevice', views.listIotDevice, name="listdevice"),
-    path('updatedevice/<int:id>/', views.updateIOTDevice, name="updatedevice"),
-    path('deletedevice/<int:id>/', views.deleteIOTDeviceRecord, name="devicedelete"),
+    path('updatedevice/<int:id>', views.updateIOTDevice, name="updatedevice"),
+    path('deletedevice/<int:id>', views.deleteIOTDeviceRecord, name="devicedelete"),
 
     path('settings', views.settings, name="settings"),
     path('vehicledetails', views.VCU, name="details"),

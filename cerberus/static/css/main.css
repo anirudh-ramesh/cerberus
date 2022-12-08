@@ -908,3 +908,10 @@ margin-left: -17% !important;
     margin-left: 2vw
 }
 
+.inputdata{
+    width: 45%;
+    margin-left: 0%;
+    border-radius: 10px;
+    border: 1px solid black;
+    padding-left: 1%;
+}

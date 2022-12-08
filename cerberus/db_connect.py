@@ -24,17 +24,20 @@ def sql_query(id):
 
 #INSERT USER INTO ORGANISATION
 def inset_into_db(data,id,role,select):
-    conn=connect()
-    cursor=conn.cursor()
-    query = 'INSERT INTO user_management_organisation_user_role(serial_number,email,id,user_status) \
-    VALUES(%s,%s,%s,%s)'                                                         
-    my_data = []
-    for row in data:
-        my_data.append((id,row,str(role),select))
-    cursor.executemany(query, my_data)
-    conn.commit()
-    cursor.close()
-    return 
+    try:
+        conn=connect()
+        cursor=conn.cursor()
+        query = 'INSERT INTO user_management_organisation_user_role(serial_number,email,id,user_status) \
+        VALUES(%s,%s,%s,%s)'                                                         
+        my_data = []
+        for row in data:
+            my_data.append((id,row,str(role),select))
+        cursor.executemany(query, my_data)
+        conn.commit()
+        cursor.close()
+        return
+    except Exception as e:
+        print(e)
 
 #LIST ORGANISATION INFO
 def getOrgUserInfo(id):
@@ -60,166 +63,190 @@ def getOrgUserInfo(id):
         cursor.close()
         return my_data
     except Exception as e:
-        print(e)
+        return []
 
 #ADD ORGANISATION PROFILE DATA
 def orgProfileAddData(id,orgprofile_id):
-    conn=connect()
-    cursor = conn.cursor()
-    sql = 'INSERT INTO user_management_organisation_organisation_profile(organisation_id,organisationprofile_id) \
-    VALUES(%s,%s)'
-    my_data = (id,orgprofile_id)
-    cursor.execute(sql, my_data)
-    conn.commit()
-    cursor.close()
-    return
+    try:
+        conn=connect()
+        cursor = conn.cursor()
+        sql = 'INSERT INTO user_management_organisation_organisation_profile(organisation_id,organisationprofile_id) \
+        VALUES(%s,%s)'
+        my_data = (id,orgprofile_id)
+        cursor.execute(sql, my_data)
+        conn.commit()
+        cursor.close()
+        return
+    except Exception as e:
+        print(e)
 
 #LIST ORGANISATION PROFILE
 def getOrgProfiles(id):
-    conn=connect()
-    cursor=conn.cursor()
-    sql = f"SELECT \
-    * \
-    FROM user_management_organisationprofile \
-    LEFT JOIN user_management_organisation_organisation_profile ON user_management_organisationprofile.id = user_management_organisation_organisation_profile.organisationprofile_id \
-    WHERE user_management_organisation_organisation_profile.organisation_id='{id}'"
-    cursor.execute(sql)
-    myresult = cursor.fetchall()
-    new_data = []
-    for row in myresult:
-        res={}
-        print(row[2])
-        res['id']= str(row[0])
-        res["battery_pack_manufacture"] = str(row[1])
-        res["battery_pack_distributor"] = row[2]
-        res["battery_pack_sub_distributor"] = row[3]
-        res["battery_pack_financier"] = row[4]
-        res["battery_pack_owner"] = row[5]
-        res["battery_pack_operator"] = row[6]
-        res["vehical_manufacture"] = row[7]
-        res["vehical_distributor"] = row[8]
-        res["vehical_sub_distributor"] = row[9]
-        res["vehical_retailer"] = row[10]
-        res["vehical_financier"] = row[11]
-        res["vehical_owner"] = row[12]
-        res["vehical_operator"] = row[13]
-        res["battrey_swap_satation_manufacture"] = row[14]
-        res["battrey_swap_satation_distributor"] = row[15]
-        res["battrey_swap_satation_sub_distributor"] = row[16]
-        res["battrey_swap_satation_financier"] = row[17]
-        res["battrey_swap_satation_owner"] = row[18]
-        res["battrey_swap_satation_operator"] = row[19]
-        new_data.append(res)
-    cursor.close()
-    return new_data
+    try:
+        conn=connect()
+        cursor=conn.cursor()
+        sql = f"SELECT \
+        * \
+        FROM user_management_organisationprofile \
+        LEFT JOIN user_management_organisation_organisation_profile ON user_management_organisationprofile.id = user_management_organisation_organisation_profile.organisationprofile_id \
+        WHERE user_management_organisation_organisation_profile.organisation_id='{id}'"
+        cursor.execute(sql)
+        myresult = cursor.fetchall()
+        new_data = []
+        for row in myresult:
+            res={}
+            print(row[2])
+            res['id']= str(row[0])
+            res["battery_pack_manufacture"] = str(row[1])
+            res["battery_pack_distributor"] = row[2]
+            res["battery_pack_sub_distributor"] = row[3]
+            res["battery_pack_financier"] = row[4]
+            res["battery_pack_owner"] = row[5]
+            res["battery_pack_operator"] = row[6]
+            res["vehical_manufacture"] = row[7]
+            res["vehical_distributor"] = row[8]
+            res["vehical_sub_distributor"] = row[9]
+            res["vehical_retailer"] = row[10]
+            res["vehical_financier"] = row[11]
+            res["vehical_owner"] = row[12]
+            res["vehical_operator"] = row[13]
+            res["battrey_swap_satation_manufacture"] = row[14]
+            res["battrey_swap_satation_distributor"] = row[15]
+            res["battrey_swap_satation_sub_distributor"] = row[16]
+            res["battrey_swap_satation_financier"] = row[17]
+            res["battrey_swap_satation_owner"] = row[18]
+            res["battrey_swap_satation_operator"] = row[19]
+            new_data.append(res)
+        cursor.close()
+        return new_data
+    except Exception as e:
+        return []
 
 #LIST ORGANISATION ROLE
 def getOrgRoles(id):
-    conn=connect()
-    cursor=conn.cursor()
-    sql = f"SELECT \
-    * \
-    FROM user_management_role \
-    LEFT JOIN user_management_organisation_organisation_profile ON user_management_role.id = user_management_organisation_organisation_profile.organisationprofile_id \
-    WHERE user_management_organisation_organisation_profile.organisation_id='{id}'"
-    cursor.execute(sql)
-    myresult = cursor.fetchall()
-    new_data = []
-    for row in myresult:
-        res={}
-        print(row[2])
-        res["battery_pack_manufacture"] = str(row[1])
-        res["battery_pack_distributor"] = row[2]
-        res["battery_pack_sub_distributor"] = row[3]
-        res["battery_pack_financier"] = row[4]
-        res["battery_pack_owner"] = row[5]
-        res["battery_pack_operator"] = row[6]
-        res["vehical_manufacture"] = row[7]
-        res["vehical_distributor"] = row[8]
-        res["vehical_sub_distributor"] = row[9]
-        res["vehical_retailer"] = row[10]
-        res["vehical_financier"] = row[11]
-        res["vehical_owner"] = row[12]
-        res["vehical_operator"] = row[13]
-        res["battrey_swap_satation_manufacture"] = row[14]
-        res["battrey_swap_satation_distributor"] = row[15]
-        res["battrey_swap_satation_sub_distributor"] = row[16]
-        res["battrey_swap_satation_financier"] = row[17]
-        res["battrey_swap_satation_owner"] = row[18]
-        res["battrey_swap_satation_operator"] = row[19]
-        new_data.append(res)
-    cursor.close()
-    return new_data
+    try:
+        conn=connect()
+        cursor=conn.cursor()
+        sql = f"SELECT \
+        * \
+        FROM user_management_role \
+        LEFT JOIN user_management_organisation_organisation_profile ON user_management_role.id = user_management_organisation_organisation_profile.organisationprofile_id \
+        WHERE user_management_organisation_organisation_profile.organisation_id='{id}'"
+        cursor.execute(sql)
+        myresult = cursor.fetchall()
+        new_data = []
+        for row in myresult:
+            res={}
+            print(row[2])
+            res["battery_pack_manufacture"] = str(row[1])
+            res["battery_pack_distributor"] = row[2]
+            res["battery_pack_sub_distributor"] = row[3]
+            res["battery_pack_financier"] = row[4]
+            res["battery_pack_owner"] = row[5]
+            res["battery_pack_operator"] = row[6]
+            res["vehical_manufacture"] = row[7]
+            res["vehical_distributor"] = row[8]
+            res["vehical_sub_distributor"] = row[9]
+            res["vehical_retailer"] = row[10]
+            res["vehical_financier"] = row[11]
+            res["vehical_owner"] = row[12]
+            res["vehical_operator"] = row[13]
+            res["battrey_swap_satation_manufacture"] = row[14]
+            res["battrey_swap_satation_distributor"] = row[15]
+            res["battrey_swap_satation_sub_distributor"] = row[16]
+            res["battrey_swap_satation_financier"] = row[17]
+            res["battrey_swap_satation_owner"] = row[18]
+            res["battrey_swap_satation_operator"] = row[19]
+            new_data.append(res)
+        cursor.close()
+        return new_data
+    except Exception as e:
+        return []
 
 #UPDATE ORGANISATION USER
 def orgUserUpdateData(role,serial_number,email):
-    conn=connect()
-    cursor = conn.cursor()
-    sql = f"UPDATE user_management_organisation_user_role set id='{role}' WHERE serial_number ='{serial_number}' AND email='{email}';"
-    cursor.execute(sql)
-    conn.commit()
-    cursor.close()
-    return
+    try:
+        conn=connect()
+        cursor = conn.cursor()
+        sql = f"UPDATE user_management_organisation_user_role set id='{role}' WHERE serial_number ='{serial_number}' AND email='{email}';"
+        cursor.execute(sql)
+        conn.commit()
+        cursor.close()
+        return
+    except Exception as e:
+        print(e)
 
 #LIST ORGANISATION PERMISSION
 def organisationmultiplePermission(id):
-    conn=connect()
-    cursor=conn.cursor()
-    sql = f"SELECT \
-    user_management_organisationpermission.permission_name, user_management_organisationpermission.role_name, user_management_organisationpermission.role_id \
-    FROM user_management_role \
-    RIGHT JOIN user_management_organisationpermission ON user_management_organisationpermission.role_id = user_management_role.id \
-    WHERE user_management_role.org_id='{id}'"
-    cursor.execute(sql)
-    myresult = cursor.fetchall()
-    my_data = []
-    role_name=[]
-    for row in myresult:
-        res={}
-        if(len(role_name) != 0 and row[1] in role_name):
-            index_data=role_name.index(row[1])
-            my_data[index_data]["permission_name"]=my_data[index_data]["permission_name"] + [row[0]]
-        else:    
-            res['permission_name'] = [row[0]]
-            res['role_name'] = row[1]
-            res['role_id'] = row[2]
-            my_data.append(res)
-            role_name.append(row[1])
+    try:
+        conn=connect()
+        cursor=conn.cursor()
+        sql = f"SELECT \
+        user_management_organisationpermission.permission_name, user_management_organisationpermission.role_name, user_management_organisationpermission.role_id \
+        FROM user_management_role \
+        RIGHT JOIN user_management_organisationpermission ON user_management_organisationpermission.role_id = user_management_role.id \
+        WHERE user_management_role.org_id='{id}'"
+        cursor.execute(sql)
+        myresult = cursor.fetchall()
+        my_data = []
+        role_name=[]
+        for row in myresult:
+            res={}
+            if(len(role_name) != 0 and row[1] in role_name):
+                index_data=role_name.index(row[1])
+                my_data[index_data]["permission_name"]=my_data[index_data]["permission_name"] + [row[0]]
+            else:    
+                res['permission_name'] = [row[0]]
+                res['role_name'] = row[1]
+                res['role_id'] = row[2]
+                my_data.append(res)
+                role_name.append(row[1])
 
-    return my_data
+        return my_data
+    except Exception as e:
+        return []
 
 #INSERT ORGANISATION PERMISSION
 def insertIntoOrgnisationPermission(permission_name,role_name,id):
-    conn=connect()
-    cursor = conn.cursor()
-    sql = 'INSERT INTO user_management_organisationpermission(permission_name,role_name,role_id) \
-    VALUES(%s,%s,%s)'
-    my_data = (permission_name,role_name,id)
-    cursor.execute(sql, my_data)
-    conn.commit()
-    cursor.close()
-    return
+    try:
+        conn=connect()
+        cursor = conn.cursor()
+        sql = 'INSERT INTO user_management_organisationpermission(permission_name,role_name,role_id) \
+        VALUES(%s,%s,%s)'
+        my_data = (permission_name,role_name,id)
+        cursor.execute(sql, my_data)
+        conn.commit()
+        cursor.close()
+        return
+    except Exception as e:
+        print(e)
 
 #Update Organisation Permission
 def updateOrgAssignPermission(permission_name,role_name,id):
-    conn=connect()
-    cursor = conn.cursor()
-    sql = f"UPDATE user_management_organisationpermission set permission_name='{permission_name}', role_name='{role_name}' WHERE id ='{id}';"
-    my_data = (permission_name,role_name,id)
-    cursor.execute(sql,my_data)
-    conn.commit()
-    cursor.close()
-    return
+    try:
+        conn=connect()
+        cursor = conn.cursor()
+        sql = f"UPDATE user_management_organisationpermission set permission_name='{permission_name}', role_name='{role_name}' WHERE id ='{id}';"
+        my_data = (permission_name,role_name,id)
+        cursor.execute(sql,my_data)
+        conn.commit()
+        cursor.close()
+        return
+    except Exception as e:
+        print(e)
 
 #REMOVE USER FROM ORGANISATION
 def removeUserFromOrg(select,serial_number,email):
-    conn=connect()
-    cursor = conn.cursor()
-    sql = f"UPDATE user_management_organisation_user_role set user_status='{select}' WHERE serial_number ='{serial_number}' AND email='{email}';"
-    cursor.execute(sql)
-    conn.commit()
-    cursor.close()
-    return
+    try:
+        conn=connect()
+        cursor = conn.cursor()
+        sql = f"UPDATE user_management_organisation_user_role set user_status='{select}' WHERE serial_number ='{serial_number}' AND email='{email}';"
+        cursor.execute(sql)
+        conn.commit()
+        cursor.close()
+        return
+    except Exception as e:
+        print(e)
 
 #ASSIGNED BATTERY DATA
 def listAssignedBatteryVehicle(id):
@@ -262,108 +289,123 @@ def listAssignedBatteryVehicle(id):
         cursor.close()
         return my_data
     except Exception as e:
-        print(e)
+        return []
 
 
 #ASSIGNED-VECHICLE-TO-ORGANISATION
 def assignedVehicleToOrganisation(id, vehicle_id):
-    conn=connect()
-    cursor = conn.cursor()
-    sql = 'INSERT INTO user_management_organisation_vehicle_assign(organisation_id,vehicle_id) \
-    VALUES(%s,%s)'
-    my_data = (id,vehicle_id)
-    cursor.execute(sql, my_data)
-    conn.commit()
-    cursor.close()
-    return
+    try:
+        conn=connect()
+        cursor = conn.cursor()
+        sql = 'INSERT INTO user_management_organisation_vehicle_assign(organisation_id,vehicle_id) \
+        VALUES(%s,%s)'
+        my_data = (id,vehicle_id)
+        cursor.execute(sql, my_data)
+        conn.commit()
+        cursor.close()
+        return
+    except Exception as e:
+        return []
 
 
 #ORGANISATION-ASSIGNED-VEHICLE
 def getOrgAssignedVehicle(id):
-    conn=connect()
-    cursor=conn.cursor()
-    sql = f"SELECT \
-    * \
-    FROM irasusapp_vehicle \
-    LEFT JOIN user_management_organisation_vehicle_assign ON irasusapp_vehicle.chasis_number = user_management_organisation_vehicle_assign.vehicle_id \
-    WHERE user_management_organisation_vehicle_assign.organisation_id='{id}'"
-    cursor.execute(sql)
-    myresult = cursor.fetchall()
-    new_data = []
-    for data in myresult:
-        res={}
-        res["vehicle_model_name"] = str(data[0])
-        res["chasis_number"] = data[1]
-        res["configuration"] = data[2]
-        res["vehicle_choice"] = data[3]
-        res["vehicle_iot_imei_number"] = data[4]
-        res["vehicle_sim_number"] = data[5]
-        res["vehicle_warrenty_start_date"]= data[6]
-        res["vehicle_warrenty_end_date"] = data[7]
-        res["assigned_owner"] = data[8]
-        res["insurance_start_date"] = data[9]
-        res["insurance_end_date"] = data[10]
-        res["organisation_id"] = data[14]
-        new_data.append(res)
-    cursor.close()
-    return new_data
+    try:
+        conn=connect()
+        cursor=conn.cursor()
+        sql = f"SELECT \
+        * \
+        FROM irasusapp_vehicle \
+        LEFT JOIN user_management_organisation_vehicle_assign ON irasusapp_vehicle.chasis_number = user_management_organisation_vehicle_assign.vehicle_id \
+        WHERE user_management_organisation_vehicle_assign.organisation_id='{id}'"
+        cursor.execute(sql)
+        myresult = cursor.fetchall()
+        new_data = []
+        for data in myresult:
+            res={}
+            res["vehicle_model_name"] = str(data[0])
+            res["chasis_number"] = data[1]
+            res["configuration"] = data[2]
+            res["vehicle_choice"] = data[3]
+            res["vehicle_iot_imei_number"] = data[4]
+            res["vehicle_sim_number"] = data[5]
+            res["vehicle_warrenty_start_date"]= data[6]
+            res["vehicle_warrenty_end_date"] = data[7]
+            res["assigned_owner"] = data[8]
+            res["insurance_start_date"] = data[9]
+            res["insurance_end_date"] = data[10]
+            res["organisation_id"] = data[14]
+            new_data.append(res)
+        cursor.close()
+        return new_data
+    except Exception as e:
+        return []
 
 #REMOVE ASSIGNED-VEHICLE FROM ORGANISATION
 def removeAssignedVehiclefromOrganisation(org_id,vehicle_id):
-    conn=connect()
-    cursor = conn.cursor()
-    sql = f"DELETE FROM user_management_organisation_vehicle_assign WHERE organisation_id='{org_id}' AND vehicle_id='{vehicle_id}';"
-    cursor.execute(sql)
-    conn.commit()
-    cursor.close()
-    return
+    try:
+        conn=connect()
+        cursor = conn.cursor()
+        sql = f"DELETE FROM user_management_organisation_vehicle_assign WHERE organisation_id='{org_id}' AND vehicle_id='{vehicle_id}';"
+        cursor.execute(sql)
+        conn.commit()
+        cursor.close()
+        return
+    except Exception as e:
+        print(e)
 
 #LIST ASSIGNED-VEHICLE
 def listAssignedVehicleToUser(id):
-    conn = connect()
-    cursor = conn.cursor()
-    sql = f"SELECT \
-        irasusapp_crmuser.email,irasusapp_crmuser.username,irasusapp_crmuser.is_active,irasusapp_vehicle.vehicle_model_name, irasusapp_vehicle.chasis_number, irasusapp_vehicle.configuration, \
-        irasusapp_vehicle.vehicle_choice,irasusapp_vehicle.vehicle_iot_imei_number,irasusapp_vehicle.vehicle_sim_number,irasusapp_vehicle.vehicle_warrenty_start_date,irasusapp_vehicle.vehicle_warrenty_end_date,\
-        irasusapp_vehicle.assigned_owner, irasusapp_vehicle.insurance_start_date,irasusapp_vehicle.insurance_end_date,irasusapp_vehicle.vehicle_selected \
-        FROM irasusapp_crmuser \
-        LEFT JOIN irasusapp_vehicle ON irasusapp_vehicle.assigned_to_id = irasusapp_crmuser.email \
-        WHERE irasusapp_crmuser.email='{id}'"
+    try:
+        conn = connect()
+        cursor = conn.cursor()
+        sql = f"SELECT \
+            irasusapp_crmuser.email,irasusapp_crmuser.username,irasusapp_crmuser.is_active,irasusapp_vehicle.vehicle_model_name, irasusapp_vehicle.chasis_number, irasusapp_vehicle.configuration, \
+            irasusapp_vehicle.vehicle_choice,irasusapp_vehicle.vehicle_iot_imei_number,irasusapp_vehicle.vehicle_sim_number,irasusapp_vehicle.vehicle_warrenty_start_date,irasusapp_vehicle.vehicle_warrenty_end_date,\
+            irasusapp_vehicle.assigned_owner, irasusapp_vehicle.insurance_start_date,irasusapp_vehicle.insurance_end_date,irasusapp_vehicle.vehicle_selected \
+            FROM irasusapp_crmuser \
+            LEFT JOIN irasusapp_vehicle ON irasusapp_vehicle.assigned_to_id = irasusapp_crmuser.email \
+            WHERE irasusapp_crmuser.email='{id}'"
 
-    cursor.execute(sql)
-    myresult = cursor.fetchall()
-    vehicle_data = []
-    for data in myresult:
-        res={}
-        res["email"] = str(data[0])
-        res["username"] = data[1]
-        res["is_active"] = data[2]
-        res["vehicle_model_name"]=data[3]
-        res["chasis_number"]=data[4]
-        res["configuration"]=data[5]
-        res["vehicle_choice"]=data[6]
-        res["vehicle_iot_imei_number"]=data[7]
-        res["vehicle_sim_number"]=data[8]
-        res["vehicle_warrenty_start_date"]=data[9]
-        res["vehicle_warrenty_end_date"]=data[10]
-        res["assigned_owner"]=data[11]
-        res["insurance_start_date"]=data[12]
-        res["insurance_end_date"]=data[13]
-        res["vehicle_selected"]=data[14]
-        
-        vehicle_data.append(res)
+        cursor.execute(sql)
+        myresult = cursor.fetchall()
+        vehicle_data = []
+        for data in myresult:
+            res={}
+            res["email"] = str(data[0])
+            res["username"] = data[1]
+            res["is_active"] = data[2]
+            res["vehicle_model_name"]=data[3]
+            res["chasis_number"]=data[4]
+            res["configuration"]=data[5]
+            res["vehicle_choice"]=data[6]
+            res["vehicle_iot_imei_number"]=data[7]
+            res["vehicle_sim_number"]=data[8]
+            res["vehicle_warrenty_start_date"]=data[9]
+            res["vehicle_warrenty_end_date"]=data[10]
+            res["assigned_owner"]=data[11]
+            res["insurance_start_date"]=data[12]
+            res["insurance_end_date"]=data[13]
+            res["vehicle_selected"]=data[14]
+            
+            vehicle_data.append(res)
 
-        cursor.close()
-    return vehicle_data
+            cursor.close()
+        return vehicle_data
+    except Exception as e:
+        return []
 
 #REMOVE VECHILE FROM USER
 def removeUserVehicle(select,chasis_number):
-    conn=connect()
-    cursor = conn.cursor()
-    sql = f"UPDATE irasusapp_vehicle set assigned_to_id=NULL,vehicle_selected={select} WHERE chasis_number='{chasis_number}';"
-    cursor.execute(sql)
-    conn.commit()
-    cursor.close()
+    try:
+        conn=connect()
+        cursor = conn.cursor()
+        sql = f"UPDATE irasusapp_vehicle set assigned_to_id=NULL,vehicle_selected={select} WHERE chasis_number='{chasis_number}';"
+        cursor.execute(sql)
+        conn.commit()
+        cursor.close()
+    except Exception as e:
+        print(e)
 
 
 #CONVERY BINARY DATA TO UTF-8 TO SHOW IMAGES
@@ -387,7 +429,7 @@ def images_display():
             one_row.append(res)
         return one_row
     except Exception as e:
-        print(e)
+        return []
 
 def iotDevice(iotList):
     try:
@@ -422,4 +464,4 @@ def iotDevice(iotList):
             new_data.append(res)
         return new_data
     except Exception as e:
-        print(e)    
+        return []

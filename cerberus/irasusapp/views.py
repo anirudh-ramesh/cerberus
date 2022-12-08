@@ -627,7 +627,6 @@ def listAddedDriver(request):
     try:
         if request.method == "GET":
             driverData = images_display()
-            print(driverData, "=========>>>")
 
         context={
                 "drivers": driverData
