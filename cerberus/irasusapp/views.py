@@ -70,16 +70,14 @@ def loginPage(request):
             flag = check_password(password,crmuser.password)
             print(flag)
             if flag:
-                print("IN THIS")
-                messages.add_message(request,messages.INFO,successAndErrorMessages()['loginMessage'])
-                return render(request,'dashboard.html',{'email':email })     
+                # messages.add_message(request,messages.INFO,successAndErrorMessages()['loginMessage'])
+                return render(request,'dashboard.html',{'email': email})     
             else:
-                print("ELSE IN")
                 messages.add_message(request, messages.INFO, successAndErrorMessages()['loginErrorMessage'])
                 return redirect('login')
         else:
             messages.add_message(request, messages.INFO, successAndErrorMessages()['userNotFound'])
-            return render(request,'login.html')
+            return redirect('login')
 
     return render(request,'login.html')  
 
