@@ -76,6 +76,7 @@
                           <a class="table-link" aria-expanded="false" href="{% url 'updatedata' fm.battery_serial_num %}"><img src="../static/icons/edit.svg"></a>
                           <a class="table-link" aria-expanded="false" href="{% url 'deletedata' fm.battery_serial_num %}"><img src="../static/icons/delete.svg"></a>
                           <a class="table-link" aria-expanded="false" href="{% url 'data' %}?cahis_id={{cahis_id}}&battery_serial_num={{fm.battery_serial_num}}&action=AssignToVehicle"><img src="../static/icons/add-88.svg"value="Add"></a>
+                          <a  href="{% url 'iramedata' %}" style="height:100%; width: 100%;"  aria-expanded="false">Iframe</a>
                         {% endif %}
 
                           

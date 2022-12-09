@@ -1,0 +1,23 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+
+
+<div class="">
+    <h4 class="alert alert-info text-center">IFRAME</h4>
+ 
+  <td>
+    <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Back</a>
+  </td>
+    
+  <div class="iramedatadiv">
+    <iframe style="position: absolute; height: 100%; width: 100%; border: none" src="http://track.irasus.com:8082"></iframe>
+
+ </div>
+
+
+</div>
+
+
+{% endblock %}

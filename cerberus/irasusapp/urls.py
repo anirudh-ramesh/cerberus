@@ -16,8 +16,8 @@ urlpatterns= [
     path('dashboarddata/', views.batteryDetails, name="homed"),
     # path('signin', views.signIn, name='signin'),
     path(r'getdata', views.getBatteryDetails, name="data"),
-    path('update/<int:id>/', views.updateBatteryDetails, name="updatedata"),
-    path('delete/<int:id>/', views.deleteRecord, name="deletedata"),
+    path('update/<int:id>', views.updateBatteryDetails, name="updatedata"),
+    path('delete/<int:id>', views.deleteRecord, name="deletedata"),
     path('reset_password/', auth_views.PasswordResetView.as_view(template_name="password_reset.html"), name="password_reset"),
     path('reset_password_sent/', auth_views.PasswordResetDoneView.as_view(template_name="password_reset_sent.html"), name="password_reset_done"),
     path('reset<uidb64>/<token>', auth_views.PasswordResetConfirmView.as_view(template_name="password_reset_form.html"), name="password_reset_confirm"),
@@ -50,7 +50,7 @@ urlpatterns= [
     path('adddevice', views.addIotDevice, name="adddevice"),
 
     path('listdevice', views.listIotDevice, name="listdevice"),
-    path('updatedevice/<int:id>', views.updateIOTDevice, name="updatedevice"),
+    path(r'updatedevice/<int:id>', views.updateIOTDevice, name="updatedevice"),
     path('deletedevice/<int:id>', views.deleteIOTDeviceRecord, name="devicedelete"),
 
  
@@ -58,7 +58,9 @@ urlpatterns= [
     path(r'assignediot', views.assignedIotDeviceToBattery, name="iotdevice"),
 
     path(r'bettrypack', views.battery_pack_menu, name="battery_data"),
-    path(r'subpack', views.battery_pack_sub_menu, name="sub_data")
+    path(r'subpack', views.battery_pack_sub_menu, name="sub_data"),
+
+    path('irame', views.irameData, name="iramedata"),
 
 
     

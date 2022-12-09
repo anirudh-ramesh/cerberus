@@ -18,9 +18,15 @@ def addUser(request):
         return render(request,'user_management_templates/user_add.html',{"IsAdmin":request.session.get("IsAdmin")})
 
     if request.method == "POST":
+        new_data = request.POST.getlist("email")
+        user_type= request.POST.getlist("user_type")
         form = UserCreatedByAdmin(request.POST)
+        is_admin=False
+        if(user_type[0] == "Admin"):
+            is_admin=True
         if form.is_valid():
-            form.save()
+            form.save() 
+        Crmuser.objects.filter(email=new_data[0]).update(user_type=user_type[0],is_admin=is_admin)
     context = { 'form': form,"IsAdmin":request.session.get("IsAdmin") }
     return render(request,'user_management_templates/user_add.html',context)
 

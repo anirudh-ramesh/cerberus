@@ -46,7 +46,6 @@ def register(request):
         # contact = request.POST.get('contact')
         user_password = request.POST.get('password')
         password_conformation = request.POST.get('password_conformation')
-
         if user_password == password_conformation:
             password = make_password(user_password)
             password_conformation = password
@@ -226,7 +225,7 @@ def deleteRecord(request, id):
         if request.method == 'POST':
             pi.delete()
             messages.add_message(request, messages.WARNING, successAndErrorMessages()['removeBatteryDetails'])
-            return render(request,'delete_battery_data.html',{"IsAdmin":request.session.get("IsAdmin")})
+            return redirect('data')
         context = {'item': pi,"IsAdmin":request.session.get("IsAdmin")} 
         return render(request, "delete_battery_data.html", context)
     except Exception as e:
@@ -905,3 +904,6 @@ def battery_pack_sub_menu(request):
         res["IsAdmin"]=request.session.get("IsAdmin")
 
         return render(request, "battery_submenu_pack.html", res)
+
+def irameData(request):
+    return render(request, "iframe_data.html",{'IsAdmin' : request.session.get("IsAdmin")})
