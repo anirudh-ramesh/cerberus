@@ -411,12 +411,11 @@ def deleteSwapStation(request,id):
 
 def moduleSettings(request):
     module_data=''
-    res={"module": [] , 'status': []}
+    res={"module": [] , 'status': [],"IsAdmin":request.session.get("IsAdmin")}
     if request.method == "GET":
         module_data = Settings.objects.values()
         res['module'] = module_data
         res['status'] = True
         print(module_data)
     context = res
-    print(context)
     return render (request, 'settings.html',context)
