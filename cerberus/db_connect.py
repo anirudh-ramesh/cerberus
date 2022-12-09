@@ -27,7 +27,7 @@ def inset_into_db(data,id,role,select):
     try:
         conn=connect()
         cursor=conn.cursor()
-        query = 'INSERT INTO user_management_organisation_user_role(serial_number,email,id,user_status) \
+        query = 'INSERT INTO user_management_organisation_user_role_one(serial_number,email,id,user_status) \
         VALUES(%s,%s,%s,%s)'                                                         
         my_data = []
         for row in data:
@@ -183,7 +183,7 @@ def orgUserUpdateData(role,serial_number,email):
     try:
         conn=connect()
         cursor = conn.cursor()
-        sql = f"UPDATE user_management_organisation_user_role set id='{role}' WHERE serial_number ='{serial_number}' AND email='{email}';"
+        sql = f"UPDATE user_management_organisation_user_role_one set id='{role}' WHERE serial_number ='{serial_number}' AND email='{email}';"
         cursor.execute(sql)
         conn.commit()
         cursor.close()
@@ -255,7 +255,7 @@ def removeUserFromOrg(select,serial_number,email):
     try:
         conn=connect()
         cursor = conn.cursor()
-        sql = f"UPDATE user_management_organisation_user_role set user_status='{select}' WHERE serial_number ='{serial_number}' AND email='{email}';"
+        sql = f"UPDATE user_management_organisation_user_role_one set user_status='{select}' WHERE serial_number ='{serial_number}' AND email='{email}';"
         cursor.execute(sql)
         conn.commit()
         cursor.close()

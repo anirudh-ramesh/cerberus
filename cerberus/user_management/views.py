@@ -228,6 +228,8 @@ def createUserRole(request,id):
         if Role.objects.filter(roles=role_name).exists():
             get_id=list(Role.objects.filter(roles=role_name).values())
             insertIntoOrgnisationPermission(permission,role_name,get_id[0].get("id"))
+            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['Role'])
+
         else:
             form = Role.objects.create(roles=role_name,select=True,org_id=id)
             form.save()
@@ -264,17 +266,17 @@ def updateRole(request,name):
     if(request.session.get("IsAdmin") == False):
         messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
         return redirect('user_management:listorg')
-    role_data = list(OrganisationPermission.objects.filter(role_name=name).values())
-
+    role_data = list(OrganisationPermission.objects.filter(role_id=name).values())
+    print(role_data)
     if request.method == "POST":
         role_name = request.POST.get('role_name')
         permission_name = request.POST.get('permission_name')
-        OrganisationPermission.objects.filter(role_name=role_data).update(role_name=role_name,permission_name=permission_name)
+        OrganisationPermission.objects.filter(role_id=name).update(role_name=role_name,permission_name=permission_name)
 
         role_data = [{"role_name": role_name, 'permission_name':permission_name }]
-        return render(request,'user_management_templates/update_role.html',{'form': role_data,"IsAdmin":request.session.get("IsAdmin") })
-    role_data =list(OrganisationPermission.objects.filter(role_name=name).values())
-    return render(request,'user_management_templates/update_role.html',{'form': role_data,"IsAdmin":request.session.get("IsAdmin")})
+        return render(request,'user_management_templates/update_role.html',{'form': role_data,"IsAdmin":request.session.get("IsAdmin"),"role_id":name })
+    role_data =list(OrganisationPermission.objects.filter(role_id=name).values())
+    return render(request,'user_management_templates/update_role.html',{'form': role_data,"IsAdmin":request.session.get("IsAdmin"),"role_id":name})
 
 #Delete records from Organisation permission.
 def deleteRole(request,id):
@@ -282,13 +284,15 @@ def deleteRole(request,id):
         if(request.session.get("IsAdmin") == False):
             messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
             return redirect('user_management:listorg')
-        pi = OrganisationPermission.objects.get(pk=id)
-        if request.method == 'POST':
+        pi = OrganisationPermission.objects.get(role_id=id)
+        if "deleteUser" in request.get_full_path():
             pi.delete()
-            return redirect('user_management:getrole')
+            return redirect('user_management:listorg')
+
         context={"IsAdmin":request.session.get("IsAdmin")}
         return render(request, "user_management_templates/list_role.html", context)
     except Exception as e:
+        print(e)
         return messages.add_message(request,messages.WARNING, successAndErrorMessages()['internalError'])
 
 #This function is used for listing user role.
@@ -314,9 +318,9 @@ def orgUserinfo(request,id):
             multiple_org_role = organisationmultiplePermission(id)
             roles = list(Role.objects.filter(org_id=id).values())
 
-        else:
-            if request.method == "POST":
-                removeUserFromOrg(False,id,str(request.get_full_path()).split("=").pop())
+        if "removeUser" in request.get_full_path():
+            removeUserFromOrg(False,id,str(request.get_full_path()).split("=")[1].split("&action")[0])
+            
         context = {
             'user_org_list': user_multiple_role,
             'data':data,
@@ -327,6 +331,7 @@ def orgUserinfo(request,id):
         }
         return render(request,"user_management_templates/user_org_list.html",context)        
     except Exception as e:
+        print(e)
         return messages.add_message(request,messages.WARNING, successAndErrorMessages()['internalError'])
 
 #This function is used for adding swap station data.

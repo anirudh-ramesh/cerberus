@@ -129,13 +129,14 @@ def batteryDetails(request):
                 )
                 formData.save()
                 messages.add_message(request, messages.INFO, successAndErrorMessages()['addBattery'])
-            return render(request,'add_battery_details.html')
+            return render(request,'add_battery_details.html',{"IsAdmin": request.session.get('IsAdmin'),"ActiveBattery":BatteryDetail.objects.filter(status="idel").count(),"DamagedBattery":BatteryDetail.objects.filter(status="damaged").count(),"inActiveBattery":BatteryDetail.objects.filter(status="in_swap_station").count() })
     except Exception as e:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
 #Listing of battery details table.
 def getBatteryDetails(request):
     cahis_id=""
+
     try:
         if request.method == "GET":
             if(request.session.get("IsAdmin")):
@@ -149,17 +150,23 @@ def getBatteryDetails(request):
                     cahis_id = str(request.get_full_path()).split("=").pop()
 
         # ASSIGNED BATTERY TO VEHICLE
-        if request.method == "POST":
+        if "AssignToVehicle" in request.get_full_path():
             vehicle_id = str(request.get_full_path()).split("?").pop()
             cahis_id = vehicle_id.split('&')[0].split("=")[1]
             battery_serial_id = vehicle_id.split('&')[1].split("=")[1]
     
             data = list(BatteryDetail.objects.filter(battery_serial_num=battery_serial_id).values())
+            if(data[0]["is_assigned"]):
+                context = { 'battery_data': data,"cahis_id": cahis_id, "IsAdmin":request.session.get("IsAdmin") ,"ActiveBattery":BatteryDetail.objects.filter(status="idel").count(),"DamagedBattery":BatteryDetail.objects.filter(status="damaged").count(),"inActiveBattery":BatteryDetail.objects.filter(status="in_swap_station").count() }
+
+                messages.add_message(request, messages.WARNING, successAndErrorMessages()['addBatteryError'])
+                return render(request, 'battery_details.html',context)
+
             for x in data:
-                demo = BatteryDetail.objects.filter(pk=int(x['battery_serial_num'])).update(vehicle_assign_id=str(cahis_id), is_assigned=True)
+                BatteryDetail.objects.filter(pk=int(x['battery_serial_num'])).update(vehicle_assign_id=str(cahis_id), is_assigned=True)
             return redirect('data')
             
-        context = { 'battery_data': data,"cahis_id": cahis_id, "IsAdmin":request.session.get("IsAdmin")}
+        context = { 'battery_data': data,"cahis_id": cahis_id, "IsAdmin":request.session.get("IsAdmin") ,"ActiveBattery":BatteryDetail.objects.filter(status="idel").count(),"DamagedBattery":BatteryDetail.objects.filter(status="damaged").count(),"inActiveBattery":BatteryDetail.objects.filter(status="in_swap_station").count() }
         return render(request, 'battery_details.html',context)
     except Exception as e:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
@@ -449,10 +456,11 @@ def getVehicleDetails(request):
 
             for x in vehicle_data:
                 Vehicle.objects.filter(pk=int(x['chasis_number'])).update(assigned_to_id=str(email_id), vehicle_selected=True)
+                BatteryDetail.objects.filter(vehicle_assign_id=x['chasis_number']).update(status="idel")
                 messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['addVehicleToUser'])
-                return render(request, 'list_vehicle_details.html', {'vehicle_data':vehicle_data , 'email_id': email_id , 'serial_number': serial_number,"IsAdmin":request.session.get("IsAdmin")})
+                return render(request, 'list_vehicle_details.html', {'vehicle_data':vehicle_data , 'email_id': email_id , 'serial_number': serial_number,"IsAdmin":request.session.get("IsAdmin"),"ActiveBattery":BatteryDetail.objects.filter(status="idel").count(),"DamagedBattery":BatteryDetail.objects.filter(status="damaged").count(),"inActiveBattery":BatteryDetail.objects.filter(status="in_swap_station").count()})
 
-        return render(request, 'list_vehicle_details.html', {'vehicle_data':vehicle_data , 'email_id': email_id , 'serial_number': serial_number,"IsAdmin":request.session.get("IsAdmin")})
+        return render(request, 'list_vehicle_details.html', {'vehicle_data':vehicle_data , 'email_id': email_id , 'serial_number': serial_number,"IsAdmin":request.session.get("IsAdmin"),"ActiveBattery":BatteryDetail.objects.filter(status="idel").count(),"DamagedBattery":BatteryDetail.objects.filter(status="damaged").count(),"inActiveBattery":BatteryDetail.objects.filter(status="in_swap_station").count()})
     except Exception as e:
         return messages.warning(request, messages.ERROR,successAndErrorMessages()['internalError'])
 

@@ -1,5 +1,5 @@
 <br>
-
+{% if IsAdmin %}
 <div class="row_status row">
 	<div class="col">
 		<div class="col-md">
@@ -8,7 +8,7 @@
 			  		<h5>ACTIVE BATTERY</h5>
 			  	</div>
 			  	<div class="card-body">
-			    	<h3 class="card-title"></h3>
+			    	<h3 class="card-title">{{ActiveBattery}}</h3>
 			  	</div>
 			</div>
 		</div>
@@ -21,7 +21,7 @@
 			  		<h5>INACTIVE BATTERY</h5>
 			  	</div>
 			  	<div class="card-body">
-			    	<h3 class="card-title"></h3>
+			    	<h3 class="card-title">{{inActiveBattery}}</h3>
 			  	</div>
 			</div>
 		</div>
@@ -31,12 +31,13 @@
 		<div class="col-md">
 			<div class="Card_status card text-center text-white  mb-3" id="orders-pending">
 			  	<div class="card-header">
-			  		<h5>DAMAGED</h5>
+			  		<h5>DAMAGED BATTERY</h5>
 			  	</div>
 			  	<div class="card-body">
-			    	<h3 class="card-title"></h3>
+			    	<h3 class="card-title">{{DamagedBattery}}</h3>
 			  	</div>
 			</div>
 		</div>
 	</div>
 </div>
+{% endif %}
