@@ -87,3 +87,10 @@ class Swapstation(models.Model):
     status = models.CharField(max_length=225,default='', blank=True, null=True)
     assigned_fleet_owner = models.CharField(max_length=225,blank=True,null=True)
     battery_swap = models.ForeignKey("irasusapp.BatteryDetail",default=None,on_delete=models.CASCADE, null=True, blank=True)
+
+class Settings(models.Model):
+    module_name = models.CharField(max_length=225, blank=True, null=True)
+    
+class userSettings(models.Model):
+    disable_module = models.ForeignKey(Settings,default=None,on_delete=models.CASCADE, null=True, blank=True)
+    active_module = models.BooleanField(default=True)

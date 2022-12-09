@@ -14,6 +14,7 @@
     {% endif %}
 
     <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Home</a>
+    <div class="card card-2"style="border-radius: 0px;">
     <form action="" method="GET">
       {% if messages %}
         {% for message in messages %}
@@ -74,7 +75,7 @@
 
                             <a href="{% url 'deletevehicle' fm.chasis_number %}" class="btn btn-danger btn-sm">Delete</a>
 
-                            <a href="{% url 'data' %}?chasis_number={{fm.chasis_number}}" class="btn btn-warning btn-sm">Assigned</a>
+                            <a href="{% url 'data' %}?chasis_number={{fm.chasis_number}}" class="btn btn-warning btn-sm">Assign-To-Battery</a>
 
                             <a href="{% url 'getvehicle' %}?assigned_to_id={{email_id}}&=chasis_number={{fm.chasis_number}}&action=AssignedToUser" class="btn btn-secondary btn-sm">Assigned-To-User</a>
                             <a href="{% url 'getvehicle' %}?serial_number={{serial_number}}&=chasis_number={{fm.chasis_number}}&action=AssignedToOrganisation" class="btn btn-secondary btn-sm">Assigned-To-Organisation</a>
@@ -95,7 +96,7 @@
 
         
     </form>
-    
+  </div>
 </div>
 
 

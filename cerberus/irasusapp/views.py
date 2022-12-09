@@ -86,12 +86,11 @@ def loginPage(request):
                 
                 return render(request,'dashboard.html',{'email':email,"IsAdmin": getUserData[0]["is_admin"] })     
             else:
-                print("ELSE IN")
                 messages.add_message(request, messages.INFO, successAndErrorMessages()['loginErrorMessage'])
                 return redirect('login')
         else:
             messages.add_message(request, messages.INFO, successAndErrorMessages()['userNotFound'])
-            return render(request,'login.html')
+            return redirect('login')
 
     return render(request,'login.html')  
 
@@ -768,9 +767,6 @@ def exportCSV(request):
 
     except Exception as error:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError']) 
-
-def settings(request):
-    return render(request, 'settings.html',{"IsAdmin":request.session.get("IsAdmin")})
 
 def VCU(request):
     return render(request, 'VCU.html',{ "IsAdmin":request.session.get("IsAdmin")})

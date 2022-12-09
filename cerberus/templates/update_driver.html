@@ -46,6 +46,11 @@
                             {% else %}
                             <option value="Driver">Driver</option>
                             {% endif %}
+                            {% if fm.user_type == "Admin" %}
+                            <option value="Admin" selected>Admin</option>
+                            {% else %}
+                            <option value="Admin">Admin</option>
+                            {% endif %}
                         </select>
                     </div>
                 </div>

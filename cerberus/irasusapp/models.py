@@ -51,6 +51,7 @@ def password_validator(value):
         )
 
 USER_TYPE = (
+    ('Admin', 'Admin'),
     ('Driver', 'Driver'), 
     ('User', 'User')
 )
@@ -211,6 +212,12 @@ STATUS = (
     ('damaged','DAMAGED'),
 )
 
+CHARGING_STATUS = (
+    ('FULL CHARGE', 'FULL CHARGE'),
+    ('HALF CHARGE', 'HALF CHARGE'),
+    ('INITIAL', 'INITIAL'),
+    ('DAMAGED','DAMAGED'),
+)
 #BATTERY-TABLE
 class BatteryDetail(models.Model):
     model_name = models.CharField(max_length=100,default='', choices=MODEL_CHOICES, blank=True)
@@ -227,9 +234,9 @@ class BatteryDetail(models.Model):
     battery_cell_chemistry = models.CharField(max_length=50, default='')
     battery_pack_nominal_voltage = models.CharField(max_length=50, default='')
     battery_pack_nominal_charge_capacity = models.CharField(max_length=50, default='')
-    charging_status = models.CharField(max_length=50, default='')
-    vehicle_assign = models.ForeignKey(Vehicle, on_delete=models.CASCADE, null=True, blank=True)
+    charging_status = models.CharField(max_length=50, default='', choices=CHARGING_STATUS,blank=True)
     is_assigned = models.BooleanField(default=False)
+    vehicle_assign = models.ForeignKey(Vehicle, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return str(self.model_name)
