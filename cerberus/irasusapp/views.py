@@ -733,9 +733,6 @@ def exportCSV(request):
     except Exception as error:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError']) 
 
-def settings(request):
-    return render(request, 'settings.html')
-
 def VCU(request):
     return render(request, 'VCU.html')
 

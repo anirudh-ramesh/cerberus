@@ -1,7 +1,7 @@
 from django.utils import timezone
 from irasusapp.models import Crmuser
 from .models import Swapstation
-from user_management.models import Organisation, OrganisationPermission, OrganisationProfile, Role
+from user_management.models import Organisation, OrganisationPermission, OrganisationProfile, Role,Settings
 from .forms import UserCreatedByAdmin, OrgasationForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -344,3 +344,15 @@ def deleteSwapStation(request,id):
         return render(request, 'delete_swapstation_data.html', context)
     except Exception as e:
         return messages.add_message(request,messages.WARNING, successAndErrorMessages()['internalError'])
+
+def moduleSettings(request):
+    module_data=''
+    res={"module": [] , 'status': []}
+    if request.method == "GET":
+        module_data = Settings.objects.values()
+        res['module'] = module_data
+        res['status'] = True
+        print(module_data)
+    context = res
+    print(context)
+    return render (request, 'settings.html',context)

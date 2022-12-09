@@ -2,9 +2,47 @@
 
 {% block content %}
 
-<div class="settings" style="text-align: center;">
-    <h4>Under Process...</h4>
-    <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Back</a>
+{% include 'status.html' %}
+
+<div class="col-sm-12">
+   
+    <h4 class="text-center alert alert info">Settings</h4>
+    <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Home</a>
+    
+    <form action="" method="GET">
+          
+      {% if messages %}
+        {% for message in messages %}
+          <div class = "alert alert-{{message.tags}}">{{message}}</div>
+        {% endfor %}
+      {% endif %}
+      
+        {% if module %}
+                <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Model Name</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    <tbody>
+                    {% for fm in module %}
+                        <tr>
+                            <td>{{fm.id}}</td>  
+                            <td>{{fm.module_name}}</td>
+                            <td>
+                              <a class="table-link" aria-expanded="false" href=""><img src="../static/icons/edit.svg"></a>
+                          </td>              
+                        </tr>         
+                      {% endfor %}
+                    </tbody>
+                    </thead>
+                  </table>
+            
+        {% else %}
+            <h4 class="text-center alert alert warning">No Records Found</h4>
+        {% endif %}      
+    </form>   
 </div>
 
 {% endblock %}

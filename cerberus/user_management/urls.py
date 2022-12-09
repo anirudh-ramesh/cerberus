@@ -30,5 +30,7 @@ urlpatterns= [
         path('addswap/', views.addSwapStation, name="addswap"),
         path(r'listswapstation', views.listSwapstation, name="listswap"),
         path('updateswapstation/<int:id>', views.updateSwapstationDetails, name="swapstation"),
-        path('deletewapstation/<int:id>', views.deleteSwapStation, name="deleteswapstation"),  
+        path('deletewapstation/<int:id>', views.deleteSwapStation, name="deleteswapstation"),
+        
+        path('settings', views.moduleSettings, name="setting"),     
 ]

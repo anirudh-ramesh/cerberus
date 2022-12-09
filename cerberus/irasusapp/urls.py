@@ -53,7 +53,7 @@ urlpatterns= [
     path('updatedevice/<int:id>', views.updateIOTDevice, name="updatedevice"),
     path('deletedevice/<int:id>', views.deleteIOTDeviceRecord, name="devicedelete"),
 
-    path('settings', views.settings, name="settings"),
+ 
     path('vehicledetails', views.VCU, name="details"),
     path(r'assignediot', views.assignedIotDeviceToBattery, name="iotdevice"),
 
