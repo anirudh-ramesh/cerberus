@@ -67,12 +67,9 @@ def register(request):
 def loginPage(request):
     if request.method == "POST":
         email = request.POST.get('email')
-        print(email)
         password = request.POST.get('password')
-        print(password)
         crmuser = Crmuser.get_user_by_email(email)
         if crmuser:
-            print(password, check_password(password,crmuser.password))
             flag = check_password(password,crmuser.password)
             print(flag)
             if flag:

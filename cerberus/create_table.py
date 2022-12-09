@@ -26,10 +26,13 @@ def AdminCreate():
         conn=connect()
         cursor = conn.cursor()
         sql = "INSERT INTO irasusapp_crmuser(username, email, contact, password, password_conformation, is_admin, is_active, last_login,created_at,updated_at,deleted_at,user_type) \
-        VALUES ('admin','admin@gmail.com','7041999864','Admin@123','Admin@123','True','True','2022-12-09 06:58:35.943724+05:30','2022-12-09 06:58:35.943724+05:30','2022-12-09 06:58:35.943724+05:30','2022-12-09 06:58:35.943724+05:30','Admin');"
+        VALUES ('admin','dixit.ims.in@gmail.com','7041999864','pbkdf2_sha256$390000$UnohK4YrmvOt9W5PeqWLG8$7QzSegy5en47+dI0uLq+4hrAlsOSDUi2OUhnm+k0ruk=','pbkdf2_sha256$390000$UnohK4YrmvOt9W5PeqWLG8$7QzSegy5en47+dI0uLq+4hrAlsOSDUi2OUhnm+k0ruk=','True','True','2022-12-09 06:58:35.943724+05:30','2022-12-09 06:58:35.943724+05:30','2022-12-09 06:58:35.943724+05:30','2022-12-09 06:58:35.943724+05:30','Admin');"
         cursor.execute(sql)
         conn.commit()
         print("done")
+        sql="select * from irasusapp_crmuser;"
+        cursor.execute(sql)
+        print(cursor.fetchall(),"=>>>>>>>>")
         cursor.close()
         return
     except Exception as e:
