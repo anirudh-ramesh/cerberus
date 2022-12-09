@@ -3,14 +3,18 @@
 {% block content %}
 
 <div class="row">
-    {% for message in messages %}
-    <h5 class="errors">{{ message }}</h5>
-    {% endfor %}
     <div class=" col-sm-8 offset-2 update_battery_page">
         <h4 class="alert alert-info">Update Battery Details</h4>
         {% if form %}
         <form class="rowd" method="POST" action="">
             {% csrf_token %}
+
+            {% if messages %}
+                {% for message in messages %}
+                <div class = "alert alert-{{message.tags}}">{{message}}</div>
+                {% endfor %}
+            {% endif %}
+
             {% for fm in form %}
                 <div class="input-group mb-2">
                     <div class="input-group-append">

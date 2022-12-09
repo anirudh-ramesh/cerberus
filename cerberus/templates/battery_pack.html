@@ -16,6 +16,7 @@
 
 
       <div class="page-wrapper" style="width: 100%;">
+
          <aside class="sidebar-nav"> 
             <div class="profile-img">
             <img src="../static/images/profile.png" alt="user" class="w-50">
@@ -70,7 +71,7 @@
                
          
                <li class="sidebar-item">
-                  <a class="sidebar-link" href="{% url 'settings' %}" aria-expanded="false"><img src="../static/icons/settings.svg"></img></a>
+                  <a class="sidebar-link" href="{% url 'user_management:setting' %}" aria-expanded="false"><img src="../static/icons/settings.svg"></img></a>
                </li>
          
          
@@ -104,6 +105,7 @@
                      <button type="submit" class="btn btn-primary btn-sm" onclick="">Search</button>
                   </form>  
                </div>
+               
                <div class="col-md-5 col-4 align-self-center">
 
                   <a href="javascript:void(0)" class="btn btn-primary">+ Add Filter</a>

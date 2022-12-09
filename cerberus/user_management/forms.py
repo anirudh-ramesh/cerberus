@@ -8,7 +8,7 @@ from user_management.models import Organisation,OrganisationProfile,Role
 class UserCreatedByAdmin(forms.ModelForm):
     class Meta:
         model = Crmuser
-        fields = ['username','email','contact','password','password_conformation']
+        fields = ['username','email','contact','password','password_conformation','user_type']
 
 
 class OrgasationForm(forms.ModelForm):
