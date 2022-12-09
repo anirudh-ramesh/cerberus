@@ -2,7 +2,7 @@ import psycopg2 as db
 from datetime import date
 
 def connect():
-    conn=db.connect(host="localhost",user="postgres",password="1234",database='battery_management')
+    conn=db.connect(host="db",user="my_username",password="password",database='postgres')
     return conn
 
 
