@@ -430,13 +430,14 @@ def getVehicleDetails(request):
                 vehicle_data = list(Vehicle.objects.values())
             else:
                 vehicle_data = list(Vehicle.objects.filter(assigned_to_id=request.session.get("email")).values())
-
         #Assigned Vehicle To Organisation
         if("AssignedToOrganisation" in request.get_full_path()):
             assigned_to_user = str(request.get_full_path()).split("?").pop()
             serial_number = assigned_to_user.split("&")[0].split("=")[1]
             chasis_number = assigned_to_user.split('&')[1].split("=")[2]
-            print(assigned_to_user,serial_number,chasis_number)
+            if(assigned_to_user):
+                return render(request,'dashboard.html',{"IsAdmin":request.session.get("IsAdmin")})
+
             assignedVehicleToOrganisation(serial_number,chasis_number)
             return redirect('user_management:listorg')
 
@@ -445,6 +446,9 @@ def getVehicleDetails(request):
             email_id = assigned_to_user.split("&")[0].split("=")[1]
             vehicle_id = assigned_to_user.split('&')[1].split("=")[2]
             vehicle_data= list(Vehicle.objects.filter(chasis_number = vehicle_id).values())
+            if(email_id):
+                return render(request,'dashboard.html',{"IsAdmin":request.session.get("IsAdmin")})
+
             for x in vehicle_data:
                 Vehicle.objects.filter(pk=int(x['chasis_number'])).update(assigned_to_id=str(email_id), vehicle_selected=True)
                 messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['addVehicleToUser'])
