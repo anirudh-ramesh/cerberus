@@ -18,30 +18,48 @@
        <li class="sidebar-item">
           <a  href="{% url 'data' %}" class="sidebar-link" aria-expanded="false"><img src="../static/icons/Battery.svg"></img></a>
        </li>
+       {% if IsAdmin %}
+
        <li class="sidebar-item">
          <a class="sidebar-link" href="{% url 'user_management:listswap' %}" aria-expanded="false"><img src="../static/icons/Swapping station.svg"></img></a>
           
        </li>
+       {% endif %}
+
        <li class="sidebar-item">
           <a class="sidebar-link" href="{% url 'geofence' %}" aria-expanded="false"><img src="../static/icons/Geography.svg"></img></a>
        </li>
-       
+
        <li class="sidebar-item">
          <a class="sidebar-link" href="{% url 'getvehicle' %}" aria-expanded="false"><img src="../static/icons/Vehicles.svg"></img></a>
       </li>
-    
+      {% if IsAdmin %}
+
       <li class="sidebar-item">
          <a class="sidebar-link" href="{% url 'user_management:listorg' %}" aria-expanded="false"><img src="../static/icons/VCU.svg"></img></a>
       </li>
+      {% endif %}
+      
+
+      {% if IsAdmin %}
+
       <li class="sidebar-item">
          <a class="sidebar-link" href="{% url 'listdevice' %}" aria-expanded="false"><img src="../static/icons/IOT.svg"></img></a>
       </li>
+      {% endif %}
+
+      {% if IsAdmin %}
       <li class="sidebar-item">
          <a class="sidebar-link" href="{% url 'csv' %}" aria-expanded="false"><img src="../static/icons/reports.svg"></img></a>
       </li>
+      {% endif %}
+      
+
       <li class="sidebar-item">
          <a class="sidebar-link" href="{% url 'settings' %}" aria-expanded="false"><img src="../static/icons/settings.svg"></img></a>
       </li>
+
+
       <li class="sidebar-item">
          <a class="sidebar-link" href="http://osticket.igt-ev.com:8080/" aria-expanded="false"><img src="../static/icons/complaint.svg"></img></a>
       </li>

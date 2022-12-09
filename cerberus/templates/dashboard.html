@@ -24,7 +24,10 @@
             </div>
             <div class="container-fluid">
                <!-- Row -->
+
                <div class="row">
+                  
+
                   <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/getdata'">
                      <div class="card h-100">
                         <div class="card-body" >
@@ -38,6 +41,7 @@
                      </div>
                   </div>
 
+                  {% if IsAdmin == True %}
                   <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/listswapstation'">
                      <div class="card h-100">
                         <div class="card-body" >
@@ -49,6 +53,10 @@
                         <img class="card-img-top dashboard" src="../static/images/Swapping Station.svg" alt="Card image cap">
                      </div>
                   </div>
+                  {% endif %}
+
+                  {% if IsAdmin == True %}
+
                   <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/geofence'">
                      <div class="card h-100">
                         <div class="card-body" >
@@ -60,6 +68,8 @@
                         <img class="card-img-top dashboard" src="../static/images/Geography.svg" alt="Card image cap">
                      </div>
                   </div>
+                  {% endif %}
+
                   <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/getuser'">
                      <div class="card h-100">
                         <div class="card-body" >
@@ -71,6 +81,8 @@
                         <img class="card-img-top dashboard" src="../static/images/users.svg" alt="Card image cap">
                      </div>
                   </div>
+
+
                   <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/getvehicle'">
                      <div class="card h-100">
                         <div class="card-body" >
@@ -82,6 +94,9 @@
                         <img class="card-img-top dashboard" src="../static/images/vehicles.svg" alt="Card image cap">
                      </div>
                   </div>
+
+                  {% if IsAdmin == True %}
+
                   <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/vehicledetails'">
                      <div class="card h-100">
                         <div class="card-body" >
@@ -93,6 +108,10 @@
                         <img class="card-img-top dashboard" src="../static/images/vcu.svg" alt="Card image cap">
                      </div>
                   </div>
+                  {% endif %}
+
+                  {% if IsAdmin == True %}
+
                   <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/listdevice'">
                      <div class="card h-100">
                         <div class="card-body" >
@@ -104,6 +123,10 @@
                         <img class="card-img-top dashboard" src="../static/images/iot devices.svg" alt="Card image cap">
                      </div>
                   </div>
+                  {% endif %}
+
+                  {% if IsAdmin == True %}
+
                   <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/getcsv'">
                      <div class="card h-100">
                         <div class="card-body" >
@@ -115,6 +138,9 @@
                         <img class="card-img-top dashboard" src="../static/images/reports.svg" alt="Card image cap">
                      </div>
                   </div>
+                  {% endif %}
+
+
                   <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/setting'">
                      <div class="card h-100">
                         <div class="card-body" >
@@ -126,6 +152,7 @@
                         <img class="card-img-top dashboard" src="../static/images/settings.svg" alt="Card image cap">
                      </div>
                   </div>
+
                </div>
             </div>
          </div>

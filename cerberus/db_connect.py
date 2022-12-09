@@ -11,7 +11,7 @@ def sql_query(id):
     try:
         conn=connect()
         cursor=conn.cursor()
-        sql= f"SELECT email FROM irasusapp_crmuser WHERE NOT EXISTS (SELECT email,serial_number FROM user_management_organisation_user_role WHERE user_management_organisation_user_role.serial_number = '{id}' AND irasusapp_crmuser.email = user_management_organisation_user_role.email);"
+        sql= f"SELECT email FROM irasusapp_crmuser WHERE NOT EXISTS (SELECT email,serial_number FROM user_management_organisation_user_role_one WHERE user_management_organisation_user_role_one.serial_number = '{id}' AND irasusapp_crmuser.email = user_management_organisation_user_role_one.email);"
         cursor.execute(sql)
         myresult = cursor.fetchall()
         new_data=[]
@@ -26,7 +26,7 @@ def sql_query(id):
 def inset_into_db(data,id,role,select):
     conn=connect()
     cursor=conn.cursor()
-    query = 'INSERT INTO user_management_organisation_user_role(serial_number,email,id,user_status) \
+    query = 'INSERT INTO user_management_organisation_user_role_one(serial_number,email,id,user_status) \
     VALUES(%s,%s,%s,%s)'                                                         
     my_data = []
     for row in data:
@@ -42,10 +42,10 @@ def getOrgUserInfo(id):
         conn=connect()
         cursor=conn.cursor()
         sql = f"SELECT \
-        irasusapp_crmuser.email,irasusapp_crmuser.username,user_management_organisation_user_role.id \
+        irasusapp_crmuser.email,irasusapp_crmuser.username,user_management_organisation_user_role_one.id \
         FROM irasusapp_crmuser \
-        LEFT JOIN user_management_organisation_user_role ON irasusapp_crmuser.email = user_management_organisation_user_role.email \
-        WHERE user_management_organisation_user_role.serial_number='{id}'AND user_management_organisation_user_role.user_status=True"
+        LEFT JOIN user_management_organisation_user_role_one ON irasusapp_crmuser.email = user_management_organisation_user_role_one.email \
+        WHERE user_management_organisation_user_role_one.serial_number='{id}'AND user_management_organisation_user_role_one.user_status=True"
         cursor.execute(sql)
         myresult = cursor.fetchall()
         my_data = []
@@ -61,7 +61,23 @@ def getOrgUserInfo(id):
         return my_data
     except Exception as e:
         print(e)
+    
 
+def getOrgInfobyEmail(email):
+    try:
+        conn=connect()
+        cursor=conn.cursor()
+        sql = f"select * from user_management_organisation_user_role_one where email='{email}'"
+        cursor.execute(sql)
+        myresult = cursor.fetchall()
+        my_data = []
+        for row in myresult:
+            
+            my_data.append(row[1])
+        cursor.close()
+        return my_data
+    except Exception as e:
+        print(e)
 #ADD ORGANISATION PROFILE DATA
 def orgProfileAddData(id,orgprofile_id):
     conn=connect()
@@ -155,7 +171,7 @@ def getOrgRoles(id):
 def orgUserUpdateData(role,serial_number,email):
     conn=connect()
     cursor = conn.cursor()
-    sql = f"UPDATE user_management_organisation_user_role set id='{role}' WHERE serial_number ='{serial_number}' AND email='{email}';"
+    sql = f"UPDATE user_management_organisation_user_role_one set id='{role}' WHERE serial_number ='{serial_number}' AND email='{email}';"
     cursor.execute(sql)
     conn.commit()
     cursor.close()
@@ -215,7 +231,7 @@ def updateOrgAssignPermission(permission_name,role_name,id):
 def removeUserFromOrg(select,serial_number,email):
     conn=connect()
     cursor = conn.cursor()
-    sql = f"UPDATE user_management_organisation_user_role set user_status='{select}' WHERE serial_number ='{serial_number}' AND email='{email}';"
+    sql = f"UPDATE user_management_organisation_user_role_one set user_status='{select}' WHERE serial_number ='{serial_number}' AND email='{email}';"
     cursor.execute(sql)
     conn.commit()
     cursor.close()
@@ -240,6 +256,8 @@ def listAssignedBatteryVehicle(id):
         my_data = []
         for data in myresult:
             res= {}
+            if(data[0] == None):
+                break
             res["model_name"] = str(data[0])
             res["battery_serial_num"] = data[1]
             res["battery_type"] = data[2]
@@ -304,6 +322,8 @@ def getOrgAssignedVehicle(id):
         res["insurance_start_date"] = data[9]
         res["insurance_end_date"] = data[10]
         res["organisation_id"] = data[14]
+        res["email"] = data[12]
+
         new_data.append(res)
     cursor.close()
     return new_data

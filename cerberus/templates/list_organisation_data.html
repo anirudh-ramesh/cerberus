@@ -6,8 +6,11 @@
 
 <div class="nav_page col-sm-12">
     <h4 class="text-center alert alert info">Organisation Data</h4>
+    {% if IsAdmin %}
       <a href="{% url 'user_management:addorg' %}" class="btn btn-dark btn-sm">Add Organisation</a>
-        {% if organisation_data %}
+    {% endif %}
+    
+      {% if organisation_data %}
                 <table class="table table-hover">
                     <thead>
                       <tr>
@@ -25,18 +28,14 @@
                         <td>{{fm.is_active}}</td>
 
                         <td>
-                            <a href="{% url 'user_management:updateorg' fm.serial_number %}" class="btn btn-warning btn-sm">Add User</a>
-                            
-                            <a href="{% url 'user_management:deleteorg' fm.serial_number %}" class="btn btn-danger btn-sm">Delete</a>
-                            
+                          {% if IsAdmin %}
+                          <a href="{% url 'user_management:updateorg' fm.serial_number %}" class="btn btn-warning btn-sm">Add User</a>
+                          <a href="{% url 'user_management:deleteorg' fm.serial_number %}" class="btn btn-danger btn-sm">Delete</a>
+                          <a href="{% url 'user_management:role' fm.serial_number %}" class="btn btn-secondary btn-sm">Create Role</a>
+                          <a href="{% url 'user_management:addprofile' fm.serial_number %}" class="btn btn-secondary btn-sm">Create Organization Profile</a>
+                          <a href="{% url 'getvehicle' %}?serial_number={{fm.serial_number}}" class="btn btn-warning btn-sm">Assigned Vehicle</a>
+                          {% endif %}
                             <a href="{% url 'user_management:list' fm.serial_number %}" class="btn btn-secondary btn-sm">Org Details</a>
-
-                            <a href="{% url 'user_management:role' fm.serial_number %}" class="btn btn-secondary btn-sm">Create Role</a>
-                            
-                            <a href="{% url 'user_management:addprofile' fm.serial_number %}" class="btn btn-secondary btn-sm">Create Organization Profile</a>
-
-                            <a href="{% url 'getvehicle' %}?serial_number={{fm.serial_number}}" class="btn btn-warning btn-sm">Assigned Vehicle</a>
-
                             <a href="{% url 'assingedtoorg' fm.serial_number %}" class="btn btn-danger btn-sm">List Assigned Vehicle</a>
                           </td>     
                       </tr>

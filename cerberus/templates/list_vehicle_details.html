@@ -7,7 +7,12 @@
 <div class="col-sm-12">
    
     <h4 class="text-center alert alert info">Vehicle Profile</h4>
-    <a href="{% url 'addvehicle' %}" class="btn btn-info btn-sm">Add-Vehicle</a>
+    {% if IsAdmin %}
+
+      <a href="{% url 'addvehicle' %}" class="btn btn-info btn-sm">Add-Vehicle</a>
+      
+    {% endif %}
+
     <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Home</a>
     <form action="" method="GET">
       {% if messages %}
@@ -61,24 +66,21 @@
                             <td>{{fm.insurance_start_date}}</td>
                             <td>{{fm.insurance_end_date}}</td>
                           
-                            <td style="display: flex;">
+                            <td>
+                            <a href="{% url 'assinged' fm.chasis_number %}" class="btn btn-secondary btn-sm">List Battery</a>
 
+                            {% if IsAdmin %}
                             <a href="{% url 'updatevehicle' fm.chasis_number %}" class="btn btn-info btn-sm">Edit</a>
 
                             <a href="{% url 'deletevehicle' fm.chasis_number %}" class="btn btn-danger btn-sm">Delete</a>
 
                             <a href="{% url 'data' %}?chasis_number={{fm.chasis_number}}" class="btn btn-warning btn-sm">Assigned</a>
 
-                            <a href="{% url 'assinged' fm.chasis_number %}" class="btn btn-secondary btn-sm">List Battery</a>
+                            <a href="{% url 'getvehicle' %}?assigned_to_id={{email_id}}&=chasis_number={{fm.chasis_number}}&action=AssignedToUser" class="btn btn-secondary btn-sm">Assigned-To-User</a>
+                            <a href="{% url 'getvehicle' %}?serial_number={{serial_number}}&=chasis_number={{fm.chasis_number}}&action=AssignedToOrganisation" class="btn btn-secondary btn-sm">Assigned-To-Organisation</a>
+                            
+                            {% endif %}
 
-                            <form action="{% url 'getvehicle' %}?assigned_to_id={{email_id}}&=chasis_number={{fm.chasis_number}}" method="POST" class="d-inline">
-                              {% csrf_token %}
-                            <input type="submit" class="btn btn-info btn-sm" value="Assigned-To-User">
-                            </form>
-                            <form action="{% url 'getvehicle' %}?serial_number={{serial_number}}&=chasis_number={{fm.chasis_number}}" method="POST" class="d-inline">
-                              {% csrf_token %}
-                            <input type="submit" class="btn btn-secondary btn-sm" value="Assigned-To-Organisation">
-                            </form>
                           </td>              
                         </tr>
                       
