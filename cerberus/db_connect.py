@@ -11,7 +11,7 @@ def sql_query(id):
     try:
         conn=connect()
         cursor=conn.cursor()
-        sql= f"SELECT email FROM irasusapp_crmuser WHERE NOT EXISTS (SELECT email,serial_number FROM user_management_organisation_user_role WHERE user_management_organisation_user_role.serial_number = '{id}' AND irasusapp_crmuser.email = user_management_organisation_user_role.email);"
+        sql= f"SELECT email FROM irasusapp_crmuser WHERE NOT EXISTS (SELECT email,serial_number FROM user_management_organisation_user_role_one WHERE user_management_organisation_user_role_one.serial_number = '{id}' AND irasusapp_crmuser.email = user_management_organisation_user_role_one.email);"
         cursor.execute(sql)
         myresult = cursor.fetchall()
         new_data=[]
@@ -45,10 +45,10 @@ def getOrgUserInfo(id):
         conn=connect()
         cursor=conn.cursor()
         sql = f"SELECT \
-        irasusapp_crmuser.email,irasusapp_crmuser.username,user_management_organisation_user_role.id \
+        irasusapp_crmuser.email,irasusapp_crmuser.username,user_management_organisation_user_role_one.id \
         FROM irasusapp_crmuser \
-        LEFT JOIN user_management_organisation_user_role ON irasusapp_crmuser.email = user_management_organisation_user_role.email \
-        WHERE user_management_organisation_user_role.serial_number='{id}'AND user_management_organisation_user_role.user_status=True"
+        LEFT JOIN user_management_organisation_user_role_one ON irasusapp_crmuser.email = user_management_organisation_user_role_one.email \
+        WHERE user_management_organisation_user_role_one.serial_number='{id}'AND user_management_organisation_user_role_one.user_status=True"
         cursor.execute(sql)
         myresult = cursor.fetchall()
         my_data = []
@@ -65,6 +65,21 @@ def getOrgUserInfo(id):
     except Exception as e:
         return []
 
+def getOrgInfobyEmail(email):
+    try:
+        conn=connect()
+        cursor=conn.cursor()
+        sql = f"select * from user_management_organisation_user_role_one where email='{email}'"
+        cursor.execute(sql)
+        myresult = cursor.fetchall()
+        my_data = []
+        for row in myresult:
+            
+            my_data.append(row[1])
+        cursor.close()
+        return my_data
+    except Exception as e:
+        print(e)
 #ADD ORGANISATION PROFILE DATA
 def orgProfileAddData(id,orgprofile_id):
     try:
@@ -267,6 +282,8 @@ def listAssignedBatteryVehicle(id):
         my_data = []
         for data in myresult:
             res= {}
+            if(data[0] == None):
+                break
             res["model_name"] = str(data[0])
             res["battery_serial_num"] = data[1]
             res["battery_type"] = data[2]

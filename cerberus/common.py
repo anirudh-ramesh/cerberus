@@ -1,5 +1,6 @@
 def successAndErrorMessages():
     response = {
+        "AuthError":"You are not authorize to view this",
         "userCreate": "User is create successfully",
         "userUpdate": "User is update successfully",
         "userRemove": "User is remove successfully",
