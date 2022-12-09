@@ -25,10 +25,12 @@
             <td>{{fm.username}}</td>
             <td>{{fm.role}}</td>
             <td>
-              <form action="{% url 'user_management:list' fm.id  %}?email={{fm.email}}" method="POST">
+              <a href="{% url 'user_management:list' fm.id  %}?email={{fm.email}}&action=removeUser" class="btn btn-secondary btn-sm">Remove</a>
+
+              <!-- <form action="{% url 'user_management:list' fm.id  %}?email={{fm.email}}" method="POST">
                 {% csrf_token %}
                 <input type="submit" class="btn btn-danger btn-sm" value="Remove">
-              </form>
+              </form> -->
             </td>
           </tr>
           {% endfor %}
@@ -124,12 +126,13 @@
                 {% endfor %}
               </td>
               <td>
-                <a href="{% url 'user_management:updaterole' fm.role_name %}" class="btn btn-secondary btn-sm">Edit</a>
+                <a href="{% url 'user_management:updaterole' fm.role_id %}" class="btn btn-secondary btn-sm">Edit</a>
+                <a href="{% url 'user_management:deleterole' fm.role_id %}?action=deleteUser" class="btn btn-danger btn-sm">Delete</a>
 
-                <form action="{% url 'user_management:deleterole' fm.role_id %}" method="POST" class="d-inline">
+                <!-- <form action="{% url 'user_management:deleterole' fm.role_id %}" method="POST" class="d-inline">
                   {% csrf_token %}
                   <input type="submit" class="btn btn-danger btn-sm" value="Delete">
-                </form>
+                </form> -->
               </td>
             </tr>
 
