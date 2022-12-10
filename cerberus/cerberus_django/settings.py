@@ -74,10 +74,10 @@ AUTH_USER_MODEL = 'irasusapp.Crmuser'
 DATABASES = {
     'default': {    
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'battery_management',
-        'USER': 'postgres',
-        'PASSWORD': '1234',
-        'HOST': 'localhost',
+        'NAME': 'postgres',
+        'USER': 'my_username',
+        'PASSWORD': 'password',
+        'HOST': 'db',
         'PORT': '5432',
         'ATOMATIC_REQUESTS':True
         # 'ENGINE': 'django.contrib.gis.db.backends.postgis',

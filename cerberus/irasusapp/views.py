@@ -67,12 +67,9 @@ def register(request):
 def loginPage(request):
     if request.method == "POST":
         email = request.POST.get('email')
-        print(email)
         password = request.POST.get('password')
-        print(password)
         crmuser = Crmuser.get_user_by_email(email)
         if crmuser:
-            print(password, check_password(password,crmuser.password))
             flag = check_password(password,crmuser.password)
             print(flag)
             if flag:
@@ -516,13 +513,12 @@ def deleteVehicleRecord(request,id):
         pi = Vehicle.objects.get(pk=id)
         if request.method == 'POST':
             pi.delete()
-            messages.add_message(request, messages.ERROR, successAndErrorMessages()['removeVehicle'])
+            messages.add_message(request, messages.WARNING, successAndErrorMessages()['removeVehicle'])
             return redirect('getvehicle')
         context = {'vehicle_data' : pi,"IsAdmin":request.session.get("IsAdmin")}
         return render(request, "delete_vehicle_data.html", context)
     except Exception as e:
-        print("Error While deleting Record",e)
-        return messages.error(request, successAndErrorMessages()['internalError'])
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['removeVehicle'])
 
 #Assigned BatteryList
 def assignedBatteryList(request,id):
