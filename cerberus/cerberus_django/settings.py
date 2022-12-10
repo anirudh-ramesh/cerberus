@@ -1,5 +1,6 @@
 import os
-
+from dotenv import load_dotenv,find_dotenv
+load_dotenv(find_dotenv())
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -74,11 +75,11 @@ AUTH_USER_MODEL = 'irasusapp.Crmuser'
 DATABASES = {
     'default': {    
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'postgres',
-        'USER': 'my_username',
-        'PASSWORD': 'password',
-        'HOST': 'db',
-        'PORT': '5432',
+        'NAME': os.getenv('DATABASE_NAME'),
+        'USER': os.getenv('USER_NAME'),
+        'PASSWORD': os.getenv('PASSWORD'),
+        'HOST': os.getenv('HOST'),
+        'PORT': os.getenv('POSTGRESQL_PORTNUMBER'),
         'ATOMATIC_REQUESTS':True
         # 'ENGINE': 'django.contrib.gis.db.backends.postgis',
         # 'NAME': 'postgres',

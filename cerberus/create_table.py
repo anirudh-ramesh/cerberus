@@ -1,8 +1,11 @@
 import psycopg2 as db
-from datetime import date
+import os
+from dotenv import load_dotenv,find_dotenv
+load_dotenv(find_dotenv())
+
 
 def connect():
-    conn=db.connect(host="db",user="my_username",password="password",database='postgres')
+    conn=db.connect(host= os.getenv('HOST'),user=os.getenv('USER_NAME'),password=os.getenv('PASSWORD'),database=os.getenv('DATABASE_NAME'))
     return conn
 
 
@@ -32,7 +35,7 @@ def AdminCreate():
         print("done")
         sql="select * from irasusapp_crmuser;"
         cursor.execute(sql)
-        print(cursor.fetchall(),"=>>>>>>>>")
+        print(cursor.fetchall())
         cursor.close()
         return
     except Exception as e:

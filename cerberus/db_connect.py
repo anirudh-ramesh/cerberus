@@ -1,8 +1,11 @@
 import psycopg2 as db
 import base64
+import os
+from dotenv import load_dotenv,find_dotenv
+load_dotenv(find_dotenv())
 
 def connect():
-    conn=db.connect(host="db",user="my_username",password="password",database='postgres')
+    conn=db.connect(host= os.getenv('HOST'),user=os.getenv('USER_NAME'),password=os.getenv('PASSWORD'),database=os.getenv('DATABASE_NAME'))
     return conn
     
 # psql -h db -p 5432 -U myprojectuser -d postgres
