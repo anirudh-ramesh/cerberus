@@ -3,14 +3,18 @@
 {% block content %}
 
 <div class="row">
-    {% for message in messages %}
-    <h5 class="errors">{{ message }}</h5>
-    {% endfor %}
     <div class=" col-sm-8 offset-2 update_battery_page">
         <h4 class="alert alert-info">Update Battery Details</h4>
         {% if form %}
         <form class="rowd" method="POST" action="">
             {% csrf_token %}
+
+            {% if messages %}
+                {% for message in messages %}
+                <div class = "alert alert-{{message.tags}}">{{message}}</div>
+                {% endfor %}
+            {% endif %}
+
             {% for fm in form %}
                 <div class="input-group mb-2">
                     <div class="input-group-append">
@@ -185,9 +189,34 @@
                 <div class="input-group mb-2">
                     <div class="input-group-append">
                         <label class="label_formm">Charging Status</label>
-                        <input type='text' name='charging_status' value="{{fm.charging_status}}" class="input-register-text" required>
+                        <select type="text" id="colorSelect" name="charging_status" value="{{fm.charging_status}}" class="input-register-text" required>
+                            {% if fm.charging_status == "FULL CHARGE" %}
+                                    <option value="FULL CHARGE" selected>FULL CHARGE</option>
+                                {% else %}
+                                    <option value="FULL CHARGE">FULL CHARGE</option>
+                                {% endif %}
+
+                                {% if fm.charging_status == "HALF CHARGE" %}
+                                    <option value="HALF CHARGE" selected>HALF CHARGE</option>
+                                {% else %}
+                                    <option value="HALF CHARGE">HALF CHARGE</option>
+                                {% endif %}
+
+                                {% if fm.charging_status == "INITIAL" %}
+                                    <option value="INITIAL" selected>INITIAL</option>
+                                {% else %}
+                                    <option value="INITIAL">INITIAL</option>
+                                {% endif %}
+                                
+                                {% if fm.charging_status == "DAMAGED" %}
+                                    <option value="DAMAGED" selected>DAMAGED</option>
+                                {% else %}
+                                    <option value="DAMAGED">DAMAGED</option>
+                                {% endif %}
+                        </select>
                     </div>
                 </div>
+
 
             {% endfor %}
             <div class="udate_button">

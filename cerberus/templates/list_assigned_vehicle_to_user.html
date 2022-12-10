@@ -5,7 +5,7 @@
 {% include 'status.html' %}
 
 <div class="col-sm-12">
-    <h4 class="text-center alert alert info">Vehicle Assigned To Organisaiotion</h4>
+    <h4 class="text-center alert alert info">Vehicle Assigned To User</h4>
     <form action="" method="GET">
 
         {% if messages %}
@@ -33,6 +33,7 @@
                         <th scope="col">Assigned Owner</th>
                         <th scope="col">Insurance Start Date</th>
                         <th scope="col">Insurance End Date</th>
+                        <th scope="col">Action</th>
                       </tr>
                     <tbody>
                     {% for fm in user_vehicle %}

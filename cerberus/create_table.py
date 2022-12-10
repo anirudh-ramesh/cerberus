@@ -1,7 +1,8 @@
 import psycopg2 as db
+from datetime import date
 
 def connect():
-    conn=db.connect(host="localhost",user="postgres",password="1234",database='battery_management')
+    conn=db.connect(host="db",user="my_username",password="password",database='postgres')
     return conn
 
 
@@ -19,3 +20,22 @@ def manualTable():
     conn.commit()
 
 manualTable()
+
+def AdminCreate():
+    try:
+        conn=connect()
+        cursor = conn.cursor()
+        sql = "INSERT INTO irasusapp_crmuser(username, email, contact, password, password_conformation, is_admin, is_active, last_login,created_at,updated_at,deleted_at,user_type) \
+        VALUES ('admin','dixit.ims.in@gmail.com','7041999864','pbkdf2_sha256$390000$UnohK4YrmvOt9W5PeqWLG8$7QzSegy5en47+dI0uLq+4hrAlsOSDUi2OUhnm+k0ruk=','pbkdf2_sha256$390000$UnohK4YrmvOt9W5PeqWLG8$7QzSegy5en47+dI0uLq+4hrAlsOSDUi2OUhnm+k0ruk=','True','True','2022-12-09 06:58:35.943724+05:30','2022-12-09 06:58:35.943724+05:30','2022-12-09 06:58:35.943724+05:30','2022-12-09 06:58:35.943724+05:30','Admin');"
+        cursor.execute(sql)
+        conn.commit()
+        print("done")
+        sql="select * from irasusapp_crmuser;"
+        cursor.execute(sql)
+        print(cursor.fetchall(),"=>>>>>>>>")
+        cursor.close()
+        return
+    except Exception as e:
+        print(e) 
+
+AdminCreate()

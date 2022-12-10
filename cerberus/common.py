@@ -1,5 +1,6 @@
 def successAndErrorMessages():
     response = {
+        "AuthError":"You are not authorize to view this",
         "userCreate": "User is create successfully",
         "userUpdate": "User is update successfully",
         "userRemove": "User is remove successfully",
@@ -31,6 +32,7 @@ def successAndErrorMessages():
         "alreadyAdded": "Details already is added for this serial number",
 
         "addBattery": "Battery is added successfully",
+        "addBatteryError": "Battery is already add",
         "updateBatteryDetails" : "Battery-details is updated successfully",
         "removeBatteryDetails" : "Battery-details is removed successfully",
 
@@ -58,6 +60,8 @@ def successAndErrorMessages():
         "deviceAddToBattery": "Device is added To battery successfully.",
         "deviceAlreadyAdded": "This IOT-Device is already added.",
         "removeeviceFromBattery": "Device is remove from battery successfully.",
-        "dataNotFound": "Data Not Found"
+        "dataNotFound": "Data Not Found",
+
+        "Role":"Role is create successfully"
     }
     return response
