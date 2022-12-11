@@ -38,6 +38,8 @@ def dashboard(request):
         context['IsAdmin']= getUserData[0]["is_admin"]
         data=UserPermission(request,getUserData[0]["is_admin"])
         context['UserPermission']=data
+        context['email']=request.session.get('email')
+
     return render(request,'dashboard.html',context)
 
 # This Function is Used for register.
