@@ -1,7 +1,7 @@
 
 {% extends 'main.html' %}
 
-{% block content %}
+{% block content  %}
    <head>
       <title>Home</title>
       <meta charset="utf-8">
@@ -11,18 +11,34 @@
       <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/jquery-sparkline@2.4.0/jquery.sparkline.min.js" integrity="sha256-TKXwAzwvBOzpxaMZKl64fccBhJvyg3wrI8/joXU4VA4=" crossorigin="anonymous"></script>
    </head>
+  
    <body class="body">
       <div id="main-wrapper" data-theme="light" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="mini-sidebar" data-sidebar-position="fixed" data-header-position="fixed" data-boxed-layout="full">
+        
          <div class="page-wrapper" style="display: block;">
             <!-- ============================================================== -->
             <!-- Bread crumb and right sidebar toggle -->
             <!-- ============================================================== -->
-            <div class="page-titles">
-               <div class="dashboard_header">
-                  <div class="col-lg-4 justify-content-start">
-                     <h3 class="text-themecolor mb-0">DASHBOARD</h3>
+           
+            <div class="page-titles"
+            style="display: flex; justify-content: space-between;padding: 0px 20px;">
+               <div class="col-lg-4 justify-content-start"style="padding-top:20px;">
+                  <h3 class="text-themecolor mb-0">DASHBOARD</h3>
+               </div>
+               <div class="col-lg-3 style_card style_profileBar" >
+                  <i class="ant-avatar ant-avatar-circle ant-avatar-image"><img src="../static/images/profile.png" alt="avatar"></i>
+                  <!-- <div class="notify">
+                     <span class="heartbit"></span> <span class="point"></span>
+                   </div> -->
+                  <div style="display: flex; flex-flow: column; width: 50%;">
+                     <div class="style_userName">Kalpesh Chavda</div>
+                     <div class="style_userName">kalpeshc.ims.in@gmail.com</div>
                   </div>
-               </div>  
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                     <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                   </svg>
+                  <!-- <button class="k-button k-button-md k-button-flat k-button-flat-primary k-rounded-md k-icon-button ant-dropdown-trigger"><span role="presentation" class="k-button-icon k-icon k-i-more-vertical"></span></button> -->
+               </div>
             </div>
             <div class="container-fluid">
                <!-- Row -->

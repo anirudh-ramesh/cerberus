@@ -30,7 +30,7 @@
        {% if UserPermission.SwapingStation == True %}
 
        <li class="sidebar-item">
-         <a class="sidebar-link" href="{% url 'user_management:listswap' %}" aria-expanded="false"><img src="../static/icons/Swapping station.svg"></img></a>
+         <a class="sidebar-link" href="{% url 'user_management:listswap' %}" aria-expanded="false"><img src="../static/icons/Swapping Station -  Menu icon - Gray.svg"></img></a>
           
        </li>
        {% endif %}
@@ -77,13 +77,14 @@
       <li class="sidebar-item">
          <a class="sidebar-link" href="http://osticket.igt-ev.com:8080/" aria-expanded="false"><img src="../static/icons/complaint.svg"></img></a>
       </li>
+      <li class="sidebar-footer">
       <form method="post" action="{% url 'logout' %}">
          {% csrf_token %}
          {% if redirect_field_value %}
          <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
          {% endif %}
-         <button class="btn btn-dark" style="right: 12%; display: flex; position: absolute;"  type="submit">{% trans 'Logout' %}</button>
-       </form>
+         <button class="btn btn-dark"  type="submit">{% trans 'Logout' %}</button>
+       </form></li>
     </ul>
 
  </aside>

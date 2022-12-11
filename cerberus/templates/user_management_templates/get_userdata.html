@@ -4,9 +4,10 @@
 
 <!-- {% include 'status.html' %} -->
 
-<div class="">
+<div class="container-fluid">
   <h4 class="text-center alert alert info">User Data</h4>
-  <div>
+  <div class="col-sm-12 m-3">
+
     {% if IsAdmin %}
 
     <a href="{% url 'user_management:demo' %}" class="btn btn-secondary btn-sm">Add-User</a>
@@ -48,7 +49,7 @@
               {% if IsAdmin %}
 
               <a class="table-link" aria-expanded="false" href="{% url 'user_management:delete' fm.email %}"><img src="../static/icons/delete.svg"></a>
-
+              <a class="table-link" aria-expanded="false" href="{% url 'user_management:delete' fm.email %}"><img src="../static/icons/car2.jpg"></a>
               <a href="{% url 'getvehicle' %}?email={{fm.email}}" class="btn btn-secondary btn-sm">Assigned Vehicle</a>
 
               <a href="{% url 'uservehicle' fm.email %}" class="btn btn-primary btn-sm">User Vehicle</a>
