@@ -2,7 +2,6 @@
 
 {% block content %}
 
-{% include 'status.html' %}
 
 <div class="col-sm-12">
    
@@ -21,20 +20,32 @@
                 <table class="table table-hover">
                     <thead>
                       <tr>
-                        <th scope="col">Id</th>
                         <th scope="col">Model Name</th>
                         <th scope="col">Action</th>
                       </tr>
                     <tbody>
                     {% for fm in module %}
                         <tr>
-                            <td>{{fm.id}}</td>  
                             <td>{{fm.module_name}}</td>
+                            {% if fm.module_status %}
+                              <td>
+                                  <label class="switch">
+                                    <input type="checkbox" class="test" id="checkbox_value" value="{{fm.module_name}}" checked>
+                                    <span class="slider round"></span>
+                                  </label>
+                              </td>
+                            {% else %}  
                             <td>
-                              <a class="table-link" aria-expanded="false" href=""><img src="../static/icons/edit.svg"></a>
-                          </td>              
-                        </tr>         
+                              <label class="switch">
+                                <input type="checkbox" class="test" id="checkbox_value" value="{{fm.module_name}}">
+                                <span class="slider round"></span>
+                              </label>
+                          </td>
+                          {% endif %}
+                        </tr>        
                       {% endfor %}
+
+
                     </tbody>
                     </thead>
                   </table>
@@ -42,7 +53,22 @@
         {% else %}
             <h4 class="text-center alert alert warning">No Records Found</h4>
         {% endif %}      
-    </form>   
+    </form>
+    
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+    <script type="text/javascript">
+    jQuery(function($) {
+        jQuery('.test').change(function(e) {
+          console.log(e.target.value)
+          $.get("/settings", {
+                id: e.target.value,
+                // action:"False",
+                csrfmiddlewaretoken: '{{ csrf_token }}' 
+            });
+        });
+    }); 
+    </script>
 </div>
 
 {% endblock %}

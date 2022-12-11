@@ -92,5 +92,6 @@ class Settings(models.Model):
     module_name = models.CharField(max_length=225, blank=True, null=True)
     
 class userSettings(models.Model):
-    disable_module = models.ForeignKey(Settings,default=None,on_delete=models.CASCADE, null=True, blank=True)
-    active_module = models.BooleanField(default=True)
+    module_name = models.CharField(max_length=225, blank=True, null=True)
+    user = models.ForeignKey("irasusapp.Crmuser",default=None,on_delete=models.CASCADE, null=True, blank=True)
+    module_status = models.BooleanField(default=True, null=True)

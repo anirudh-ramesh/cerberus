@@ -42,3 +42,30 @@ def AdminCreate():
         print(e) 
 
 AdminCreate()
+
+def settingsModuleName():
+    try:
+        conn=connect()
+        cursor = conn.cursor()        
+        sql = "INSERT INTO \
+                user_management_settings(module_name) \
+            VALUES \
+                ('Users'),\
+                ('BatteryPacks'),\
+                ('Geography'),\
+                ('Vehicles'), \
+                ('VCU'),\
+                ('Organisation'), \
+                ('IOTDevice'),\
+                ('Reports'), \
+                ('SwapingStation')\
+            RETURNING *;"
+        cursor.execute(sql)
+        print("done-created")
+        conn.commit()   
+        cursor.close()
+        return
+    except Exception as e:
+        return []
+
+settingsModuleName()

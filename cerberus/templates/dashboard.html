@@ -28,7 +28,8 @@
                <!-- Row -->
 
                <div class="row">
-                  
+
+                  {% if UserPermission.BatteryPacks == True %}
 
                   <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/getdata'">
                      <div class="card h-100">
@@ -42,8 +43,9 @@
                         <img class="card-img-top dashboard" src="../static/images/1.png" alt="Card image cap">
                      </div>
                   </div>
+                  {% endif %}
 
-                  {% if IsAdmin == True %}
+                  {% if UserPermission.SwapingStation == True %}
                   <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/listswapstation'">
                      <div class="card h-100">
                         <div class="card-body" >
@@ -57,7 +59,7 @@
                   </div>
                   {% endif %}
 
-                  {% if IsAdmin == True %}
+                  {% if UserPermission.Geography == True %}
 
                   <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/geofence'">
                      <div class="card h-100">
@@ -72,6 +74,8 @@
                   </div>
                   {% endif %}
 
+                  {% if UserPermission.Users == True %}
+
                   <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/getuser'">
                      <div class="card h-100">
                         <div class="card-body" >
@@ -83,7 +87,9 @@
                         <img class="card-img-top dashboard" src="../static/images/4.png" alt="Card image cap">
                      </div>
                   </div>
+                  {% endif %}
 
+                  {% if UserPermission.Vehicles == True %}
 
                   <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/getvehicle'">
                      <div class="card h-100">
@@ -96,8 +102,9 @@
                         <img class="card-img-top dashboard" src="../static/images/5.png" alt="Card image cap">
                      </div>
                   </div>
+                  {% endif %}
 
-                  {% if IsAdmin == True %}
+                  {% if UserPermission.VCU == True %}
 
                   <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/vehicledetails'">
                      <div class="card h-100">
@@ -112,7 +119,7 @@
                   </div>
                   {% endif %}
 
-                  {% if IsAdmin == True %}
+                  {% if UserPermission.IOTDevice == True %}
 
                   <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/listdevice'">
                      <div class="card h-100">
@@ -127,7 +134,7 @@
                   </div>
                   {% endif %}
 
-                  {% if IsAdmin == True %}
+                  {% if UserPermission.Reports == True %}
 
                   <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/getcsv'">
                      <div class="card h-100">

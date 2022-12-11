@@ -1,3 +1,4 @@
+from user_management.models import Settings,userSettings
 def successAndErrorMessages():
     response = {
         "AuthError":"You are not authorize to view this",
@@ -62,6 +63,57 @@ def successAndErrorMessages():
         "removeeviceFromBattery": "Device is remove from battery successfully.",
         "dataNotFound": "Data Not Found",
 
-        "Role":"Role is create successfully"
+        "Role":"Role is create successfully",
+        "userViewPermission": ["Users","BatteryPacks","Vehicles"]
     }
     return response
+
+def UserPermission(request,check=None):
+    try:
+        module_data = Settings.objects.values()
+        new_data=[]
+        res={}
+        if(request.session.get("IsAdmin")):
+            res['module'] = module_data
+            for permission in module_data:
+                data=list(userSettings.objects.filter(user_id=request.session.get("email"),module_name=permission["module_name"]).values())
+                if(len(data) and data[0]["module_status"] == True):
+                    permission["module_status"]= False
+                    new_data.append(permission)
+                else:
+                    permission["module_status"]= True
+                    new_data.append(permission)
+
+            res['module'] = new_data
+        else:
+            new_data=[]
+            for permission in module_data:
+                if(permission["module_name"] in successAndErrorMessages()["userViewPermission"]):
+                    data=list(userSettings.objects.filter(user_id=request.session.get("email"),module_name=permission["module_name"]).values())
+                    if(len(data) and data[0]["module_status"] == False):
+                        permission["module_status"]= False
+                        new_data.append(permission)
+                    else:
+                        permission["module_status"]= True
+                        new_data.append(permission)                             
+            res['module'] = new_data
+        if(check != None):
+            res={
+                "Users":True,
+                "BatteryPacks":True,
+                "Vehicles":True,
+                "Geography":False,
+                "Organisation":False,
+                "IOTDevice":False,
+                "Reports":False,
+                "SwapingStation":False,
+                "VCU":False,
+            }
+            for i in new_data:
+                if(check):
+                    res[i["module_name"]]= i["module_status"]
+                else:
+                    res[i["module_name"]]= i["module_status"]
+        return res
+    except Exception as e:
+        print(e,"==>>")  
