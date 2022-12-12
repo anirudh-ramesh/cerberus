@@ -16,7 +16,7 @@
 		</div>
 		
 		<div class="card_Bettery card-body">
-			<h4 class="btn btn-primary add_battery_details" >Add Bettery Details</h4>
+			<h4 class="btn btn-secondary  btn-sm btn-block">Add Battery Details</h4>
 			<div class="card_subb card-body">
 				<form class="form" method="POST" action="">
 					{% csrf_token %}
@@ -65,7 +65,7 @@
 						<div class="input-group-append">
 							<label class="label_form_battery">Iot type</label>
 							<select type="text" id="colorSelect" name="iot_type" class="input-register-text_battery" required>
-								<option>tarckmate</option>
+								<option>trackmate</option>
 								<option>electrifuel</option>
 								<option>aeidth</option>
 							</select>
@@ -120,8 +120,8 @@
 					</div>
 					<div class="input-group mb-2">
 						<div class="input-group-append">
-							<label class="label_form_battery">Battery Pack Nominal Charge Capacity</label>
-							<input type="number" step="any" name='battery_pack_nominal_charge_capacity' class="input-register-text_battery" required>
+							<label class="label_form_battery">Battery Pack Capacity</label>
+							<input type="number" step="any" name='battery_pack_capacity' class="input-register-text_battery" required>
 						</div>
 					</div>
 					<div class="input-group mb-2">

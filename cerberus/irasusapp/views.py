@@ -102,12 +102,13 @@ def logoutUser(request):
 
 #Adding battery details to Battery table.
 def batteryDetails(request):
+    userPermission=UserPermission(request,request.session.get("IsAdmin"))
     try:
         serial_num = request.POST.get('battery_serial_num')
         
         if BatteryDetail.objects.filter(battery_serial_num=serial_num):
             messages.add_message(request, messages.WARNING, successAndErrorMessages()['alreadyAdded'])
-            return render(request,'add_battery_details.html')
+            return render(request,'add_battery_details.html',{"IsAdmin": request.session.get('IsAdmin')})
         else:
             if request.method == "POST":
                 formData = BatteryDetail.objects.create(
@@ -124,12 +125,12 @@ def batteryDetails(request):
                     status = request.POST.get('status'),
                     battery_cell_chemistry = request.POST.get('battery_cell_chemistry'),
                     battery_pack_nominal_voltage = request.POST.get('battery_pack_nominal_voltage'),
-                    battery_pack_nominal_charge_capacity = request.POST.get('battery_pack_nominal_charge_capacity'),
+                    battery_pack_capacity = request.POST.get('battery_pack_capacity'),
                     charging_status = request.POST.get('charging_status')
                 )
                 formData.save()
                 messages.add_message(request, messages.INFO, successAndErrorMessages()['addBattery'])
-            return render(request,'add_battery_details.html',{"IsAdmin": request.session.get('IsAdmin'),"ActiveBattery":BatteryDetail.objects.filter(status="in_vehicle").count(),"DamagedBattery":BatteryDetail.objects.filter(status="damaged").count(),"inActiveBattery":BatteryDetail.objects.filter(status="in_swap_station").count() })
+            return render(request,'add_battery_details.html',{"IsAdmin": request.session.get('IsAdmin'),'UserPermission':userPermission, "ActiveBattery":BatteryDetail.objects.filter(status="in_vehicle").count()+BatteryDetail.objects.filter(status="in_swap_station").count(),"DamagedBattery":BatteryDetail.objects.filter(status="damaged").count(),"inActiveBattery":BatteryDetail.objects.filter(status="idel").count() })
     except Exception as e:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
@@ -158,7 +159,7 @@ def getBatteryDetails(request):
     
             data = list(BatteryDetail.objects.filter(battery_serial_num=battery_serial_id).values())
             if(data[0]["is_assigned"]):
-                context = { 'battery_data': data,"cahis_id": cahis_id, "IsAdmin":request.session.get("IsAdmin") ,"ActiveBattery":BatteryDetail.objects.filter(status="in_vehicle").count(),"DamagedBattery":BatteryDetail.objects.filter(status="damaged").count(),"inActiveBattery":BatteryDetail.objects.filter(status="in_swap_station").count() }
+                context = { 'battery_data': data,"cahis_id": cahis_id, "IsAdmin":request.session.get("IsAdmin") ,"ActiveBattery":BatteryDetail.objects.filter(status="in_vehicle").count()+BatteryDetail.objects.filter(status="in_swap_station").count(),"DamagedBattery":BatteryDetail.objects.filter(status="damaged").count(),"inActiveBattery":BatteryDetail.objects.filter(status="idel").count() }
 
                 messages.add_message(request, messages.WARNING, successAndErrorMessages()['addBatteryError'])
                 return render(request, 'battery_details.html',context)
@@ -166,7 +167,7 @@ def getBatteryDetails(request):
             for x in data:
                 BatteryDetail.objects.filter(pk=int(x['battery_serial_num'])).update(vehicle_assign_id=str(cahis_id), is_assigned=True)
             return redirect('data')
-        context = { 'battery_data': data,"cahis_id": cahis_id, "IsAdmin":request.session.get("IsAdmin") ,"ActiveBattery":BatteryDetail.objects.filter(status="in_vehicle").count(),"DamagedBattery":BatteryDetail.objects.filter(status="damaged").count(),"inActiveBattery":BatteryDetail.objects.filter(status="in_swap_station").count() }
+        context = { 'battery_data': data,"cahis_id": cahis_id, "IsAdmin":request.session.get("IsAdmin") ,"ActiveBattery":BatteryDetail.objects.filter(status="in_vehicle").count() + BatteryDetail.objects.filter(status="in_swap_station").count(),"DamagedBattery":BatteryDetail.objects.filter(status="damaged").count(),"inActiveBattery":BatteryDetail.objects.filter(status="idel").count() }
         context['UserPermission']=userPermission  
 
         return render(request, 'battery_details.html',context)
@@ -193,7 +194,7 @@ def updateBatteryDetails(request, id):
             status = request.POST.get('status')
             battery_cell_chemistry = request.POST.get('battery_cell_chemistry')
             battery_pack_nominal_voltage = request.POST.get('battery_pack_nominal_voltage')
-            battery_pack_nominal_charge_capacity = request.POST.get('battery_pack_nominal_charge_capacity')
+            battery_pack_capacity = request.POST.get('battery_pack_capacity')
             charging_status = request.POST.get('charging_status')
 
             BatteryDetail.objects.filter(battery_serial_num=id).update(
@@ -201,7 +202,7 @@ def updateBatteryDetails(request, id):
             iot_type=iot_type,iot_imei_number=iot_imei_number,sim_number=sim_number,warrenty_start_date=warrenty_start_date,
             warrenty_duration=warrenty_duration,assigned_owner=assigned_owner,status=status,
             battery_cell_chemistry=battery_cell_chemistry,battery_pack_nominal_voltage=battery_pack_nominal_voltage,
-            battery_pack_nominal_charge_capacity=battery_pack_nominal_charge_capacity,
+            battery_pack_capacity=battery_pack_capacity,
             charging_status=charging_status
             )
             battery_data = [{
@@ -210,7 +211,7 @@ def updateBatteryDetails(request, id):
                 'iot_type': iot_type,'iot_imei_number': iot_imei_number,'sim_number': sim_number,'warrenty_start_date': warrenty_start_date,
                 'warrenty_duration': warrenty_duration,'assigned_owner': assigned_owner,'status': status,
                 'battery_cell_chemistry': battery_cell_chemistry,'battery_pack_nominal_voltage': battery_pack_nominal_voltage,
-                'battery_pack_nominal_charge_capacity' : battery_pack_nominal_charge_capacity,
+                'battery_pack_capacity' : battery_pack_capacity,
                 'charging_status': charging_status
                 }]
             messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['updateBatteryDetails'])
@@ -415,24 +416,32 @@ def intialize_context(request):
 
 #Adding vehicle to the Vehicle table
 def addVehicleDetails(request):
-    try: 
-        if request.method == "POST":
-            formData = Vehicle.objects.create(
-                vehicle_model_name = request.POST.get('vehicle_model_name'),
-                chasis_number = request.POST.get('chasis_number'),
-                configuration = request.POST.get('configuration'),
-                vehicle_choice = request.POST.get('vehicle_choice'),
-                vehicle_iot_imei_number = request.POST.get('vehicle_iot_imei_number'),
-                vehicle_sim_number = request.POST.get('vehicle_sim_number'),
-                vehicle_warrenty_start_date = datetime.strptime(request.POST.get('vehicle_warrenty_start_date'), format),
-                vehicle_warrenty_end_date = datetime.strptime(request.POST.get('vehicle_warrenty_end_date'), format),
-                assigned_owner = request.POST.get('assigned_owner'),
-                insurance_start_date = datetime.strptime(request.POST.get('insurance_start_date'), format),
-                insurance_end_date = datetime.strptime(request.POST.get('insurance_start_date'), format)
-            )
-            formData.save()
-            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['addVehicle'])
-        return render(request,'add_vehicle_details.html')
+    userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    try:
+        chasis_number = request.POST.get('chasis_number')
+        if Vehicle.objects.filter(chasis_number=chasis_number):
+            print("IN THIS CONDITION")
+            messages.add_message(request, messages.WARNING, successAndErrorMessages()['alreadyAddedVehicle'])
+            return render(request,'add_vehicle_details.html',{"IsAdmin": request.session.get('IsAdmin'),'UserPermission':userPermission})
+
+        else:
+            if request.method == "POST":
+                formData = Vehicle.objects.create(
+                    vehicle_model_name = request.POST.get('vehicle_model_name'),
+                    chasis_number = request.POST.get('chasis_number'),
+                    configuration = request.POST.get('configuration'),
+                    vehicle_choice = request.POST.get('vehicle_choice'),
+                    vehicle_iot_imei_number = request.POST.get('vehicle_iot_imei_number'),
+                    vehicle_sim_number = request.POST.get('vehicle_sim_number'),
+                    vehicle_warrenty_start_date = datetime.strptime(request.POST.get('vehicle_warrenty_start_date'), format),
+                    vehicle_warrenty_end_date = datetime.strptime(request.POST.get('vehicle_warrenty_end_date'), format),
+                    assigned_owner = request.POST.get('assigned_owner'),
+                    insurance_start_date = datetime.strptime(request.POST.get('insurance_start_date'), format),
+                    insurance_end_date = datetime.strptime(request.POST.get('insurance_start_date'), format)
+                )
+                formData.save()
+                messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['addVehicle'])
+            return render(request,'add_vehicle_details.html',{'UserPermission':userPermission})
     except Exception as e:
         return messages.warning(request, messages.ERROR, successAndErrorMessages()['internalError'])
 
@@ -471,9 +480,9 @@ def getVehicleDetails(request):
                 Vehicle.objects.filter(pk=int(x['chasis_number'])).update(assigned_to_id=str(email_id), vehicle_selected=True)
                 BatteryDetail.objects.filter(vehicle_assign_id=x['chasis_number']).update(status="idel")
                 messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['addVehicleToUser'])
-                return render(request, 'list_vehicle_details.html', {'vehicle_data':vehicle_data , 'email_id': email_id , 'serial_number': serial_number,"IsAdmin":request.session.get("IsAdmin"),"ActiveBattery":BatteryDetail.objects.filter(status="in_vehicle").count(),"DamagedBattery":BatteryDetail.objects.filter(status="damaged").count(),"inActiveBattery":BatteryDetail.objects.filter(status="in_swap_station").count(),'UserPermission':userPermission})
+                return render(request, 'list_vehicle_details.html', {'vehicle_data':vehicle_data , 'email_id': email_id , 'serial_number': serial_number,"IsAdmin":request.session.get("IsAdmin"),"ActiveBattery":BatteryDetail.objects.filter(status="in_vehicle").count()+BatteryDetail.objects.filter(status="in_swap_station").count(),"DamagedBattery":BatteryDetail.objects.filter(status="damaged").count(),"inActiveBattery":BatteryDetail.objects.filter(status="idel").count(),'UserPermission':userPermission})
 
-        return render(request, 'list_vehicle_details.html', {'vehicle_data':vehicle_data , 'email_id': email_id , 'serial_number': serial_number,"IsAdmin":request.session.get("IsAdmin"),"ActiveBattery":BatteryDetail.objects.filter(status="in_vehicle").count(),"DamagedBattery":BatteryDetail.objects.filter(status="damaged").count(),"inActiveBattery":BatteryDetail.objects.filter(status="in_swap_station").count(),'UserPermission':userPermission})
+        return render(request, 'list_vehicle_details.html', {'vehicle_data':vehicle_data , 'email_id': email_id , 'serial_number': serial_number,"IsAdmin":request.session.get("IsAdmin"),"ActiveBattery":BatteryDetail.objects.filter(status="in_vehicle").count()+BatteryDetail.objects.filter(status="in_swap_station").count(),"DamagedBattery":BatteryDetail.objects.filter(status="damaged").count(),"inActiveBattery":BatteryDetail.objects.filter(status="idel").count(),'UserPermission':userPermission})
     except Exception as e:
         return messages.warning(request, messages.ERROR,successAndErrorMessages()['internalError'])
 
@@ -915,7 +924,7 @@ def battery_pack_sub_menu(request):
                         new_res["charging_status"]="40%"
                     new_res["battery_serial_num"]=data["battery_serial_num"]
                     new_res["battery_pack_nominal_voltage"]=data["battery_pack_nominal_voltage"]
-                    new_res["battery_pack_nominal_charge_capacity"]=data["battery_pack_nominal_charge_capacity"]
+                    new_res["battery_pack_capacity"]=data["battery_pack_capacity"]
                     print(new_res)
                     new_arr.append(new_res)
                     res['filter_data']=new_arr

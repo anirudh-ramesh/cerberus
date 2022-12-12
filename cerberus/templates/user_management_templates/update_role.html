@@ -7,7 +7,7 @@
         {% for message in messages %}
             <h5 class="errors">{{ message }}</h5>
         {% endfor %}
-        <h4 class="alert alert-info">Update Role</h4>
+        <h4 class="btn btn-secondary  btn-sm btn-block">Update Role</h4>
             <form method="POST" action="">
                 {% csrf_token %}
                 {% for fm in form %}

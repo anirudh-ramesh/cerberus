@@ -120,34 +120,37 @@ def listOrganisation(request):
 
 #This function will update Organisation.
 def updateOranisation(request,id):
-    userPermission=UserPermission(request,request.session.get("IsAdmin"))
-    global listuser
-    if request.method == 'POST':
-        role=request.POST.get("role_name")
-        pi = Organisation.objects.get(pk=id)
-        roles = Role.objects.filter(org_id=id)
-        check_boxes = request.POST.getlist('checkedvalue')
-        inset_into_db(check_boxes,id,role,True)
-        fm = OrgasationForm(request.POST, instance=pi)
-        if fm.is_valid():
-            fm.save()
-        listuser = sql_query(id)
-    else:
-        pi = Organisation.objects.get(pk=id)
-        fm = OrgasationForm(instance=pi)
-        listuser = sql_query(id)
-        roles = Role.objects.filter(org_id=id)
-        print(listuser)
+    try:
+        userPermission=UserPermission(request,request.session.get("IsAdmin"))
+        global listuser
+        if request.method == 'POST':
+            role=request.POST.get("role_name")
+            pi = Organisation.objects.get(pk=id)
+            roles = Role.objects.filter(org_id=id)
+            check_boxes = request.POST.getlist('checkedvalue')
+            inset_into_db(check_boxes,id,role,True)
+            fm = OrgasationForm(request.POST, instance=pi)
+            if fm.is_valid():
+                fm.save()
+            listuser = sql_query(id)
+        else:
+            pi = Organisation.objects.get(pk=id)
+            fm = OrgasationForm(instance=pi)
+            listuser = sql_query(id)
+            roles = Role.objects.filter(org_id=id)
+            print(listuser)
 
-    context = {
-        'form': fm,
-        'listuser': listuser,
-        'role' : roles,
-        "IsAdmin":request.session.get("IsAdmin"),
-        'UserPermission':userPermission
-    }
-    messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['updateOrganisation'])
-    return render(request,'update_organisation.html',context)
+        context = {
+            'form': fm,
+            'listuser': listuser,
+            'role' : roles,
+            "IsAdmin":request.session.get("IsAdmin"),
+            'UserPermission':userPermission
+        }
+        # messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['updateOrganisation'])
+        return render(request,'update_organisation.html',context)
+    except Exception as e:
+        return messages.add_message(request,messages.WARNING, successAndErrorMessages()['internalError'])
 
 #Delete records from Organisation.
 def deleteOraganisation(request, id):
@@ -168,7 +171,7 @@ def deleteOraganisation(request, id):
 
 #Adding organisation profile data.
 def addOrganisationProfile(request,id):
-
+    userPermission=UserPermission(request,request.session.get("IsAdmin"))
     if(request.session.get("IsAdmin") == False):
         messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
         return redirect('user_management:listorg')
@@ -197,20 +200,22 @@ def addOrganisationProfile(request,id):
         formData.save()
         orgProfileAddData(id,formData.id)
         messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['createOrganisationProfile'])
-    return render(request,'add_organisation_profile.html',{ 'id': id ,"IsAdmin":request.session.get("IsAdmin")})
+    return render(request,'add_organisation_profile.html',{ 'id': id ,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
 
 #Listing of organisation profile
 def listOrganisationProfile(request,id):
+    userPermission=UserPermission(request,request.session.get("IsAdmin"))
     if(request.session.get("IsAdmin") == False):
         messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
         return redirect('user_management:listorg')
     if request.method == "GET":
         data = getOrgProfiles(id)
-    contex = {'organisation_profile_data' : data ,"IsAdmin":request.session.get("IsAdmin")}
+    contex = {'organisation_profile_data' : data ,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission}
     return render(request, 'list_organisation_profile.html',contex)
 
 
 def deleteOraganisationProfile(request, id):
+    userPermission=UserPermission(request,request.session.get("IsAdmin"))
     try:
         if(request.session.get("IsAdmin") == False):
             messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
@@ -220,13 +225,14 @@ def deleteOraganisationProfile(request, id):
             pi.delete()
             messages.add_message(request, messages.WARNING,successAndErrorMessages()['removeOrganisationProfile'])
             return redirect('user_management:listorg')
-        context = { 'organisation_profile_delete': pi ,"IsAdmin":request.session.get("IsAdmin")}
+        context = { 'organisation_profile_delete': pi ,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission}
         return render(request, "delete_organisation_profile.html", context)
     except Exception as e:
         return messages.add_message(request,messages.WARNING, successAndErrorMessages()['internalError'])
 
 #Create a role and inserting into permission organisation 
 def createUserRole(request,id):
+    userPermission=UserPermission(request,request.session.get("IsAdmin"))
     if(request.session.get("IsAdmin") == False):
         messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
         return redirect('user_management:listorg')
@@ -237,12 +243,11 @@ def createUserRole(request,id):
             get_id=list(Role.objects.filter(roles=role_name).values())
             insertIntoOrgnisationPermission(permission,role_name,get_id[0].get("id"))
             messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['Role'])
-
         else:
             form = Role.objects.create(roles=role_name,select=True,org_id=id)
             form.save()
             insertIntoOrgnisationPermission(permission,role_name,form.id)
-    return render(request,'user_management_templates/add_user_role.html', {"IsAdmin":request.session.get("IsAdmin")})
+    return render(request,'user_management_templates/add_user_role.html', {"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
 
 #This function is used to get listing role. 
 def listRole(request):
@@ -318,6 +323,7 @@ def listedUserRole(request):
 
 #Get Organisation Details.
 def orgUserinfo(request,id):
+    userPermission=UserPermission(request,request.session.get("IsAdmin"))
     try:
         if request.method == "GET":
             user_multiple_role = getOrgUserInfo(id)
@@ -335,7 +341,8 @@ def orgUserinfo(request,id):
             'orgprofiledata': org_profile_data,
             'roles': roles,
             'multipleOrg_role': multiple_org_role,
-            "IsAdmin":request.session.get("IsAdmin")
+            "IsAdmin":request.session.get("IsAdmin"),
+            'UserPermission':userPermission
         }
         return render(request,"user_management_templates/user_org_list.html",context)        
     except Exception as e:
@@ -455,4 +462,4 @@ def moduleSettings(request):
 
         return render (request, 'settings.html',context)
     except Exception as e:
-        return render (request, 'home',context)
+        return render (request, 'dashboard.html')

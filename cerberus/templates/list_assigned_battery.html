@@ -17,19 +17,19 @@
                     <thead>
                       <tr>
                         <th scope="col">Assigned Battery</th>
-                        <th scope="col">Model_name</th>
-                        <th scope="col">Battery_serial_num</th>
-                        <th scope="col">Battery_type</th>
-                        <th scope="col">Bms_type</th>
-                        <th scope="col">Iot_type</th>
-                        <th scope="col">Iot_imei_number</th>
-                        <th scope="col">Warrenty_start_date</th>
-                        <th scope="col">warrenty_duration</th>
+                        <th scope="col">Modelname</th>
+                        <th scope="col">Battery serial num</th>
+                        <th scope="col">Battery type</th>
+                        <th scope="col">Bms type</th>
+                        <th scope="col">Iot type</th>
+                        <th scope="col">Iot imei number</th>
+                        <th scope="col">Warrenty start date</th>
+                        <th scope="col">warrenty duration</th>
                         <th scope="col">Status</th>
-                        <th scope="col">Battery_cell_chemistry</th>
-                        <th scope="col">Battery_pack_nominal_voltage</th>
-                        <th scope="col">Battery_pack_nominal_charge_capacity</th>
-                        <th scope="col">charging_status</th>
+                        <th scope="col">Battery cell chemistry</th>
+                        <th scope="col">Battery pack nominal voltage</th>
+                        <th scope="col">Battery pack capacity</th>
+                        <th scope="col">charging status</th>
                         <th scope="col">Action</th>
                         
                       </tr>
@@ -60,7 +60,7 @@
                         <td>{{fm.status}}</td>
                         <td>{{fm.battery_cell_chemistry}}</td>
                         <td>{{fm.battery_pack_nominal_voltage}}</td>
-                        <td>{{fm.battery_pack_nominal_charge_capacity}}</td>
+                        <td>{{fm.battery_pack_capacity}}</td>
                         <td>{{fm.charging_status}}</td>
                         <td>
                         {% if fm.vehicle_assign_id %} 

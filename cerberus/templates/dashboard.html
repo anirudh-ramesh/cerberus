@@ -25,19 +25,18 @@
                <div class="col-lg-4 justify-content-start"style="padding-top:20px;">
                   <h3 class="text-themecolor mb-0">DASHBOARD</h3>
                </div>
+
+               {% if messages %}
+                  {% for message in messages %}
+                  <div class = "alert alert-{{message.tags}}">{{message}}</div>
+                  {% endfor %}
+               {% endif %}
                <div class="col-lg-3 style_card style_profileBar" >
                   <i class="ant-avatar ant-avatar-circle ant-avatar-image"><img src="../static/images/profile.png" alt="avatar"></i>
-                  <!-- <div class="notify">
-                     <span class="heartbit"></span> <span class="point"></span>
-                   </div> -->
+          
                   <div style="display: flex; flex-flow: column; width: 50%;">
-                     <!-- <div class="style_userName">Kalpesh Chavda</div> -->
                      <div class="style_userName">{{email}}</div>
                   </div>
-                  <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                     <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-                   </svg> -->
-                  <!-- <button class="k-button k-button-md k-button-flat k-button-flat-primary k-rounded-md k-icon-button ant-dropdown-trigger"><span role="presentation" class="k-button-icon k-icon k-i-more-vertical"></span></button> -->
                </div>
             </div>
             <div class="container-fluid">
