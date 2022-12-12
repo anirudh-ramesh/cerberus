@@ -22,6 +22,7 @@ from base64 import b64encode
 import requests
 from urllib import parse
 import json
+from urllib import parse
 from django.db.models import F, Q
 from common import UserPermission, successAndErrorMessages
 
@@ -457,16 +458,15 @@ def getVehicleDetails(request):
                 vehicle_data = list(Vehicle.objects.values())
             else:
                 vehicle_data = list(Vehicle.objects.filter(assigned_to_id=request.session.get("email")).values())
+                
         #Assigned Vehicle To Organisation
         if("AssignedToOrganisation" in request.get_full_path()):
             assigned_to_user = str(request.get_full_path()).split("?").pop()
             serial_number = assigned_to_user.split("&")[0].split("=")[1]
             chasis_number = assigned_to_user.split('&')[1].split("=")[2]
             if(assigned_to_user):
-                return render(request,'dashboard.html',{"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
-
-            assignedVehicleToOrganisation(serial_number,chasis_number)
-            return redirect('user_management:listorg')
+                assignedVehicleToOrganisation(serial_number,chasis_number)
+                return redirect('user_management:listorg')
 
         #Assigned Vehicle To User
         if("AssignedToUser" in request.get_full_path()):
@@ -506,7 +506,7 @@ def updateVehicleDetails(request,id):
             insurance_start_date = datetime.strptime(request.POST.get('insurance_start_date'), format)
             insurance_end_date = datetime.strptime(request.POST.get('insurance_start_date'), format)
 
-            data = Vehicle.objects.filter(chasis_number=id).update(
+            Vehicle.objects.filter(chasis_number=id).update(
                 vehicle_model_name=vehicle_model_name, chasis_number=chasis_number,
                 configuration=configuration,vehicle_choice=vehicle_choice,
                 vehicle_iot_imei_number=vehicle_iot_imei_number,vehicle_sim_number=vehicle_sim_number,
@@ -579,16 +579,22 @@ def assignedOrgVehicleList(request,id):
             for i in org_vehicle_list:
                 if (i["email"] == request.session.get('email')):
                         newdata.append(i)
-
         #Remove vehicle from Organisation
-        if request.method == "POST":
-            assigned_vehicle = str(request.get_full_path()).split("?").pop()
-            vehicle_id = assigned_vehicle.split("&")[0].split("=")[1]
-            removeAssignedVehiclefromOrganisation(id,vehicle_id)
-            return redirect('user_management:listorg')
+        
+        assigned_vehicle = request.get_full_path()
+        if assigned_vehicle:
+            parse.urlsplit(assigned_vehicle)
+            parse.parse_qs(parse.urlsplit(assigned_vehicle).query)
+            dictinary_obj = dict(parse.parse_qsl(parse.urlsplit(assigned_vehicle).query))
+            vehicle_id = dictinary_obj
+            if vehicle_id:
+                removeAssignedVehiclefromOrganisation(id,vehicle_id['chasis_number'])
+                messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['removeVehicle'])
+                return redirect('user_management:listorg')
                 
-        return render(request, 'list_organisation_vehicle.html',{'org_vehicle_list': org_vehicle_list,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
+        return render(request, 'list_organisation_vehicle.html',{'org_vehicle_list': org_vehicle_list,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission, 'org_id': id})
     except Exception as e:
+        print(e)
         return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError'])
 
 #Assigned vehicle to user

@@ -5,8 +5,15 @@
 <div class="row">
     <div class="col-sm-8">
         <h4 class="add_user alert alert-info">Add User Role</h4>
+
         <form class="formt" method="POST" action="">
             {% csrf_token %}
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class = "alert alert-{{message.tags}}">{{message}}</div>
+                {% endfor %}
+            {% endif %}
             <div class="input-group mb-2">
                 <div class="input-group-append">
                    <input type='text' name='roles' placeholder="Role Name" class="input-register-text" required>
