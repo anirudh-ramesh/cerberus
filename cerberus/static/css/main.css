@@ -24,7 +24,13 @@ a {
 	position: relative !important;
 }
 
-
+.card-header>.h5{
+    font-size: calc((1vh, 1px + 1vmin) + (1px + 1vmax));
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+}
 .user_card {
     width: 350px;
     margin-top: auto;
@@ -675,7 +681,8 @@ p {
     width: 44%;
     margin-left: 0%;
     border-radius: 10px !important;
-    border: 1px solid black 
+    border: 1px solid black ;
+    padding-left: 20px;
 }
 .input-register-text_battery{
     width: 20%;
@@ -867,9 +874,12 @@ label{
 
 .Card_status{
     width: 50%;
+    width: 200px;
+    min-width: 200px;
 }
 .row_status{
     width: 100% !important;
+    margin: auto;
 }
 .nav_page{
     width: 100%;
@@ -882,7 +892,7 @@ label{
     margin-left: 0%;
 }
 .alert-info{
-    width: 65% !important;
+    /* width: 65% !important; */
     text-align: center;
   margin: auto;
 }
