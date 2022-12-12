@@ -73,18 +73,16 @@ def loginPage(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         crmuser = Crmuser.get_user_by_email(email)
-        userPermission=UserPermission(request,True)
         if crmuser:
             flag = check_password(password,crmuser.password)
             print(flag)
             if flag:
-                print("IN THIS")
                 messages.add_message(request,messages.INFO,successAndErrorMessages()['loginMessage'])
                 request.session["email"]=email
                 getUserData=list(Crmuser.objects.filter(email=email).values())
                 if(len(getUserData) !=0):
                    request.session["IsAdmin"]= getUserData[0]["is_admin"]
-                
+                userPermission=UserPermission(request,request.session.get("IsAdmin"))
                 return render(request,'dashboard.html',{'email':email,"IsAdmin": getUserData[0]["is_admin"] ,'UserPermission':userPermission})     
             else:
                 messages.add_message(request, messages.INFO, successAndErrorMessages()['loginErrorMessage'])
