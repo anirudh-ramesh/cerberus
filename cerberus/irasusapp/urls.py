@@ -62,6 +62,10 @@ urlpatterns= [
 
     path('irame', views.irameData, name="iramedata"),
 
+    path(r'activeiot', views.getActiveAnddeactiveIotBystatus, name="activeiot"),
+    path(r'deactiveiot', views.getActiveAnddeactiveIotBystatus, name="deactiveiot"),     
+
+
 
     
     

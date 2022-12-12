@@ -1,0 +1,30 @@
+<br>
+{% if IsAdmin %}
+<div class="row_status row">
+	<div class="col" onclick="location.href='/activeiot?action=Active'"> 
+		<div class="col-md">
+			<div class="Card_status card text-center text-white  mb-3" id="total-orders">
+			  	<div class="card-header">
+			  		<h5>ACTIVE SWAP STATION</h5>
+			  	</div>
+			  	<div class="card-body">
+			    	<h3 class="card-title">{{Activeiot}}</h3>
+			  	</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col" onclick="location.href='/deactiveiot?action=InActive'">
+		<div class="col-md">
+			<div class="Card_status card text-center text-white  mb-3" id="orders-delivered">
+			  	<div class="card-header">
+			  		<h5>INACTIVE SWAP STATION</h5>
+			  	</div>
+			  	<div class="card-body">
+			    	<h3 class="card-title">{{InActiveiot}}</h3>
+			  	</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endif %}

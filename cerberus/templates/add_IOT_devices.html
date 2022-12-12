@@ -3,7 +3,6 @@
 
 {% block content %}
 
-{% include 'status.html' %}
 <br>
 <div class="row">
 	<div class="col-md-5">
@@ -39,6 +38,14 @@
 							<div class="input-group-append">
 								<label>Firmware Version</label>
 								<input type="number" step="any" name='firmware_version' class="input-register-text" required>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label class="label_formm">Status</label>
+                                <br>
+                                <label class="label_formm"><input name="status" type="radio" value="Active" required="" checked>Active</label>
+                                <label class="label_formm"><input name="status" type="radio" value="InActive" required="">InActive</label>
 							</div>
 						</div>
 	

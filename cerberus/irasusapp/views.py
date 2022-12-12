@@ -138,6 +138,17 @@ def batteryDetails(request):
 def getBatteryDetails(request):
     cahis_id=""
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    assigned_vehicle = request.get_full_path()
+    parse.urlsplit(assigned_vehicle)
+    parse.parse_qs(parse.urlsplit(assigned_vehicle).query)
+    dictinary_obj = dict(parse.parse_qsl(parse.urlsplit(assigned_vehicle).query))
+    if(dictinary_obj.get("cahis_id")):
+        if(request.session.get("IsAdmin")):
+            vehicle_data = list(Vehicle.objects.values())
+        else:
+            vehicle_data = list(Vehicle.objects.filter(assigned_to_id=request.session.get("email")).values())
+
+        return render(request, 'list_vehicle_details.html', {'vehicle_data':vehicle_data ,"IsAdmin":request.session.get("IsAdmin"),"ActiveBattery":BatteryDetail.objects.filter(status="in_vehicle").count()+BatteryDetail.objects.filter(status="in_swap_station").count(),"DamagedBattery":BatteryDetail.objects.filter(status="damaged").count(),"inActiveBattery":BatteryDetail.objects.filter(status="idel").count(),'UserPermission':userPermission})
 
     try:
         if request.method == "GET":
@@ -254,12 +265,30 @@ def addIotDevice(request):
                     imei_number = request.POST.get('imei_number'),
                     hardware_version = request.POST.get('hardware_version'),
                     firmware_version = request.POST.get('firmware_version'),
+                    status = request.POST.get('status'),
+
                 )
                 formData.save()
                 messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['deivceAdded'])
             return render(request,'add_IOT_devices.html',{"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
     except Exception as e:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
+
+
+def getActiveAnddeactiveIotBystatus(request):
+    userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    assigned_vehicle = request.get_full_path()
+    parse.urlsplit(assigned_vehicle)
+    parse.parse_qs(parse.urlsplit(assigned_vehicle).query)
+    dictinary_obj = dict(parse.parse_qsl(parse.urlsplit(assigned_vehicle).query))
+    if(request.session.get("IsAdmin") == False):
+        messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
+        return redirect('home')
+    if request.method == "GET":
+        data = list(IotDevices.objects.filter(status=dictinary_obj.get('action')).values())
+    contex = {'iot_station_data' : data is not [] and data or None,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission, "action":dictinary_obj.get('action') }
+    return render(request, 'iot_list_by_status.html',contex)
+
 
 
 def listIotDevice(request):
@@ -277,7 +306,7 @@ def listIotDevice(request):
                     BatteryDetail.objects.filter(iot_imei_number_id=imei_number).update(iot_imei_number_id=None)
                     messages.add_message(request, messages.WARNING, successAndErrorMessages()['removeDeviceFromBattery'])
                     return redirect('listdevice')
-        return render(request, 'list_IOT_devices.html',{ 'iot_device_data': batteryWithIotDevice,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission })
+        return render(request, 'list_IOT_devices.html',{ 'iot_device_data': batteryWithIotDevice,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission,"Activeiot": IotDevices.objects.filter(status="Active").values().count(),"InActiveiot": IotDevices.objects.filter(status="InActive").values().count()})
     except Exception as e:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
@@ -292,12 +321,15 @@ def updateIOTDevice(request,id):
             
             IotDevices.objects.filter(imei_number=id).update(
                 imei_number=imei_number, hardware_version=hardware_version,
-                firmware_version=firmware_version
+                firmware_version=firmware_version,
+                status=request.POST.get('status')
             )
             update_iot_device = [{
                 'imei_number':imei_number,
                 'hardware_version':hardware_version,
                 'firmware_version': firmware_version,
+                "status":request.POST.get('status')
+
             }]
             messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['deviceUpdate'])
             return render(request,'update_IOT_device.html',{'update_IOT_data': update_iot_device,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission })
@@ -607,7 +639,7 @@ def assignedVehicleToUser(request,id):
             messages.add_message(request, messages.WARNING, successAndErrorMessages()['removeVehiclefromUser'])
             return redirect("user_management:getdata")
 
-        return render(request,'list_assigned_vehicle_to_user.html',{'user_vehicle':user_vehicle,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
+        return render(request,'list_assigned_vehicle_to_user.html',{'user_vehicle':user_vehicle,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission,"ActiveBattery":BatteryDetail.objects.filter(status="in_vehicle").count()+BatteryDetail.objects.filter(status="in_swap_station").count(),"DamagedBattery":BatteryDetail.objects.filter(status="damaged").count(),"inActiveBattery":BatteryDetail.objects.filter(status="idel").count()})
     except Exception as e:
        return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError'])
 
