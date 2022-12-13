@@ -3,8 +3,6 @@
 
 {% block content %}
 
-{% include 'status.html' %}
-
 <div class="row">
 	<div class="col-md-5">
 		<div class="card_Bettery card-body">
@@ -38,12 +36,7 @@
 						<div class="input-group mb-2">
 							<div class="input-group-append">
 								<label class="label_formm">Number Of Door</label>
-                                <select type="text"  name="number_of_doors" class="input-register-text" required>
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                </select>
+								<input type='number' name='number_of_doors'  class="input-register-text" required>
 							</div>
 						</div>
                         <div class="input-group mb-2">
@@ -57,8 +50,8 @@
 						</div>
                         <div class="input-group mb-2">
 							<div class="input-group-append">
-								<label class="label_formm">Configuration</label>
-								<input type='text' name='configuration'  class="input-register-text" required>
+								<label class="label_formm">Location </label>
+								<input type='text' name='Location'  class="input-register-text" required>
 							</div>
 						</div>
                         <div class="input-group mb-2">

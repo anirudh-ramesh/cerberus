@@ -176,6 +176,8 @@ class IotDevices(models.Model):
     imei_number = models.CharField(max_length=225, blank=True, primary_key=True)
     hardware_version = models.CharField(max_length=225, blank=True, null=True)
     firmware_version = models.CharField(max_length=225, blank=True, null=True)
+    status = models.CharField(max_length=225,default='', blank=True, null=True)
+
 
     def __str__(self):
         return str(self.imei_number)

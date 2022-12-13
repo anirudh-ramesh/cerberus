@@ -36,34 +36,17 @@
                             </div>
                         </div>
                         <div class="input-group mb-2">
-                            <div class="input-group-append">
-                                <label class="label_formm">Number of Doors</label>
-                                <select type="text" name="number_of_doors" required>
-                                    {% if fm.number_of_doors == "1" %}
-                                        <option value="1" selected>1</option>
-                                    {% else %}
-                                        <option value="1">1</option>
-                                    {% endif %}
-                                    {% if fm.number_of_doors == "2" %}
-                                        <option value="2" selected>2</option>
-                                    {% else %}
-                                        <option value="2">2</option>
-                                    {% endif %}
-                                    
-                                    {% if fm.number_of_doors == "3" %}
-                                        <option value="3" selected>3</option>
-                                    {% else %}
-                                        <option value="3">3</option>
-                                    {% endif %}
-    
-                                    {% if fm.number_of_doors == "4" %}
-                                        <option value="4" selected>4</option>
-                                    {% else %}
-                                        <option value="4">4</option>
-                                    {% endif %}
-                                </select>
-                            </div>
-                        </div>
+							<div class="input-group-append">
+								<label class="label_formm">Number Of Door</label>
+								<input type='number' name='number_of_doors' value="{{fm.number_of_doors}}"  class="input-register-text" required>
+							</div>
+						</div>
+                        <div class="input-group mb-2">
+							<div class="input-group-append">
+								<label class="label_formm">Location</label>
+								<input type='text' name='Location' value="{{fm.location}}" class="input-register-text" required>
+							</div>
+						</div>
                         <div class="input-group mb-2">
                             <div class="input-group-append">
                                 <label class="label_formm">Charge Specification</label>
@@ -81,13 +64,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="input-group mb-2">
-                            <div class="input-group-append">
-                                <label class="label_formm">Vehicle Iot Imei Number</label>
-                                <input type='text' name='configuration' value="{{fm.configuration}}" class="input-register-texts" required>		
-                            </div>
-                        </div>
-                        assigned_owner
+                        
                         <div class="input-group mb-2">
                             <div class="input-group-append">
                                 <label class="label_formm">Assigned Owner</label>
@@ -105,12 +82,31 @@
                                 </select>
                             </div>
                         </div>
+
                         <div class="input-group mb-2">
+							<div class="input-group-append">
+								<label class="label_formm">Status</label>
+                                <br>
+                                {% if fm.status == "Active" %}
+                                <label class="label_formm"><input name="status" type="radio" value="Active" required="" checked>Active</label>
+                                {% else %}
+                                <label class="label_formm"><input name="status" type="radio" value="Active" required="" >Active</label>
+                                {% endif %}
+
+                                {% if fm.status == "Inactive" %}
+                                <label class="label_formm"><input name="status" type="radio" value="Inactive" required="" checked>Inactive</label>
+                                {% else %}
+                                <label class="label_formm"><input name="status" type="radio" value="Inactive" required="" >Inactive</label>
+                                {% endif %}
+							</div>
+						</div>
+
+                        <!-- <div class="input-group mb-2">
                             <div class="input-group-append">
                                 <label class="label_formm">Status</label>
                                 <input type='text' name='status' value="{{fm.status}}" class="input-register-texts" required>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="input-group mb-2">
                             <div class="input-group-append">
                                 <label class="label_formm">Assigned Fleet Owner</label>

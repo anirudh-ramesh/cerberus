@@ -471,7 +471,8 @@ def iotDevice(iotList):
                     res["iot_imei_number_id"]=iot["imei_number"]
                     res["hardware_version"]=iot["hardware_version"]
                     res["firmware_version"]=iot["firmware_version"]
-                    res["assign"] = True
+                    res['status'] = iot['status']
+                    res["assign"] =True
                     new_data.append(res)
                     continueForLoop=True
                     continue
@@ -480,6 +481,7 @@ def iotDevice(iotList):
             res["iot_imei_number_id"]=iot["imei_number"]
             res["hardware_version"]=iot["hardware_version"]
             res["firmware_version"]=iot["firmware_version"]
+            res['status'] = iot['status']
             res["assign"] = False
             new_data.append(res)
         return new_data

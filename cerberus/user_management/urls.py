@@ -32,5 +32,9 @@ urlpatterns= [
         path('updateswapstation/<int:id>', views.updateSwapstationDetails, name="swapstation"),
         path('deletewapstation/<int:id>', views.deleteSwapStation, name="deleteswapstation"),
         
-        path('settings', views.moduleSettings, name="setting"),     
+        path('settings', views.moduleSettings, name="setting"),   
+        path(r'activeswapstation', views.getActiveAndDeactive, name="activeswapstation"),
+        path(r'deactiveswapstation', views.getActiveAndDeactive, name="deactiveswapstation"),     
+    
+  
 ]

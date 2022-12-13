@@ -61,7 +61,7 @@ def successAndErrorMessages():
         "devicealreadyAdded": "Device is already added",
         "deviceAddToBattery": "Device is added To battery successfully.",
         "deviceAlreadyAdded": "This IOT-Device is already added.",
-        "removeeviceFromBattery": "Device is remove from battery successfully.",
+        "removeDeviceFromBattery": "Device is remove from battery successfully.",
         "dataNotFound": "Data Not Found",
 
         "Role":"Role is create successfully",

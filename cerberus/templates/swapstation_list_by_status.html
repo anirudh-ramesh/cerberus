@@ -1,0 +1,51 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="col-sm-12">
+
+    <h4 class="text-center alert alert info">{{action}} Swap Station</h4>
+    <div class="">
+      <a href="{% url 'user_management:listswap' %}" class="btn btn-info btn-sm">Back</a>
+    <form action="" method="GET">
+      
+        {% if swap_station_data %}
+       
+                <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">Swap Station Name</th>
+                        <th scope="col">IMEI Number</th>
+                        <th scope="col">Number of Doors</th>
+                        <th scope="col">Charging Specification</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Assigned Owner</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Assigned Fleet Owner</th>                        
+                      </tr>
+                    <tbody>
+    
+                    {% for fm in swap_station_data %}
+                      <tr>
+                        <td>{{fm.swap_station_name}}</td>
+                        <td>{{fm.imei_number}}</td>
+                        <td>{{fm.number_of_doors}}</td>
+                        <td>{{fm.charge_specification}}</td>
+                        <td>{{fm.location}}</td>
+                        <td>{{fm.assigned_owner}}</td>
+                        <td>{{fm.status}}</td>
+                        <td>{{fm.assigned_fleet_owner}}</td>
+
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                    </thead>
+                  </table>
+                
+        {% else %}
+            <h4 class="text-center alert alert warning">No Data Found</h4>
+        {% endif %}
+
+    </form>  
+  </div>
+</div>
+
+{% endblock %}

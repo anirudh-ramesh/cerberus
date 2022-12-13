@@ -2,7 +2,7 @@
 
 {% block content %}
 
-{% include 'status.html' %}
+{% include 'swapstation_status.html' %}
 
 <div class="col-sm-12">
   <a href="{% url 'user_management:addswap' %}" class="btn btn-info btn-sm">Add-Swap-Station</a>
@@ -25,7 +25,7 @@
                         <th scope="col">IMEI number</th>
                         <th scope="col">Number of Doors</th>
                         <th scope="col">Charging Specification</th>
-                        <th scope="col">Configuration</th>
+                        <th scope="col">Location</th>
                         <th scope="col">Assigned Owner</th>
                         <th scope="col">Status</th>
                         <th scope="col">Assigned Fleet Owner</th>
@@ -39,7 +39,7 @@
                             <td>{{fm.imei_number}}</td>
                             <td>{{fm.number_of_doors}}</td>
                             <td>{{fm.charge_specification}}</td>
-                            <td>{{fm.configuration}}</td>
+                            <td>{{fm.location}}</td>
                             <td>{{fm.assigned_owner}}</td>
                             <td>{{fm.status}}</td>
                             <td>{{fm.assigned_fleet_owner}}</td>

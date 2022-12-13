@@ -6,6 +6,7 @@ from .forms import UserCreatedByAdmin, OrgasationForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from urllib import parse
 from db_connect import sql_query,inset_into_db,getOrgUserInfo,orgProfileAddData,getOrgProfiles,organisationmultiplePermission,insertIntoOrgnisationPermission,removeUserFromOrg ,getOrgInfobyEmail
 from common import successAndErrorMessages,UserPermission
 
@@ -361,7 +362,7 @@ def addSwapStation(request):
             imei_number = request.POST.get('imei_number'),
             number_of_doors = request.POST.get('number_of_doors'),
             charge_specification = request.POST.get('charge_specification'),
-            configuration = request.POST.get('configuration'),
+            location= request.POST.get('Location'),
             assigned_owner = request.POST.get('assigned_owner'),
             status = request.POST.get('status'),
             assigned_fleet_owner = request.POST.get('assigned_fleet_owner'),
@@ -372,14 +373,38 @@ def addSwapStation(request):
 
 #Listing swap station data.
 def listSwapstation(request):
-    userPermission=UserPermission(request,request.session.get("IsAdmin"))
-    if(request.session.get("IsAdmin") == False):
-        messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
-        return redirect('home')
-    if request.method == "GET":
-        data = list(Swapstation.objects.values())
-    contex = {'swap_station_data' : data,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission }
-    return render(request, 'list_swapstation_data.html',contex)
+    try:
+        userPermission=UserPermission(request,request.session.get("IsAdmin"))
+        if(request.session.get("IsAdmin") == False):
+            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
+            return redirect('home')
+        if request.method == "GET":
+            data = list(Swapstation.objects.values())
+        contex = {'swap_station_data' : data,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission,"ActiveSwapStation":Swapstation.objects.filter(status="Active").count(),"InActiveSwapStation":Swapstation.objects.filter(status="Inactive").count() }
+        return render(request, 'list_swapstation_data.html',contex)
+    except Exception as e:
+        return messages.add_message(request,messages.WARNING, successAndErrorMessages()['internalError'])
+
+
+#Get active and deactive swap station data.
+def getActiveAndDeactive(request):
+    try:
+        userPermission=UserPermission(request,request.session.get("IsAdmin"))
+        assigned_vehicle = request.get_full_path()
+        parse.urlsplit(assigned_vehicle)
+        parse.parse_qs(parse.urlsplit(assigned_vehicle).query)
+        dictinary_obj = dict(parse.parse_qsl(parse.urlsplit(assigned_vehicle).query))
+        if(request.session.get("IsAdmin") == False):
+            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
+            return redirect('home')
+        if request.method == "GET":
+            data = list(Swapstation.objects.filter(status=dictinary_obj.get('action')).values())
+        contex = {'swap_station_data' : data is not [] and data or None,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission, "action":dictinary_obj.get('action') }
+        return render(request, 'swapstation_list_by_status.html',contex)
+    except Exception as e:
+        return messages.add_message(request,messages.WARNING, successAndErrorMessages()['internalError'])
+
+
 
 #This function is used to update swap station data.
 def updateSwapstationDetails(request,id):
@@ -394,23 +419,24 @@ def updateSwapstationDetails(request,id):
         imei_number = request.POST.get('imei_number')
         number_of_doors = request.POST.get('number_of_doors')
         charge_specification = request.POST.get('charge_specification')
-        configuration = request.POST.get('configuration')
         assigned_owner = request.POST.get('assigned_owner')
         status = request.POST.get('status')
         assigned_fleet_owner = request.POST.get('assigned_fleet_owner')
+        location= request.POST.get('Location')
 
         Swapstation.objects.filter(imei_number=id).update(
             swap_station_name=swap_station_name, imei_number=imei_number,
             number_of_doors=number_of_doors,charge_specification=charge_specification,
-            configuration=configuration,assigned_owner=assigned_owner,
+            assigned_owner=assigned_owner,
             status=status,assigned_fleet_owner=assigned_fleet_owner,
+            location=location
         )
 
         update_swapstation = [{
             'swap_station_name':swap_station_name,
             'imei_number':imei_number,'number_of_doors': number_of_doors,
             'charge_specification': charge_specification,
-            'configuration': configuration,'assigned_owner': assigned_owner,
+            'location': location,'assigned_owner': assigned_owner,
             'status': status,
             'assigned_fleet_owner': assigned_fleet_owner,
         }]
