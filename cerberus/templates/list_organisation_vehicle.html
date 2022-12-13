@@ -6,6 +6,13 @@
 
 <div class="col-sm-12">
     <h4 class="text-center alert alert info">Vehicle Assigned To Organisaiotion</h4>
+    <a href="{% url 'user_management:listorg' %}" class="btn btn-info btn-sm">Back</a>
+    
+    {% if messages %}
+      {% for message in messages %}
+      <div class = "alert alert-{{message.tags}}">{{message}}</div>
+      {% endfor %}
+    {% endif %}
     <form action="" method="GET">
 
         {% if org_vehicle_list %}
@@ -17,8 +24,6 @@
                         <th scope="col">Chasis Number</th>
                         <th scope="col">Vehicle Configuration</th>
                         <th scope="col">Vehicle Choice</th>
-                        <th scope="col">Vehicle Iot Imei Number</th>
-                        <th scope="col">Vehicle Sim Number</th>
                         <th scope="col">Vehicle Warrenty Start Date</th>
                         <th scope="col">Vehicle Warrenty End Date</th>
                         <th scope="col">Assigned Owner</th>

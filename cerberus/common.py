@@ -1,4 +1,7 @@
 from user_management.models import Settings,userSettings
+from django.conf import settings
+from django.core.mail import send_mail
+
 def successAndErrorMessages():
     response = {
         "AuthError":"You are not authorize to view this",
@@ -31,9 +34,10 @@ def successAndErrorMessages():
         "assignBattery" : "Battery assign to vehicle successfully",
         "batteryRemovefrom" : "Battery is removed from vehicle",
         "alreadyAddedVehicle": "Details already is added for this serial number",
+        "alreadyVehicleUser": "Vehicle is already added To this user",
 
         "addBattery": "Battery is added successfully",
-        "addBatteryError": "Battery is already add",
+        "addBatteryError": "Battery is already assiged to This vehicle",
         "updateBatteryDetails" : "Battery-details is updated successfully",
         "removeBatteryDetails" : "Battery-details is removed successfully",
         "alreadyAddedBattery": "Details already is added for this serial number",
@@ -117,4 +121,16 @@ def UserPermission(request,check=None):
                     res[i["module_name"]]= i["module_status"]
         return res
     except Exception as e:
-        print(e)  
+        print(e)
+
+def sendEmail(request, subject, message=None):
+    try:
+        subject = subject
+        message = message
+        # id = id 
+        # assignToid = assignToid
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = ['dixit.ims.in@gmail.com',]
+        send_mail( subject, message, email_from, recipient_list )
+    except Exception as e:
+        print(e)
