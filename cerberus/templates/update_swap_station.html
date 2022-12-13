@@ -5,12 +5,11 @@
 <div class="row">
 <div class="update-swap-station-div">
     <div class="card_Bettery">
-        <div class="battery">
+        <div class="card-body">
             <h5 class="btn btn-secondary  btn-sm btn-block" style="display: flex;
-            justify-content: center">Update Swap-Station Details</h5>
+            justify-content: center;width: 100%;">Update Swap-Station Details</h5>
             <hr>
-        </div>
-
+       
             {% if update_swap_station_data %}
                 <form class="formt" method="POST" action="">
                     {% csrf_token %}
@@ -129,7 +128,7 @@
                     <h4 class="text-center alert alert warning btn-sm">No Records Found</h4>
                 {% endif %}
             </form>
-    </div>
+    </div> </div>
 </div>
-
+</div>
 {% endblock %}

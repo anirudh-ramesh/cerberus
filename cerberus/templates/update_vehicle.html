@@ -1,13 +1,13 @@
 {% extends 'main.html' %}
 
 {% block content %}
-
-<div class="row">
-    <div class="col-sm-8 offset-2">
-        <h4 class="btn btn-secondary  btn-sm btn-block">Update Vehicle Details</h4>
+<div class="container">
+<div class="row container"style="padding: 1rem;">
+    <div class="col-sm-8">
+        
         {% if update_vehicle_data %}
 
-            <form class="formt" method="POST" action="">
+            <form class="form" style="padding:0 3rem;"method="POST" action="">
                 {% csrf_token %}
 
                 {% if messages %}
@@ -17,6 +17,8 @@
                 {% endif %}
                 
                 {% for fm in update_vehicle_data %}
+                <div class="input-group mb-2"> <h4 class="btn btn-secondary  btn-sm btn-block">Update Vehicle Details</h4></div>
+               
                     <div class="input-group mb-2">
                         <div class="input-group-append">
                             <label class="label_formm">Vehicle Model Name</label>
@@ -132,15 +134,16 @@
                     </div>
 
                 {% endfor %}
-
+                <div class="btn-group">
+                    <a href="{% url 'getvehicle' %}" class="btn btn-info  btn-sm">Back To Details </a>
                 <input type="submit" class="btn btn-success btn-sm" value="Update">
-                <a href="{% url 'getvehicle' %}" class="btn btn-info  btn-sm">Back To Details </a>
-
-
+                
+            </div>
+  
             {% else %}
                 <h4 class="text-center alert alert warning">No Records Found</h4>
             {% endif %}
         </form>
     </div>
-</div>
+</div></div>
 {% endblock %}
