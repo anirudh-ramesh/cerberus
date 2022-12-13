@@ -25,6 +25,5 @@ class VehicleDetailsForm(forms.ModelForm):
     class Meta:
         model = Vehicle
         fields = ['vehicle_model_name','chasis_number',
-        'configuration','vehicle_choice','vehicle_iot_imei_number',
-        'vehicle_iot_imei_number','vehicle_sim_number','vehicle_warrenty_start_date',
+        'configuration','vehicle_choice','vehicle_warrenty_start_date',
         'vehicle_warrenty_end_date','assigned_owner','insurance_start_date','insurance_end_date']

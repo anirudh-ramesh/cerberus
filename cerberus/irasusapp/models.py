@@ -158,8 +158,6 @@ class Vehicle(models.Model):
     chasis_number = models.CharField(max_length=225, default='',primary_key=True)
     configuration = models.CharField(max_length=20, default='', choices=CONFIGURATION)
     vehicle_choice = models.CharField(max_length=225, default='', choices=VEHICLE)
-    vehicle_iot_imei_number = models.CharField(max_length=100)
-    vehicle_sim_number = models.CharField(max_length=20)
     vehicle_warrenty_start_date = models.DateField(default='',blank=True,null=True)
     vehicle_warrenty_end_date = models.DateField(default='',blank=True, null=True)
     assigned_owner = models.CharField(max_length=225, default='')
@@ -168,6 +166,7 @@ class Vehicle(models.Model):
     vehicle_selected = models.BooleanField(default=False)
     assigned_to = models.ForeignKey(Crmuser,default=None,on_delete=models.CASCADE, null=True, blank=True)
     created_date = models.DateField(blank=True,null=True)
+    vehicle_status = models.CharField(max_length=225,default='', blank=True, null=True)
     # geofence = models.ManyToManyField(Geofence)
 
     def __str__(self):
@@ -195,21 +194,21 @@ BATTERY_TYPES = (
 )
 
 BMS_TYPE = (
-    ('ion', 'ION'),
-    ('electrifuel', 'ELECTRIFUEL'),
+    ('ION', 'ION'),
+    ('ELECTRIFUEL', 'ELECTRIFUEL'),
 )
 
 IOT_TYPE = (
     ('trackmate', 'TRACKMATE'),
     ('electrifuel', 'ELECTRIFUEL'),
-    ('aeidth', 'AEIDTH'),
+    ('aeidth-IGT', 'AEIDTH-IGT'),
 )
 
 STATUS = (
-    ('in_swap_station', 'IN_SWAP_STATION'),
-    ('in_vehicle', 'IN_VEHICLE'),
-    ('idel', 'IDEL'),
-    ('damaged','DAMAGED'),
+    ('IN_SWAP_STATION', 'IN_SWAP_STATION'),
+    ('IN_VEHICLE', 'IN_VEHICLE'),
+    ('IDEL', 'IDEL'),
+    ('DAMAGED','DAMAGED'),
 )
 
 CHARGING_STATUS = (

@@ -347,14 +347,14 @@ def getOrgAssignedVehicle(id):
             res["chasis_number"] = data[1]
             res["configuration"] = data[2]
             res["vehicle_choice"] = data[3]
-            res["vehicle_iot_imei_number"] = data[4]
-            res["vehicle_sim_number"] = data[5]
-            res["vehicle_warrenty_start_date"]= data[6]
-            res["vehicle_warrenty_end_date"] = data[7]
-            res["assigned_owner"] = data[8]
-            res["insurance_start_date"] = data[9]
-            res["insurance_end_date"] = data[10]
-            res["organisation_id"] = data[14]
+            # res["vehicle_iot_imei_number"] = data[4]
+            # res["vehicle_sim_number"] = data[4]
+            res["vehicle_warrenty_start_date"]= data[4]
+            res["vehicle_warrenty_end_date"] = data[5]
+            res["assigned_owner"] = data[6]
+            res["insurance_start_date"] = data[7]
+            res["insurance_end_date"] = data[8]
+            res["organisation_id"] = data[12]
             new_data.append(res)
         cursor.close()
         return new_data
@@ -381,7 +381,7 @@ def listAssignedVehicleToUser(id):
         cursor = conn.cursor()
         sql = f"SELECT \
             irasusapp_crmuser.email,irasusapp_crmuser.username,irasusapp_crmuser.is_active,irasusapp_vehicle.vehicle_model_name, irasusapp_vehicle.chasis_number, irasusapp_vehicle.configuration, \
-            irasusapp_vehicle.vehicle_choice,irasusapp_vehicle.vehicle_iot_imei_number,irasusapp_vehicle.vehicle_sim_number,irasusapp_vehicle.vehicle_warrenty_start_date,irasusapp_vehicle.vehicle_warrenty_end_date,\
+            irasusapp_vehicle.vehicle_choice,irasusapp_vehicle.vehicle_warrenty_start_date,irasusapp_vehicle.vehicle_warrenty_end_date,\
             irasusapp_vehicle.assigned_owner, irasusapp_vehicle.insurance_start_date,irasusapp_vehicle.insurance_end_date,irasusapp_vehicle.vehicle_selected \
             FROM irasusapp_crmuser \
             LEFT JOIN irasusapp_vehicle ON irasusapp_vehicle.assigned_to_id = irasusapp_crmuser.email \
@@ -399,14 +399,14 @@ def listAssignedVehicleToUser(id):
             res["chasis_number"]=data[4]
             res["configuration"]=data[5]
             res["vehicle_choice"]=data[6]
-            res["vehicle_iot_imei_number"]=data[7]
-            res["vehicle_sim_number"]=data[8]
-            res["vehicle_warrenty_start_date"]=data[9]
-            res["vehicle_warrenty_end_date"]=data[10]
-            res["assigned_owner"]=data[11]
-            res["insurance_start_date"]=data[12]
-            res["insurance_end_date"]=data[13]
-            res["vehicle_selected"]=data[14]
+            # res["vehicle_iot_imei_number"]=data[7]
+            # res["vehicle_sim_number"]=data[7]
+            res["vehicle_warrenty_start_date"]=data[7]
+            res["vehicle_warrenty_end_date"]=data[8]
+            res["assigned_owner"]=data[9]
+            res["insurance_start_date"]=data[10]
+            res["insurance_end_date"]=data[11]
+            res["vehicle_selected"]=data[12]
             
             vehicle_data.append(res)
 

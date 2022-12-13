@@ -80,8 +80,8 @@
                     <div class="input-group-append">
                         <label class="label_formm">Bms Type</label>
                         <select type="text" id="colorSelect" name="bms_type"  value="{{fm.bms_type}}" class="input-register-text" required>
-                            <option>ion</option>
-                            <option>electrifuel</option>
+                            <option>ION</option>
+                            <option>ELECTRIFUEL</option>
                         </select>
                     </div>
                 </div>
@@ -100,10 +100,10 @@
                                     <option value="electrifuel">electrifuel</option>
                                 {% endif %}
                                 
-                                {% if fm.iot_type == "aeidth" %}
-                                    <option value="aeidth" selected>aeidth</option>
+                                {% if fm.iot_type == "aeidth-IGT" %}
+                                    <option value="aeidth-IGT" selected>aeidth-IGT</option>
                                 {% else %}
-                                    <option value="aeidth">aeidth</option>
+                                    <option value="aeidth-IGT">aeidth-IGT</option>
                                 {% endif %}
                         </select>
                     </div>
@@ -142,28 +142,28 @@
                     <div class="input-group-append">
                         <label class="label_formm">Status</label>
                         <select type="text" id="colorSelect" name="status" value="{{fm.status}}" class="input-register-text" required>
-                            {% if fm.status == "in_swap_station" %}
-                                    <option value="in_swap_station" selected>in_swap_station</option>
+                            {% if fm.status == "IN_SWAP_STATION" %}
+                                    <option value="IN_SWAP_STATION" selected>IN SWAP STATION</option>
                                 {% else %}
-                                    <option value="in_swap_station">in_swap_station</option>
+                                    <option value="IN_SWAP_STATION">IN SWAP STATION</option>
                                 {% endif %}
 
-                                {% if fm.status == "in_vehicle" %}
-                                    <option value="in_vehicle" selected>in_vehicle</option>
+                                {% if fm.status == "IN_VEHICLE" %}
+                                    <option value="IN_VEHICLE" selected>IN VEHICLE</option>
                                 {% else %}
-                                    <option value="in_vehicle">in_vehicle</option>
+                                    <option value="IN_VEHICLE">IN VEHICLE</option>
                                 {% endif %}
 
-                                {% if fm.status == "idel" %}
-                                    <option value="idel" selected>idel</option>
+                                {% if fm.status == "IDEL" %}
+                                    <option value="IDEL" selected>IDEL</option>
                                 {% else %}
-                                    <option value="idel">idel</option>
+                                    <option value="IDEL">IDEL</option>
                                 {% endif %}
                                 
-                                {% if fm.status == "damaged" %}
-                                    <option value="damaged" selected>damaged</option>
+                                {% if fm.status == "DAMAGED" %}
+                                    <option value="DAMAGED" selected>DAMAGED</option>
                                 {% else %}
-                                    <option value="damaged">damaged</option>
+                                    <option value="DAMAGED">DAMAGED</option>
                                 {% endif %}
                         </select>
                     </div>

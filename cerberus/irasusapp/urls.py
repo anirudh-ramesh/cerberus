@@ -16,8 +16,16 @@ urlpatterns= [
     path('dashboarddata/', views.batteryDetails, name="homed"),
     # path('signin', views.signIn, name='signin'),
     path(r'getdata', views.getBatteryDetails, name="data"),
-    path('update/<int:id>', views.updateBatteryDetails, name="updatedata"),
-    path('delete/<int:id>', views.deleteRecord, name="deletedata"),
+    path('update/<str:id>', views.updateBatteryDetails, name="updatedata"),
+    path('delete/<str:id>', views.deleteRecord, name="deletedata"),
+
+    path('activebattery', views.activeBatteryDetails, name="active"), 
+    path('inactivebattery', views.inactiveBatteryDetails, name="inactive"), 
+    path('damaged', views.damagedBatteryDetails, name="damagedbattery"), 
+
+    path('activevehicle', views.activeVehicleDetails, name="actvehicle"), 
+    path('inactivevehicle', views.inactiveVehicleDetails, name="inactivevehicle"),
+
     path('reset_password/', auth_views.PasswordResetView.as_view(template_name="password_reset.html"), name="password_reset"),
     path('reset_password_sent/', auth_views.PasswordResetDoneView.as_view(template_name="password_reset_sent.html"), name="password_reset_done"),
     path('reset<uidb64>/<token>', auth_views.PasswordResetConfirmView.as_view(template_name="password_reset_form.html"), name="password_reset_confirm"),

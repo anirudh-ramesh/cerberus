@@ -38,7 +38,7 @@
 					<div class="input-group mb-2">
 						<div class="input-group-append">
 							<label class="label_form_battery">Battery Serial Number</label>
-							<input type='number' name='battery_serial_num' class="input-register-text_battery" required>
+							<input type='text' name='battery_serial_num' class="input-register-text_battery" required>
 						</div>
 					</div>
 					<div class="input-group mb-2">
@@ -56,8 +56,8 @@
 						<div class="input-group-append">
 							<label class="label_form_battery">Bms Type</label>
 							<select type="text" id="colorSelect" name="bms_type" class="input-register-text_battery" required>
-								<option>ion</option>
-								<option>electrifuel</option>
+								<option>ION</option>
+								<option>ELECTRIFUEL</option>
 							</select>
 						</div>
 					</div>
@@ -67,7 +67,7 @@
 							<select type="text" id="colorSelect" name="iot_type" class="input-register-text_battery" required>
 								<option>trackmate</option>
 								<option>electrifuel</option>
-								<option>aeidth</option>
+								<option>aeidth-IGT</option>
 							</select>
 						</div>
 					</div>
@@ -99,10 +99,10 @@
 						<div class="input-group-append">
 							<label class="label_form_battery">Status</label>
 							<select type="text" id="colorSelect" name="status" class="input-register-text_battery" required>
-								<option>in_swap_station</option>
-								<option>in_vehicle</option>
-								<option>idel</option>
-								<option>damaged</option>
+								<option value="IN_SWAP_STATION">IN SWAP STATION</option>
+								<option value="IN_VEHICLE">IN VEHICLE</option>
+								<option value="IDEL">IDEL</option>
+								<option value="DAMAGED">DAMAGED</option>
 							</select>
 						</div>
 					</div>

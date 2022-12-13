@@ -36,6 +36,7 @@ def successAndErrorMessages():
         "addBatteryError": "Battery is already add",
         "updateBatteryDetails" : "Battery-details is updated successfully",
         "removeBatteryDetails" : "Battery-details is removed successfully",
+        "alreadyAddedBattery": "Details already is added for this serial number",
 
         "addDriver" : "Driver is added successfully",
         "updateDriver" : "Driver is updated successfully",

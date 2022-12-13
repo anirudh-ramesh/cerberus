@@ -3,10 +3,13 @@
 {% block content %}
 
 <div class="col-sm-12">
-    <h4 class="text-center alert alert info">Vehicle Assigned To Organisaiotion</h4>
+   
+    <h4 class="text-center alert alert info">Active Vehicle Details</h4>
+    <div class="">
+      <a href="{% url 'getvehicle' %}" class="btn btn-info  btn-sm">Back</a>
     <form action="" method="GET">
-
-        {% if org_vehicle_list %}
+      
+        {% if activeVehicle %}
                 <table class="table table-hover">
                     <thead>
                       <tr>
@@ -15,18 +18,16 @@
                         <th scope="col">Chasis Number</th>
                         <th scope="col">Vehicle Configuration</th>
                         <th scope="col">Vehicle Choice</th>
-                        <th scope="col">Vehicle Iot Imei Number</th>
-                        <th scope="col">Vehicle Sim Number</th>
                         <th scope="col">Vehicle Warrenty Start Date</th>
                         <th scope="col">Vehicle Warrenty End Date</th>
                         <th scope="col">Assigned Owner</th>
                         <th scope="col">Insurance Start Date</th>
                         <th scope="col">Insurance End Date</th>
-                        <th scope="col">Action</th>
+                        <th scope="col">Vehicle Status</th>
+
                       </tr>
                     <tbody>
-                    {% for fm in org_vehicle_list %}
-
+                    {% for fm in activeVehicle %}
                         <tr>
                           <td>
                             {% if fm.vehicle_selected %}
@@ -48,10 +49,8 @@
                             <td>{{fm.assigned_owner}}</td>
                             <td>{{fm.insurance_start_date}}</td>
                             <td>{{fm.insurance_end_date}}</td>
-                            
-                            <td>
-                              <a href="{% url 'assingedtoorg' org_id %}?action=removevehicle&chasis_number={{fm.chasis_number}}" class="btn btn-danger btn-sm">Remove</a>
-                            </td>             
+                            <td>{{fm.vehicle_status}}</td>
+                                          
                         </tr>
                       
                       {% endfor %}
@@ -63,10 +62,8 @@
             <h4 class="text-center alert alert warning">No Records Found</h4>
         {% endif %}
 
-        
     </form>
-    
+  </div>
 </div>
-
 
 {% endblock %}

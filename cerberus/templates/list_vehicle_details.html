@@ -2,7 +2,7 @@
 
 {% block content %}
 
-{% include 'status.html' %}
+{% include 'vehicle_status.html' %}
 
 <div class="col-sm-12">
    
@@ -34,13 +34,12 @@
                         <th scope="col">Chasis Number</th>
                         <th scope="col">Vehicle Configuration</th>
                         <th scope="col">Vehicle Choice</th>
-                        <th scope="col">Vehicle Iot Imei Number</th>
-                        <th scope="col">Vehicle Sim Number</th>
                         <th scope="col">Vehicle Warrenty Start Date</th>
                         <th scope="col">Vehicle Warrenty End Date</th>
                         <th scope="col">Assigned Owner</th>
                         <th scope="col">Insurance Start Date</th>
                         <th scope="col">Insurance End Date</th>
+                        <th scope="col">Vehicle Status</th>
                         <th scope="col">Action</th>
 
                       </tr>
@@ -62,13 +61,12 @@
                             <td>{{fm.chasis_number}}</td>
                             <td>{{fm.configuration}}</td>
                             <td>{{fm.vehicle_choice}}</td>
-                            <td>{{fm.vehicle_iot_imei_number}}</td>
-                            <td>{{fm.vehicle_sim_number}}</td>
                             <td>{{fm.vehicle_warrenty_start_date}}</td>
                             <td>{{fm.vehicle_warrenty_end_date}}</td>
                             <td>{{fm.assigned_owner}}</td>
                             <td>{{fm.insurance_start_date}}</td>
                             <td>{{fm.insurance_end_date}}</td>
+                            <td>{{fm.vehicle_status}}</td>                    
                           
                             <td>
                             <a href="{% url 'assinged' fm.chasis_number %}" class="btn btn-secondary btn-sm">List Battery</a>

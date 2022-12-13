@@ -85,18 +85,6 @@
                     </div>
                     <div class="input-group mb-2">
                         <div class="input-group-append">
-                            <label class="label_formm">Vehicle Iot Imei Number</label>
-                            <input type="number" name='vehicle_iot_imei_number' value="{{fm.vehicle_iot_imei_number}}" class="input-register-text" required>		
-                        </div>
-                    </div>
-                    <div class="input-group mb-2">
-                        <div class="input-group-append">
-                            <label class="label_formm">Vehicle Sim Number</label>
-                            <input type="number" name='vehicle_sim_number' value="{{fm.vehicle_sim_number}}" class="input-register-text" required>
-                        </div>
-                    </div>
-                    <div class="input-group mb-2">
-                        <div class="input-group-append">
                             <label class="label_formm">Vehicle Warrenty Start Date</label>
                             <input type='date' name='vehicle_warrenty_start_date' value="{{fm.vehicle_warrenty_start_date|date:'Y-m-d'}}" class="input-register-text" required>
                         </div>
@@ -123,6 +111,23 @@
                         <div class="input-group-append">
                             <label class="label_formm">Insurance End Date</label>
                             <input type='date' name='insurance_end_date' value="{{fm.insurance_end_date|date:'Y-m-d'}}" class="input-register-text" required>
+                        </div>
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="input-group-append">
+                            <label class="label_formm">Vehicle Status</label>
+                            <br>
+                            {% if fm.vehicle_status == "Active" %}
+                                <label class="label_formm"><input name="vehicle_status" type="radio" value="Active" required="" checked>Active</label>
+                            {% else %}
+                            <label class="label_formm"><input name="vehicle_status" type="radio" value="Active" required="" >Active</label>
+                            {% endif %}
+
+                            {% if fm.vehicle_status == "Inactive" %}
+                            <label class="label_formm"><input name="vehicle_status" type="radio" value="Inactive" required="" checked>Inactive</label>
+                            {% else %}
+                            <label class="label_formm"><input name="vehicle_status" type="radio" value="Inactive" required="" >Inactive</label>
+                            {% endif %}
                         </div>
                     </div>
 
