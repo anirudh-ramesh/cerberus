@@ -21,7 +21,7 @@
     
     {% if messages %}
       {% for message in messages %}
-      <div class="alert alert-{{message.tags}}">{{message}}</div>
+      <div class="alert alert-{{message.tags}} mb-3">{{message}}</div>
       {% endfor %}
     {% endif %}
     <table class="table table-hover">
