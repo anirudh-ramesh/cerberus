@@ -276,7 +276,7 @@ def listAssignedBatteryVehicle(id):
         irasusapp_batterydetail.bms_type,irasusapp_batterydetail.iot_type,irasusapp_batterydetail.iot_imei_number_id,irasusapp_batterydetail.sim_number,\
         irasusapp_batterydetail.warrenty_start_date,irasusapp_batterydetail.warrenty_duration, irasusapp_batterydetail.assigned_owner,irasusapp_batterydetail.status,\
         irasusapp_batterydetail.battery_cell_chemistry,irasusapp_batterydetail.battery_pack_nominal_voltage,\
-        irasusapp_batterydetail.battery_pack_nominal_charge_capacity, irasusapp_batterydetail.charging_status, irasusapp_batterydetail.vehicle_assign_id,irasusapp_batterydetail.is_assigned\
+        irasusapp_batterydetail.battery_pack_capacity, irasusapp_batterydetail.charging_status, irasusapp_batterydetail.vehicle_assign_id,irasusapp_batterydetail.is_assigned\
         FROM irasusapp_batterydetail \
         RIGHT JOIN irasusapp_vehicle ON irasusapp_vehicle.chasis_number = irasusapp_batterydetail.vehicle_assign_id \
         WHERE irasusapp_vehicle.chasis_number='{id}'"
@@ -300,7 +300,7 @@ def listAssignedBatteryVehicle(id):
             res["status"] = data[10]
             res["battery_cell_chemistry"] = data[11]
             res["battery_pack_nominal_voltage"] = data[12]
-            res["battery_pack_nominal_charge_capacity"] = data[13]
+            res["battery_pack_capacity"] = data[13]
             res["charging_status"] = data[14]
             res["vehicle_assign_id"] = data[15]
             res["is_assigned"] = data[16]

@@ -4,7 +4,7 @@
 
 <div class="row">
     <div class=" col-sm-8 offset-2 update_battery_page">
-        <h4 class="alert alert-info">Update Battery Details</h4>
+        <h4 class="btn btn-secondary  btn-sm btn-block">Update Battery Details</h4>
         {% if form %}
         <form class="rowd" method="POST" action="">
             {% csrf_token %}
@@ -89,10 +89,10 @@
                     <div class="input-group-append">
                         <label class="label_formm">Iot type</label>
                         <select type="text" id="colorSelect" name="iot_type"  value="{{fm.iot_type}}" class="input-register-text" required>
-                            {% if fm.iot_type == "tarckmate" %}
-                                    <option value="tarckmate" selected>tarckmate</option>
+                            {% if fm.iot_type == "trackmate" %}
+                                    <option value="trackmate" selected>trackmate</option>
                                 {% else %}
-                                    <option value="tarckmate">tarckmate</option>
+                                    <option value="trackmate">trackmate</option>
                                 {% endif %}
                                 {% if fm.iot_type == "electrifuel" %}
                                     <option value="electrifuel" selected>electrifuel</option>
@@ -117,7 +117,7 @@
                 <div class="input-group mb-2">
                     <div class="input-group-append">
                         <label class="label_formm">Sim Number</label>
-                        <input type='text' name='sim_number' value="{{fm.iot_type}}" class="input-register-text" required>
+                        <input type='text' name='sim_number' value="{{fm.sim_number}}" class="input-register-text" required>
                     </div>
                 </div>
                 <div class="input-group mb-2">
@@ -182,8 +182,8 @@
                 </div>
                 <div class="input-group mb-2">
                     <div class="input-group-append">
-                        <label class="label_formm">Battery Pack Nominal Charge Capacity</label>
-                        <input type='text' name='battery_pack_nominal_charge_capacity' value="{{fm.battery_pack_nominal_charge_capacity}}" class="input-register-text" required>
+                        <label class="label_formm">Battery Pack Capacity</label>
+                        <input type='text' name='battery_pack_capacity' value="{{fm.battery_pack_capacity}}" class="input-register-text" required>
                     </div>
                 </div>
                 <div class="input-group mb-2">

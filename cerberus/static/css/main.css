@@ -22,9 +22,9 @@ a {
 }
 .position-relative {
 	position: relative !important;
-}
+} 
 
-.card-header>.h5{
+.card-header>h5{
     font-size: calc((1vh, 1px + 1vmin) + (1px + 1vmax));
     -webkit-hyphens: none;
     -moz-hyphens: none;
@@ -70,6 +70,16 @@ a {
 } */
 #form-title{
     color: #fff;
+}
+.btn-group{
+    /* width: 100%; */
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    grid-column-gap: 4rem;
 }
 .login_btn {
     width: 100%;
@@ -428,11 +438,11 @@ a {
     font-size: 2rem !important;
 }
 .card-img-top {
-    width: 30% !important;
+    width: 42% !important;
     border-top-right-radius: var(--bs-card-inner-border-radius);
     padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
     object-fit: contain;
-    height: 180px;
+    /* height: 180px; */
 }
 
 .text-end {
@@ -456,7 +466,8 @@ a {
 .sidebar-nav ul {
     margin: 0;
     padding: 5px;
-    
+    height: 450px;
+    overflow: auto;
 }
 .sidebar-nav ul li {
     list-style: none;
@@ -476,7 +487,9 @@ a {
 }
 
 }
-
+.pro_gress{
+        margin:1rem 0;
+}
 .col-md-5 {
     max-width: 100% !important;
 }
@@ -486,7 +499,7 @@ a {
 }
 .sidebar-nav ul .sidebar-item {
     width: 100%;
-    margin-bottom: 6px;
+    /* margin-bottom: 6px; */
 }
 .sidebar-nav ul .sidebar-item .sidebar-link.active, .sidebar-nav ul .sidebar-item .sidebar-link:hover {
     opacity: 1;
@@ -547,7 +560,17 @@ a {
     align-items: center;
     grid-column-gap: 8px;
 }
-
+.mb-3{
+    margin-bottom: .75rem !important;
+}
+.grid{
+    grid-row-gap: 0.5rem;
+    display: grid;
+    grid-column-gap: 0.5rem;
+    
+    -ms-grid-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+}
 img {
     width: 20px;
     max-width: 100%;
@@ -671,11 +694,11 @@ p {
     width: 50%;
 }
 .input-register-text{
-    width: 24%;
+    width: 50%;
     margin-left: 0%;
     border-radius: 10px;
     border: 1px solid black;
-    padding-left: 1%; 
+    padding: 0 1rem;
 }
 .organisation_profile{
     width: 44%;
@@ -699,13 +722,15 @@ p {
     margin-left: 0% !important;
 }
 .input-register-texts{
-    width: 50%;
+    width: 30%;
     margin-left: 0%;
     border-radius: 10px;
-    border: 1px solid black 
+    border: 1px solid black ;
+    padding-left: 1rem;
 }
 .input-group-append{
     width: 100%;
+   
 }
 .card_Bettery{
     width: 230%;
@@ -720,7 +745,7 @@ p {
 }
 .label_formm{
     margin-right: 0px;
-    /* width: 50%; */
+    width: 50%;
 }
 .rowd{
     width: 120%;
@@ -788,8 +813,17 @@ p {
     left: 30%
 }
 
-.input-group  {
-    width: 120%;
+
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+    overflow: auto;
+    display: block;
+}
+.table thead th {
+    vertical-align: middle;
+    border-bottom: 2px solid #dee2e6;
 }
 .table th {
     padding: 0.75rem;
@@ -888,7 +922,7 @@ label{
     padding: 5%;
 }
 .btn-block{
-    width: 40%;
+    /* width: 40%; */
     margin-left: 0%;
 }
 .alert-info{
@@ -910,11 +944,11 @@ margin-left: -17% !important;
 }
 .heading_text{
     font-size: 15px;
-    margin-top: 8%;
+    /* margin-top: 8%; */
 }
 .text-black{
     font-size: 20px;
-    margin-top: 20%;
+    /* margin-top: 20%; */
 }
 .swap_station{
     width: 100% !important;
@@ -942,6 +976,8 @@ margin-left: -17% !important;
 .style_profileBar {
     display: flex;
     justify-content: space-evenly;
+    height: 50px;
+
 }
 .ant-avatar {
     -webkit-font-feature-settings: "tnum","tnum";

@@ -13,7 +13,7 @@ class BatteryDetailsFrom(forms.ModelForm):
         fields = ['model_name','battery_serial_num','battery_type','bms_type','iot_type',
                   'iot_imei_number','sim_number','warrenty_start_date','warrenty_duration',
                   'assigned_owner','status','battery_cell_chemistry','battery_pack_nominal_voltage',
-                  'battery_pack_nominal_charge_capacity','charging_status']
+                  'battery_pack_capacity','charging_status']
     def __init__(self, *args, **kwargs):
         super(BatteryDetailsFrom,self).__init__(*args, **kwargs)
         self.fields['status'].empty_label = "Select"

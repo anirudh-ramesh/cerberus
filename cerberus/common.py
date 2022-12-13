@@ -30,7 +30,7 @@ def successAndErrorMessages():
         "removeVehicle": "Vehicle is removed successfully",
         "assignBattery" : "Battery assign to vehicle successfully",
         "batteryRemovefrom" : "Battery is removed from vehicle",
-        "alreadyAdded": "Details already is added for this serial number",
+        "alreadyAddedVehicle": "Details already is added for this serial number",
 
         "addBattery": "Battery is added successfully",
         "addBatteryError": "Battery is already add",
@@ -110,10 +110,10 @@ def UserPermission(request,check=None):
                 "VCU":False,
             }
             for i in new_data:
-                if(check):
+                if(request.session.get("IsAdmin")):
                     res[i["module_name"]]= i["module_status"]
                 else:
                     res[i["module_name"]]= i["module_status"]
         return res
     except Exception as e:
-        print(e,"==>>")  
+        print(e)  

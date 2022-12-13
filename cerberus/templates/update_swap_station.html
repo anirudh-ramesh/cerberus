@@ -6,11 +6,10 @@
 <div class="update-swap-station-div">
     <div class="card_Bettery">
         <div class="card-body">
-            <h5 class="alert alert-info" style="display: flex;
-            justify-content: center">Update Swap-Station Details</h5>
+            <h5 class="btn btn-secondary  btn-sm btn-block" style="display: flex;
+            justify-content: center;width: 100%;">Update Swap-Station Details</h5>
             <hr>
        
-
             {% if update_swap_station_data %}
                 <form class="formt" method="POST" action="">
                     {% csrf_token %}
@@ -38,7 +37,7 @@
                         <div class="input-group mb-2">
                             <div class="input-group-append">
                                 <label class="label_formm">Number of Doors</label>
-                                <select type="text" name="number_of_doors" required>
+                                <select type="text" class="number_of_doors" required>
                                     {% if fm.number_of_doors == "1" %}
                                         <option value="1" selected>1</option>
                                     {% else %}
