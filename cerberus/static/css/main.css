@@ -747,9 +747,7 @@ p {
     margin-right: 0px;
     width: 50%;
 }
-.rowd{
-    width: 120%;
-}
+
 .label_formtt{
     margin-right: 10px;
     width: 50%;
@@ -820,6 +818,31 @@ p {
     color: #212529;
     overflow: auto;
     display: block;
+}
+.settingdiv {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+    overflow: auto;
+    /* display: block; */
+}
+.settingdiv thead th {
+    vertical-align: middle;
+    border-bottom: 2px solid #dee2e6;
+}
+.settingdiv th {
+    padding: 0.75rem;
+   
+    border: 1px solid #dee2e6;
+    text-align: center;
+    vertical-align: bottom;
+}
+.settingdiv td {
+    padding: 0.75rem;
+   
+    border: 1px solid #dee2e6;
+    text-align: center;
+    vertical-align: top;
 }
 .table thead th {
     vertical-align: middle;
@@ -932,6 +955,7 @@ label{
 }
 .udate_button{
     margin-left: 10%;
+    text-align: center !important;
 }
 .update_battery_page{
     margin-left: 7% !important;

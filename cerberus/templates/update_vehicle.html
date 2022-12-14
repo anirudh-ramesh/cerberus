@@ -120,25 +120,25 @@
                             <label class="label_formm">Vehicle Status</label>
                             <br>
                             {% if fm.vehicle_status == "Active" %}
-                                <label class="label_formm"><input name="vehicle_status" type="radio" value="Active" required="" checked>Active</label>
+                                <label><input name="vehicle_status" type="radio" value="Active" required="" checked>Active</label>
                             {% else %}
-                            <label class="label_formm"><input name="vehicle_status" type="radio" value="Active" required="" >Active</label>
+                            <label><input name="vehicle_status" type="radio" value="Active" required="" >Active</label>
                             {% endif %}
 
                             {% if fm.vehicle_status == "Inactive" %}
-                            <label class="label_formm"><input name="vehicle_status" type="radio" value="Inactive" required="" checked>Inactive</label>
+                            <label><input name="vehicle_status" type="radio" value="Inactive" required="" checked>Inactive</label>
                             {% else %}
-                            <label class="label_formm"><input name="vehicle_status" type="radio" value="Inactive" required="" >Inactive</label>
+                            <label><input name="vehicle_status" type="radio" value="Inactive" required="" >Inactive</label>
                             {% endif %}
                         </div>
                     </div>
 
                 {% endfor %}
                 <div class="btn-group">
+                    <input type="submit" class="btn btn-success btn-sm" value="Update">
                     <a href="{% url 'getvehicle' %}" class="btn btn-info  btn-sm">Back To Details </a>
-                <input type="submit" class="btn btn-success btn-sm" value="Update">
-                
-            </div>
+
+                </div>
   
             {% else %}
                 <h4 class="text-center alert alert warning">No Records Found</h4>

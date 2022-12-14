@@ -40,18 +40,18 @@
 
                         <div class="input-group mb-2">
 							<div class="input-group-append">
-								<label class="label_formm">Status</label>
+								<label>Status</label>
                                 <br>
                                 {% if fm.status == "Active" %}
-                                <label class="label_formm"><input name="status" type="radio" value="Active" required="" checked>Active</label>
+                                <label><input name="status" type="radio" value="Active" required="" checked>Active</label>
                                 {% else %}
-                                <label class="label_formm"><input name="status" type="radio" value="Active" required="" >Active</label>
+                                <label><input name="status" type="radio" value="Active" required="" >Active</label>
                                 {% endif %}
 
                                 {% if fm.status == "Inactive" %}
-                                <label class="label_formm"><input name="status" type="radio" value="Inactive" required="" checked>Inactive</label>
+                                <label><input name="status" type="radio" value="Inactive" required="" checked>Inactive</label>
                                 {% else %}
-                                <label class="label_formm"><input name="status" type="radio" value="Inactive" required="" >Inactive</label>
+                                <label><input name="status" type="radio" value="Inactive" required="" >Inactive</label>
                                 {% endif %}
 							</div>
 						</div>
