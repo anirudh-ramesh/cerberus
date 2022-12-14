@@ -691,10 +691,15 @@ def assignedBatteryList(request,id):
             data = listAssignedBatteryVehicle(id)
 
         # Remove battery from vehicle.
-        if request.method == "POST": 
-            data = listAssignedBatteryVehicle(id)
-            for x in data:
-                data = BatteryDetail.objects.filter(pk=x['battery_serial_num']).update(vehicle_assign_id=None, is_assigned=False)
+        assigned_vehicle = request.get_full_path()
+        parse.urlsplit(assigned_vehicle)
+        parse.parse_qs(parse.urlsplit(assigned_vehicle).query)
+        dictinary_obj = dict(parse.parse_qsl(parse.urlsplit(assigned_vehicle).query))
+        if "action" in assigned_vehicle:
+                print("HERE")
+                data = BatteryDetail.objects.filter(battery_serial_num=dictinary_obj['battery_serial_num']).update(vehicle_assign_id=None, is_assigned=False)
+                messages.add_message(request, messages.WARNING, successAndErrorMessages()['batteryRemovefrom'])
+                return redirect('getvehicle')
 
         context = {
             'assigned_battery_list' : data,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission,"ActiveBattery":BatteryDetail.objects.filter(status="IN_VEHICLE").count()+BatteryDetail.objects.filter(status="IN_SWAP_STATION").count(),"DamagedBattery":BatteryDetail.objects.filter(status="DAMAGED").count(),"inActiveBattery":BatteryDetail.objects.filter(status="IDEL").count()
@@ -745,10 +750,12 @@ def assignedVehicleToUser(request,id):
             user_vehicle = listAssignedVehicleToUser(id)
 
         #Remove Vehicle from User
-        if request.method == "POST":
-            assigned_vehicle = str(request.get_full_path()).split("?").pop()
-            vehicle_id = assigned_vehicle.split("&")[0].split("=")[1]
-            user_vehicle = removeUserVehicle(False,vehicle_id)
+        assigned_vehicle = request.get_full_path()
+        if ("action" in assigned_vehicle):
+            parse.urlsplit(assigned_vehicle)
+            parse.parse_qs(parse.urlsplit(assigned_vehicle).query)
+            dictinary_obj = dict(parse.parse_qsl(parse.urlsplit(assigned_vehicle).query))
+            user_vehicle = removeUserVehicle(False,dictinary_obj['chasis_number'])
             messages.add_message(request, messages.WARNING, successAndErrorMessages()['removeVehiclefromUser'])
             return redirect("user_management:getdata")
 

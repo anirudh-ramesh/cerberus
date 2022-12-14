@@ -17,8 +17,8 @@ urlpatterns= [
         
 
         path('addorgprofile/<int:id>', views.addOrganisationProfile, name="addprofile"),
-        path('listorgprofile/<int:id>', views.listOrganisationProfile, name="listorgprofile"),
-        path('deleteorgprofile/<int:id>', views.deleteOraganisationProfile, name="deleteorgprofile"),
+        path('listorgprofile/<int:id>', views.listOrganisationProfile, name="orgprofiles"),
+        path(r'deleteorgprofile/<int:id>', views.deleteOraganisationProfile, name="deleteorgprofile"),
 
         path('addrole/<int:id>', views.createUserRole, name="role"),
         path('getrole/', views.listRole, name="listrole"),

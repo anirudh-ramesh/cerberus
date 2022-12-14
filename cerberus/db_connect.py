@@ -113,7 +113,6 @@ def getOrgProfiles(id):
         new_data = []
         for row in myresult:
             res={}
-            print(row[2])
             res['id']= str(row[0])
             res["battery_pack_manufacture"] = str(row[1])
             res["battery_pack_distributor"] = row[2]
@@ -134,7 +133,8 @@ def getOrgProfiles(id):
             res["battrey_swap_satation_financier"] = row[17]
             res["battrey_swap_satation_owner"] = row[18]
             res["battrey_swap_satation_operator"] = row[19]
-            new_data.append(res)
+            res['serial_number'] = row[21]
+            new_data.append(res)           
         cursor.close()
         return new_data
     except Exception as e:

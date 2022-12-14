@@ -62,10 +62,7 @@
                             <td>{{fm.insurance_end_date}}</td>
                             
                             <td>
-                                <form action="{% url 'uservehicle' fm.email %}?chasis_number={{fm.chasis_number}}" method="POST" class="d-inline">
-                                    {% csrf_token %}
-                                  <input type="submit" class="btn btn-danger btn-sm" value="Remove">
-                                </form>
+                              <a class="btn btn-danger btn-sm" href="{% url 'uservehicle' fm.email %}?chasis_number={{fm.chasis_number}}&action=RemoveVehicle1">Remove</a>
                             </td>             
                         </tr>
                       

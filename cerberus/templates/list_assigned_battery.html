@@ -64,10 +64,8 @@
                         <td>{{fm.charging_status}}</td>
                         <td>
                         {% if fm.vehicle_assign_id %} 
-                          <form action="{% url 'assinged' fm.vehicle_assign_id %}?battery_serial_num={{fm.battery_serial_num}}" method="POST" class="d-inline">
-                              {% csrf_token %}
-                            <input type="submit" class="btn btn-danger btn-sm" value="Remove">
-                          </form>
+                        <a class="btn btn-danger btn-sm" href="{% url 'assinged' fm.vehicle_assign_id %}?battery_serial_num={{fm.battery_serial_num}}&action=RemoveBattery">Remove</a>
+
                         {% else %}
                             <h4 class="text-center alert alert warning">No Assigned Battery Found</h4>
                         {% endif %}

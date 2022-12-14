@@ -24,9 +24,9 @@ def successAndErrorMessages():
         "removeOrganisation": "Organisation is remove successfully",
         "roleAssigned" : "Role is assigned to organisation",
 
-        "createOrganisationProfile": "Organisation-Profile created successfully",
-        "updateOrganisationProfile": "Organisation-Profile updated successfully",
-        "removeOrganisationProfile": "Organisation-Profile removed successfully",
+        "createOrganisationProfile": "Organisation-Profile is created successfully",
+        "updateOrganisationProfile": "Organisation-Profile is updated successfully",
+        "removeOrganisationProfile": "Organisation-Profile is removed successfully",
 
         "addVehicle": "Vehicle is added successfully",
         "updateVehicle": "Vechicle-details is Updated successfully",
@@ -130,7 +130,7 @@ def sendEmail(request, subject, message=None):
         # id = id 
         # assignToid = assignToid
         email_from = settings.EMAIL_HOST_USER
-        recipient_list = ['dixit.ims.in@gmail.com',]
-        send_mail( subject, message, email_from, recipient_list )
+        recipient_list = ['dixit.ims.in@gmail.com']
+        email = send_mail( subject, message, email_from, recipient_list )
     except Exception as e:
         print(e)

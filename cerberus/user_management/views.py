@@ -98,9 +98,10 @@ def addOrganisation(request):
         form = OrgasationForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['createOrganisation'])
         return redirect("user_management:listorg")
     context = { 'form': form,'UserPermission':userPermission }
-    messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['createOrganisation'])
+
     return render(request,'add_organisation.html',context)
 
 #Listing of Organisation.
@@ -211,7 +212,7 @@ def listOrganisationProfile(request,id):
         return redirect('user_management:listorg')
     if request.method == "GET":
         data = getOrgProfiles(id)
-    contex = {'organisation_profile_data' : data ,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission}
+    contex = {'organisation_profile_data' : data ,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission }
     return render(request, 'list_organisation_profile.html',contex)
 
 
@@ -221,12 +222,21 @@ def deleteOraganisationProfile(request, id):
         if(request.session.get("IsAdmin") == False):
             messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
             return redirect('user_management:listorg')
+
+        #GETTING ORGNISATION ID FROM LIST_ORGNISATION_PROFILE_PAGE
+        url_path = request.get_full_path()
+        parse.urlsplit(url_path)
+        parse.parse_qs(parse.urlsplit(url_path).query)
+        dictinary_obj = dict(parse.parse_qsl(parse.urlsplit(url_path).query))
+        
         pi = OrganisationProfile.objects.get(pk=id)
         if request.method == 'POST':
             pi.delete()
             messages.add_message(request, messages.WARNING,successAndErrorMessages()['removeOrganisationProfile'])
-            return redirect('user_management:listorg')
-        context = { 'organisation_profile_delete': pi ,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission}
+            context={'id' : dictinary_obj['org_id'] }
+            return redirect('user_management:orgprofiles', context['id'])
+
+        context = { 'organisation_profile_delete': pi ,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission, 'org_id': dictinary_obj['org_id']}
         return render(request, "delete_organisation_profile.html", context)
     except Exception as e:
         return messages.add_message(request,messages.WARNING, successAndErrorMessages()['internalError'])
