@@ -2,7 +2,6 @@
 
 {% block content %}
 
-{% include 'vehicle_status.html' %}
 
 <div class="col-sm-12">
    
@@ -14,6 +13,7 @@
       <a href="{% url 'addvehicle' %}" class="btn btn-info btn-sm">Add-Vehicle</a>
       
     {% endif %}
+    <a href="{% url 'addriver' %}" class="btn btn-primary btn-sm">Add Driver</a>
 
     <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Home</a>
   </div>

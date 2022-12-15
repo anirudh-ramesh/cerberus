@@ -821,6 +821,7 @@ def listgeofenceData(request):
    
 #Add driver For Vechicle Module.
 def addDriver(request):
+    userPermission=UserPermission(request,request.session.get("IsAdmin"))
     try:
         if request.method == "POST":
             username = request.POST.get('username')
@@ -838,7 +839,7 @@ def addDriver(request):
             )
             newdata.save()
             messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['addDriver']) 
-        return render(request, 'adddriver.html')
+        return render(request, 'adddriver.html', {"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
 
     except Exception as e:
         return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError']) 

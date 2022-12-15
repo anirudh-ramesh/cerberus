@@ -3,12 +3,14 @@
 {% block content %}
 
 <div class="row">
-    {% for message in messages %}
-    <h5 class="errors">{{ message }}</h5>
-    {% endfor %}
     <div class="col-sm-8 offset-2">
         <h4 class="btn btn-secondary  btn-sm btn-block">Update Driver</h4>
         <div class="user_card">
+            {% if messages %}
+                {% for message in messages %}
+                <div class = "alert alert-{{message.tags}}">{{message}}</div>
+                {% endfor %}
+            {% endif %}
             <form action="" method="POST">
                 {% csrf_token %}
                 
@@ -94,8 +96,8 @@
                     </div>
                 </div>
                 {% endfor %}
-                <input type="submit" class="btn btn-success mt-3" value="Update">
-                <a href="{% url 'getdrivers' %}" class="btn btn-info">Back to Details</a>
+                <input type="submit" class="btn btn-success btn-sm mt-3" value="Update">
+                <a href="{% url 'getdrivers' %}" class="btn btn-info btn-sm">Back to Details</a>
             </form>
         </div>
     </div>

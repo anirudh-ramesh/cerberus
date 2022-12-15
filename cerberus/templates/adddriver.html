@@ -3,14 +3,14 @@
 
 {% block content %}
 
-{% include 'status.html' %}
+<!-- {% include 'status.html' %} -->
 
 <br>
 <div class="row">
 	<div class="col-md-5">
 		<hr>
 		<div class="card card-body">
-			<h4 class="btn btn-secondary  btn-sm btn-block" href="">Driver Details</h4>
+			<h4 class="btn btn-secondary  btn-sm btn-block" href="">Add Driver</h4>
 			<div class="card card-body">
 				<div class="d-flex justify-content-start form_container">
 					<form method="POST" action="" enctype="multipart/form-data">
@@ -62,8 +62,12 @@
 							</div>
 						</div>
 
-						<div class="d-flex justify-content-center mt-3">
-				 			<input class="btn btn-success" type="submit" value="Submit">
+						<div class="submit-button">
+							<div>
+								<input class="btn btn-success btn-sm" type="submit" value="Submit">
+								<a href="{% url 'getdrivers' %}" class="btn btn-info btn-sm">List Vehicle</a>
+							</div>
+							 
 				   		</div>
 
 					</form>
