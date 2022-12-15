@@ -73,6 +73,27 @@ urlpatterns= [
     path(r'activeiot', views.getActiveAnddeactiveIotBystatus, name="activeiot"),
     path(r'deactiveiot', views.getActiveAnddeactiveIotBystatus, name="deactiveiot"),     
 
+    
+    ### fleet management
+    
+    path(r'listfleetowner', views.listFleetManagement, name="listfleetowner"),
+    path(r'listfleetoperator', views.listFleetOperatorupnderFleetOwner, name="listfleetoperator"),
+
+    path(r'deletefleetoperator/<str:id>', views.deleteFleetOperatorupnderFleetOwner, name="deletefleetoperator"),
+    path(r'activefleetowner', views.getActiveandInactiveFleetOwner, name="activefleetowner"),
+
+    path(r'inactivefleetowner', views.getActiveandInactiveFleetOwner, name="inactivefleetowner"),
+
+    path(r'createfleetoperator', views.createFleetOperatorupnderFleetOwner, name="createfleetoperator"),
+    path(r'updatefleetoperator/<str:id>', views.updateFleetOperatorupnderFleetOwner, name="updatefleetoperator"),
+    path(r'deletefleetoperator/<str:id>', views.deleteFleetOperatorupnderFleetOwner, name="deletefleetoperator"),
+    path(r'createfleetowner', views.createFleetManagement, name="createfleetowner"),
+    path(r'updatefleetowner/<str:id>', views.updateFleetManagement, name="updatefleetowner"),
+    path(r'activefleetoperator', views.getActiveandInactiveFleetOperatorupnderFleetOwner, name="activefleetoperator"),
+    path(r'inactivefleetoperator', views.getActiveandInactiveFleetOperatorupnderFleetOwner, name="inactivefleetoperator"),
+
+
+    
 
 
     

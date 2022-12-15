@@ -69,7 +69,18 @@ def successAndErrorMessages():
         "dataNotFound": "Data Not Found",
 
         "Role":"Role is create successfully",
-        "userViewPermission": ["Users","BatteryPacks","Vehicles"]
+        "userViewPermission": ["Users","BatteryPacks","Vehicles"],
+
+        #fleet management
+
+        "fleetownerExists": "fleet owner is alrady exists",
+        "fleetownerCreate": "fleet owner is create successfully",
+        "fleetownerupdate":"fleet owner is update successfully",
+
+        "fleetoperatorExists": "fleet operatoe is alrady exists",
+        "fleetoperatorCreate": "fleet operatoe is create successfully",
+        "fleetoperatorupdate":"fleet operatoe is update successfully",
+
     }
     return response
 
