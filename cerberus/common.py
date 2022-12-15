@@ -73,11 +73,11 @@ def successAndErrorMessages():
 
         #fleet management
 
-        "fleetownerExists": "fleet owner is alrady exists",
+        "fleetownerExists": "fleet owner is already exists",
         "fleetownerCreate": "fleet owner is create successfully",
         "fleetownerupdate":"fleet owner is update successfully",
 
-        "fleetoperatorExists": "fleet operatoe is alrady exists",
+        "fleetoperatorExists": "fleet operatoe is already exists",
         "fleetoperatorCreate": "fleet operatoe is create successfully",
         "fleetoperatorupdate":"fleet operatoe is update successfully",
 
@@ -145,3 +145,292 @@ def sendEmail(request, subject, message=None):
         email = send_mail( subject, message, email_from, recipient_list )
     except Exception as e:
         print(e)
+
+
+
+
+def permission(role):
+    if(role == "Admin"):
+        superAdmin={
+            "vehicle":{
+                "create": True,
+                "update": True,
+                "delete": True,
+                "batteryAssigned": True,
+                "DriverCreate": True,
+                "batteryView": True,
+                "userAssigned": True,
+                "assignedOrganisation": True
+            },
+            "battery":{
+                "create": True,
+                "update": True,
+                "delete": True,
+                "batteryAssigned": True,
+                "assigned": True,
+            },
+            "swapstation":{
+                "create": True,
+                "update": True,
+                "delete": True,
+                "assigned": True,
+                "view": True
+            },
+            "geofence":{
+                "create":True,
+                "update":True,
+                "delete":True
+            },
+            "org":{
+                "addUsertoorg":True,
+                "delete":True,
+                "createRole":True,
+                "createProfile": True,
+                "assignedvehical":True,
+                "view":True,
+                "listVihical": True
+            },
+            "iot":{
+                "create":True,
+                "update":True,
+                "delete":True,
+                "assignBattery":True
+            },
+            "csv":{
+                "download": True,
+            },
+            "fleetOwner":{
+                "create":True,
+                "update":True,
+                "delete":True,
+            },
+            "fleetOperater":{
+                "create":True,
+                "update":True,
+                "delete":True,
+            },
+            "payment":{
+                "log": True
+            }
+        }
+        return superAdmin
+    if(role == "User" or role =="Driver"):
+        User={
+            "vehicle":{
+                "create": False,
+                "update": False,
+                "delete": False,
+                "view": True,
+                "batteryAssigned": False,
+                "DriverCreate": False,
+                "batteryView": True,
+                "userAssigned": False,
+                "assignedOrganisation": False
+            },
+            "battery":{
+                "create": False,
+                "update": False,
+                "delete": False,
+                "batteryAssigned": False,
+                "assigned": False,
+                "view": True
+            },
+            "swapstation":{
+                "create": False,
+                "update": False,
+                "delete": False,
+                "assigned": False,
+                "view": False
+
+            },
+            "geofence":{
+                "create":False,
+                "update":False,
+                "delete":False
+            },
+            "org":{
+                "addUsertoorg":False,
+                "delete":False,
+                "createRole":False,
+                "createProfile": False,
+                "assignedvehical":False,
+                "view":True,
+                "listVehicle": True
+            },
+            "iot":{
+                "create":False,
+                "update":False,
+                "delete":False,
+                "assignBattery":False
+            },
+            "csv":{
+                "download": False,
+
+            },
+            "fleetOwner":{
+                "create":False,
+                "update":False,
+                "delete":False,
+            },
+            "fleetOperater":{
+                "create":False,
+                "update":False,
+                "delete":False,
+            },
+            "payment":{
+                "log": False
+            },
+            "driver":{
+                "create":True,
+                "delete":True,
+                "update":True,
+            },
+        }
+        return User 
+    if(role == "FleetOprater"):
+        fleetOperator={
+            "vehicle":{
+                "create": False,
+                "update": False,
+                "delete": False,
+                "view": True,
+                "batteryAssigned": False,
+                "DriverCreate": False,
+                "batteryView": True,
+                "userAssigned": False,
+                "assignedOrganisation": False
+            },
+            "battery":{
+                "create": False,
+                "update": False,
+                "delete": False,
+                "batteryAssigned": False,
+                "assigned": False,
+                "view": True
+            },
+            "swapstation":{
+                "create": False,
+                "update": False,
+                "delete": False,
+                "assigned": False,
+                "view": True
+            },
+            "geofence":{
+                "create":False,
+                "update":False,
+                "delete":False
+            },
+            "org":{
+                "addUsertoorg":False,
+                "delete":False,
+                "createRole":False,
+                "createProfile": False,
+                "assignedvehical":False,
+                "view":True,
+                "listVihical": True
+            },
+            "iot":{
+                "create":False,
+                "update":False,
+                "delete":False,
+                "assignBattery":False
+            },
+            "csv":{
+                "download": False,
+
+            },
+            "fleetOwner":{
+                "create":False,
+                "update":False,
+                "delete":False,
+            },
+            "fleetOperater":{
+                "create":False,
+                "update":False,
+                "delete":False,
+            },
+            "payment":{
+                "log": True
+            },
+            "driver":{
+                "create":False,
+                "delete":False,
+                "update":False,
+                "view": False
+            },
+        }
+        return fleetOperator
+    if(role == "FleetOwner"):
+        fleetOwner={
+            "vehicle":{
+                "create": True,
+                "update": True,
+                "delete": True,
+                "view": True,
+                "batteryAssigned": False,
+                "DriverCreate": False,
+                "batteryView": True,
+                "userAssigned": False,
+                "assignedOrganisation": False
+            },
+            "battery":{
+                "create": False,
+                "update": False,
+                "delete": False,
+                "batteryAssigned": False,
+                "assigned": False,
+                "view": True
+            },
+            "swapstation":{
+                "create": False,
+                "update": False,
+                "delete": False,
+                "assigned": False,
+                "view": True
+            },
+            "geofence":{
+                "create":False,
+                "update":False,
+                "delete":False
+            },
+            "org":{
+                "addUsertoorg":False,
+                "delete":False,
+                "createRole":False,
+                "createProfile": False,
+                "assignedvehical":False,
+                "view":True,
+                "listVihical": True
+            },
+            "iot":{
+                "create":False,
+                "update":False,
+                "delete":False,
+                "assignBattery":False
+            },
+            "csv":{
+                "download": False,
+
+            },
+            "driver":{
+                "create":True,
+                "delete":True,
+                "update":True,
+                "view": True
+
+            },
+            "fleetOwner":{
+                "create":True,
+                "update":True,
+                "delete":True,
+            },
+            "fleetOperater":{
+                "create":True,
+                "update":True,
+                "delete":True,
+            },
+            "payment":{
+                "log": True
+            }
+        }
+        return fleetOwner

@@ -1,7 +1,7 @@
 """ 
-   - This Modules is develop for Registration, Login, Battery_management,
-   Microsoft signup functions, Vehicle_management, Geofencing,
-   Driver_management, Generate_CSV.
+   - This Modules is develop for Registration, Login, Battery Management,
+   Microsoft signup functions, Vehicle Management, Geofencing,
+   Driver Management, Generate Csv, FleetOwner, FleetOperater.
 
 """
 from django.shortcuts import render, redirect
@@ -35,6 +35,7 @@ def dashboard(request):
     context={
         "IsAdmin":False
     }
+    print(request.session.get('user_type'))
 
     if(len(getUserData) != 0):
         context['IsAdmin']= getUserData[0]["is_admin"]
@@ -83,6 +84,7 @@ def loginPage(request):
                 getUserData=list(Crmuser.objects.filter(email=email).values())
                 if(len(getUserData) !=0):
                    request.session["IsAdmin"]= getUserData[0]["is_admin"]
+                   request.session["user_type"]= getUserData[0]["user_type"]
                 userPermission=UserPermission(request,request.session.get("IsAdmin"))
                 return render(request,'dashboard.html',{'email':email,"IsAdmin": getUserData[0]["is_admin"] ,'UserPermission':userPermission})     
             else:
@@ -858,7 +860,7 @@ def listAddedDriver(request):
                 }
         return render(request, 'list_drivers.html',context)
     except Exception as e:
-        return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError']) 
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError']) 
 
 # This function will Update Driver
 def updateDriver(request,id):
@@ -915,7 +917,7 @@ def deleteDriver(request, id):
         return render(request, "delete_driver.html", context)
     except Exception as e:
         print(e)
-        return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError'])
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
 
 #Generate CSV field vise.
@@ -1108,19 +1110,20 @@ def createFleetManagement(request):
     if request.method == "GET":
         return render(request, "fleet_owner_and_fleet_operator/add_fleet_owner.html",{'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
 
-    data=createFleetOwner(request)
+    if request.method == "POST":
+        data=createFleetOwner(request)
 
-    if(data == True):
-        messages.add_message(request, messages.ERROR, successAndErrorMessages()['fleetownerExists'])
-        return render(request, "fleet_owner_and_fleet_operator/add_fleet_owner.html",{'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+        if(data == True):
+            messages.add_message(request, messages.WARNING, successAndErrorMessages()['fleetownerExists'])
+            return render(request, "fleet_owner_and_fleet_operator/add_fleet_owner.html",{'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
 
-    elif(data == False):
-        messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError'])
-        return render(request, "fleet_owner_and_fleet_operator/add_fleet_owner.html",{'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+        elif(data == False):
+            messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
+            return render(request, "fleet_owner_and_fleet_operator/add_fleet_owner.html",{'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
 
-    else:
-        messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['fleetownerCreate'])
-        return render(request, "fleet_owner_and_fleet_operator/add_fleet_owner.html",{'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+        else:
+            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['fleetownerCreate'])
+            return render(request, "fleet_owner_and_fleet_operator/add_fleet_owner.html",{'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
 
 ## update fleet owner data
 def updateFleetManagement(request,id):
@@ -1130,7 +1133,7 @@ def updateFleetManagement(request,id):
         return render(request, "fleet_owner_and_fleet_operator/update_fleet_owner.html",{'data': data,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
 
     if(data == False and len(data) != 0):
-        messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError'])
+        messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
         return render(request, "fleet_owner_and_fleet_operator/update_fleet_owner.html",{'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
 
     else:
@@ -1148,22 +1151,39 @@ def listFleetManagement(request):
     data=listFleetOwner(request)
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     if(len(data) == 0) :
-        messages.add_message(request, messages.ERROR, successAndErrorMessages()['dataNotFound'])
         return render(request, "fleet_owner_and_fleet_operator/list_fleet_owner.html",{'data':data, 'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission,"ActiveFleetOperator":FleetOwner.objects.filter(status=True).count(),"InactiveFleetOperator":FleetOwner.objects.filter(status=False).count()})
 
     elif(data == False):
-        messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError'])
+        messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
         return render(request, "fleet_owner_and_fleet_operator/list_fleet_owner.html",{'data':data, 'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission,"ActiveFleetOperator":FleetOwner.objects.filter(status=True).count(),"InactiveFleetOperator":FleetOwner.objects.filter(status=False).count()})
 
     else:
         return render(request, "fleet_owner_and_fleet_operator/list_fleet_owner.html",{'data':data, 'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission,"ActiveFleetOwner":FleetOwner.objects.filter(status=True).count(),"InactiveFleetOwner":FleetOwner.objects.filter(status=False).count()})
+
+## delete fleet Owner data
+def deleteFleetManagemant(request,id):
+    userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    data=True
+    if request.method == "GET": 
+        data=list(deleteFleetOwner(request,id))[0]
+    if(data == False):
+        messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
+        return render(request, "fleet_owner_and_fleet_operator/delete_fleet_owner.html",{'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+
+    else:
+        if request.method == "POST":
+            data=deleteFleetOwner(request,id)
+            return redirect("listfleetowner")
+        else:
+            return render(request, "fleet_owner_and_fleet_operator/delete_fleet_owner.html",{'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission,"data":data})
+
 
 ## get active and deactive fleet owner
 def getActiveandInactiveFleetOwner(request):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     data=getActiveAndInactiveFleetOwner(request)
     if(data != False and len(data) == 0):
-        messages.add_message(request, messages.ERROR, successAndErrorMessages()['dataNotFound'])
+        messages.add_message(request, messages.WARNING, successAndErrorMessages()['dataNotFound'])
         return render(request, "fleet_owner_and_fleet_operator/active_and_inactive_fleet_owner.html",{ "data": [],'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
 
     else:
@@ -1178,12 +1198,12 @@ def createFleetOperatorupnderFleetOwner(request):
         return render(request, "fleet_owner_and_fleet_operator/add_fleet_operatore.html",{'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
 
     if(data == True):
-        messages.add_message(request, messages.ERROR, successAndErrorMessages()['fleetoperatorExists'])
+        messages.add_message(request, messages.WARNING, successAndErrorMessages()['fleetoperatorExists'])
         return render(request, "fleet_owner_and_fleet_operator/add_fleet_operatore.html",{'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
 
     elif(data == False):
 
-        messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError'])
+        messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
         return render(request, "fleet_owner_and_fleet_operator/add_fleet_operatore.html",{'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
 
     else:
@@ -1197,7 +1217,7 @@ def updateFleetOperatorupnderFleetOwner(request,id):
     data=updateFleetOperator(request,id)
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     if(data == False and len(data) != 0) :
-        messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError'])
+        messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
         return render(request, "fleet_owner_and_fleet_operator/update_fleet_operator.html",{'data' : data ,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
 
     else:
@@ -1215,7 +1235,7 @@ def deleteFleetOperatorupnderFleetOwner(request,id):
     if request.method == "GET": 
         data=list(deleteFleetOperator(request,id))[0]
     if(data == False):
-        messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError'])
+        messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
         return render(request, "fleet_owner_and_fleet_operator/delete_fleet_operator.html",{'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
 
     else:
@@ -1230,11 +1250,10 @@ def listFleetOperatorupnderFleetOwner(request):
     data=listFleetOperator(request)
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     if(len(data) == 0):
-        messages.add_message(request, messages.ERROR, successAndErrorMessages()['dataNotFound'])
         return render(request, "fleet_owner_and_fleet_operator/list_fleet_operator.html",{ "data": [],'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
 
     elif(data == False):
-        messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError'])
+        messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
         return render(request, "fleet_owner_and_fleet_operator/list_fleet_operator.html",{ data: data,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
 
     else:
@@ -1245,7 +1264,7 @@ def getActiveandInactiveFleetOperatorupnderFleetOwner(request):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     data=getActiveAndInactiveFleetOperatore(request)
     if(data != False and len(data) == 0):
-        messages.add_message(request, messages.ERROR, successAndErrorMessages()['dataNotFound'])
+        messages.add_message(request, messages.WARNING, successAndErrorMessages()['dataNotFound'])
         return render(request, "fleet_owner_and_fleet_operator/active_and_inactive_fleet_operator.html",{ "data": [],'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
 
     else:

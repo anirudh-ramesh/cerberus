@@ -91,6 +91,7 @@ urlpatterns= [
     path(r'updatefleetowner/<str:id>', views.updateFleetManagement, name="updatefleetowner"),
     path(r'activefleetoperator', views.getActiveandInactiveFleetOperatorupnderFleetOwner, name="activefleetoperator"),
     path(r'inactivefleetoperator', views.getActiveandInactiveFleetOperatorupnderFleetOwner, name="inactivefleetoperator"),
+    path(r'deletefleetowner/<int:id>', views.deleteFleetManagemant, name="deletefleetowner"),
 
 
     

@@ -17,7 +17,7 @@
                       <tr>
                         <th scope="col">Username</th>
                         <th scope="col">Email</th>
-                        <th scope="col">IsAdmin</th>
+                        <!-- <th scope="col">IsAdmin</th> -->
                         <th scope="col">Status</th>
                         <th scope="col">Action</th>
 
@@ -27,12 +27,14 @@
                         <tr>
                             <td>{{fm.username}}</td>
                             <td>{{fm.email}}</td>
-                            <td>{{fm.is_admin}}</td>
+                            <!-- <td>{{fm.is_admin}}</td> -->
                             <td>{{fm.status}}</td>
 
                           
                           <td style="display: flex;">
                             <a class="table-link" aria-expanded="false" href="{% url 'updatefleetowner' fm.email %}"><img src="../static/icons/edit.svg"></a>
+                            <a class="table-link" aria-expanded="false" href="{% url 'deletefleetowner' fm.id %}"><img src="../static/icons/delete.svg"></a>
+
 
                           </td>              
                         </tr>
