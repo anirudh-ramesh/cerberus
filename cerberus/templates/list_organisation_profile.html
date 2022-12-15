@@ -3,11 +3,16 @@
 
 {% block content %}
 
-<!-- {% include 'status.html' %} -->
 
 <div class="col-sm-12">
     <h4 class="text-center alert alert info">Organisaiotion Profile Data</h4>
     <form action="" method="GET">
+        {% if messages %}
+          {% for message in messages %}
+            <div class = "alert alert-{{message.tags}}">{{message}}</div>
+          {% endfor %}
+        {% endif %}
+        
         {% if organisation_profile_data %}
                 <table class="table table-hover">
                     <thead>
@@ -53,7 +58,7 @@
                             <td>{{fm.battrey_swap_satation_operator}}</td>
                             
                             <td>
-                              <a href="{% url 'user_management:deleteorgprofile' fm.id %}" class="btn btn-danger btn-sm">Delete</a>             
+                              <a href="{% url 'user_management:deleteorgprofile' fm.id %}?org_id={{fm.serial_number}}" class="btn btn-danger btn-sm">Delete</a>             
                             </td>
                         </tr>
                      
@@ -66,7 +71,7 @@
             <h4 class="text-center alert alert warning">No Records Found</h4>
         {% endif %}
 
-        <a href="{% url 'home' %}" class="btn btn-secondary">Back To Home</a>
+        <a href="{% url 'user_management:listorg' %}" class="btn btn-secondary">Back</a>
 
         
     </form>

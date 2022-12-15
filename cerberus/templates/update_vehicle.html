@@ -2,148 +2,160 @@
 
 {% block content %}
 <div class="container">
-<div class="row container"style="padding: 1rem;">
-    <div class="col-sm-8">
-        
+    <div class="row container">
+        <!-- <div class="col-sm-8"> -->
+
         {% if update_vehicle_data %}
 
-            <form class="form" style="padding:0 3rem;"method="POST" action="">
-                {% csrf_token %}
+        <form class="form" style="padding:0 3rem;" method="POST" action="">
+            {% csrf_token %}
 
-                {% if messages %}
-                    {% for message in messages %}
-                    <div class = "alert alert-{{message.tags}}">{{message}}</div>
-                    {% endfor %}
-                {% endif %}
-                
-                {% for fm in update_vehicle_data %}
-                <div class="input-group mb-2"> <h4 class="btn btn-secondary  btn-sm btn-block">Update Vehicle Details</h4></div>
-               
-                    <div class="input-group mb-2">
-                        <div class="input-group-append">
-                            <label class="label_formm">Vehicle Model Name</label>
-                            <input type='text' name='vehicle_model_name' value="{{fm.vehicle_model_name}}" class="input-register-text" required>
-                        </div>
-                    </div>
-                    <div class="input-group mb-2">
-                        <div class="input-group-append">
-                            <label class="label_formm">Chasis Number</label>
-                            <input type="number" name='chasis_number' value="{{fm.chasis_number}}" class="input-register-text" required>
-                        </div>
-                    </div>
-                    <div class="input-group mb-2">
-                        <div class="input-group-append">
-                            <label class="label_formm">Vehicle Configuration</label>
-                            <select type="text" name="configuration" class="input-register-text" required>
-                                {% if fm.configuration == "48V" %}
-                                    <option value="48V" selected>48V</option>
-                                {% else %}
-                                    <option value="48V">48V</option>
-                                {% endif %}
-                                {% if fm.configuration == "60V" %}
-                                    <option value="60V" selected>60V</option>
-                                {% else %}
-                                    <option value="60V">60V</option>
-                                {% endif %}
-                                
-                                {% if fm.configuration == "72V" %}
-                                    <option value="72V" selected>72V</option>
-                                {% else %}
-                                    <option value="72V">72V</option>
-                                {% endif %}
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{message.tags}}">{{message}}</div>
+            {% endfor %}
+            {% endif %}
 
-                            </select>
-                        </div>
-                    </div>
-                    <div class="input-group mb-2">
-                        <div class="input-group-append">
-                            <label class="label_formm">Vehicle Choice</label>
-                            <select type="text" name="vehicle_choice" value="{{fm.vehicle_choice}}" class="input-register-text" required>
-                                {% if fm.vehicle_choice == "2W-L" %}
-                                    <option value="2W-L" selected>2W-L</option>
-                                {% else %}
-                                    <option value="2W-L">2W-L</option>
-                                {% endif %}
-                                {% if fm.vehicle_choice == "2W-H" %}
-                                    <option value="2W-H" selected>2W-H</option>
-                                {% else %}
-                                    <option value="2W-H">2W-H</option>
-                                {% endif %}
-                                
-                                {% if fm.vehicle_choice == "3W-Erickshaw" %}
-                                    <option value="3W-Erickshaw" selected>3W-Erickshaw</option>
-                                {% else %}
-                                    <option value="3W-Erickshaw">3W-Erickshaw</option>
-                                {% endif %}
-
-                                {% if fm.vehicle_choice == "3W-Loader" %}
-                                    <option value="3W-Loader" selected>3W-Loader</option>
-                                {% else %}
-                                    <option value="3W-Loader">3W-Loader</option>
-                                {% endif %}
-                                  
-                            </select>
-                        </div>
-                    </div>
-                    <div class="input-group mb-2">
-                        <div class="input-group-append">
-                            <label class="label_formm">Vehicle Warrenty Start Date</label>
-                            <input type='date' name='vehicle_warrenty_start_date' value="{{fm.vehicle_warrenty_start_date|date:'Y-m-d'}}" class="input-register-text" required>
-                        </div>
-                    </div>
-                    <div class="input-group mb-2">
-                        <div class="input-group-append">
-                            <label class="label_formm">Vehicle Warrenty End Date</label>
-                            <input type='date' name='vehicle_warrenty_end_date' value="{{fm.vehicle_warrenty_end_date|date:'Y-m-d'}}" class="input-register-text" required>
-                        </div>
-                    </div>
-                    <div class="input-group mb-2">
-                        <div class="input-group-append">
-                            <label class="label_formm">Assigned Owner</label>
-                            <input type='text' name='assigned_owner' value="{{fm.assigned_owner}}" class="input-register-text" required>
-                        </div>
-                    </div>
-                    <div class="input-group mb-2">
-                        <div class="input-group-append">
-                            <label class="label_formm">Insurance Start Date</label>
-                            <input type='date' name='insurance_start_date' value="{{fm.insurance_start_date|date:'Y-m-d'}}" class="input-register-text" required>
-                        </div>
-                    </div>
-                    <div class="input-group mb-2">
-                        <div class="input-group-append">
-                            <label class="label_formm">Insurance End Date</label>
-                            <input type='date' name='insurance_end_date' value="{{fm.insurance_end_date|date:'Y-m-d'}}" class="input-register-text" required>
-                        </div>
-                    </div>
-                    <div class="input-group mb-2">
-                        <div class="input-group-append">
-                            <label class="label_formm">Vehicle Status</label>
-                            <br>
-                            {% if fm.vehicle_status == "Active" %}
-                                <label class="label_formm"><input name="vehicle_status" type="radio" value="Active" required="" checked>Active</label>
-                            {% else %}
-                            <label class="label_formm"><input name="vehicle_status" type="radio" value="Active" required="" >Active</label>
-                            {% endif %}
-
-                            {% if fm.vehicle_status == "Inactive" %}
-                            <label class="label_formm"><input name="vehicle_status" type="radio" value="Inactive" required="" checked>Inactive</label>
-                            {% else %}
-                            <label class="label_formm"><input name="vehicle_status" type="radio" value="Inactive" required="" >Inactive</label>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                {% endfor %}
-                <div class="btn-group">
-                    <a href="{% url 'getvehicle' %}" class="btn btn-info  btn-sm">Back To Details </a>
-                <input type="submit" class="btn btn-success btn-sm" value="Update">
-                
+            {% for fm in update_vehicle_data %}
+            <div class="input-group mb-2">
+                <h4 class="btn btn-secondary  btn-sm btn-block">Update Vehicle Details</h4>
             </div>
-  
+
+            <div class="input-group mb-2">
+                <div class="input-group-append">
+                    <label class="label_formm">Vehicle Model Name</label>
+                    <input type='text' name='vehicle_model_name' value="{{fm.vehicle_model_name}}"
+                        class="input-register-text" required>
+                </div>
+            </div>
+            <div class="input-group mb-2">
+                <div class="input-group-append">
+                    <label class="label_formm">Chasis Number</label>
+                    <input type="number" name='chasis_number' value="{{fm.chasis_number}}" class="input-register-text"
+                        required>
+                </div>
+            </div>
+            <div class="input-group mb-2">
+                <div class="input-group-append">
+                    <label class="label_formm">Vehicle Configuration</label>
+                    <select type="text" name="configuration" class="input-register-text" required>
+                        {% if fm.configuration == "48V" %}
+                        <option value="48V" selected>48V</option>
+                        {% else %}
+                        <option value="48V">48V</option>
+                        {% endif %}
+                        {% if fm.configuration == "60V" %}
+                        <option value="60V" selected>60V</option>
+                        {% else %}
+                        <option value="60V">60V</option>
+                        {% endif %}
+
+                        {% if fm.configuration == "72V" %}
+                        <option value="72V" selected>72V</option>
+                        {% else %}
+                        <option value="72V">72V</option>
+                        {% endif %}
+
+                    </select>
+                </div>
+            </div>
+            <div class="input-group mb-2">
+                <div class="input-group-append">
+                    <label class="label_formm">Vehicle Choice</label>
+                    <select type="text" name="vehicle_choice" value="{{fm.vehicle_choice}}" class="input-register-text"
+                        required>
+                        {% if fm.vehicle_choice == "2W-L" %}
+                        <option value="2W-L" selected>2W-L</option>
+                        {% else %}
+                        <option value="2W-L">2W-L</option>
+                        {% endif %}
+                        {% if fm.vehicle_choice == "2W-H" %}
+                        <option value="2W-H" selected>2W-H</option>
+                        {% else %}
+                        <option value="2W-H">2W-H</option>
+                        {% endif %}
+
+                        {% if fm.vehicle_choice == "3W-Erickshaw" %}
+                        <option value="3W-Erickshaw" selected>3W-Erickshaw</option>
+                        {% else %}
+                        <option value="3W-Erickshaw">3W-Erickshaw</option>
+                        {% endif %}
+
+                        {% if fm.vehicle_choice == "3W-Loader" %}
+                        <option value="3W-Loader" selected>3W-Loader</option>
+                        {% else %}
+                        <option value="3W-Loader">3W-Loader</option>
+                        {% endif %}
+
+                    </select>
+                </div>
+            </div>
+            <div class="input-group mb-2">
+                <div class="input-group-append">
+                    <label class="label_formm">Vehicle Warrenty Start Date</label>
+                    <input type='date' name='vehicle_warrenty_start_date'
+                        value="{{fm.vehicle_warrenty_start_date|date:'Y-m-d'}}" class="input-register-text" required>
+                </div>
+            </div>
+            <div class="input-group mb-2">
+                <div class="input-group-append">
+                    <label class="label_formm">Vehicle Warrenty End Date</label>
+                    <input type='date' name='vehicle_warrenty_end_date'
+                        value="{{fm.vehicle_warrenty_end_date|date:'Y-m-d'}}" class="input-register-text" required>
+                </div>
+            </div>
+            <div class="input-group mb-2">
+                <div class="input-group-append">
+                    <label class="label_formm">Assigned Owner</label>
+                    <input type='text' name='assigned_owner' value="{{fm.assigned_owner}}" class="input-register-text"
+                        required>
+                </div>
+            </div>
+            <div class="input-group mb-2">
+                <div class="input-group-append">
+                    <label class="label_formm">Insurance Start Date</label>
+                    <input type='date' name='insurance_start_date' value="{{fm.insurance_start_date|date:'Y-m-d'}}"
+                        class="input-register-text" required>
+                </div>
+            </div>
+            <div class="input-group mb-2">
+                <div class="input-group-append">
+                    <label class="label_formm">Insurance End Date</label>
+                    <input type='date' name='insurance_end_date' value="{{fm.insurance_end_date|date:'Y-m-d'}}"
+                        class="input-register-text" required>
+                </div>
+            </div>
+            <div class="input-group mb-2">
+                <div class="input-group-append">
+                    <label class="label_formm">Vehicle Status</label>
+                    <br>
+                    {% if fm.vehicle_status == "Active" %}
+                    <label><input name="vehicle_status" type="radio" value="Active" required="" checked>Active</label>
+                    {% else %}
+                    <label><input name="vehicle_status" type="radio" value="Active" required="">Active</label>
+                    {% endif %}
+
+                    {% if fm.vehicle_status == "Inactive" %}
+                    <label><input name="vehicle_status" type="radio" value="Inactive" required=""
+                            checked>Inactive</label>
+                    {% else %}
+                    <label><input name="vehicle_status" type="radio" value="Inactive" required="">Inactive</label>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% endfor %}
+            <div class="btn-group">
+                <input type="submit" class="btn btn-success btn-sm" value="Update">
+                <a href="{% url 'getvehicle' %}" class="btn btn-info  btn-sm">Back To Details </a>
+
+            </div>
+
             {% else %}
-                <h4 class="text-center alert alert warning">No Records Found</h4>
+            <h4 class="text-center alert alert warning">No Records Found</h4>
             {% endif %}
         </form>
     </div>
-</div></div>
+
+</div>
 {% endblock %}

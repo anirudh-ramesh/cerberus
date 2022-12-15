@@ -4,20 +4,21 @@
 {% block content %}
 
 <div class="row">
+	<div class="container col-lg-6">
 	<div class="col-md-5">
 		<div class="card_Bettery card-body">
 			<div class="battery">
 				<h5 class="btn btn-secondary  btn-sm btn-block battery-header" style="justify-content: center;">Add Swap Station</h5>
 				<hr>
 			</div>
-			<div class="card_subb card-body swap_station">
-				<div class="d-flex justify-content-start form_container">
+			<div class="card_subb">
+				<div class="d-flex">
 					<form class="form_swap" method="POST" action="">
 						{% csrf_token %}
 						
 						{% if messages %}
 							{% for message in messages %}
-							<div class = "alert alert-{{message.tags}}">{{message}}</div>
+							<div class = "top_msg alert alert-{{message.tags}}">{{message}}</div>
 							{% endfor %}
 					 	{% endif %}
 						<div class="input-group mb-2">
@@ -67,8 +68,8 @@
 							<div class="input-group-append">
 								<label class="label_formm">Status</label>
                                 <br>
-                                <label class="label_formm"><input name="status" type="radio" value="Active" required="">Active</label>
-                                <label class="label_formm"><input name="status" type="radio" value="Inactive" required="">Inactive</label>
+                                <label class="label_formm"style="justify-content: flex-end;"><input name="status" type="radio" value="Active" required="">Active</label>
+                                <label class="label_formm"style="justify-content: flex-end;"><input name="status" type="radio" value="Inactive" required="">Inactive</label>
                                 
 							</div>
 						</div>
@@ -79,19 +80,19 @@
 							</div>
 						</div>
 
-						<div class="submit-button">
-							<div class="">
+						
+							<div class="btn-group">
 								<input class="btn btn-success btn-sm" type="submit" value="Submit">
 								<a href="{% url 'user_management:listswap' %}" class="btn btn-info btn-sm">Back</a>
 							</div>
-						</div>
+						
 					</form>
 					
 				</div>
 			</div>
 		</div>
 	</div>
-
+</div>
 </div>
 
 {% endblock %}

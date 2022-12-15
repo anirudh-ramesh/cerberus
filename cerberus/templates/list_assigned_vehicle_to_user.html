@@ -2,7 +2,7 @@
 
 {% block content %}
 
-{% include 'status.html' %}
+<!-- {% include 'status.html' %} -->
 
 <div class="col-sm-12">
     <h4 class="text-center alert alert info">Vehicle Assigned To User</h4>
@@ -26,8 +26,6 @@
                         <th scope="col">Chasis Number</th>
                         <th scope="col">Vehicle Configuration</th>
                         <th scope="col">Vehicle Choice</th>
-                        <th scope="col">Vehicle Iot Imei Number</th>
-                        <th scope="col">Vehicle Sim Number</th>
                         <th scope="col">Vehicle Warrenty Start Date</th>
                         <th scope="col">Vehicle Warrenty End Date</th>
                         <th scope="col">Assigned Owner</th>
@@ -64,10 +62,7 @@
                             <td>{{fm.insurance_end_date}}</td>
                             
                             <td>
-                                <form action="{% url 'uservehicle' fm.email %}?chasis_number={{fm.chasis_number}}" method="POST" class="d-inline">
-                                    {% csrf_token %}
-                                  <input type="submit" class="btn btn-danger btn-sm" value="Remove">
-                                </form>
+                              <a class="btn btn-danger btn-sm" href="{% url 'uservehicle' fm.email %}?chasis_number={{fm.chasis_number}}&action=RemoveVehicle1">Remove</a>
                             </td>             
                         </tr>
                       

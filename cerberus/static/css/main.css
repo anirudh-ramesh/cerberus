@@ -65,14 +65,12 @@ a {
 .p_center{
     text-align: center;
 }
-/* .form_container {
-    margin-top: 20px;
-} */
+
 #form-title{
     color: #fff;
 }
 .btn-group{
-    /* width: 100%; */
+    padding: 0 2rem;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -103,6 +101,9 @@ a {
     border: 0 !important;
     padding: 0.75rem 0.75rem !important;
     border-radius: 0.25rem 0 0 0.25rem !important;
+}
+.b-0{
+    border: 0 !important;
 }
 .input_user,
 .input_pass:focus {
@@ -572,10 +573,11 @@ a {
     grid-template-columns: 1fr 1fr 1fr;
 }
 img {
-    width: 20px;
+    width: 26px;
     max-width: 100%;
     vertical-align: middle;
     display: inline-block;
+    height: 26px;
 }
 .align-items-center {
     align-items: center !important;
@@ -686,8 +688,8 @@ p {
     width: 120%;
 } */
 .form_swap{
-    width: 70%;
-    margin-left: 18%;
+    width: 100%;
+    /* margin-left: 18%; */
 
 }
 .org_prof{
@@ -746,10 +748,12 @@ p {
 .label_formm{
     margin-right: 0px;
     width: 50%;
+    display: flex;
+    align-items: center;
+    height: 28px;
+    
 }
-.rowd{
-    width: 120%;
-}
+
 .label_formtt{
     margin-right: 10px;
     width: 50%;
@@ -762,7 +766,7 @@ p {
     width: 50%;
 }
 .formt{
-    width: 139%;
+    width: 100%;
 }
 .add_user{
     width: 150%;
@@ -798,8 +802,8 @@ p {
 .battery-header{
     width: 100%;
     display: flex;
-    /* justify-content: center; */
-    margin-left: 17%;
+    justify-content: center;
+    /* margin-left: 17%; */
 }
 
 .card_Bettery{
@@ -820,6 +824,31 @@ p {
     color: #212529;
     overflow: auto;
     display: block;
+}
+.settingdiv {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+    overflow: auto;
+    /* display: block; */
+}
+.settingdiv thead th {
+    vertical-align: middle;
+    border-bottom: 2px solid #dee2e6;
+}
+.settingdiv th {
+    padding: 0.75rem;
+   
+    border: 1px solid #dee2e6;
+    text-align: center;
+    vertical-align: bottom;
+}
+.settingdiv td {
+    padding: 0.75rem;
+   
+    border: 1px solid #dee2e6;
+    text-align: center;
+    vertical-align: top;
 }
 .table thead th {
     vertical-align: middle;
@@ -847,10 +876,13 @@ min-width: 120px;
         max-width: 100% !important;
         flex: 0% !important;
     }
+    .container {
+        max-width: 50%;
+    }
 }
 
 label{
-    width: 20%;
+    width: 36%;
 } 
 
 .justify-content-center {
@@ -930,8 +962,19 @@ label{
     text-align: center;
   margin: auto;
 }
+.top_msg{
+    padding: 0.3rem;
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    margin: auto;
+
+}
 .udate_button{
     margin-left: 10%;
+    text-align: center !important;
 }
 .update_battery_page{
     margin-left: 7% !important;

@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="row">
-<div class="update-swap-station-div">
+<div class="container col-lg-6">
     <div class="card_Bettery">
         <div class="card-body">
             <h5 class="btn btn-secondary  btn-sm btn-block" style="display: flex;
@@ -25,13 +25,13 @@
                         <div class="input-group mb-2">
                             <div class="input-group-append">
                                 <label class="label_formm">Vehicle Model Name</label>
-                                <input type='text' name='swap_station_name' value="{{fm.swap_station_name}}" class="input-register-texts" required>
+                                <input type='text' name='swap_station_name' value="{{fm.swap_station_name}}" class="input-register-text" required>
                             </div>
                         </div>
                         <div class="input-group mb-2">
                             <div class="input-group-append">
                                 <label class="label_formm">Chasis Number</label>
-                                <input type="number" step="any" name='imei_number' value="{{fm.imei_number}}" class="input-register-texts" required>
+                                <input type="number" step="any" name='imei_number' value="{{fm.imei_number}}" class="input-register-text" required>
                             </div>
                         </div>
                         <div class="input-group mb-2">
@@ -49,7 +49,7 @@
                         <div class="input-group mb-2">
                             <div class="input-group-append">
                                 <label class="label_formm">Charge Specification</label>
-                                <select type="text" name="charge_specification" value="{{fm.charge_specification}}" class="input-register-texts" required>
+                                <select type="text" name="charge_specification" value="{{fm.charge_specification}}" class="input-register-text" required>
                                     {% if fm.charge_specification == "58V 15A" %}
                                         <option value="58V 15A" selected>58V 15A</option>
                                     {% else %}
@@ -67,7 +67,7 @@
                         <div class="input-group mb-2">
                             <div class="input-group-append">
                                 <label class="label_formm">Assigned Owner</label>
-                                <select type="text" name="assigned_owner" value="{{fm.assigned_owner}}" class="input-register-texts" required>
+                                <select type="text" name="assigned_owner" value="{{fm.assigned_owner}}" class="input-register-text" required>
                                     {% if fm.assigned_owner == "LEAP" %}
                                         <option value="LEAP" selected>LEAP</option>
                                     {% else %}
@@ -87,15 +87,15 @@
 								<label class="label_formm">Status</label>
                                 <br>
                                 {% if fm.status == "Active" %}
-                                <label class="label_formm"><input name="status" type="radio" value="Active" required="" checked>Active</label>
+                                <label class=""><input name="status" type="radio" value="Active" required="" checked>Active</label>
                                 {% else %}
-                                <label class="label_formm"><input name="status" type="radio" value="Active" required="" >Active</label>
+                                <label class=""><input name="status" type="radio" value="Active" required="" >Active</label>
                                 {% endif %}
 
                                 {% if fm.status == "Inactive" %}
-                                <label class="label_formm"><input name="status" type="radio" value="Inactive" required="" checked>Inactive</label>
+                                <label class=""><input name="status" type="radio" value="Inactive" required="" checked>Inactive</label>
                                 {% else %}
-                                <label class="label_formm"><input name="status" type="radio" value="Inactive" required="" >Inactive</label>
+                                <label class=""><input name="status" type="radio" value="Inactive" required="" >Inactive</label>
                                 {% endif %}
 							</div>
 						</div>
@@ -103,13 +103,13 @@
                         <!-- <div class="input-group mb-2">
                             <div class="input-group-append">
                                 <label class="label_formm">Status</label>
-                                <input type='text' name='status' value="{{fm.status}}" class="input-register-texts" required>
+                                <input type='text' name='status' value="{{fm.status}}" class="input-register-text" required>
                             </div>
                         </div> -->
                         <div class="input-group mb-2">
                             <div class="input-group-append">
                                 <label class="label_formm">Assigned Fleet Owner</label>
-                                <input type='text' name='assigned_fleet_owner' value="{{fm.assigned_fleet_owner}}" class="input-register-texts" required>
+                                <input type='text' name='assigned_fleet_owner' value="{{fm.assigned_fleet_owner}}" class="input-register-text" required>
                             </div>
                         </div>
     

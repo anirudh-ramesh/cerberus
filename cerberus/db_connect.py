@@ -113,7 +113,6 @@ def getOrgProfiles(id):
         new_data = []
         for row in myresult:
             res={}
-            print(row[2])
             res['id']= str(row[0])
             res["battery_pack_manufacture"] = str(row[1])
             res["battery_pack_distributor"] = row[2]
@@ -134,7 +133,8 @@ def getOrgProfiles(id):
             res["battrey_swap_satation_financier"] = row[17]
             res["battrey_swap_satation_owner"] = row[18]
             res["battrey_swap_satation_operator"] = row[19]
-            new_data.append(res)
+            res['serial_number'] = row[21]
+            new_data.append(res)           
         cursor.close()
         return new_data
     except Exception as e:
@@ -431,21 +431,21 @@ def removeUserVehicle(select,chasis_number):
 #CONVERY BINARY DATA TO UTF-8 TO SHOW IMAGES
 def images_display():
     try:
-        conn=db.connect(host="localhost",user="postgres",password="1234",database='battery_management')
+        conn=connect()
         cursor = conn.cursor()
-        sql = 'SELECT adhar_proof,pancard_proof,license_proof,email,username,user_type,is_active FROM irasusapp_crmuser;'
+        sql = "SELECT email,username,user_type,is_active,adhar_proof,pancard_proof,license_proof FROM irasusapp_crmuser WHERE user_type='Driver';"
         cursor.execute(sql)
         results = cursor.fetchall()
         one_row = []
         for value in results:
             res={}
-            res['adhar_proof'] = base64.b64encode(value[0]).decode("utf-8")
-            res['pan_proof'] = base64.b64encode(value[1]).decode("utf-8")
-            res['driving_license'] = base64.b64encode(value[2]).decode("utf-8")
-            res['email'] = value[3]
-            res['username'] = value[4]
-            res['user_type'] = value[5]
-            res['is_active'] = value[6]
+            res['email'] = value[0]
+            res['username'] = value[1]
+            res['user_type'] = value[2]
+            res['is_active'] = value[3]
+            res['adhar_proof'] = base64.b64encode(value[4]).decode("utf-8")
+            res['pan_proof'] = base64.b64encode(value[5]).decode("utf-8")
+            res['driving_license'] = base64.b64encode(value[6]).decode("utf-8")            
             one_row.append(res)
         return one_row
     except Exception as e:
