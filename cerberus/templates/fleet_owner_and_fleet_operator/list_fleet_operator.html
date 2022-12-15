@@ -1,0 +1,54 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+{% include 'fleet_owner_and_fleet_operator/feet_operatore_status.html' %}
+
+<div class="col-sm-12">
+  <a href="{% url 'createfleetoperator' %}" class="btn btn-info btn-sm">Add-Fleet-Operator</a>
+        <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Home</a>
+
+    <h4 class="text-center">Fleet Operator Details</h4>
+    <form action="" method="GET">
+      
+        {% if data %}
+                <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">Username</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">IsAdmin</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">FleetOwnerEmail</th>
+                        <th scope="col">Action</th>
+
+                      </tr>
+                    <tbody>
+                    {% for fm in data %}
+                        <tr>
+                            <td>{{fm.username}}</td>
+                            <td>{{fm.email}}</td>
+                            <td>{{fm.is_admin}}</td>
+                            <td>{{fm.status}}</td>
+                            <td>{{fm.fleetId}}</td>
+
+                          
+                          <td style="display: flex;">
+                            <a class="table-link" aria-expanded="false" href="{% url 'updatefleetoperator' fm.email %}"><img src="../static/icons/edit.svg"></a>
+                            <a class="table-link" aria-expanded="false" href="{% url 'deletefleetoperator' fm.id %}"><img src="../static/icons/delete.svg"></a>
+                          </td>              
+                        </tr>
+                      
+                      {% endfor %}
+                    </tbody>
+                    </thead>
+                  </table>
+            
+        {% else %}
+            <h4 class="text-center alert alert warning">No Record Found</h4>
+        {% endif %}
+
+    </form>
+    
+</div>
+{% endblock %}
