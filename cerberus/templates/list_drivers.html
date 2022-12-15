@@ -20,10 +20,11 @@
                         <th scope="col">Username</th>
                         <th scope="col">Verified-info</th>
                         <th scope="col">User-Type</th>
+                        <th scope="col">Status</th>
                         <th scope="col">Adhar-Proof</th>
                         <th scope="col">Pan-Proof</th>
                         <th scope="col">Driving-License</th>
-                        <th scope="col">Status</th>
+                        
                         <th scope="col">Action</th>
 
                       </tr>
@@ -34,6 +35,7 @@
                             <td>{{fm.username}}</td>
                             <td>{{fm.email}}</td>
                             <td>{{fm.user_type}}</td>
+                            <td>{{fm.is_active}}</td>
                             <td>
                                 <img src='data:image/jpeg;base64,{{fm.adhar_proof}}' alt="no image display" style="width:100px;height:100px;" >
                             </td>
@@ -42,8 +44,7 @@
                             </td>
                             <td>
                                 <img src='data:image/jpeg;base64,{{fm.driving_license}}' alt="no image display" style="width:100px;height:100px;" >
-                            </td>
-                            <td>{{fm.is_active}}</td>
+                            </td> 
                             <td>
                                 <a href="{% url 'updatedriver' fm.email %}" class="btn btn-warning btn-sm">Edit</a>
 

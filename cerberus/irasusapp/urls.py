@@ -68,7 +68,7 @@ urlpatterns= [
     path(r'bettrypack', views.battery_pack_menu, name="battery_data"),
     path(r'subpack', views.battery_pack_sub_menu, name="sub_data"),
 
-    path('irame', views.irameData, name="iramedata"),
+    path('irame/<str:id>', views.irameData, name="iramedata"),
 
     path(r'activeiot', views.getActiveAnddeactiveIotBystatus, name="activeiot"),
     path(r'deactiveiot', views.getActiveAnddeactiveIotBystatus, name="deactiveiot"),     

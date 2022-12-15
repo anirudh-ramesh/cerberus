@@ -864,32 +864,34 @@ def updateDriver(request,id):
     try:
         if request.method == 'GET':
             pi =list(Crmuser.objects.filter(pk=id).values())
-            pi[0]["adhar_proof"]=b64encode(pi[0]['adhar_proof']).decode("utf-8")
             pi[0]["email"]=pi[0]["email"]
             pi[0]["username"]=pi[0]["username"]
             pi[0]["user_type"]=pi[0]["user_type"]
             pi[0]["is_active"]=pi[0]["is_active"]
+            pi[0]["adhar_proof"]=b64encode(pi[0]['adhar_proof']).decode("utf-8")
             pi[0]["pancard_proof"]=b64encode(pi[0]['pancard_proof']).decode("utf-8")
             pi[0]["license_proof"]=b64encode(pi[0]['license_proof']).decode("utf-8")
+
         if request.method == 'POST':
-            username = request.POST['username']
-            email = request.POST['email']
+            username = request.POST.get('username')
+            email = request.POST.get('email')
             isactive = request.POST.get('is_active')
             user_type = request.POST.get('user_type')
             if isactive == 'on':
                 isactive = True
             else:
                 isactive = False
-            Crmuser.objects.filter(email=id).update(username=username,email=email,is_active=isactive,user_type=user_type,updated_at = timezone.now())
-            pi =list(Crmuser.objects.filter(pk=id).values())
-            pi[0]["adhar_proof"]=b64encode(pi[0]['adhar_proof']).decode("utf-8")
+            Crmuser.objects.filter(pk=id).update(username=username,email=email,is_active=isactive,user_type=user_type,updated_at = timezone.now())
+
+            pi =list(Crmuser.objects.filter(email=email).values())
             pi[0]["email"]=pi[0]["email"]
             pi[0]["username"]=pi[0]["username"]
             pi[0]["user_type"]=pi[0]["user_type"]
             pi[0]["is_active"]=pi[0]["is_active"]
+            pi[0]["adhar_proof"]=b64encode(pi[0]['adhar_proof']).decode("utf-8")
             pi[0]["pancard_proof"]=b64encode(pi[0]['pancard_proof']).decode("utf-8")
             pi[0]["license_proof"]=b64encode(pi[0]['license_proof']).decode("utf-8")
-            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['updateDriver']) 
+            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['updateDriver'])
             return render(request,'update_driver.html',{ 'form': pi,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission })
 
         return render(request,'update_driver.html',{ 'form': pi,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission })
@@ -1091,6 +1093,6 @@ def battery_pack_sub_menu(request):
 
         return render(request, "battery_submenu_pack.html", res)
 
-def irameData(request):
+def irameData(request,id):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
-    return render(request, "iframe_data.html",{'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+    return render(request, "iframe_data.html",{'id':id,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})

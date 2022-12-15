@@ -1,9 +1,8 @@
 {% extends 'main.html' %}
 {% block content %}
 {% include 'status.html' %}
-<br>
-
 <div class="row">
+	<div class="container col-lg-6">
 	<div class="col-md-5">
 		
 		<hr>
@@ -12,9 +11,10 @@
 			<hr>
 		</div>
 		<div class="card_Bettery card-body">
-			<h4 class="btn btn-secondary  btn-sm btn-block" href="">Vehicle Details</h4>
-			<div class="card_subb card-body add_vehicle">
-				<div class="d-flex justify-content-start form_container">
+			
+			<div class="card_subb card-body p-0">
+				<h4 class="btn btn-secondary  btn-sm btn-block" href="">Vehicle Details</h4>
+				<div class="d-flex form_container">
 					<form class="form_swap" method="POST" action="">
 						{% csrf_token %}
 
@@ -89,14 +89,14 @@
 						<div class="input-group mb-2">
 							<div class="input-group-append">
 								<label class="label_formm">Vehicle Status</label>
-                                <br>
-                                <label class="label_formm"><input name="vehicle_status" type="radio" value="Active" required="">Active</label>
-                                <label class="label_formm"><input name="vehicle_status" type="radio" value="Inactive" required="">Inactive</label>    
+                                
+                                <label class="label_formm"style="justify-content: flex-end;"><input name="vehicle_status" type="radio" value="Active" required="">Active</label>
+                                <label class="label_formm"style="justify-content: flex-end;"><input name="vehicle_status" type="radio" value="Inactive" required="">Inactive</label>    
 							</div>
 						</div>
 
 						
-						<div class="submit-button">
+						<div class="btn-group">
 							<div class="submit-div">
 								<input class="btn btn-success btn-sm" type="submit" value="Submit">
 							  </div>
@@ -110,5 +110,6 @@
 			</div>
 		</div>
 	</div>
+</div>
 </div>
 {% endblock %}
