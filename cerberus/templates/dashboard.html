@@ -48,7 +48,7 @@
                   <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/getdata'">
                      <div class="card h-100">
                         <div class="card-body" >
-                           <h5 class="heading_text" >Extracting real time insights from Energy Assets.</h5>
+                           <h5 class="heading_text" > Extracting real time insights from Energy Assets.</h5>
                            <div class="pro_gress">
                               <h3 class="text-black">Battery Packs
                               </h3>
@@ -59,7 +59,7 @@
                   </div>
                   {% endif %}
 
-                  {% if UserPermission.SwapingStation == True %}
+                  {% if UserPermission.SwapingStation == True or newuserPermission.swapstation.view == True %}
                   <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/listswapstation'">
                      <div class="card h-100">
                         <div class="card-body" >
@@ -73,7 +73,7 @@
                   </div>
                   {% endif %}
 
-                  {% if UserPermission.Geography == True %}
+                  {% if UserPermission.Geography == True or newuserPermission.geofence.create == True %}
 
                   <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/geofence'">
                      <div class="card h-100">
@@ -88,7 +88,7 @@
                   </div>
                   {% endif %}
 
-                  {% if UserPermission.Users == True %}
+                  {% if UserPermission.Users == True or newuserPermission.user.view == True %}
 
                   <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/getuser'">
                      <div class="card h-100">
@@ -103,7 +103,7 @@
                   </div>
                   {% endif %}
 
-                  {% if UserPermission.Vehicles == True %}
+                  {% if UserPermission.Vehicles == True or newuserPermission.vehicle.view == True %}
 
                   <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/getvehicle'">
                      <div class="card h-100">
@@ -118,7 +118,7 @@
                   </div>
                   {% endif %}
 
-                  {% if UserPermission.VCU == True %}
+                  {% if UserPermission.VCU == True or newuserPermission.VCU.view == True %}
 
                   <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/vehicledetails'">
                      <div class="card h-100">
@@ -133,7 +133,7 @@
                   </div>
                   {% endif %}
 
-                  {% if UserPermission.IOTDevice == True %}
+                  {% if UserPermission.IOTDevice == True or newuserPermission.iot.view == True %}
 
                   <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/listdevice'">
                      <div class="card h-100">
@@ -148,7 +148,7 @@
                   </div>
                   {% endif %}
 
-                  {% if UserPermission.Reports == True %}
+                  {% if UserPermission.Reports == True or newuserPermission.csv.download == True %}
 
                   <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/getcsv'">
                      <div class="card h-100">

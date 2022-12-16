@@ -45,14 +45,19 @@
           <!-- <td><img src="{{fm.adhar_proof.url}}" alt="" class="card-img-top"></td> -->
 
             <td style="display: flex;">
+              {% if IsAdmin or newuserPermission.user.update %}
               <a class="table-link" aria-expanded="false" href="{% url 'user_management:update' fm.email %}"><img src="../static/icons/edit.svg"></a>
-              {% if IsAdmin %}
+              {% endif %}
 
+              {% if IsAdmin or newuserPermission.user.delete %}
               <a class="table-link" aria-expanded="false" href="{% url 'user_management:delete' fm.email %}"><img src="../static/icons/delete.svg"></a>
+              {% endif %}
+
+              {% if IsAdmin or newuserPermission.user.delete %} 
               <a href="{% url 'getvehicle' %}?email={{fm.email}}" class="btn btn-secondary btn-sm">Assigned Vehicle</a>
+              {% endif %}
 
               <a href="{% url 'uservehicle' fm.email %}" class="btn btn-primary btn-sm">User Vehicle</a>
-              {% endif %}
 
           </td>
             
