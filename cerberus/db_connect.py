@@ -433,7 +433,7 @@ def images_display():
     try:
         conn=connect()
         cursor = conn.cursor()
-        sql = "SELECT email,username,user_type,is_active,adhar_proof,pancard_proof,license_proof FROM irasusapp_crmuser WHERE user_type='Driver';"
+        sql = "SELECT email,username,user_type,is_active,adhar_proof,pancard_proof,license_proof,vehicle_assigned_id  FROM irasusapp_crmuser WHERE user_type='Driver';"
         cursor.execute(sql)
         results = cursor.fetchall()
         one_row = []
@@ -445,7 +445,8 @@ def images_display():
             res['is_active'] = value[3]
             res['adhar_proof'] = base64.b64encode(value[4]).decode("utf-8")
             res['pan_proof'] = base64.b64encode(value[5]).decode("utf-8")
-            res['driving_license'] = base64.b64encode(value[6]).decode("utf-8")            
+            res['driving_license'] = base64.b64encode(value[6]).decode("utf-8")
+            res['vehicle_assigned_id'] = value[7]
             one_row.append(res)
         return one_row
     except Exception as e:

@@ -437,6 +437,38 @@ def assignedIotDeviceToBattery(request):
     except Exception as e:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError']) 
 
+def assignedVehicleToDriver(request):
+    try:
+        userPermission=UserPermission(request,request.session.get("IsAdmin"))
+        obj = Vehicle.objects.all()
+
+        #ASSIGN VEHICLE TO DRIVER
+        if request.method == "POST":
+            assigned_vehicle = request.get_full_path()
+            if("action" in assigned_vehicle and "add" in assigned_vehicle):
+
+                parse.urlsplit(assigned_vehicle)
+                parse.parse_qs(parse.urlsplit(assigned_vehicle).query)
+                dictinary_obj = dict(parse.parse_qsl(parse.urlsplit(assigned_vehicle).query))
+                chasis_number = request.POST.get('name_of_select')
+                already_assign = list(Crmuser.objects.filter(email = dictinary_obj['email']).values())
+               
+                for x in already_assign:
+                    
+                    if x['vehicle_assigned_id'] is not None:
+                        messages.add_message(request, messages.WARNING, successAndErrorMessages()['alreadyVehicleUser'])
+                        return redirect('drivervehicle')
+                    else:
+                        Crmuser.objects.filter(pk=dictinary_obj['email']).update(vehicle_assigned_id = chasis_number)
+                        
+                        messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['addVehicleToUser'])
+                        sendEmail(request, "Iot Device", f"{dictinary_obj['email']} Battery is Assiged To The Iot Device {chasis_number}")
+                        return redirect('drivervehicle')
+        context = { 'assinged_vehicle': obj,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission }
+        return render(request,'assigned_vehicle_to_driver.html', context)
+    except Exception as e:
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError']) 
+
 # def login_with_phone_num(request):
 #     if request.method == "POST":
 #         phone_number = request.POST.get("phone_number")
@@ -851,8 +883,19 @@ def listAddedDriver(request):
         if request.method == "GET":
             driverData = images_display()
 
+            #REMOVE VEHICLE FROM DRIVER
+            get_full_path = request.get_full_path()
+            if("action" in get_full_path and "remove" in get_full_path):
+                parse.urlsplit(get_full_path)
+                parse.parse_qs(parse.urlsplit(get_full_path).query)
+                dictinary_obj = dict(parse.parse_qsl(parse.urlsplit(get_full_path).query))
+                batteryRemovedFromIot = Crmuser.objects.filter(email= dictinary_obj['email']).values()
+                # sendEmail(request, "Remove Vehicle From Driver", f"{batteryRemovedFromIot[0]['battery_serial_num']} Vehicle is Removed From The Driver {dictinary_obj['email']}")
+                batteryRemovedFromIot.update(vehicle_assigned_id=None)        
+                messages.add_message(request, messages.WARNING, successAndErrorMessages()['vehicleRemovedFromDriver'])
+                return redirect('getdrivers')
         context={
-                "drivers": driverData ,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission
+                    "drivers": driverData ,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission
                 }
         return render(request, 'list_drivers.html',context)
     except Exception as e:

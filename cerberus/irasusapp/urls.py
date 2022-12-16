@@ -64,6 +64,7 @@ urlpatterns= [
  
     path('vehicledetails', views.VCU, name="details"),
     path(r'assignediot', views.assignedIotDeviceToBattery, name="iotdevice"),
+    path(r'vehicleassignedtodriver', views.assignedVehicleToDriver, name="drivervehicle"), 
 
     path(r'bettrypack', views.battery_pack_menu, name="battery_data"),
     path(r'subpack', views.battery_pack_sub_menu, name="sub_data"),
