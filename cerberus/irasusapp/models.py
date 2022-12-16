@@ -53,8 +53,8 @@ def password_validator(value):
 USER_TYPE = (
     ('Admin', 'Admin'),
     ('Driver', 'Driver'), 
-    ('FeetOwner', 'FeetOwner'),
-    ('FleetOprater', 'FleetOprater')
+    ('FleetOwner', 'FleetOwner'),
+    ('FleetOperator', 'FleetOperator')
 )
 
 #USER-TABLE
@@ -165,13 +165,16 @@ class Vehicle(models.Model):
     vehicle_choice = models.CharField(max_length=225, default='', choices=VEHICLE)
     vehicle_warrenty_start_date = models.DateField(default='',blank=True,null=True)
     vehicle_warrenty_end_date = models.DateField(default='',blank=True, null=True)
-    assigned_owner = models.CharField(max_length=225, default='')
+    assigned_operator = models.CharField(max_length=225, default='')
     insurance_start_date = models.DateField(default='',blank=True,null=True)
     insurance_end_date = models.DateField(default='',blank=True, null=True)
     vehicle_selected = models.BooleanField(default=False)
     assigned_to = models.ForeignKey(Crmuser,default=None,on_delete=models.CASCADE, null=True, blank=True)
     created_date = models.DateField(blank=True,null=True)
     vehicle_status = models.CharField(max_length=225,default='', blank=True, null=True)
+    created_by = models.CharField(max_length=100, default='')
+    created_id = models.CharField(max_length=300, default='')
+
     # geofence = models.ManyToManyField(Geofence)
 
     def __str__(self):
@@ -236,6 +239,7 @@ class BatteryDetail(models.Model):
     warrenty_start_date = models.DateField(default='',blank=True,null=True)
     warrenty_duration = models.DateField(default='',blank=True, null=True)
     assigned_owner = models.CharField(max_length=225)
+    assigned_operator = models.CharField(max_length=500,blank=True, null=True)
     status = models.CharField(max_length=225, choices=STATUS, default='')
     battery_cell_chemistry = models.CharField(max_length=225, default='')
     battery_pack_nominal_voltage = models.CharField(max_length=225, default='')
@@ -243,7 +247,8 @@ class BatteryDetail(models.Model):
     charging_status = models.CharField(max_length=225, default='', choices=CHARGING_STATUS,blank=True)
     is_assigned = models.BooleanField(default=False)
     vehicle_assign = models.ForeignKey(Vehicle, on_delete=models.CASCADE, null=True, blank=True)
-
+    created_by = models.CharField(max_length=100, default='')
+    created_id = models.CharField(max_length=300, default='')
     def __str__(self):
         return str(self.model_name)
 
@@ -254,6 +259,9 @@ class FleetOperator(models.Model):
     status = models.BooleanField(default=False)
     fleetId = models.CharField(max_length=225, blank=False)
     permission = models.CharField(max_length=4000, blank=True,null=True)
+    created_by = models.CharField(max_length=100, default='')
+    created_id = models.CharField(max_length=300, default='')
+
 
     def __str__(self):
         return str(self.model_name)
@@ -266,6 +274,9 @@ class FleetOwner(models.Model):
     is_admin = models.BooleanField(default=False)
     status = models.BooleanField(default=False)
     permission = models.CharField(max_length=4000, blank=True,null=True)
+    created_by = models.CharField(max_length=100, default='')
+    created_id = models.CharField(max_length=300, default='')
+
     
     def __str__(self):
         return str(self.model_name)

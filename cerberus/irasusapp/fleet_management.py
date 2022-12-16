@@ -1,7 +1,7 @@
 """ Fleet manageemnt """
 """ create Fleet owner """
 from django.contrib.auth.hashers import make_password, check_password
-from .models import FleetOperator,FleetOwner,Crmuser
+from .models import FleetOperator,FleetOwner,Crmuser,BatteryDetail
 from urllib import parse
 import json
 from common import permission
@@ -81,8 +81,11 @@ def createFleetOwner(request):
                         username = request.POST.get('username'),
                         email = request.POST.get('email'),
                         is_admin = True,
-                        status=checkActiveAndInActiveStatus(request.POST.get('status'))
-                    )
+                        status=checkActiveAndInActiveStatus(request.POST.get('status')),
+                        created_by=request.session.get("user_type"),
+                        created_id=request.session.get("email")
+                        )
+                    
         formData.save()
 
         FleetOwner.objects.filter(email=request.POST.get('email')).update(permission=json.dumps(permission("FleetOwner")))
@@ -109,7 +112,7 @@ def updateFleetOwner(request,id):
             FleetOwner.objects.filter(email=id).update(
                             username = request.POST.get('username'),
                             status=checkActiveAndInActiveStatus(request.POST.get('status')))
-
+            
             return FleetOwner.objects.filter(email=id).values()
 
     except Exception as e:
@@ -189,14 +192,17 @@ def createFleetOperator(request):
                     is_admin = True,
                     status=checkActiveAndInActiveStatus(request.POST.get('status')),
                     fleetId=request.session.get("email"),
-                    permission=json.dumps(permission("FleetOprater"))
+                    permission=json.dumps(permission("FleetOprater")
+                    )
                 )
         formData.save() 
-        createCrmUser(request,"FleetOprator")            
+        FleetOperator.objects.filter(email=request.POST.get('email')).update(created_by=request.session.get("user_type"),created_id=request.session.get("email"))
+        createCrmUser(request,"FleetOperator")            
  
         return formData
 
     except Exception as e:
+        print(e)
         return False
 
 def updateFleetOperator(request,id):
@@ -217,6 +223,8 @@ def updateFleetOperator(request,id):
                         status=checkActiveAndInActiveStatus(request.POST.get('status')),
                         fleetId=request.session.get("email"))
         listData =FleetOperator.objects.filter(email=id).values()
+        print(request.POST.get("email"))
+        data=BatteryDetail.objects.filter(battery_serial_num=request.POST.get('assigned_operator')).update(assigned_operator=request.POST.get("email"))
         return listData
 
     except Exception as e:
@@ -261,7 +269,7 @@ def listFleetOperator(request):
             return listData
 
         else:
-            listData =FleetOperator.objects.filter(email=request.session.get("email")).values()
+            listData =FleetOperator.objects.filter(created_id=request.session.get("email")).values()
             return listData
 
     except Exception as e:

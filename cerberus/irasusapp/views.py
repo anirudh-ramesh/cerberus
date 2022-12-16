@@ -79,7 +79,6 @@ def loginPage(request):
         crmuser = Crmuser.get_user_by_email(email)
         if crmuser:
             flag = check_password(password,crmuser.password)
-            print(flag)
             if flag:
                 request.session["email"]=email
                 getUserData=list(Crmuser.objects.filter(email=email).values())
@@ -110,12 +109,12 @@ def logoutUser(request):
 def batteryDetails(request):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     newuserPermission=permission(request.session.get("user_type"))
-
+    getOwnerList=list(FleetOwner.objects.all())
     try:
         serial_num = request.POST.get('battery_serial_num')
         if BatteryDetail.objects.filter(battery_serial_num=serial_num):
             messages.add_message(request, messages.WARNING, successAndErrorMessages()['alreadyAddedBattery'])
-            return render(request,'add_battery_details.html',{"IsAdmin": request.session.get('IsAdmin'),"newuserPermission":newuserPermission,"userPermission":userPermission})
+            return render(request,'add_battery_details.html',{"getOwnerList":getOwnerList,"IsAdmin": request.session.get('IsAdmin'),"newuserPermission":newuserPermission,"userPermission":userPermission})
         else:
             if request.method == "POST":
                 formData = BatteryDetail.objects.create(
@@ -133,11 +132,13 @@ def batteryDetails(request):
                     battery_cell_chemistry = request.POST.get('battery_cell_chemistry'),
                     battery_pack_nominal_voltage = request.POST.get('battery_pack_nominal_voltage'),
                     battery_pack_capacity = request.POST.get('battery_pack_capacity'),
-                    charging_status = request.POST.get('charging_status')
+                    charging_status = request.POST.get('charging_status'),
+                    created_by=request.session.get("user_type"),
+                    created_id=request.session.get("email")
                 )
                 formData.save()
                 messages.add_message(request, messages.INFO, successAndErrorMessages()['addBattery'])
-        return render(request,'add_battery_details.html',{"IsAdmin": request.session.get('IsAdmin'),'UserPermission':userPermission, "ActiveBattery":BatteryDetail.objects.filter(status="IN_VEHICLE").count()+BatteryDetail.objects.filter(status="IN_SWAP_STATION").count(),"DamagedBattery":BatteryDetail.objects.filter(status="DAMAGED").count(),"inActiveBattery":BatteryDetail.objects.filter(status="IDEL").count(),"newuserPermission":newuserPermission })
+        return render(request,'add_battery_details.html',{"getOwnerList":getOwnerList,"IsAdmin": request.session.get('IsAdmin'),'UserPermission':userPermission, "ActiveBattery":BatteryDetail.objects.filter(status="IN_VEHICLE").count()+BatteryDetail.objects.filter(status="IN_SWAP_STATION").count(),"DamagedBattery":BatteryDetail.objects.filter(status="DAMAGED").count(),"inActiveBattery":BatteryDetail.objects.filter(status="IDEL").count(),"newuserPermission":newuserPermission })
     except Exception as e:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
@@ -151,6 +152,7 @@ def getBatteryDetails(request):
     parse.urlsplit(assigned_vehicle)
     parse.parse_qs(parse.urlsplit(assigned_vehicle).query)
     dictinary_obj = dict(parse.parse_qsl(parse.urlsplit(assigned_vehicle).query))
+      
     # if(dictinary_obj.get("cahis_id")):
     #     if(request.session.get("IsAdmin")):
     #         vehicle_data = list(Vehicle.objects.values())
@@ -164,6 +166,11 @@ def getBatteryDetails(request):
             if(request.session.get("IsAdmin")):
                 data = list(BatteryDetail.objects.values())
                 cahis_id = str(request.get_full_path()).split("=").pop()
+            elif(request.session.get("user_type") in successAndErrorMessages()["fleetType"]):
+                data=list(BatteryDetail.objects.filter(assigned_owner=request.session.get("email")).values())
+                cahis_id = str(request.get_full_path()).split("=").pop()
+                if("FleetOperator" == request.session.get("user_type")):
+                    data=list(BatteryDetail.objects.filter(assigned_operator=request.session.get("email")).values())
             else:
                 getVehicleData=list(Vehicle.objects.filter(assigned_to_id=request.session.get("email")).values())
                 data=[]
@@ -193,16 +200,22 @@ def getBatteryDetails(request):
 
         return render(request, 'battery_details.html',context)
     except Exception as e:
-        print(e,"-=-=-=-")
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
 #This Function Will Update_Battery_details/Edit
 def updateBatteryDetails(request, id):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     newuserPermission=permission(request.session.get("user_type"))
+    getOwnerList=list(FleetOwner.objects.all().values())
 
     try:
+        newData=[]
         battery_data = BatteryDetail.objects.filter(battery_serial_num=id).values()
+        for data in getOwnerList:
+            if(data.get('email') ==battery_data[0]["assigned_owner"]):
+                newData.insert(0,data)
+            else:
+                newData.append(data) 
         if request.method == "POST":
             model_name = request.POST.get('model_name')
             battery_serial_num = request.POST.get('battery_serial_num')
@@ -238,10 +251,10 @@ def updateBatteryDetails(request, id):
                 'charging_status': charging_status
                 }]
             messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['updateBatteryDetails'])
-            return render(request,'update_battery_details.html', {"newuserPermission":newuserPermission,'form': battery_data, "IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
+            return render(request,'update_battery_details.html', {"getOwnerList":newData, "newuserPermission":newuserPermission,'form': battery_data, "IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
 
         battery_data = list(BatteryDetail.objects.filter(battery_serial_num=id).values())
-        return render(request,'update_battery_details.html',{"newuserPermission":newuserPermission,'form': battery_data, "IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
+        return render(request,'update_battery_details.html',{"getOwnerList":newData,"newuserPermission":newuserPermission,'form': battery_data, "IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
     except Exception as e:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
@@ -544,13 +557,14 @@ def intialize_context(request):
 def addVehicleDetails(request):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     newuserPermission=permission(request.session.get("user_type"))
+    getFleetId=list(FleetOperator.objects.filter(created_id=request.session.get("email")).values())
 
     try:
         chasis_number = request.POST.get('chasis_number')
         if Vehicle.objects.filter(chasis_number=chasis_number):
             print("IN THIS CONDITION")
             messages.add_message(request, messages.WARNING, successAndErrorMessages()['alreadyAddedVehicle'])
-            return render(request,'add_vehicle_details.html',{"newuserPermission":newuserPermission,"IsAdmin": request.session.get('IsAdmin'),'UserPermission':userPermission})
+            return render(request,'add_vehicle_details.html',{"get_FleetId":getFleetId,"newuserPermission":newuserPermission,"IsAdmin": request.session.get('IsAdmin'),'UserPermission':userPermission})
 
         else:
             if request.method == "POST":
@@ -561,14 +575,15 @@ def addVehicleDetails(request):
                     vehicle_choice = request.POST.get('vehicle_choice'),
                     vehicle_warrenty_start_date = datetime.strptime(request.POST.get('vehicle_warrenty_start_date'), format),
                     vehicle_warrenty_end_date = datetime.strptime(request.POST.get('vehicle_warrenty_end_date'), format),
-                    assigned_owner = request.POST.get('assigned_owner'),
+                    assigned_operator = request.POST.get('assigned_operator'),
                     insurance_start_date = datetime.strptime(request.POST.get('insurance_start_date'), format),
                     insurance_end_date = datetime.strptime(request.POST.get('insurance_start_date'), format),
                     vehicle_status = request.POST.get('vehicle_status')
                 )
                 formData.save()
+                Vehicle.objects.filter(chasis_number=request.POST.get('chasis_number')).update(created_by=request.session.get("user_type"),created_id=request.session.get("email"))
                 messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['addVehicle'])
-            return render(request,'add_vehicle_details.html',{"newuserPermission":newuserPermission,'UserPermission':userPermission,"ActiveVehicle":Vehicle.objects.filter(vehicle_status="Active").count(),"InactiveVehicle":Vehicle.objects.filter(vehicle_status="Inactive").count()})
+            return render(request,'add_vehicle_details.html',{"get_FleetId":getFleetId,"newuserPermission":newuserPermission,'UserPermission':userPermission,"ActiveVehicle":Vehicle.objects.filter(vehicle_status="Active").count(),"InactiveVehicle":Vehicle.objects.filter(vehicle_status="Inactive").count()})
     except Exception as e:
         return messages.warning(request, messages.ERROR, successAndErrorMessages()['internalError'])
 
@@ -576,7 +591,6 @@ def addVehicleDetails(request):
 def getVehicleDetails(request):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     newuserPermission=permission(request.session.get("user_type"))
-
     parse.urlsplit(request.get_full_path())
     parse.parse_qs(parse.urlsplit(request.get_full_path()).query)
     dictinary_obj = dict(parse.parse_qsl(parse.urlsplit(request.get_full_path()).query))
@@ -585,11 +599,15 @@ def getVehicleDetails(request):
         assigned_to_user = str(request.get_full_path()).split("?").pop()
         serial_number = assigned_to_user.split("=").pop()
         email_id = assigned_to_user.split("=").pop()
-        if request.method == "GET":
-            if(request.session.get("IsAdmin")):
-                vehicle_data = list(Vehicle.objects.values())
-            else:
-                vehicle_data = list(Vehicle.objects.filter(assigned_to_id=request.session.get("email")).values())
+
+        if(request.session.get("IsAdmin")):
+            vehicle_data = list(Vehicle.objects.values())
+        elif(request.session.get("user_type") in successAndErrorMessages()["fleetType"]):
+            vehicle_data=list(Vehicle.objects.filter(created_id=request.session.get("email")).values())
+            if("FleetOperator" == request.session.get("user_type")):
+                vehicle_data=list(Vehicle.objects.filter(assigned_operator=request.session.get("email")).values())
+        else:
+            vehicle_data = list(Vehicle.objects.filter(assigned_to_id=request.session.get("email")).values())
                 
         #Assigned Vehicle To Organisation
         if("AssignedToOrganisation" in request.get_full_path()):
@@ -627,8 +645,7 @@ def getVehicleDetails(request):
                 sendEmail(request, "Vehicle Assigned", f"{vehicle_data[0]['vehicle_model_name']} Vehicle is Assigned To The User {email_id}")
                 messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['addVehicleToUser'])
                 return render(request, 'list_vehicle_details.html', {"newuserPermission":newuserPermission,'vehicle_data':list(Vehicle.objects.values()) , 'email_id': email_id , 'serial_number': serial_number,"IsAdmin":request.session.get("IsAdmin"),"ActiveVehicle":Vehicle.objects.filter(vehicle_status="Active").count(),"InactiveVehicle":Vehicle.objects.filter(vehicle_status="Inactive").count(),'UserPermission':userPermission})
-
-        return render(request, 'list_vehicle_details.html', {"newuserPermission":newuserPermission,'vehicle_data':list(Vehicle.objects.values()) , 'email_id': email_id , 'serial_number': serial_number,"IsAdmin":request.session.get("IsAdmin"),"ActiveVehicle":Vehicle.objects.filter(vehicle_status="Active").count(),"InactiveVehicle":Vehicle.objects.filter(vehicle_status="Inactive").count(),'UserPermission':userPermission})
+        return render(request, 'list_vehicle_details.html', {"newuserPermission":newuserPermission,'vehicle_data':vehicle_data , 'email_id': email_id , 'serial_number': serial_number,"IsAdmin":request.session.get("IsAdmin"),"ActiveVehicle":Vehicle.objects.filter(vehicle_status="Active").count(),"InactiveVehicle":Vehicle.objects.filter(vehicle_status="Inactive").count(),'UserPermission':userPermission})
     except Exception as e:
         return messages.warning(request, messages.ERROR,successAndErrorMessages()['internalError'])
 
@@ -637,9 +654,18 @@ def getVehicleDetails(request):
 def updateVehicleDetails(request,id):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     newuserPermission=permission(request.session.get("user_type"))
+    getFleetId=list(FleetOperator.objects.filter(created_id=request.session.get("email")).values())
+
 
     try:
         update_vehicle = list(Vehicle.objects.filter(chasis_number=id).values())
+        newData=[]
+        for data in getFleetId:
+            if(data.get('email') ==update_vehicle[0]["assigned_operator"]):
+                newData.insert(0,data)
+            else:
+                newData.append(data)    
+        
 
         if request.method == "POST":
             vehicle_model_name = request.POST.get('vehicle_model_name')
@@ -648,7 +674,6 @@ def updateVehicleDetails(request,id):
             vehicle_choice = request.POST.get('vehicle_choice')
             vehicle_warrenty_start_date = datetime.strptime(request.POST.get('vehicle_warrenty_start_date'), format)
             vehicle_warrenty_end_date = datetime.strptime(request.POST.get('vehicle_warrenty_end_date'), format)
-            assigned_owner = request.POST.get('assigned_owner')
             insurance_start_date = datetime.strptime(request.POST.get('insurance_start_date'), format)
             insurance_end_date = datetime.strptime(request.POST.get('insurance_start_date'), format)
             vehicle_status = request.POST.get('vehicle_status')
@@ -657,8 +682,9 @@ def updateVehicleDetails(request,id):
                 vehicle_model_name=vehicle_model_name, chasis_number=chasis_number,
                 configuration=configuration,vehicle_choice=vehicle_choice,
                 vehicle_warrenty_start_date=vehicle_warrenty_start_date,vehicle_warrenty_end_date=vehicle_warrenty_end_date,
-                assigned_owner=assigned_owner,insurance_start_date=insurance_start_date,
-                insurance_end_date=insurance_end_date,vehicle_status=vehicle_status
+                insurance_start_date=insurance_start_date,
+                insurance_end_date=insurance_end_date,vehicle_status=vehicle_status,
+                assigned_operator= request.POST.get('assigned_operator')
             )
 
             update_vehicle = [{
@@ -666,15 +692,15 @@ def updateVehicleDetails(request,id):
                 'chasis_number':chasis_number,'vehicle_choice': vehicle_choice,
                 'configuration': configuration,
                 'vehicle_warrenty_start_date': vehicle_warrenty_start_date,
-                'vehicle_warrenty_end_date': vehicle_warrenty_end_date,'assigned_owner': assigned_owner,
+                'vehicle_warrenty_end_date': vehicle_warrenty_end_date,'assigned_operator': request.POST.get('assigned_operator'),
                 'insurance_start_date': insurance_start_date,
                 'insurance_end_date': insurance_end_date, 'vehicle_status':vehicle_status
             }]
             messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['updateVehicle'])
-            return render(request,'update_vehicle.html',{"newuserPermission":newuserPermission,'update_vehicle_data': update_vehicle,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission,"ActiveVehicle":Vehicle.objects.filter(vehicle_status="Active").count(),"InactiveVehicle":Vehicle.objects.filter(vehicle_status="Inactive").count() })
+            return render(request,'update_vehicle.html',{"getFleetId":newData,"newuserPermission":newuserPermission,'update_vehicle_data': update_vehicle,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission,"ActiveVehicle":Vehicle.objects.filter(vehicle_status="Active").count(),"InactiveVehicle":Vehicle.objects.filter(vehicle_status="Inactive").count() })
 
         update_vehicle = list(Vehicle.objects.filter(chasis_number=id).values())
-        return render(request,'update_vehicle.html',{"newuserPermission":newuserPermission,'update_vehicle_data': update_vehicle,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission,"ActiveVehicle":Vehicle.objects.filter(vehicle_status="Active").count(),"InactiveVehicle":Vehicle.objects.filter(vehicle_status="Inactive").count() })
+        return render(request,'update_vehicle.html',{"getFleetId":newData,"newuserPermission":newuserPermission,'update_vehicle_data': update_vehicle,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission,"ActiveVehicle":Vehicle.objects.filter(vehicle_status="Active").count(),"InactiveVehicle":Vehicle.objects.filter(vehicle_status="Inactive").count() })
     except Exception as error:
         print(error)
         return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError'])
@@ -902,6 +928,8 @@ def addDriver(request):
                 license_proof=license_proof,is_active=is_active
             )
             newdata.save()
+            Crmuser.objects.filter(email=request.POST.get('contact')).update(is_admin=False,created_by=request.session.get("user_type"),created_id=request.session.get("email"))
+
             messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['addDriver']) 
         return render(request, 'adddriver.html', {"newuserPermission":newuserPermission,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
 
@@ -915,7 +943,16 @@ def listAddedDriver(request):
 
     try:
         if request.method == "GET":
-            driverData = images_display()
+            
+            if(request.session.get("IsAdmin")):
+                driverData = images_display(True)
+            elif(request.session.get("user_type") in successAndErrorMessages()["fleetType"]):
+                driverData = images_display(request.session.get("email"))
+
+            else:
+                driverData = images_display(request.session.get("email"))
+
+         
 
         context={
                 "newuserPermission":newuserPermission,"drivers": driverData ,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission
@@ -974,7 +1011,6 @@ def deleteDriver(request, id):
  
     try:
         pi = Crmuser.objects.get(pk=id)
-        print(pi)
         if request.method == 'POST':
             pi.delete()
             messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['removeDriver']) 
@@ -1309,17 +1345,18 @@ def updateFleetOperatorupnderFleetOwner(request,id):
     data=updateFleetOperator(request,id)
     newuserPermission=permission(request.session.get("user_type"))
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    getBattery=list(BatteryDetail.objects.filter(assigned_owner=request.session.get("email")).values())
     if(data == False and len(data) != 0) :
         messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
-        return render(request, "fleet_owner_and_fleet_operator/update_fleet_operator.html",{"newuserPermission":newuserPermission,'data' : data ,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+        return render(request, "fleet_owner_and_fleet_operator/update_fleet_operator.html",{"getBattery":getBattery,"newuserPermission":newuserPermission,'data' : data ,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
 
     else:
         if request.method == "POST":
             data=updateFleetOperator(request,id)
             messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['fleetoperatorupdate'])
-            return render(request, "fleet_owner_and_fleet_operator/update_fleet_operator.html",{"newuserPermission":newuserPermission,'data' : data ,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+            return render(request, "fleet_owner_and_fleet_operator/update_fleet_operator.html",{"getBattery":getBattery,"newuserPermission":newuserPermission,'data' : data ,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
         else:
-            return render(request, "fleet_owner_and_fleet_operator/update_fleet_operator.html",{"newuserPermission":newuserPermission,'data' : data ,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+            return render(request, "fleet_owner_and_fleet_operator/update_fleet_operator.html",{"getBattery":getBattery,"newuserPermission":newuserPermission,'data' : data ,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
 
 ## delete fleet operato data
 def deleteFleetOperatorupnderFleetOwner(request,id):

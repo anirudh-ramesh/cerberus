@@ -29,6 +29,23 @@
                             </div>
                         </div>
                         <div class="input-group mb-2">
+                            <div class="input-group-append">
+                                <label class="label_formm">username</label>
+                                <input type='text' name='email' value="{{fm.email}}" class="input-register-texts" readonly>
+                            </div>
+                        </div>
+                        <div class="input-group mb-2">
+                            <div class="input-group-append">
+                                <label class="label_formm">Assigned Battery To Operator</label>
+                                <select type="text" name="assigned_operator" class="input-register-text" required>
+                                {% for fleetData in getBattery %}
+                                    <option value="{{fleetData.battery_serial_num}}">{{fleetData.model_name}}</option>  
+                                {% endfor %}
+                            </select>
+        
+                            </div>
+                        </div>
+                        <div class="input-group mb-2">
 							<div class="input-group-append">
 								<label class="label_formm">Status</label>
                                 <br>

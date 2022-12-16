@@ -9,26 +9,34 @@ from django.contrib import messages
 from urllib import parse
 from db_connect import sql_query,inset_into_db,getOrgUserInfo,orgProfileAddData,getOrgProfiles,organisationmultiplePermission,insertIntoOrgnisationPermission,removeUserFromOrg ,getOrgInfobyEmail
 from common import successAndErrorMessages,UserPermission,permission
+from django.contrib.auth.hashers import make_password, check_password
+
 
 #This Function Used to Add User.
 def addUser(request):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     newuserPermission=permission(request.session.get("user_type"))
-
     form = UserCreatedByAdmin()
     if(request.session.get("IsAdmin") == False):
         messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
         return render(request,'user_management_templates/user_add.html',{"newuserPermission":newuserPermission,"IsAdmin":request.session.get("IsAdmin")})
+    
     if request.method == "POST":
-        new_data = request.POST.getlist("email")
-        user_type= request.POST.getlist("user_type")
-        form = UserCreatedByAdmin(request.POST)
+        if Crmuser.objects.filter(email=request.POST.get("email")).exists():
+            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['emailTaken'])
+            return render(request,'user_management_templates/user_add.html',{"newuserPermission":newuserPermission,"IsAdmin":request.session.get("IsAdmin")})
+        user_name = request.POST.get('username')
+        new_data = request.POST.get("email")
+        user_type= request.POST.get("user_type")
+        password = request.POST.get('password')
+        contact = request.POST.get('contact')
         is_admin=False
-        if(user_type[0] == "Admin"):
+        if(request.POST.get("user_type") == "Admin"):
             is_admin=True
-        if form.is_valid():
-            form.save() 
-        Crmuser.objects.filter(email=new_data[0]).update(user_type=user_type[0],is_admin=is_admin,created_by=request.session.get("user_type"),created_id=request.session.get("email"))
+        form = Crmuser.objects.create(email=new_data,contact=contact,username= user_name, password=make_password(password),user_type=user_type,is_admin=is_admin,created_by=request.session.get("user_type"),created_id=request.session.get("email"))
+        form.save()
+        messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['userCreate'])
+        return redirect('user_management:demo')
     context = {"newuserPermission":newuserPermission, 'form': form,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission }
     return render(request,'user_management_templates/user_add.html',context)
 
@@ -425,9 +433,9 @@ def listSwapstation(request):
 
     try:
         userPermission=UserPermission(request,request.session.get("IsAdmin"))
-        if(request.session.get("IsAdmin") == False):
-            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
-            return redirect('home')
+        # if(request.session.get("IsAdmin") == False):
+        #     messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
+        #     return redirect('home')
         if request.method == "GET":
             data = list(Swapstation.objects.values())
         contex = {"newuserPermission":newuserPermission,'swap_station_data' : data,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission,"ActiveSwapStation":Swapstation.objects.filter(status="Active").count(),"InActiveSwapStation":Swapstation.objects.filter(status="Inactive").count() }
