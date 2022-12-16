@@ -18,7 +18,7 @@ def generatorPassword():
     all = lower + upper + num
     temp = random.sample(all,PASSWORD_LENGHT)
     password = "".join(temp)
-    print(password)
+    print("Fleet Owner and Fleet Operator Password:-",password)
     return password
 
 
@@ -127,7 +127,6 @@ def listFleetOwner(request):
 
         """ list Fleet owner """
         if(request.session.get("IsAdmin")):
-            print("=========>>>>>")
             listData =FleetOwner.objects.values()
             return listData
 
