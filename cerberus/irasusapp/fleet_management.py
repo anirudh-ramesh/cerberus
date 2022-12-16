@@ -37,7 +37,7 @@ def createCrmUser(request,user_type):
             else:
                 user = Crmuser.objects.create_user(email=email, password=password, password_conformation=password_conformation)
                 user.save()
-                Crmuser.objects.filter(email=email).update(user_type=user_type,username = request.POST.get('username'))
+                Crmuser.objects.filter(email=email).update(user_type=user_type,username = request.POST.get('username'),created_by=request.session.get("user_type"),created_id=request.session.get("email"))
 
                 return user
     except Exception as e:
@@ -87,7 +87,7 @@ def createFleetOwner(request):
 
         FleetOwner.objects.filter(email=request.POST.get('email')).update(permission=json.dumps(permission("FleetOwner")))
         
-        createCrmUser(request,"FeetOwner")            
+        createCrmUser(request,"FleetOwner")            
         return formData             
     except Exception as e:
         print(e)
@@ -192,7 +192,7 @@ def createFleetOperator(request):
                     permission=json.dumps(permission("FleetOprater"))
                 )
         formData.save() 
-        createCrmUser(request,"FleetOprater")            
+        createCrmUser(request,"FleetOprator")            
  
         return formData
 

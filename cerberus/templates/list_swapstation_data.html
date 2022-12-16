@@ -5,8 +5,10 @@
 {% include 'swapstation_status.html' %}
 
 <div class="col-sm-12">
+  {% if IsAdmin or newuserPermission.swapstation.create %}
   <a href="{% url 'user_management:addswap' %}" class="btn btn-info btn-sm">Add-Swap-Station</a>
-        <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Home</a>
+  {% endif %}
+  <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Home</a>
 
     <h4 class="text-center">Swap-Station Details</h4>
     <form action="" method="GET">
@@ -46,9 +48,19 @@
 
                           
                           <td style="display: flex;">
+                            {% if IsAdmin or newuserPermission.swapstation.update %}
+                            
                             <a class="table-link" aria-expanded="false" href="{% url 'user_management:swapstation' fm.imei_number %}"><img src="../static/icons/edit.svg"></a>
 
+                            {% endif %}
+
+                            {% if IsAdmin or newuserPermission.swapstation.delete %}
                             <a class="table-link" aria-expanded="false" href="{% url 'user_management:deleteswapstation' fm.imei_number %}"><img src="../static/icons/delete.svg"></a>
+
+                            {% endif %}
+
+
+
 
                           </td>              
                         </tr>

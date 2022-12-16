@@ -8,15 +8,17 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from urllib import parse
 from db_connect import sql_query,inset_into_db,getOrgUserInfo,orgProfileAddData,getOrgProfiles,organisationmultiplePermission,insertIntoOrgnisationPermission,removeUserFromOrg ,getOrgInfobyEmail
-from common import successAndErrorMessages,UserPermission
+from common import successAndErrorMessages,UserPermission,permission
 
 #This Function Used to Add User.
 def addUser(request):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    newuserPermission=permission(request.session.get("user_type"))
+
     form = UserCreatedByAdmin()
     if(request.session.get("IsAdmin") == False):
         messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
-        return render(request,'user_management_templates/user_add.html',{"IsAdmin":request.session.get("IsAdmin")})
+        return render(request,'user_management_templates/user_add.html',{"newuserPermission":newuserPermission,"IsAdmin":request.session.get("IsAdmin")})
     if request.method == "POST":
         new_data = request.POST.getlist("email")
         user_type= request.POST.getlist("user_type")
@@ -26,28 +28,32 @@ def addUser(request):
             is_admin=True
         if form.is_valid():
             form.save() 
-        Crmuser.objects.filter(email=new_data[0]).update(user_type=user_type[0],is_admin=is_admin)
-    context = { 'form': form,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission }
+        Crmuser.objects.filter(email=new_data[0]).update(user_type=user_type[0],is_admin=is_admin,created_by=request.session.get("user_type"),created_id=request.session.get("email"))
+    context = {"newuserPermission":newuserPermission, 'form': form,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission }
     return render(request,'user_management_templates/user_add.html',context)
 
 #This function used for Listing of users.
 def getUser(request):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    newuserPermission=permission(request.session.get("user_type"))
+
     if request.method == "GET":
         if(request.session.get("IsAdmin")):
             data = list(Crmuser.objects.values())
         else:
             data=list(Crmuser.objects.filter(email=request.session.get("email")).values())
-    contex = {'user_data' : data ,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission}
+    contex = {"newuserPermission":newuserPermission,'user_data' : data ,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission}
     return render(request, 'user_management_templates/get_userdata.html',contex)
 
 #This function will update Users.
 def updateUser(request,id):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    newuserPermission=permission(request.session.get("user_type"))
+
     pi =list(Crmuser.objects.filter(pk=id).values())
     if(request.session.get("IsAdmin") == False):
         messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
-        return render(request,'user_management_templates/update_user.html',{ 'form': pi,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission })
+        return render(request,'user_management_templates/update_user.html',{"newuserPermission":newuserPermission, 'form': pi,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission })
 
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -62,14 +68,16 @@ def updateUser(request,id):
         Crmuser.objects.filter(email=id).update(username=username,email=email,contact=contact,is_active=isactive, updated_at = timezone.now())
         messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['updateUser'])
         pi=[{"email":email ,"username":username, "contact":contact, "is_active": isactive,'UserPermission':userPermission }]
-        return render(request,'user_management_templates/update_user.html',{ 'form': pi,"IsAdmin":request.session.get("IsAdmin") })
+        return render(request,'user_management_templates/update_user.html',{"newuserPermission":newuserPermission, 'form': pi,"IsAdmin":request.session.get("IsAdmin") })
 
     pi =list(Crmuser.objects.filter(pk=id).values())
-    return render(request,'user_management_templates/update_user.html',{ 'form': pi,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission  })
+    return render(request,'user_management_templates/update_user.html',{"newuserPermission":newuserPermission, 'form': pi,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission  })
 
 #Delete records from User table.
 def deleteUser(request, id):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    newuserPermission=permission(request.session.get("user_type"))
+
     try:
         pi = Crmuser.objects.get(pk=id)
         if(request.session.get("IsAdmin") == False):
@@ -80,7 +88,7 @@ def deleteUser(request, id):
             pi.delete()
             messages.add_message(request, messages.WARNING, successAndErrorMessages()['removeUser'])
             return redirect('user_management:getdata')
-        context = {'item': pi,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission} 
+        context = {"newuserPermission":newuserPermission,'item': pi,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission} 
         return render(request, "delete.html", context)
     except Exception as e:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
@@ -89,6 +97,8 @@ def deleteUser(request, id):
 #This Function Used to Add Organisation.
 def addOrganisation(request):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    newuserPermission=permission(request.session.get("user_type"))
+
     form = OrgasationForm()
     if(request.session.get("IsAdmin") == False):
         messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
@@ -100,13 +110,15 @@ def addOrganisation(request):
             form.save()
             messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['createOrganisation'])
         return redirect("user_management:listorg")
-    context = { 'form': form,'UserPermission':userPermission }
+    context = {"newuserPermission":newuserPermission, 'form': form,'UserPermission':userPermission }
 
     return render(request,'add_organisation.html',context)
 
 #Listing of Organisation.
 def listOrganisation(request):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    newuserPermission=permission(request.session.get("user_type"))
+
     if request.method == "GET":
         print(request.session.get('IsAdmin'))
         if(request.session.get('IsAdmin')):
@@ -117,11 +129,13 @@ def listOrganisation(request):
             data=[]
             for i in filterData:
                 data=data + list(Organisation.objects.filter(serial_number=i).values())
-    contex = {'organisation_data' : data,"IsAdmin":request.session.get('IsAdmin'),'UserPermission':userPermission}
+    contex = {"newuserPermission":newuserPermission,'organisation_data' : data,"IsAdmin":request.session.get('IsAdmin'),'UserPermission':userPermission}
     return render(request, 'list_organisation_data.html',contex)
 
 #This function will update Organisation.
 def updateOranisation(request,id):
+    newuserPermission=permission(request.session.get("user_type"))
+
     try:
         userPermission=UserPermission(request,request.session.get("IsAdmin"))
         global listuser
@@ -147,7 +161,8 @@ def updateOranisation(request,id):
             'listuser': listuser,
             'role' : roles,
             "IsAdmin":request.session.get("IsAdmin"),
-            'UserPermission':userPermission
+            'UserPermission':userPermission,
+            "newuserPermission":newuserPermission
         }
         # messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['updateOrganisation'])
         return render(request,'update_organisation.html',context)
@@ -157,6 +172,8 @@ def updateOranisation(request,id):
 #Delete records from Organisation.
 def deleteOraganisation(request, id):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    newuserPermission=permission(request.session.get("user_type"))
+
     try:
         pi = Organisation.objects.get(pk=id)
         if(request.session.get("IsAdmin") == False):
@@ -166,7 +183,7 @@ def deleteOraganisation(request, id):
             pi.delete()
             messages.add_message(request, messages.WARNING, successAndErrorMessages()['removeOrganisation'])
             return redirect('user_management:listorg')
-        context = {'delete_organisation' : pi,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission} 
+        context = {"newuserPermission":newuserPermission,'delete_organisation' : pi,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission} 
         return render(request, "delete_organisation.html", context)
     except Exception as e:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
@@ -174,6 +191,8 @@ def deleteOraganisation(request, id):
 #Adding organisation profile data.
 def addOrganisationProfile(request,id):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    newuserPermission=permission(request.session.get("user_type"))
+
     if(request.session.get("IsAdmin") == False):
         messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
         return redirect('user_management:listorg')
@@ -202,22 +221,26 @@ def addOrganisationProfile(request,id):
         formData.save()
         orgProfileAddData(id,formData.id)
         messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['createOrganisationProfile'])
-    return render(request,'add_organisation_profile.html',{ 'id': id ,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
+    return render(request,'add_organisation_profile.html',{"newuserPermission":newuserPermission, 'id': id ,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
 
 #Listing of organisation profile
 def listOrganisationProfile(request,id):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    newuserPermission=permission(request.session.get("user_type"))
+
     if(request.session.get("IsAdmin") == False):
         messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
         return redirect('user_management:listorg')
     if request.method == "GET":
         data = getOrgProfiles(id)
-    contex = {'organisation_profile_data' : data ,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission }
+    contex = {"newuserPermission":newuserPermission,'organisation_profile_data' : data ,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission }
     return render(request, 'list_organisation_profile.html',contex)
 
 
 def deleteOraganisationProfile(request, id):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    newuserPermission=permission(request.session.get("user_type"))
+
     try:
         if(request.session.get("IsAdmin") == False):
             messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
@@ -233,10 +256,10 @@ def deleteOraganisationProfile(request, id):
         if request.method == 'POST':
             pi.delete()
             messages.add_message(request, messages.WARNING,successAndErrorMessages()['removeOrganisationProfile'])
-            context={'id' : dictinary_obj['org_id'] }
+            context={'id' : dictinary_obj['org_id'],"newuserPermission":newuserPermission }
             return redirect('user_management:orgprofiles', context['id'])
 
-        context = { 'organisation_profile_delete': pi ,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission, 'org_id': dictinary_obj['org_id']}
+        context = {"newuserPermission":newuserPermission, 'organisation_profile_delete': pi ,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission, 'org_id': dictinary_obj['org_id']}
         return render(request, "delete_organisation_profile.html", context)
     except Exception as e:
         return messages.add_message(request,messages.WARNING, successAndErrorMessages()['internalError'])
@@ -244,6 +267,8 @@ def deleteOraganisationProfile(request, id):
 #Create a role and inserting into permission organisation 
 def createUserRole(request,id):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    newuserPermission=permission(request.session.get("user_type"))
+
     if(request.session.get("IsAdmin") == False):
         messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
         return redirect('user_management:listorg')
@@ -258,11 +283,12 @@ def createUserRole(request,id):
             form = Role.objects.create(roles=role_name,select=True,org_id=id)
             form.save()
             insertIntoOrgnisationPermission(permission,role_name,form.id)
-    return render(request,'user_management_templates/add_user_role.html', {"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
+    return render(request,'user_management_templates/add_user_role.html', {"newuserPermission":newuserPermission,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
 
 #This function is used to get listing role. 
 def listRole(request):
-    
+    newuserPermission=permission(request.session.get("user_type"))
+   
     user_roles = []
     if request.method == "GET":
         roledata = list(OrganisationPermission.objects.values())
@@ -281,12 +307,14 @@ def listRole(request):
             else:
                 messages.add_message(request, messages.WARNING, successAndErrorMessages()['dataNotFound'])
         return user_roles       
-    context = { 'roledata' : roledata,"IsAdmin":request.session.get("IsAdmin") }
+    context = { "newuserPermission":newuserPermission,'roledata' : roledata,"IsAdmin":request.session.get("IsAdmin") }
     return render(request,'user_management_templates/list_role.html',context)
 
 
 #This function will update role.
 def updateRole(request,name):
+    newuserPermission=permission(request.session.get("user_type"))
+
     if(request.session.get("IsAdmin") == False):
         messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
         return redirect('user_management:listorg')
@@ -298,12 +326,14 @@ def updateRole(request,name):
         OrganisationPermission.objects.filter(role_id=name).update(role_name=role_name,permission_name=permission_name)
 
         role_data = [{"role_name": role_name, 'permission_name':permission_name }]
-        return render(request,'user_management_templates/update_role.html',{'form': role_data,"IsAdmin":request.session.get("IsAdmin"),"role_id":name })
+        return render(request,'user_management_templates/update_role.html',{"newuserPermission":newuserPermission,'form': role_data,"IsAdmin":request.session.get("IsAdmin"),"role_id":name })
     role_data =list(OrganisationPermission.objects.filter(role_id=name).values())
-    return render(request,'user_management_templates/update_role.html',{'form': role_data,"IsAdmin":request.session.get("IsAdmin"),"role_id":name})
+    return render(request,'user_management_templates/update_role.html',{"newuserPermission":newuserPermission,'form': role_data,"IsAdmin":request.session.get("IsAdmin"),"role_id":name})
 
 #Delete records from Organisation permission.
 def deleteRole(request,id):
+    newuserPermission=permission(request.session.get("user_type"))
+
     try:
         if(request.session.get("IsAdmin") == False):
             messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
@@ -313,7 +343,7 @@ def deleteRole(request,id):
             pi.delete()
             return redirect('user_management:listorg')
 
-        context={"IsAdmin":request.session.get("IsAdmin")}
+        context={"IsAdmin":request.session.get("IsAdmin"),"newuserPermission":newuserPermission,}
         return render(request, "user_management_templates/list_role.html", context)
     except Exception as e:
         print(e)
@@ -321,12 +351,15 @@ def deleteRole(request,id):
 
 #This function is used for listing user role.
 def listedUserRole(request):
+    newuserPermission=permission(request.session.get("user_type"))
+
     try:
         user_multiple_role = listRole(request)
 
         context = {
             'user_role': user_multiple_role,
-            "IsAdmin":request.session.get("IsAdmin")
+            "IsAdmin":request.session.get("IsAdmin"),
+            "newuserPermission":newuserPermission,
         }
         return render(request,"user_management_templates/user_multiple_role.html",context)        
     except Exception as e:
@@ -335,6 +368,8 @@ def listedUserRole(request):
 #Get Organisation Details.
 def orgUserinfo(request,id):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    newuserPermission=permission(request.session.get("user_type"))
+
     try:
         if request.method == "GET":
             user_multiple_role = getOrgUserInfo(id)
@@ -353,7 +388,8 @@ def orgUserinfo(request,id):
             'roles': roles,
             'multipleOrg_role': multiple_org_role,
             "IsAdmin":request.session.get("IsAdmin"),
-            'UserPermission':userPermission
+            'UserPermission':userPermission,
+            "newuserPermission":newuserPermission,
         }
         return render(request,"user_management_templates/user_org_list.html",context)        
     except Exception as e:
@@ -363,6 +399,8 @@ def orgUserinfo(request,id):
 #This function is used for adding swap station data.
 def addSwapStation(request): 
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    newuserPermission=permission(request.session.get("user_type"))
+
     if(request.session.get("IsAdmin") == False):
         messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
         return redirect('home')
@@ -379,10 +417,12 @@ def addSwapStation(request):
         )
         formData.save()
         messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['createSwapStation'])
-    return render(request,'add_swapstation.html', {"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
+    return render(request,'add_swapstation.html', {"newuserPermission":newuserPermission,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
 
 #Listing swap station data.
 def listSwapstation(request):
+    newuserPermission=permission(request.session.get("user_type"))
+
     try:
         userPermission=UserPermission(request,request.session.get("IsAdmin"))
         if(request.session.get("IsAdmin") == False):
@@ -390,7 +430,7 @@ def listSwapstation(request):
             return redirect('home')
         if request.method == "GET":
             data = list(Swapstation.objects.values())
-        contex = {'swap_station_data' : data,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission,"ActiveSwapStation":Swapstation.objects.filter(status="Active").count(),"InActiveSwapStation":Swapstation.objects.filter(status="Inactive").count() }
+        contex = {"newuserPermission":newuserPermission,'swap_station_data' : data,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission,"ActiveSwapStation":Swapstation.objects.filter(status="Active").count(),"InActiveSwapStation":Swapstation.objects.filter(status="Inactive").count() }
         return render(request, 'list_swapstation_data.html',contex)
     except Exception as e:
         return messages.add_message(request,messages.WARNING, successAndErrorMessages()['internalError'])
@@ -398,6 +438,8 @@ def listSwapstation(request):
 
 #Get active and deactive swap station data.
 def getActiveAndDeactive(request):
+    newuserPermission=permission(request.session.get("user_type"))
+
     try:
         userPermission=UserPermission(request,request.session.get("IsAdmin"))
         assigned_vehicle = request.get_full_path()
@@ -409,7 +451,7 @@ def getActiveAndDeactive(request):
             return redirect('home')
         if request.method == "GET":
             data = list(Swapstation.objects.filter(status=dictinary_obj.get('action')).values())
-        contex = {'swap_station_data' : data is not [] and data or None,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission, "action":dictinary_obj.get('action') }
+        contex = {"newuserPermission":newuserPermission,'swap_station_data' : data is not [] and data or None,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission, "action":dictinary_obj.get('action') }
         return render(request, 'swapstation_list_by_status.html',contex)
     except Exception as e:
         return messages.add_message(request,messages.WARNING, successAndErrorMessages()['internalError'])
@@ -419,6 +461,8 @@ def getActiveAndDeactive(request):
 #This function is used to update swap station data.
 def updateSwapstationDetails(request,id):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    newuserPermission=permission(request.session.get("user_type"))
+
     if(request.session.get("IsAdmin") == False):
         messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
         return redirect('home')
@@ -452,14 +496,16 @@ def updateSwapstationDetails(request,id):
         }]
 
         messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['updateSwapStation'])
-        return render(request,'update_swap_station.html',{'update_swap_station_data': update_swapstation,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission })
+        return render(request,'update_swap_station.html',{"newuserPermission":newuserPermission,'update_swap_station_data': update_swapstation,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission })
 
     update_swapstation = list(Swapstation.objects.filter(imei_number=id).values())
-    return render(request,'update_swap_station.html',{'update_swap_station_data': update_swapstation,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission })
+    return render(request,'update_swap_station.html',{"newuserPermission":newuserPermission,'update_swap_station_data': update_swapstation,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission })
 
 #delete records from swap station table.
 def deleteSwapStation(request,id):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    newuserPermission=permission(request.session.get("user_type"))
+
     try:
         if(request.session.get("IsAdmin") == False):
             messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
@@ -469,13 +515,15 @@ def deleteSwapStation(request,id):
             pi.delete()
             messages.add_message(request, messages.WARNING, successAndErrorMessages()['removeSwapStation'])
             return redirect('user_management:listswap')
-        context={'delete_swap_station': pi,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission}
+        context={"newuserPermission":newuserPermission,'delete_swap_station': pi,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission}
         messages.info(request, successAndErrorMessages()['removeSwapStation'])
         return render(request, 'delete_swapstation_data.html', context)
     except Exception as e:
         return messages.add_message(request,messages.WARNING, successAndErrorMessages()['internalError'])
 
 def moduleSettings(request):
+    newuserPermission=permission(request.session.get("user_type"))
+
     try:
         res={"module": [],"module_on":[],"IsAdmin":request.session.get("IsAdmin")}
         module_name = request.GET.get("id")
@@ -493,7 +541,8 @@ def moduleSettings(request):
                         return redirect('user_management:setting')
                 user_data = userSettings.objects.create(module_status=False,module_name=module_name,user_id=request.session.get("email"))
                 user_data.save()
-        res["UserPermission"]=UserPermission(request,True)      
+        res["UserPermission"]=UserPermission(request,True) 
+        res["newuserPermission"]=newuserPermission     
         context = res
 
         return render (request, 'settings.html',context)

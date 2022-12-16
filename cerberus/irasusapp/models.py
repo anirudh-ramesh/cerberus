@@ -53,7 +53,8 @@ def password_validator(value):
 USER_TYPE = (
     ('Admin', 'Admin'),
     ('Driver', 'Driver'), 
-    ('User', 'User')
+    ('FeetOwner', 'FeetOwner'),
+    ('FleetOprater', 'FleetOprater')
 )
 
 #USER-TABLE
@@ -78,6 +79,10 @@ class Crmuser(AbstractBaseUser):
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     orgs = models.ManyToManyField(Organisation)
+    created_by = models.CharField(max_length=100, default='')
+    created_id = models.CharField(max_length=300, default='')
+
+
 
 
     objects = CrmUserManager()

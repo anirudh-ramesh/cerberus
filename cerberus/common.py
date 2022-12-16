@@ -208,10 +208,25 @@ def permission(role):
                 "create":True,
                 "update":True,
                 "delete":True,
+                "view": True
             },
             "payment":{
                 "log": True
-            }
+            },
+            "user":{
+               "create":True,
+                "update":True,
+                "delete":True,
+                "view":True 
+            },
+              "VCU":{
+                "create":False,
+                "update":False,
+                "delete":False,
+                "assignBattery":False,
+                "view": False
+
+            },
         }
         return superAdmin
     if(role == "User" or role =="Driver"):
@@ -285,9 +300,23 @@ def permission(role):
                 "delete":True,
                 "update":True,
             },
+           "user":{
+               "create":False,
+                "update":True,
+                "delete":False,
+                "view":True 
+            },
+              "VCU":{
+                "create":False,
+                "update":False,
+                "delete":False,
+                "assignBattery":False,
+                "view": False
+
+            },
         }
         return User 
-    if(role == "FleetOprater"):
+    if(role == "FleetOprator"):
         fleetOperator={
             "vehicle":{
                 "create": False,
@@ -358,6 +387,20 @@ def permission(role):
                 "update":False,
                 "view": False
             },
+            "user":{
+               "create":False,
+                "update":False,
+                "delete":False,
+                "view":True 
+            },
+              "VCU":{
+                "create":False,
+                "update":False,
+                "delete":False,
+                "assignBattery":False,
+                "view": False
+
+            },
         }
         return fleetOperator
     if(role == "FleetOwner"):
@@ -400,16 +443,27 @@ def permission(role):
                 "createProfile": False,
                 "assignedvehical":False,
                 "view":True,
-                "listVihical": True
+                "listVihical": True,
+                "create":True,
+                "update": True
             },
             "iot":{
                 "create":False,
                 "update":False,
                 "delete":False,
-                "assignBattery":False
+                "assignBattery":False,
+                "view": False
             },
             "csv":{
-                "download": False,
+                "download": True,
+
+            },
+            "VCU":{
+                "create":False,
+                "update":False,
+                "delete":False,
+                "assignBattery":False,
+                "view": False
 
             },
             "driver":{
@@ -423,14 +477,22 @@ def permission(role):
                 "create":True,
                 "update":True,
                 "delete":True,
+                "view": True
             },
             "fleetOperater":{
                 "create":True,
                 "update":True,
                 "delete":True,
+                "view": True
             },
             "payment":{
                 "log": True
+            },
+            "user":{
+               "create":False,
+                "update":False,
+                "delete":False,
+                "view":True 
             }
         }
         return fleetOwner
