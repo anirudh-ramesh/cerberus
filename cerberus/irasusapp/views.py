@@ -193,7 +193,6 @@ def getBatteryDetails(request):
 
         return render(request, 'battery_details.html',context)
     except Exception as e:
-        print(e,"-=-=-=-")
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
 #This Function Will Update_Battery_details/Edit
@@ -922,6 +921,7 @@ def addDriver(request):
         if request.method == "POST":
             username = request.POST.get('username')
             email = request.POST.get('contact')
+            password = make_password(generatorPassword())
             user_type =  request.POST.get('user_type')
             adhar_proof = request.FILES['adhar_card'].file.read()
             pancard_proof = request.FILES['pan_card'].file.read()
@@ -931,7 +931,8 @@ def addDriver(request):
             newdata = Crmuser.objects.create(
                 username=username,email=email,user_type=user_type,
                 adhar_proof=adhar_proof,pancard_proof=pancard_proof,
-                license_proof=license_proof,is_active=is_active
+                license_proof=license_proof,is_active=is_active,
+                password = password
             )
             newdata.save()
             messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['addDriver']) 

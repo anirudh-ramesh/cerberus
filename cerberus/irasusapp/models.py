@@ -81,8 +81,8 @@ class Crmuser(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     orgs = models.ManyToManyField(Organisation)
     vehicle_assigned = models.ForeignKey("Vehicle",default=None,on_delete=models.CASCADE, null=True, blank=True)
-    created_by = models.CharField(max_length=100, default='')
-    created_id = models.CharField(max_length=300, default='')
+    created_by = models.CharField(max_length=100, default='', null=True, blank=True)
+    created_id = models.CharField(max_length=300, default='',null=True, blank=True)
 
     objects = CrmUserManager()
 
