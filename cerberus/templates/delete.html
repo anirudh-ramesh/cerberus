@@ -10,10 +10,10 @@
     <form action="{% url 'user_management:delete' item.email %}" method="POST" class="d-inline">
       {% csrf_token %}
 
-        <td>
-          <a href="{% url 'user_management:getdata' %}" class="btn btn-secondary btn-sm">Back</a>
-        </td>
     <input type="submit" class="btn btn-danger btn-sm" value="Delete">
+    <td>
+      <a href="{% url 'user_management:getdata' %}" class="btn btn-secondary btn-sm">Back</a>
+    </td>
   </form>
 
 

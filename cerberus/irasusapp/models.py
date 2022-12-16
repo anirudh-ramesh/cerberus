@@ -52,7 +52,8 @@ def password_validator(value):
 
 USER_TYPE = (
     ('Admin', 'Admin'),
-    ('Driver', 'Driver'), 
+    ('Driver', 'Driver'),
+    ('User', 'User'),
     ('FeetOwner', 'FeetOwner'),
     ('FleetOprater', 'FleetOprater')
 )
