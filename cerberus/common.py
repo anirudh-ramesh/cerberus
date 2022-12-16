@@ -446,8 +446,8 @@ def permission(role):
                 "assignedvehical":False,
                 "view":True,
                 "listVihical": True,
-                "create":True,
-                "update": True
+                "create":False,
+                "update": False
             },
             "iot":{
                 "create":False,
