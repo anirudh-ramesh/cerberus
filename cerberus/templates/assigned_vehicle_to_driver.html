@@ -1,0 +1,28 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div class="device-assign" style="display: flex;"> 
+  <form action="" method="post">
+    {% csrf_token %}
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class = "alert alert-{{message.tags}}">{{message}}</div>
+      {% endfor %}
+    {% endif %}
+
+    <h4 class="text-center alert alert info">Add Vehicle-Device</h4>
+    <select name='name_of_select'>
+      {% for data in assinged_vehicle %}
+        <option  class="assigned_value"  value="{{data.chasis_number}}">{{data.vehicle_model_name}}</option>
+      {% endfor %}
+    </select>
+    <Button type='submit' class="btn btn-success btn-sm" value="Submit">Submit</Button>
+    
+    <a href="{% url 'getdrivers' %}" class="btn btn-dark btn-sm">Back</a>
+  </form>
+    
+</div>
+
+{% endblock %}

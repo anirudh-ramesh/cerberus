@@ -34,7 +34,8 @@ def successAndErrorMessages():
         "assignBattery" : "Battery assign to vehicle successfully",
         "batteryRemovefrom" : "Battery is removed from vehicle",
         "alreadyAddedVehicle": "Details already is added for this serial number",
-        "alreadyVehicleUser": "Vehicle is already added To this user",
+        "vehicleRemovedFromDriver": "Vehicle is successfully removed from Driver",
+        "alreadyVehicleUser": "Vehicle is already assigned To this user",
 
         "addBattery": "Battery is added successfully",
         "addBatteryError": "Battery is already assiged to This vehicle",
@@ -130,7 +131,7 @@ def sendEmail(request, subject, message=None):
         # id = id 
         # assignToid = assignToid
         email_from = settings.EMAIL_HOST_USER
-        recipient_list = ['dixit.ims.in@gmail.com']
-        email = send_mail( subject, message, email_from, recipient_list )
+        recipient_list = ['dixitjethava1111@gmail.com',]
+        send_mail(subject, message, email_from, recipient_list )
     except Exception as e:
         print(e)
