@@ -1,7 +1,7 @@
 
 {% extends 'main.html' %}
 
-{% block content %}
+{% block content  %}
    <head>
       <title>Home</title>
       <meta charset="utf-8">
@@ -11,120 +11,171 @@
       <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/jquery-sparkline@2.4.0/jquery.sparkline.min.js" integrity="sha256-TKXwAzwvBOzpxaMZKl64fccBhJvyg3wrI8/joXU4VA4=" crossorigin="anonymous"></script>
    </head>
+  
    <body class="body">
       <div id="main-wrapper" data-theme="light" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="mini-sidebar" data-sidebar-position="fixed" data-header-position="fixed" data-boxed-layout="full">
+        
          <div class="page-wrapper" style="display: block;">
             <!-- ============================================================== -->
             <!-- Bread crumb and right sidebar toggle -->
             <!-- ============================================================== -->
-            <div class="page-titles">
-               <div class="col-lg-4 justify-content-start">
+           
+            <div class="page-titles"
+            style="display: flex; justify-content: space-between;padding: 0px 20px;">
+               <div class="col-lg-4 justify-content-start"style="padding-top:20px;">
                   <h3 class="text-themecolor mb-0">DASHBOARD</h3>
                </div>
+
+               {% if messages %}
+                  {% for message in messages %}
+                  <div class = "mb-0 alert alert-{{message.tags}}">{{message}}</div>
+                  {% endfor %}
+               {% endif %}
+               <div class="col-lg-3 style_card style_profileBar" >
+                  <i class="ant-avatar ant-avatar-circle ant-avatar-image"><img src="../static/images/profile.png" alt="avatar"></i>
+          
+                  <div style="display: flex; flex-flow: column; width: 50%;">
+                     <div class="style_userName">{{email}}</div>
+                  </div>
+               </div>
             </div>
-            <div class="container-fluid">
+            <div class="container-fluid"style="padding-top: 8px;">
                <!-- Row -->
+
                <div class="row">
-                  <div class="col-lg-4 col-md-6 mb-3">
-                     <div class="card h-100 dashboard">
+
+                  {% if UserPermission.BatteryPacks == True %}
+
+                  <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/getdata'">
+                     <div class="card h-100">
                         <div class="card-body" >
                            <h5 class="heading_text" >Extracting real time insights from Energy Assets.</h5>
                            <div class="pro_gress">
-                              <h3  onclick="location.href = '/getdata'" class="text-black">Battery Packs
+                              <h3 class="text-black">Battery Packs
                               </h3>
                            </div>
                         </div>
-                        <img class="card-img-top" src="../static/images/1.png" alt="Card image cap">
+                        <img class="card-img-top dashboard" src="../static/images/1.png" alt="Card image cap">
                      </div>
                   </div>
-                  <div class="col-lg-4 col-md-6 mb-3">
-                     <div class="card h-100 dashboard">
+                  {% endif %}
+
+                  {% if UserPermission.SwapingStation == True %}
+                  <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/listswapstation'">
+                     <div class="card h-100">
                         <div class="card-body" >
                            <h5 class="heading_text" >Extracting real time insights from Energy Assets.</h5>
                            <div class="pro_gress">
-                              <h3 onclick="location.href = '/listswapstation'" class="text-black">Swaping Station</h3>
+                              <h3  class="text-black">Swaping Station</h3>
                            </div>
                         </div>
-                        <img class="card-img-top" src="../static/images/2.png" alt="Card image cap">
+                        <img class="card-img-top dashboard" src="../static/images/2.png" alt="Card image cap">
                      </div>
                   </div>
-                  <div class="col-lg-4 col-md-6 mb-3">
-                     <div class="card h-100 dashboard">
+                  {% endif %}
+
+                  {% if UserPermission.Geography == True %}
+
+                  <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/geofence'">
+                     <div class="card h-100">
                         <div class="card-body" >
                            <h5 class="heading_text" >Extracting real time insights from Energy Assets.</h6>
                            <div class="pro_gress">
-                              <h3 onclick="location.href = '/geofence'" class="text-black">Geography</h3>
+                              <h3  class="text-black">Geography</h3>
                            </div>
                         </div>
-                        <img class="card-img-top" src="../static/images/3.png" alt="Card image cap">
+                        <img class="card-img-top dashboard" src="../static/images/3.png" alt="Card image cap">
                      </div>
                   </div>
-                  <div class="col-lg-4 col-md-6 mb-3">
-                     <div class="card h-100 dashboard">
+                  {% endif %}
+
+                  {% if UserPermission.Users == True %}
+
+                  <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/getuser'">
+                     <div class="card h-100">
                         <div class="card-body" >
                            <h5 class="heading_text" class="heading_text">Extracting real time and actionable insights from Energy Assets.</h6>
                            <div class="pro_gress">
-                              <h3 onclick="location.href = '/getuser'" class="text-black">Users</h3>
+                              <h3  class="text-black">Users</h3>
                            </div>
                         </div>
-                        <img class="card-img-top" src="../static/images/4.png" alt="Card image cap">
+                        <img class="card-img-top dashboard" src="../static/images/4.png" alt="Card image cap">
                      </div>
                   </div>
-                  <div class="col-lg-4 col-md-6 mb-3">
-                     <div class="card h-100 dashboard">
+                  {% endif %}
+
+                  {% if UserPermission.Vehicles == True %}
+
+                  <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/getvehicle'">
+                     <div class="card h-100">
                         <div class="card-body" >
                            <h5 class="heading_text">Extracting real time and actionable insights from Energy Assets.</h6>
                            <div class="pro_gress">
-                              <h3 onclick="location.href = '/getvehicle'" class="text-black">Vehicles</h3>
+                              <h3  class="text-black">Vehicles</h3>
                            </div>
                         </div>
-                        <img class="card-img-top" src="../static/images/5.png" alt="Card image cap">
+                        <img class="card-img-top dashboard" src="../static/images/5.png" alt="Card image cap">
                      </div>
                   </div>
-                  <div class="col-lg-4 col-md-6 mb-3">
-                     <div class="card h-100 dashboard">
+                  {% endif %}
+
+                  {% if UserPermission.VCU == True %}
+
+                  <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/vehicledetails'">
+                     <div class="card h-100">
                         <div class="card-body" >
                            <h5 class="heading_text">Extracting real time and actionable insights</h6>
                            <div class="pro_gress">
                               <h3 class="text-black">VCU</h3>
                            </div>
                         </div>
-                        <img class="card-img-top" src="../static/images/6.png" alt="Card image cap">
+                        <img class="card-img-top dashboard" src="../static/images/6.png" alt="Card image cap">
                      </div>
                   </div>
-                  <div class="col-lg-4 col-md-6 mb-3">
-                     <div class="card h-100 dashboard">
+                  {% endif %}
+
+                  {% if UserPermission.IOTDevice == True %}
+
+                  <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/listdevice'">
+                     <div class="card h-100">
                         <div class="card-body" >
                            <h5 class="heading_text">Extracting real time and actionable insights from Energy Assets.</h6>
                            <div class="pro_gress">
                               <h3 class="text-black">IOT Devices</h3>
                            </div>
                         </div>
-                        <img class="card-img-top" src="../static/images/7.png" alt="Card image cap">
+                        <img class="card-img-top dashboard" src="../static/images/7.png" alt="Card image cap">
                      </div>
                   </div>
-                  <div class="col-lg-4 col-md-6 mb-3">
-                     <div class="card h-100 dashboard">
+                  {% endif %}
+
+                  {% if UserPermission.Reports == True %}
+
+                  <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/getcsv'">
+                     <div class="card h-100">
                         <div class="card-body" >
                            <h5 class="heading_text">Extracting real time and actionable insights from Energy Assets.</h6>
                            <div class="pro_gress">
-                              <h3 onclick="location.href = '/getcsv'" class="text-black">Reports</h3>
+                              <h3 class="text-black">Reports</h3>
                            </div>
                         </div>
-                        <img class="card-img-top" src="../static/images/8.png" alt="Card image cap">
+                        <img class="card-img-top dashboard" src="../static/images/8.png" alt="Card image cap">
                      </div>
                   </div>
-                  <div class="col-lg-4 col-md-6 mb-3">
-                     <div class="card h-100 dashboard">
+                  {% endif %}
+
+                  <div class="col-lg-4 col-md-6 mb-3" onclick="location.href = '/settings'">
+                     <div class="card h-100">
                         <div class="card-body" >
                            <h5 class="heading_text">Extracting real time insights from Energy Assets.</h6>
                            <div class="pro_gress">
                               <h3 class="text-black">Settings</h3>
                            </div>
                         </div>
-                        <img class="card-img-top" src="../static/images/9.png" alt="Card image cap">
+                        <img class="card-img-top dashboard" src="../static/images/9.png" alt="Card image cap">
                      </div>
                   </div>
+
                </div>
             </div>
          </div>

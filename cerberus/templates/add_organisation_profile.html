@@ -3,19 +3,23 @@
 
 {% block content %}
 
-{% include 'status.html' %}
-
 
 <br>
 
 <div class="organisationdata">
 	<div class="col-md-5 data">
 		<div class="card ">
-			<h4 class="btn btn-secondary org_prof">Organisation Profile</h4>
+			<h4 class="btn btn-secondary  btn-sm btn-block org_prof">Organisation Profile</h4>
 			<div class="card card-body">
 				<div class="d-flex justify-content-start form_container">
 					<form method="POST" action="" class="organisationform">
 						{% csrf_token %}
+
+						{% if messages %}
+							{% for message in messages %}
+							<div class = "alert alert-{{message.tags}}">{{message}}</div>
+							{% endfor %}
+						{% endif %}
 						<div class="input-group mb-2 ">
 							<div class="input-group-append ">
 								<label class="both">Battery Pack Manufacture </label>
@@ -137,7 +141,7 @@
 				 			<input class="btn btn-success" type="submit" value="Submit">
 				   		</div>			
 						<div class="d-flex justify-content-center mt-3 login_container">
-							<a href="{% url 'user_management:listorgprofile' id %}" class="btn btn-secondary btn-sm">List Orgnisation Profile</a>
+							<a href="{% url 'user_management:orgprofiles' id %}" class="btn btn-secondary btn-sm">List Orgnisation Profile</a>
 							
 						</div>
 						<div class="d-flex justify-content-center mt-3 login_container">

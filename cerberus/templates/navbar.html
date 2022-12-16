@@ -4,54 +4,87 @@
 
   <aside class="sidebar-nav"> 
    <div class="profile-img">
-   <img src="../static/images/profile.png" alt="user" class="w-50">
+   <img src="../static/images/logo_1465364909556.svg (1).png" alt="user" class=" logo_img">
    </div>
-   <h6 style="font-size: 10px;">{{email}}</h6>
     <ul id="sidebarnav" class="in">
 
        <li class="sidebar-item">
          <a class="sidebar-link" href="{% url 'home' %}" aria-expanded="false"><img src="../static/icons/home.svg"></img></a>
           </li>
-       <li class="sidebar-item">  <a class="sidebar-link"aria-expanded="false" href="{% url 'user_management:getdata' %}"><img src="../static/icons/Users.svg"></img></a>
+      {% if UserPermission.Users == True %}
+    
+       <li class="sidebar-item">  
+         <a class="sidebar-link"aria-expanded="false" href="{% url 'user_management:getdata' %}"><img src="../static/icons/Users.svg"></img></a>
         
        </li>
+       {% endif %}
+
+       {% if UserPermission.BatteryPacks == True %}
+
        <li class="sidebar-item">
           <a  href="{% url 'data' %}" class="sidebar-link" aria-expanded="false"><img src="../static/icons/Battery.svg"></img></a>
        </li>
+       
+       {% endif %}
+
+       {% if UserPermission.SwapingStation == True %}
+
        <li class="sidebar-item">
-         <a class="sidebar-link" href="{% url 'user_management:listswap' %}" aria-expanded="false"><img src="../static/icons/Swapping station.svg"></img></a>
+         <a class="sidebar-link" href="{% url 'user_management:listswap' %}" aria-expanded="false"><img src="../static/icons/Swapping Station -  Menu icon - Gray.svg"></img></a>
           
        </li>
+       {% endif %}
+       {% if UserPermission.Geography == True %}
+
        <li class="sidebar-item">
           <a class="sidebar-link" href="{% url 'geofence' %}" aria-expanded="false"><img src="../static/icons/Geography.svg"></img></a>
        </li>
-       
+       {% endif %}
+       {% if UserPermission.Vehicles == True %}
+
        <li class="sidebar-item">
          <a class="sidebar-link" href="{% url 'getvehicle' %}" aria-expanded="false"><img src="../static/icons/Vehicles.svg"></img></a>
       </li>
-    
+      {% endif %}
+
+      {% if UserPermission.VCU == True %}
+
       <li class="sidebar-item">
          <a class="sidebar-link" href="{% url 'user_management:listorg' %}" aria-expanded="false"><img src="../static/icons/VCU.svg"></img></a>
       </li>
+      {% endif %}
+      
+
+      {% if UserPermission.IOTDevice == True %}
+
       <li class="sidebar-item">
          <a class="sidebar-link" href="{% url 'listdevice' %}" aria-expanded="false"><img src="../static/icons/IOT.svg"></img></a>
       </li>
+      {% endif %}
+
+      {% if UserPermission.Reports == True %}
       <li class="sidebar-item">
          <a class="sidebar-link" href="{% url 'csv' %}" aria-expanded="false"><img src="../static/icons/reports.svg"></img></a>
       </li>
+      {% endif %}
+      
+
       <li class="sidebar-item">
-         <a class="sidebar-link" href="{% url 'settings' %}" aria-expanded="false"><img src="../static/icons/settings.svg"></img></a>
+         <a class="sidebar-link" href="{% url 'user_management:setting' %}" aria-expanded="false"><img src="../static/icons/settings.svg"></img></a>
       </li>
+
+
       <li class="sidebar-item">
          <a class="sidebar-link" href="http://osticket.igt-ev.com:8080/" aria-expanded="false"><img src="../static/icons/complaint.svg"></img></a>
       </li>
+      <li class="sidebar-footer">
       <form method="post" action="{% url 'logout' %}">
          {% csrf_token %}
          {% if redirect_field_value %}
          <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
          {% endif %}
-         <button class="btn btn-dark" style="right: 12%; display: flex; position: absolute;"  type="submit">{% trans 'Logout' %}</button>
-       </form>
+         <button class="btn btn-dark"  type="submit">{% trans 'Logout' %}</button>
+       </form></li>
     </ul>
 
  </aside>

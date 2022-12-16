@@ -80,10 +80,18 @@ ASSIGN_OWNER = (
 class Swapstation(models.Model):
     swap_station_name = models.CharField(max_length=225, default='', blank=True)
     imei_number = models.CharField(max_length=225, default='', blank=True, primary_key=True)
-    number_of_doors = models.CharField(max_length=225, blank=True, choices=DOOR_CHOICES)
+    number_of_doors = models.CharField(max_length=225, blank=True)
     charge_specification = models.CharField(max_length=225, blank=True, choices=CHARGE_SPECIFICATION)
-    configuration = models.CharField(max_length=225,blank=True)
+    location= models.CharField(max_length=1000,blank=True)
     assigned_owner = models.CharField(max_length=225,blank=True,choices=ASSIGN_OWNER)
     status = models.CharField(max_length=225,default='', blank=True, null=True)
     assigned_fleet_owner = models.CharField(max_length=225,blank=True,null=True)
     battery_swap = models.ForeignKey("irasusapp.BatteryDetail",default=None,on_delete=models.CASCADE, null=True, blank=True)
+
+class Settings(models.Model):
+    module_name = models.CharField(max_length=225, blank=True, null=True)
+    
+class userSettings(models.Model):
+    module_name = models.CharField(max_length=225, blank=True, null=True)
+    user = models.ForeignKey("irasusapp.Crmuser",default=None,on_delete=models.CASCADE, null=True, blank=True)
+    module_status = models.BooleanField(default=True, null=True)

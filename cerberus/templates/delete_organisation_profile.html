@@ -2,21 +2,20 @@
 
 {% block content %}
 
-{% include 'status.html' %}
+<!-- {% include 'status.html' %} -->
 
 <div class="">
   <h4 class="text-center alert alert info">Organisation Profile Data</h4>
 
     <p>Are you sure you want to delete <b>"{{organisation_profile_delete.battery_pack_manufacture}} ?"</b></p>
 
-    <form action="{% url 'user_management:deleteorgprofile' organisation_profile_delete.id %}" method="POST" class="d-inline">
+    <form action="{% url 'user_management:deleteorgprofile' organisation_profile_delete.id %}?org_id={{org_id}}" method="POST" class="d-inline">
         {% csrf_token %}
-
-        <td>
-            <a href="{% url 'user_management:listorgprofile' organisation_profile_delete.id %}" class="btn btn-secondary btn-sm">Back</a>
-        </td>
       <input type="submit" class="btn btn-danger btn-sm" value="Remove">
     </form>
+
+    <a href="{% url 'user_management:orgprofiles' org_id %}" class="btn btn-secondary btn-sm">Back</a>
+    
 </div>
 
 {% endblock %}

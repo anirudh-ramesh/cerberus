@@ -3,96 +3,101 @@
 {% block content %}
 
 <div class="row">
-    {% for message in messages %}
-    <h5 class="errors">{{ message }}</h5>
-    {% endfor %}
-    <div class="col-sm-8 offset-2">
-        <h4 class="alert alert-info">Update Driver</h4>
-        <div class="user_card">
-            <form action="" method="POST">
-                {% csrf_token %}
-                
-                {% for fm in form %}
-                <div class="input-group mb-2">
-                    <div class="input-group-append">
-                        <label>Username</label>
-                        <input type='text' name='username' value="{{fm.username}}" class="input-register-text" required>
+    <div class="container col-lg-6">
+        <div class="col-md-5">
+            <h4 class="btn btn-secondary  btn-sm btn-block">Update Driver</h4>
+            <div class="card card-body">
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{message.tags}}">{{message}}</div>
+                {% endfor %}
+                {% endif %}
+                <form action="" method="POST">
+                    {% csrf_token %}
+
+                    {% for fm in form %}
+                    <div class="input-group mb-2">
+                        <div class="input-group-append">
+                            <label>Username</label>
+                            <input type='text' name='username' value="{{fm.username}}" class="input-register-text"
+                                required>
+                        </div>
                     </div>
-                </div>
-                <div class="input-group mb-2">
-                    <div class="input-group-append">
-                        <label>Email</label>
-                        <input type='text' name='email' value="{{fm.email}}" class="input-register-text" required>
+                    <div class="input-group mb-2">
+                        <div class="input-group-append">
+                            <label>Email</label>
+                            <input type='text' name='email' value="{{fm.email}}" class="input-register-text" required>
+                        </div>
                     </div>
-                </div>
-                <!-- <div class="input-group mb-2">
+                    <!-- <div class="input-group mb-2">
                     <div class="input-group-append">
                         <label>Contact</label>
                         <input type='text' name='contact' value="{{fm.contact}}" class="input-register-text">
                     </div>
                 </div> -->
-                <div class="input-group mb-2">
-                    <div class="input-group-append">
-                        <label>User-Type</label>
-                        <select type="text" name="user_type" value="{{fm.user_type}}" class="input-register-text"
-                            required>
-                            {% if fm.user_type == "User" %}
-                            <option value="User" selected>User</option>
-                            {% else %}
-                            <option value="User">User</option>
-                            {% endif %}
-                            {% if fm.user_type == "Driver" %}
-                            <option value="Driver" selected>Driver</option>
-                            {% else %}
-                            <option value="Driver">Driver</option>
-                            {% endif %}
-                        </select>
+                    <div class="input-group mb-2">
+                        <div class="input-group-append">
+                            <label>User Type</label>
+                            <select type="text" name="user_type" value="{{fm.user_type}}" class="input-register-text"
+                                required>
+                                {% if fm.user_type == "Driver" %}
+                                <option value="Driver" selected>Driver</option>
+                                {% else %}
+                                <option value="Driver">Driver</option>
+                                {% endif %}
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="input-group mb-2">
-                    <div class="input-group-append">
-                        <label>Adhar-Proof</label>
-                        <img src='data:image/jpeg;base64,{{fm.adhar_proof}}' alt="no image display" name="adhar_proof"
-                            style="width:100px;height:100px;">
+                    <div class="input-group mb-2">
+                        <div class="input-group-append">
+                            <label>Adhar Proof</label>
+                            <img src='data:image/jpeg;base64,{{fm.adhar_proof}}' alt="no image display"
+                                name="adhar_proof" style="width:100px;height:100px;">
+                        </div>
                     </div>
-                </div>
-                <div class="input-group mb-2">
-                    <div class="input-group-append">
-                        <label>Pan-Proof</label>
-                        <img src='data:image/jpeg;base64,{{fm.pancard_proof}}' alt="no image display"
-                            style="width:100px;height:100px;">
+                    <div class="input-group mb-2">
+                        <div class="input-group-append">
+                            <label>Pan Proof</label>
+                            <img src='data:image/jpeg;base64,{{fm.pancard_proof}}' alt="no image display"
+                                style="width:100px;height:100px;">
+                        </div>
                     </div>
-                </div>
-                <div class="input-group mb-2">
-                    <div class="input-group-append">
-                        <label>Driving-License</label>
-                        <img src='data:image/jpeg;base64,{{fm.license_proof}}' alt="no image display"
-                            style="width:100px;height:100px;">
+                    <div class="input-group mb-2">
+                        <div class="input-group-append">
+                            <label>Driving License</label>
+                            <img src='data:image/jpeg;base64,{{fm.license_proof}}' alt="no image display"
+                                style="width:100px;height:100px;">
+                        </div>
                     </div>
-                </div>
 
-                <!-- <div class="input-group mb-2">
+                    <!-- <div class="input-group mb-2">
                     <div class="input-group-append">
                         <label>Last Login</label>
                         <input type='text' name='lastlogin' value={{fm.last_login}} class="input-register-text" required>
                     </div>
                 </div> -->
-                <div class="input-group mb-2">
-                    <div class="input-group-append">
-                        <label>IsActive
-                            {% if fm.is_active %}
-                            <input type="checkbox" value="{{fm.is_active}}" name="is_active" checked>
-                            {% else %}
-                            <input type="checkbox" name="is_active">
-                            {% endif %}
-                        </label>
+                    <div class="input-group mb-2">
+                        <div class="input-group-append">
+                            <label>Isactive
+                                {% if fm.is_active %}
+                                <input type="checkbox" name="is_active" checked>
+                                {% else %}
+                                <input type="checkbox" name="is_active" >
+                                {% endif %}
+                            </label>
+                        </div>
                     </div>
-                </div>
-                {% endfor %}
-                <input type="submit" class="btn btn-success mt-3" value="Update">
-                <a href="{% url 'getdrivers' %}" class="btn btn-info">Back to Details</a>
-            </form>
+                    {% endfor %}
+                    <div class="submit-button">
+                        <div>
+                            <input type="submit" class="btn btn-success btn-sm mt-3" value="Update">
+                            <a href="{% url 'getdrivers' %}" class="btn btn-info btn-sm">Back to Details</a>
+                        </div>    
+                    </div>
+                    
+                </form>
+            </div>
         </div>
     </div>
 
-{% endblock %}
+    {% endblock %}

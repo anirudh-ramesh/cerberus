@@ -4,12 +4,16 @@
 
 <div class="row">
     <div class="col-sm-8 offset-2">
-        {% for message in messages %}
-            <h5 class="errors">{{ message }}</h5>
-        {% endfor %}
-        <h4 class="alert alert-info">Update Role</h4>
+        <h4 class="btn btn-secondary  btn-sm btn-block">Update Role</h4>
             <form method="POST" action="">
                 {% csrf_token %}
+                    
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class = "alert alert-{{message.tags}}">{{message}}</div>
+                    {% endfor %}
+                {% endif %}
+
                 {% for fm in form %}
                     <div class="input-group mb-2">
                         <div class="input-group-append">
@@ -25,7 +29,7 @@
                     </div>
                 {% endfor %}
                 <input type="submit" class="btn btn-success mt-3" value="Update">
-                <a href="{% url 'user_management:listrole' %}" class="btn btn-info">Back to Details</a>
+                <a href="{% url 'home' %}" class="btn btn-info">Back to Details</a>
             </form>          
     </div>
 </div>

@@ -2,11 +2,21 @@
 
 {% block content %}
 
-{% include 'status.html' %}
+{% include 'swapstation_status.html' %}
 
 <div class="col-sm-12">
-    <h4><b>Swap-Station Details</b></h4>
+  <a href="{% url 'user_management:addswap' %}" class="btn btn-info btn-sm">Add-Swap-Station</a>
+        <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Home</a>
+
+    <h4 class="text-center">Swap-Station Details</h4>
     <form action="" method="GET">
+
+      <!-- {% if messages %}
+        {% for message in messages %}
+        <div class = "alert alert-{{message.tags}}">{{message}}</div>
+        {% endfor %}
+      {% endif %} -->
+      
         {% if swap_station_data %}
                 <table class="table table-hover">
                     <thead>
@@ -15,7 +25,7 @@
                         <th scope="col">IMEI number</th>
                         <th scope="col">Number of Doors</th>
                         <th scope="col">Charging Specification</th>
-                        <th scope="col">Configuration</th>
+                        <th scope="col">Location</th>
                         <th scope="col">Assigned Owner</th>
                         <th scope="col">Status</th>
                         <th scope="col">Assigned Fleet Owner</th>
@@ -29,16 +39,17 @@
                             <td>{{fm.imei_number}}</td>
                             <td>{{fm.number_of_doors}}</td>
                             <td>{{fm.charge_specification}}</td>
-                            <td>{{fm.configuration}}</td>
+                            <td>{{fm.location}}</td>
                             <td>{{fm.assigned_owner}}</td>
                             <td>{{fm.status}}</td>
                             <td>{{fm.assigned_fleet_owner}}</td>
 
                           
-                            <td>
-                            <a href="{% url 'user_management:swapstation' fm.imei_number %}" class="btn btn-info btn-sm">Edit</a>
+                          <td style="display: flex;">
+                            <a class="table-link" aria-expanded="false" href="{% url 'user_management:swapstation' fm.imei_number %}"><img src="../static/icons/edit.svg"></a>
 
-                            <a href="{% url 'user_management:deleteswapstation' fm.imei_number %}" class="btn btn-danger btn-sm">Delete</a>
+                            <a class="table-link" aria-expanded="false" href="{% url 'user_management:deleteswapstation' fm.imei_number %}"><img src="../static/icons/delete.svg"></a>
+
                           </td>              
                         </tr>
                       
@@ -51,8 +62,6 @@
             <h4 class="text-center alert alert warning">No Records Found</h4>
         {% endif %}
 
-        <a href="{% url 'user_management:addswap' %}" class="btn btn-info btn-sm">Add-Swap-Station</a>
-        <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Home</a>
     </form>
     
 </div>

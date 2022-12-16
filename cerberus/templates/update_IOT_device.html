@@ -2,11 +2,10 @@
 
 {% block content %}
 
-{% include 'status.html' %}
 
 <div class="row">
     <div class="col-md-5">
-        <h4 class="alert alert-info">Update IOT-Device Details</h4>
+        <h4 class="btn btn-secondary  btn-sm btn-block" style="width: 36%;">Update IOT-Device Details</h4>
         <div class="card card-body">
             {% if update_IOT_data %}
                 <form method="POST" action="">
@@ -14,30 +13,48 @@
 
                         {% if messages %}
                             {% for message in messages %}
-                                <div class = "alert alert-{{message.tags}}">{{message}}</div>
+                                <div{% if message.tags %} class="alert alert-{{message.tags}}" {% endif %}>{{ message }}</div>
                             {% endfor %}
                         {% endif %}
                     
                     {% for fm in update_IOT_data %}
                         <div class="input-group mb-2">
                             <div class="input-group-append">
-                                <label>IOT Imei-Number</label>
-                                <input type='text' name='imei_number' value="{{fm.imei_number}}" class="input-register-text" required>
+                                <label class="update_iot_device">IOT Imei-Number</label>
+                                <input type="number" name='imei_number' value="{{fm.imei_number}}" class="update_iot_device_input" required>
                             </div>
                         </div>
                         <div class="input-group mb-2">
                             <div class="input-group-append">
-                                <label>Hardware Version</label>
-                                <input type='text' name='hardware_version' value="{{fm.hardware_version}}" class="input-register-text" required>
+                                <label class="update_iot_device">Hardware Version</label>
+                                <input type="number" step="any" name='hardware_version' value="{{fm.hardware_version}}" class="update_iot_device_input" required>
                             </div>
                         </div>
 
                         <div class="input-group mb-2">
                             <div class="input-group-append">
-                                <label>Firmware Version</label>
-                                <input type='text' name='firmware_version' value="{{fm.firmware_version}}" class="input-register-text" required>		
+                                <label class="update_iot_device">Firmware Version</label>
+                                <input type="number" step="any" name='firmware_version' value="{{fm.firmware_version}}" class="update_iot_device_input" required>		
                             </div>
                         </div>
+
+                        <div class="input-group mb-2">
+							<div class="input-group-append">
+								<label class="update_iot_device">Status</label>
+                                <br>
+                                {% if fm.status == "Active" %}
+                                <label class="update_iot_device"><input name="status" type="radio" value="Active" required="" checked>Active</label>
+                                {% else %}
+                                <label class="update_iot_device"><input name="status" type="radio" value="Active" required="" >Active</label>
+                                {% endif %}
+
+                                {% if fm.status == "Inactive" %}
+                                <label class="update_iot_device"><input name="status" type="radio" value="Inactive" required="" checked>Inactive</label>
+                                {% else %}
+                                <label class="update_iot_device"><input name="status" type="radio" value="Inactive" required="" >Inactive</label>
+                                {% endif %}
+							</div>
+						</div>
 
                     {% endfor %}
                     

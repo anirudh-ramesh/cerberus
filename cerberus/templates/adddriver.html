@@ -3,19 +3,18 @@
 
 {% block content %}
 
-{% include 'status.html' %}
+<!-- {% include 'status.html' %} -->
 
 <br>
 <div class="row">
+	<div class="container col-lg-6">
 	<div class="col-md-5">
-		<h5>Add Driver Details</h5>
 		<hr>
-		<div class="card card-body">
-			<a class="btn btn-primary  btn-sm btn-block" href="">Driver Details</a>
 			<div class="card card-body">
-				<div class="d-flex justify-content-start form_container">
-					<form method="POST" action="" enctype="multipart/form-data">
-						{% csrf_token %}
+				<h4 class="btn btn-secondary  btn-sm btn-block" href="">Driver Details</h4>
+				<div class="d-flex"style="padding: auto 1rem;">
+					<form class="form_swap"method="POST" action="" enctype="multipart/form-data">
+						{% csrf_token %} 
 
 						{% if messages %}
 							{% for message in messages %}
@@ -24,54 +23,57 @@
 					 	{% endif %}
 						<div class="input-group mb-2">
 							<div class="input-group-append">
-								<label>Username</label>
+								<label class="label_formm">Username</label>
 								<input type='text' name='username' class="input-register-text" required>
 							</div>
 						</div>
 						<div class="input-group mb-2">
 							<div class="input-group-append">
-								<label>Contact</label>
+								<label class="label_formm">Contact</label>
 								<input type='text' name='contact' class="input-register-text" required>
 							</div>
 						</div>
                         <div class="input-group mb-2">
 							<div class="input-group-append">
-								<label>User Type</label>
-                                <select type="text"  name="user_type" class="input-register-text" required>
-                                    <option>User</option>
+								<label class="label_formm">User Type</label>
+                                <select type="text"  name="user_type" value="Driver" class="input-register-text" required>
                                     <option>Driver</option>
                                 </select>
 							</div>
 						</div>
 						<div class="input-group mb-2">
 							<div class="input-group-append">
-								<label>Adhar Card</label>
+								<label class="label_formm">Adhar Card</label>
 								<input type='file' name='adhar_card' class="input-register-text" required>		
 							</div>
 						</div>
 						<div class="input-group mb-2">
 							<div class="input-group-append">
-								<label>Pan Card</label>
+								<label class="label_formm">Pan Card</label>
 								<input type='file' name='pan_card' class="input-register-text" required>
 							</div>
 						</div>
 						<div class="input-group mb-2">
 							<div class="input-group-append">
-								<label>Driving License</label>
+								<label class="label_formm">Driving License</label>
 								<input type='file' name='driving_license' class="input-register-text" required>
 							</div>
 						</div>
 
-						<div class="d-flex justify-content-center mt-3">
-				 			<input class="btn btn-success" type="submit" value="Submit">
+						<div class="submit-button">
+							<div>
+								<input class="btn btn-success btn-sm" type="submit" value="Submit">
+								<a href="{% url 'getdrivers' %}" class="btn btn-info btn-sm button_details">List Vehicle</a>
+							</div>
+							 
 				   		</div>
 
 					</form>
 				</div>
 			</div>
-		</div>
+		
 	</div>
 
 </div>
-
+</div>
 {% endblock %}

@@ -4,29 +4,42 @@
 
 {% include 'status.html' %}
 
-<div class="col-sm-8">
+
+<div class="col-sm-12">
+  {% if IsAdmin %}
     <a href="{% url 'homed' %}" class="btn btn-info btn-sm">Add-Battery-Data</a>
+  {% endif %}
+
     <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Home</a>
     <h4 class="text-center alert alert info">Battery Data</h4>
+    <div class="card card-2"style="border-radius: 0px;">
     <form action="" method="GET">
+      
+      {% if messages %}
+        {% for message in messages %}
+        <div class = "alert alert-{{message.tags}}">{{message}}</div>
+        {% endfor %}
+      {% endif %}
+
         {% if battery_data %}
+       
                 <table class="table table-hover">
                     <thead>
                       <tr>
                         <th scope="col">Assigned Battery</th>
-                        <th scope="col">Model_name</th>
-                        <th scope="col">Battery_serial_num</th>
-                        <th scope="col">Battery_type</th>
-                        <th scope="col">Bms_type</th>
-                        <th scope="col">Iot_type</th>
-                        <th scope="col">Warrenty_start_date</th>
-                        <th scope="col">warrenty_duration</th>
+                        <th scope="col">Model name</th>
+                        <th scope="col">Battery serial num</th>
+                        <th scope="col">Battery type</th>
+                        <th scope="col">Bms type</th>
+                        <th scope="col">Iot type</th>
+                        <th scope="col">Sim Number</th>
+                        <th scope="col">Warrenty start date</th>
+                        <th scope="col">warrenty duration</th>
                         <th scope="col">Status</th>
-                        <th scope="col">Battery_cell_chemistry</th>
-                        <th scope="col">Battery_pack_nominal_voltage</th>
-                        <th scope="col">Battery_pack_nominal_charge_capacity</th>
-                        <th scope="col">charging_status</th>
-                        <!-- <th scope="col">Iot_imei_number</th> -->
+                        <th scope="col">Battery cell chemistry</th>
+                        <th scope="col">Battery pack nominalvoltage</th>
+                        <th scope="col">Battery pack capacity</th>
+                        <th scope="col">charging status</th>
                         <th scope="col">Action</th>
                         
                       </tr>
@@ -50,35 +63,38 @@
                         <td>{{fm.battery_type}}</td>
                         <td>{{fm.bms_type}}</td>
                         <td>{{fm.iot_type}}</td>
+                        <td>{{fm.sim_number}}</td>
                         <td>{{fm.warrenty_start_date}}</td>
                         <td>{{fm.warrenty_duration}}</td>
                         <td>{{fm.status}}</td>
                         <td>{{fm.battery_cell_chemistry}}</td>
                         <td>{{fm.battery_pack_nominal_voltage}}</td>
-                        <td>{{fm.battery_pack_nominal_charge_capacity}}</td>
+                        <td>{{fm.battery_pack_capacity}}</td>
                         <td>{{fm.charging_status}}</td>
-                        <!-- <td>{{fm.iot_imei_number}}</td> -->
-                        <td>
-                          <a href="{% url 'updatedata' fm.battery_serial_num %}" class="btn btn-warning btn-sm">Edit</a>
+                        <td style="display: flex;">
+                          <a class="table-link" aria-expanded="false" href="{% url 'battery_data' %}"><img src="../static/icons/data-update.svg"/></a>
 
-                          <a href="{% url 'deletedata' fm.battery_serial_num %}" class="btn btn-danger btn-sm">Delete</a>
+                        {% if IsAdmin %}
+                          <a class="table-link" aria-expanded="false" href="{% url 'updatedata' fm.battery_serial_num %}"><img src="../static/icons/edit.svg"></a>
+                          <a class="table-link" aria-expanded="false" href="{% url 'deletedata' fm.battery_serial_num %}"><img src="../static/icons/delete.svg"></a>
+                          <a class="table-link" aria-expanded="false" href="{% url 'data' %}?cahis_id={{cahis_id}}&battery_serial_num={{fm.battery_serial_num}}&action=AssignToVehicle"><img src="../static/icons/add-88.svg"value="Add"></a>
+                          <a  href="{% url 'iramedata' fm.battery_serial_num %}" style="height:100%; width: 100%;"  aria-expanded="false" class="btn btn-secondary btn-sm">Battery Packs</a>
+                        {% endif %}
 
-                          <form action="{% url 'data' %}?cahis_id={{cahis_id}}&battery_serial_num={{fm.battery_serial_num}}" method="POST">
-                            {% csrf_token %}
-                            <input type="submit" class="btn btn-secondary btn-sm" value="Add">
-                          </form>
+                          
                         </td>
                       </tr>
                       {% endfor %}
                     </tbody>
                     </thead>
                   </table>
-            
+                
         {% else %}
             <h4 class="text-center alert alert warning">No Data Found</h4>
         {% endif %}
 
-    </form>    
+    </form>  
+  </div>
 </div>
 
 

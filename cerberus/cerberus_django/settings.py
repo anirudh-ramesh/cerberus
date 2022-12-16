@@ -1,5 +1,6 @@
 import os
-
+from dotenv import load_dotenv,find_dotenv
+load_dotenv(find_dotenv())
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -63,6 +64,7 @@ TEMPLATES = [
         },
     },
 ]
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 WSGI_APPLICATION = 'cerberus_django.wsgi.application'
 
@@ -74,15 +76,15 @@ AUTH_USER_MODEL = 'irasusapp.Crmuser'
 DATABASES = {
     'default': {    
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'battery_management',
-        'USER': 'postgres',
-        'PASSWORD': '1234',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.getenv('DATABASE_NAME'),
+        'USER': os.getenv('USER_NAME'),
+        'PASSWORD': os.getenv('PASSWORD'),
+        'HOST': os.getenv('HOST'),
+        'PORT': os.getenv('POSTGRESQL_PORTNUMBER'),
         'ATOMATIC_REQUESTS':True
-        # 'ENGINE': 'django.db.backends.postgresql',
+        # 'ENGINE': 'django.contrib.gis.db.backends.postgis',
         # 'NAME': 'postgres',
-        # 'USER': 'myprojectuser',
+        # 'USER': 'my_username',
         # 'HOST': 'db',
         # 'PORT': 5432,
         # 'PASSWORD': 'password'
@@ -134,11 +136,12 @@ STATICFILES_DIRS = [
 
 #SMTP Configuration
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'dixit.ims.in@gmail.com'
+EMAIL_HOST_PASSWORD = 'stzdqauxtrrstewp'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'dixitjethava1111@gmail.com'
-EMAIL_HOST_PASSWORD = 'dixit@123'
 
 # Authentication backends
 AUTHENTICATION_BACKENDS = [

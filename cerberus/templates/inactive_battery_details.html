@@ -1,0 +1,87 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+
+<div class="col-sm-12">
+
+    <h4 class="text-center alert alert info">Inactive Battery Data</h4>
+    <div class="">
+      <a href="{% url 'data' %}" class="btn btn-info btn-sm">Back</a>
+    <form action="" method="GET">
+
+        {% if inactiveBatteries %}
+       
+                <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">Assigned Battery</th>
+                        <th scope="col">Model name</th>
+                        <th scope="col">Battery serial num</th>
+                        <th scope="col">Battery type</th>
+                        <th scope="col">Bms type</th>
+                        <th scope="col">Iot type</th>
+                        <th scope="col">Sim Number</th>
+                        <th scope="col">Warrenty start date</th>
+                        <th scope="col">warrenty duration</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Battery cell chemistry</th>
+                        <th scope="col">Battery pack nominalvoltage</th>
+                        <th scope="col">Battery pack capacity</th>
+                        <th scope="col">charging status</th>
+                        <th scope="col">Action</th>
+                        
+                      </tr>
+                    <tbody>
+    
+                    {% for fm in inactiveBatteries %}
+                      <tr>
+                        <td>
+                          {% if fm.is_assigned %}
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" checked="checked" value="{{fm}}" name="is_assigned">
+                          </div>
+                          {% else %}
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="{{fm}}" name="is_assigned">
+                          </div>
+                          {% endif %}
+                        </td>
+                        <td>{{fm.model_name}}</td>
+                        <td>{{fm.battery_serial_num}}</td>
+                        <td>{{fm.battery_type}}</td>
+                        <td>{{fm.bms_type}}</td>
+                        <td>{{fm.iot_type}}</td>
+                        <td>{{fm.sim_number}}</td>
+                        <td>{{fm.warrenty_start_date}}</td>
+                        <td>{{fm.warrenty_duration}}</td>
+                        <td>{{fm.status}}</td>
+                        <td>{{fm.battery_cell_chemistry}}</td>
+                        <td>{{fm.battery_pack_nominal_voltage}}</td>
+                        <td>{{fm.battery_pack_capacity}}</td>
+                        <td>{{fm.charging_status}}</td>
+                        <td style="display: flex;">
+
+                        {% if IsAdmin %}
+
+                          <a class="table-link" aria-expanded="false" href=""><img src="../static/icons/edit.svg"></a>
+
+                          <a class="table-link" aria-expanded="false" href=""><img src="../static/icons/delete.svg"></a>
+
+                        {% endif %}   
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                    </thead>
+                  </table>
+                
+        {% else %}
+            <h4 class="text-center alert alert warning">No Data Found</h4>
+        {% endif %}
+
+    </form>  
+  </div>
+</div>
+
+{% endblock %}

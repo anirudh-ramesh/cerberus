@@ -4,7 +4,7 @@
 
 <div class="col-md-5">
     <div class="update-user-div">
-        <h4 class="alert alert-info">Update Users</h4>
+        <h4 class="btn btn-secondary  btn-sm btn-block" style="width: 32%;">Update Users</h4>
         <form action="" method="POST">
             <div class="">
 					<form method="POST" action="">
@@ -13,25 +13,25 @@
                             <div class="input-group mb-2">
                                 <div class="input-group-append">
                                     <label class="login">Username</label>
-                                    <input type='text' name='username' value="{{fm.username}}" class="input-register-text" required>
+                                    <input type='text' name='username' value="{{fm.username}}" class="input-register-text update_user" required>
                                 </div>
                             </div>
                             <div class="input-group mb-2">
                                 <div class="input-group-append">
                                     <label class="login">Email</label>
-                                    <input type='text' name='email' value="{{fm.email}}" class="input-register-text" required>
+                                    <input type='text' name='email' value="{{fm.email}}" class="input-register-text update_user" required>
                                 </div>
                             </div>
                             <div class="input-group mb-2">
                                 <div class="input-group-append">
                                     <label class="login">Contact</label>
-                                    <input type='text' name='contact' value="{{fm.contact}}" class="input-register-text" required>
+                                    <input type='text' name='contact' value="{{fm.contact}}" class="input-register-text update_user" required>
                                 </div>
                             </div>
                             <!-- <div class="input-group mb-2">
                                 <div class="input-group-append">
                                     <label class="login">Last Login</label>
-                                    <input type='text' name='lastlogin' value={{fm.last_login}} class="input-register-text" required>
+                                    <input type='text' name='lastlogin' value={{fm.last_login}} class="input-register-text update_user" required>
                                 </div>
                             </div> -->
                             <div class="input-group mb-2">
@@ -48,7 +48,7 @@
                         {% endfor %}
 					</form>
             <input type="submit" class="btn btn-success btn-sm" value="Update">
-            <a href="{% url 'user_management:getdata' %}" class="btn btn-secondary btn-sm">Back to Details</a>
+            <a href="{% url 'user_management:getdata' %}" class="btn btn-secondary btn-sm button_details">Back to Details</a>
         </form>
     </div>
 </div>

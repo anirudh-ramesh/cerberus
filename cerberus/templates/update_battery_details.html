@@ -3,19 +3,23 @@
 {% block content %}
 
 <div class="row">
-    {% for message in messages %}
-    <h5 class="errors">{{ message }}</h5>
-    {% endfor %}
     <div class=" col-sm-8 offset-2 update_battery_page">
-        <h4 class="alert alert-info">Update Battery Details</h4>
+        <h4 class="btn btn-secondary  btn-sm btn-block" style="width: 50%;">Update Battery Details</h4>
         {% if form %}
         <form class="rowd" method="POST" action="">
             {% csrf_token %}
+
+            {% if messages %}
+                {% for message in messages %}
+                <div class = "alert alert-{{message.tags}}">{{message}}</div>
+                {% endfor %}
+            {% endif %}
+
             {% for fm in form %}
                 <div class="input-group mb-2">
                     <div class="input-group-append">
-                        <label class="label_formm">Model Name</label>
-                        <select type="text" id="model_name" name="model_name" value="{{fm.model_name}}" class="input-register-text" required>
+                        <label class="update_battery ">Model Name</label>
+                        <select type="text" id="model_name" name="model_name" value="{{fm.model_name}}" class="update_battery_input " required>
                             {% if fm.model_name == "igtblu" %}
                                     <option value="igtblu" selected>igtblu</option>
                                 {% else %}
@@ -38,14 +42,14 @@
                 </div>
                 <div class="input-group mb-2">
                     <div class="input-group-append">
-                        <label class="label_formm">Battery Serial Number</label>
-                        <input type='text' name='battery_serial_num' value="{{fm.battery_serial_num}}" class="input-register-text" required>
+                        <label class="update_battery">Battery Serial Number</label>
+                        <input type='text' name='battery_serial_num' value="{{fm.battery_serial_num}}" class="update_battery_input" required>
                     </div>
                 </div>
                 <div class="input-group mb-2">
                     <div class="input-group-append">
-                        <label class="label_formm">Battery Type</label>
-                        <select type="text" id="colorSelect" name="battery_type" value="{{fm.battery_type}}" class="input-register-text" required>
+                        <label class="update_battery">Battery Type</label>
+                        <select type="text" id="colorSelect" name="battery_type" value="{{fm.battery_type}}" class="update_battery_input" required>
                             {% if fm.battery_type == "24" %}
                                     <option value="24" selected>24</option>
                                 {% else %}
@@ -74,21 +78,21 @@
                 </div>
                 <div class="input-group mb-2">
                     <div class="input-group-append">
-                        <label class="label_formm">Bms Type</label>
-                        <select type="text" id="colorSelect" name="bms_type"  value="{{fm.bms_type}}" class="input-register-text" required>
-                            <option>ion</option>
-                            <option>electrifuel</option>
+                        <label class="update_battery">Bms Type</label>
+                        <select type="text" id="colorSelect" name="bms_type"  value="{{fm.bms_type}}" class="update_battery_input" required>
+                            <option>ION</option>
+                            <option>ELECTRIFUEL</option>
                         </select>
                     </div>
                 </div>
                 <div class="input-group mb-2">
                     <div class="input-group-append">
-                        <label class="label_formm">Iot type</label>
-                        <select type="text" id="colorSelect" name="iot_type"  value="{{fm.iot_type}}" class="input-register-text" required>
-                            {% if fm.iot_type == "tarckmate" %}
-                                    <option value="tarckmate" selected>tarckmate</option>
+                        <label class="update_battery">Iot type</label>
+                        <select type="text" id="colorSelect" name="iot_type"  value="{{fm.iot_type}}" class="update_battery_input" required>
+                            {% if fm.iot_type == "trackmate" %}
+                                    <option value="trackmate" selected>trackmate</option>
                                 {% else %}
-                                    <option value="tarckmate">tarckmate</option>
+                                    <option value="trackmate">trackmate</option>
                                 {% endif %}
                                 {% if fm.iot_type == "electrifuel" %}
                                     <option value="electrifuel" selected>electrifuel</option>
@@ -96,103 +100,128 @@
                                     <option value="electrifuel">electrifuel</option>
                                 {% endif %}
                                 
-                                {% if fm.iot_type == "aeidth" %}
-                                    <option value="aeidth" selected>aeidth</option>
+                                {% if fm.iot_type == "aeidth-IGT" %}
+                                    <option value="aeidth-IGT" selected>aeidth-IGT</option>
                                 {% else %}
-                                    <option value="aeidth">aeidth</option>
+                                    <option value="aeidth-IGT">aeidth-IGT</option>
                                 {% endif %}
                         </select>
                     </div>
                 </div>
                 <!-- <div class="input-group mb-2">
                     <div class="input-group-append">
-                        <label class="label_formm">Iot Imei Number</label>
-                        <input type='text' name='iot_imei_number'  value="{{fm.iot_imei_number}}" class="input-register-text" required>
+                        <label class="update_battery">Iot Imei Number</label>
+                        <input type='text' name='iot_imei_number'  value="{{fm.iot_imei_number}}" class="update_battery_input" required>
                     </div>
                 </div> -->
                 <div class="input-group mb-2">
                     <div class="input-group-append">
-                        <label class="label_formm">Sim Number</label>
-                        <input type='text' name='sim_number' value="{{fm.iot_type}}" class="input-register-text" required>
+                        <label class="update_battery">Sim Number</label>
+                        <input type='text' name='sim_number' value="{{fm.sim_number}}" class="update_battery_input" required>
                     </div>
                 </div>
                 <div class="input-group mb-2">
                     <div class="input-group-append">
-                        <label class="label_formm">Warrenty Start Date</label>
-                        <input class="input-register-text" name='warrenty_start_date' value="{{fm.warrenty_start_date|date:'Y-m-d'}}" required>
+                        <label class="update_battery">Warrenty Start Date</label>
+                        <input class="update_battery_input" name='warrenty_start_date' value="{{fm.warrenty_start_date|date:'Y-m-d'}}" required>
                     </div>
                 </div>
                 <div class="input-group mb-2">
                     <div class="input-group-append">
-                        <label class="label_formm">Warrenty Duration</label>
-                        <input class="input-register-text" name='warrenty_duration' value="{{fm.warrenty_duration|date:'Y-m-d'}}" required>
+                        <label class="update_battery">Warrenty Duration</label>
+                        <input class="update_battery_input" name='warrenty_duration' value="{{fm.warrenty_duration|date:'Y-m-d'}}" required>
                     </div>
                 </div>
                 <div class="input-group mb-2">
                     <div class="input-group-append">
-                        <label class="label_formm">Assigned Owner</label>
-                        <input type='text' name='assigned_owner'  value="{{fm.assigned_owner}}" class="input-register-text" required>
+                        <label class="update_battery">Assigned Owner</label>
+                        <input type='text' name='assigned_owner'  value="{{fm.assigned_owner}}" class="update_battery_input" required>
                     </div>
                 </div>
                 <div class="input-group mb-2">
                     <div class="input-group-append">
-                        <label class="label_formm">Status</label>
-                        <select type="text" id="colorSelect" name="status" value="{{fm.status}}" class="input-register-text" required>
-                            {% if fm.status == "in_swap_station" %}
-                                    <option value="in_swap_station" selected>in_swap_station</option>
+                        <label class="update_battery">Status</label>
+                        <select type="text" id="colorSelect" name="status" value="{{fm.status}}" class="update_battery_input" required>
+                            {% if fm.status == "IN_SWAP_STATION" %}
+                                    <option value="IN_SWAP_STATION" selected>IN SWAP STATION</option>
                                 {% else %}
-                                    <option value="in_swap_station">in_swap_station</option>
+                                    <option value="IN_SWAP_STATION">IN SWAP STATION</option>
                                 {% endif %}
 
-                                {% if fm.status == "in_vehicle" %}
-                                    <option value="in_vehicle" selected>in_vehicle</option>
+                                {% if fm.status == "IN_VEHICLE" %}
+                                    <option value="IN_VEHICLE" selected>IN VEHICLE</option>
                                 {% else %}
-                                    <option value="in_vehicle">in_vehicle</option>
+                                    <option value="IN_VEHICLE">IN VEHICLE</option>
                                 {% endif %}
 
-                                {% if fm.status == "idel" %}
-                                    <option value="idel" selected>idel</option>
+                                {% if fm.status == "IDEL" %}
+                                    <option value="IDEL" selected>IDEL</option>
                                 {% else %}
-                                    <option value="idel">idel</option>
+                                    <option value="IDEL">IDEL</option>
                                 {% endif %}
                                 
-                                {% if fm.status == "damaged" %}
-                                    <option value="damaged" selected>damaged</option>
+                                {% if fm.status == "DAMAGED" %}
+                                    <option value="DAMAGED" selected>DAMAGED</option>
                                 {% else %}
-                                    <option value="damaged">damaged</option>
+                                    <option value="DAMAGED">DAMAGED</option>
                                 {% endif %}
                         </select>
                     </div>
                 </div>
                 <div class="input-group mb-2">
                     <div class="input-group-append">
-                        <label class="label_formm">Battery Cell Chemistry</label>
-                        <input type='text' name='battery_cell_chemistry' value="{{fm.battery_cell_chemistry}}" class="input-register-text" required>
+                        <label class="update_battery">Battery Cell Chemistry</label>
+                        <input type='text' name='battery_cell_chemistry' value="{{fm.battery_cell_chemistry}}" class="update_battery_input" required>
                     </div>
                 </div>
                 <div class="input-group mb-2">
                     <div class="input-group-append">
-                        <label class="label_formm">Battery Pack Nominal Voltage</label>
-                        <input type='text' name='battery_pack_nominal_voltage' value="{{fm.battery_pack_nominal_voltage}}" class="input-register-text" required>
+                        <label class="update_battery">Battery Pack Nominal Voltage</label>
+                        <input type='text' name='battery_pack_nominal_voltage' value="{{fm.battery_pack_nominal_voltage}}" class="update_battery_input" required>
                     </div>
                 </div>
                 <div class="input-group mb-2">
                     <div class="input-group-append">
-                        <label class="label_formm">Battery Pack Nominal Charge Capacity</label>
-                        <input type='text' name='battery_pack_nominal_charge_capacity' value="{{fm.battery_pack_nominal_charge_capacity}}" class="input-register-text" required>
+                        <label class="update_battery">Battery Pack Capacity</label>
+                        <input type='text' name='battery_pack_capacity' value="{{fm.battery_pack_capacity}}" class="update_battery_input" required>
                     </div>
                 </div>
                 <div class="input-group mb-2">
                     <div class="input-group-append">
-                        <label class="label_formm">Charging Status</label>
-                        <input type='text' name='charging_status' value="{{fm.charging_status}}" class="input-register-text" required>
+                        <label class="update_battery">Charging Status</label>
+                        <select type="text" id="colorSelect" name="charging_status" value="{{fm.charging_status}}" class="update_battery_input" required>
+                            {% if fm.charging_status == "FULL CHARGE" %}
+                                    <option value="FULL CHARGE" selected>FULL CHARGE</option>
+                                {% else %}
+                                    <option value="FULL CHARGE">FULL CHARGE</option>
+                                {% endif %}
+
+                                {% if fm.charging_status == "HALF CHARGE" %}
+                                    <option value="HALF CHARGE" selected>HALF CHARGE</option>
+                                {% else %}
+                                    <option value="HALF CHARGE">HALF CHARGE</option>
+                                {% endif %}
+
+                                {% if fm.charging_status == "INITIAL" %}
+                                    <option value="INITIAL" selected>INITIAL</option>
+                                {% else %}
+                                    <option value="INITIAL">INITIAL</option>
+                                {% endif %}
+                                
+                                {% if fm.charging_status == "DAMAGED" %}
+                                    <option value="DAMAGED" selected>DAMAGED</option>
+                                {% else %}
+                                    <option value="DAMAGED">DAMAGED</option>
+                                {% endif %}
+                        </select>
                     </div>
                 </div>
+
 
             {% endfor %}
             <div class="udate_button">
             <input type="submit" class="btn btn-success btn-sm" value="Update">
-            <a href="{% url 'getvehicle' %}" class="btn btn-info btn-sm">Back To Details </a>
+            <a href="{% url 'data' %}" class="btn btn-info btn-sm button_details" >Back To Details </a>
             </div>
         {% else %}
             <h4 class="text-center alert alert warning">No Records Found</h4>

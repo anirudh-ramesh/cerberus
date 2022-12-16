@@ -2,11 +2,19 @@
 
 {% block content %}
 
-{% include 'status.html' %}
+<!-- {% include 'status.html' %} -->
 
 <div class="col-sm-12">
     <h4 class="text-center alert alert info">Vehicle Assigned To Organisaiotion</h4>
+    <a href="{% url 'user_management:listorg' %}" class="btn btn-info btn-sm">Back</a>
+    
+    {% if messages %}
+      {% for message in messages %}
+      <div class = "alert alert-{{message.tags}}">{{message}}</div>
+      {% endfor %}
+    {% endif %}
     <form action="" method="GET">
+
         {% if org_vehicle_list %}
                 <table class="table table-hover">
                     <thead>
@@ -16,16 +24,16 @@
                         <th scope="col">Chasis Number</th>
                         <th scope="col">Vehicle Configuration</th>
                         <th scope="col">Vehicle Choice</th>
-                        <th scope="col">Vehicle Iot Imei Number</th>
-                        <th scope="col">Vehicle Sim Number</th>
                         <th scope="col">Vehicle Warrenty Start Date</th>
                         <th scope="col">Vehicle Warrenty End Date</th>
                         <th scope="col">Assigned Owner</th>
                         <th scope="col">Insurance Start Date</th>
                         <th scope="col">Insurance End Date</th>
+                        <th scope="col">Action</th>
                       </tr>
                     <tbody>
                     {% for fm in org_vehicle_list %}
+
                         <tr>
                           <td>
                             {% if fm.vehicle_selected %}
@@ -42,8 +50,6 @@
                             <td>{{fm.chasis_number}}</td>
                             <td>{{fm.configuration}}</td>
                             <td>{{fm.vehicle_choice}}</td>
-                            <td>{{fm.vehicle_iot_imei_number}}</td>
-                            <td>{{fm.vehicle_sim_number}}</td>
                             <td>{{fm.vehicle_warrenty_start_date}}</td>
                             <td>{{fm.vehicle_warrenty_end_date}}</td>
                             <td>{{fm.assigned_owner}}</td>
@@ -51,10 +57,7 @@
                             <td>{{fm.insurance_end_date}}</td>
                             
                             <td>
-                                <form action="{% url 'assingedtoorg' fm.organisation_id %}?chasis_number={{fm.chasis_number}}" method="POST" class="d-inline">
-                                    {% csrf_token %}
-                                    <input type="submit" class="btn btn-danger btn-sm" value="Remove">
-                                </form>
+                              <a href="{% url 'assingedtoorg' org_id %}?action=removevehicle&chasis_number={{fm.chasis_number}}" class="btn btn-danger btn-sm">Remove</a>
                             </td>             
                         </tr>
                       

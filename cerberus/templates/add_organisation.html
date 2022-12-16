@@ -9,26 +9,34 @@
 	<div class="col-md-5">
 		<hr>
 		<div class="card card-body">
-			<a class="btn btn-primary  btn-sm btn-block" href="">Add Organisation Details</a>
+			<h4 class="btn btn-secondary  btn-sm btn-block" href="" style="width: 30%;">Add Organisation Details</h4>
 			<div class="card card-body">
-
+				{% if messages %}
+					{% for message in messages %}
+					<div class = "alert alert-{{message.tags}}">{{message}}</div>
+					{% endfor %}
+				{% endif %}
+				
 				<form action="" method="POST">
 					{% csrf_token %}
-					
-					<!-- {% if messages %}
-							{% for message in messages %}
-							<div class = "alert alert-{{message.tags}}">{{message}}</div>
-							{% endfor %}
-					{% endif %} -->
+										
 
-					{{form.as_p}}
+					{% for fm in form %}
+					<div class="d-flex add_org">
+                		<div class="lavel_form">
+							{{fm.label_tag }}
+						</div> 
+						<div class="lavel_input">
+							{{fm}}
+						</div>
+						<div>
+							{{fm.errors|striptags}}
+						</div>  <br><br>
+					</div>
+            		{% endfor %}
 					<input type="Submit" name="Submit" class="btn btn-success btn-sm" value="Submit" >
-					<a href="{% url 'user_management:listorg' %}" class="btn btn-secondary btn-sm">Back</a>
-					<!-- {% if messages %}
-					{% for message in messages %}
-						<h5 class="errors">{{ message }}</h5>
-					{% endfor %}
-					{% endif %} -->
+					<a href="{% url 'user_management:listorg' %}" class="btn btn-secondary btn-sm button_details">Back</a>
+
 				</form>
 				
 			</div>

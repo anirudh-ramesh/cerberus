@@ -3,138 +3,153 @@
 {% block content %}
 
 <div class="row">
-    <div class="col-sm-8 offset">
-        <h4 class="alert alert-info">{{data}}</h4>
-        <form action="" method="GET">
-            {% csrf_token %}
-            <h4>Organisation User</h4>
-            {% if user_org_list %}
-                <table class="table table-hover">
-                    <thead>
-                    <tr>
-                        <th scope="col">Email</th>
-                        <th scope="col">Username</th>
-                        <th scope="col">Role</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                    <tbody>
-                    {% for fm in user_org_list %}
-                    <tr>
-                        <td>{{fm.email}}</td>
-                        <td>{{fm.username}}</td>
-                        <td>{{fm.role}}</td>
-                        <td>
-                        <form action="{% url 'user_management:list' fm.id  %}?email={{fm.email}}" method="POST">
-                          {% csrf_token %}
-                          <input type="submit" class="btn btn-danger btn-sm" value="Remove">
-                        </form>
-                        </td>
-                    </tr>
-                    {% endfor %}                    
-                    </tbody>
-                    </thead>
-                </table>
-                {% else %}
-                <h4 class="text-center alert alert warning">User Not Found</h4>
-            {% endif %}
-            <h4 >Organisation Profile</h4>
-            {% if orgprofiledata %}
-                <table class="table table-hover">
-                    <thead>
-                      <tr>
-                        <th scope="col">Battery Pack Manufacture</th>
-                        <th scope="col">Battery Pack Distributor</th>
-                        <th scope="col">Battery Pack Sub Distributor</th>
-                        <th scope="col">Battery Pack Financier</th>
-                        <th scope="col">Battery Pack Owner</th>
-                        <th scope="col">Battery Pack Operator</th>
-                        <th scope="col">Vehical Manufacture</th>
-                        <th scope="col">Vehical Distributor</th>
-                        <th scope="col">Vehical Sub Distributor</th>
-                        <th scope="col">Vehical Retailer</th>
-                        <th scope="col">Vehical Financier</th>
-                        <th scope="col">Vehical Owner</th>
-                        <th scope="col">Vehical Operator</th>
-                        <th scope="col">Battery Swap Station Manufacture</th>
-                        <th scope="col">Battery Swap Station Distributor</th>
-                        <th scope="col">Battery Swap Station Sub Distributor</th>
-                        <th scope="col">Battery Swap Station Financier</th>
-                        <th scope="col">Battery Swap Station Owner</th>
-                        <th scope="col">Battery Swap Station Operator</th>
-                        
-                      </tr>
-                    <tbody>
-    
-                    {% for fm in orgprofiledata %}
-                      <tr>
-                        <td>{{fm.battery_pack_manufacture}}</td>
-                        <td>{{fm.battery_pack_distributor}}</td>
-                        <td>{{fm.battery_pack_sub_distributor}}</td>
-                        <td>{{fm.battery_pack_financier}}</td>
-                        <td>{{fm.battery_pack_owner}}</td>
-                        <td>{{fm.battery_pack_operator}}</td>
-                        <td>{{fm.vehical_manufacture}}</td>
-                        <td>{{fm.vehical_distributor}}</td>
-                        <td>{{fm.vehical_sub_distributor}}</td>
-                        <td>{{fm.vehical_retailer}}</td>
-                        <td>{{fm.vehical_financier}}</td>
-                        <td>{{fm.vehical_owner}}</td>
-                        <td>{{fm.vehical_operator}}</td>
-                        <td>{{fm.battrey_swap_satation_manufacture}}</td>
-                        <td>{{fm.battrey_swap_satation_distributor}}</td>
-                        <td>{{fm.battrey_swap_satation_sub_distributor}}</td>
-                        <td>{{fm.battrey_swap_satation_financier}}</td>
-                        <td>{{fm.battrey_swap_satation_owner}}</td>
-                        <td>{{fm.battrey_swap_satation_operator}}</td>
-                      </tr>
-                      {% endfor %}
-                    </tbody>
-                    </thead>
-                  </table>
-            
-        {% else %}
-            <h4 class="text-center alert alert warning">Organisation Profile Not Found</h4>
-        {% endif %}
+  <div class="col-sm-8 offset">
+    <h4 class="btn btn-secondary  btn-sm btn-block text-center">Organisation-details</h4>
+    <h2 class=""style="text-align: center;">{{data}}</h2>
+    <form action="" method="GET">
+      {% csrf_token %}
+      <h4>Organisation User</h4>
+      {% if user_org_list %}
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Email</th>
+            <th scope="col">Username</th>
+            <th scope="col">Role</th>
+            <th scope="col">Action</th>
+          </tr>
+        <tbody>
+          {% for fm in user_org_list %}
+          <tr>
+            <td>{{fm.email}}</td>
+            <td>{{fm.username}}</td>
+            <td>{{fm.role}}</td>
+            <td>
+              <a href="{% url 'user_management:list' fm.id  %}?email={{fm.email}}&action=removeUser" class="btn btn-secondary btn-sm">Remove</a>
 
-        <h4 >Organisation Roles</h4>
-            {% if multipleOrg_role %}
-                <table class="table table-hover">
-                    <thead>
-                      <tr>
-                        <th scope="col">Role Name</th>
-                        <th scope="col">Permission</th>                        
-                      </tr>
-                    <tbody class="tabledata">
-                      {% for fm in multipleOrg_role %}
-                        <tr>
-                          <td class="">{{fm.role_name}}</td>                      
-                        </tr>
-                        <tr class="permission">
-                           {% for data in fm.permission_name %} 
-                            <td>{{data}}</td> 
-                            {% endfor %}                     
-                        </tr>
-                          {% for fm in form %}
-                          {% endfor %}
-                        <td>
-                          <a href="{% url 'user_management:updaterole' fm.role_name %}" class="btn btn-secondary btn-sm">Edit</a>
-                          
-                          <form action="{% url 'user_management:deleterole' fm.role_id %}" method="POST" class="d-inline">
-                              {% csrf_token %}
-                            <input type="submit" class="btn btn-danger btn-sm" value="Delete">
-                          </form>
-                      </td>
-                      {% endfor %}
-                    </tbody>
-                    </thead>
-                  </table>
-            
-        {% else %}
-            <h4 class="text-center alert alert warning">Roles Data Not Found</h4>
-        {% endif %}
+              <!-- <form action="{% url 'user_management:list' fm.id  %}?email={{fm.email}}" method="POST">
+                {% csrf_token %}
+                <input type="submit" class="btn btn-danger btn-sm" value="Remove">
+              </form> -->
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+        </thead>
+      </table>
+      {% else %}
+      <h4 class="text-center alert alert warning">User Not Found</h4>
+      {% endif %}
+      <h4>Organisation Profile</h4>
+      {% if orgprofiledata %}
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Battery Pack Manufacture</th>
+            <th scope="col">Battery Pack Distributor</th>
+            <th scope="col">Battery Pack Sub Distributor</th>
+            <th scope="col">Battery Pack Financier</th>
+            <th scope="col">Battery Pack Owner</th>
+            <th scope="col">Battery Pack Operator</th>
+            <th scope="col">Vehical Manufacture</th>
+            <th scope="col">Vehical Distributor</th>
+            <th scope="col">Vehical Sub Distributor</th>
+            <th scope="col">Vehical Retailer</th>
+            <th scope="col">Vehical Financier</th>
+            <th scope="col">Vehical Owner</th>
+            <th scope="col">Vehical Operator</th>
+            <th scope="col">Battery Swap Station Manufacture</th>
+            <th scope="col">Battery Swap Station Distributor</th>
+            <th scope="col">Battery Swap Station Sub Distributor</th>
+            <th scope="col">Battery Swap Station Financier</th>
+            <th scope="col">Battery Swap Station Owner</th>
+            <th scope="col">Battery Swap Station Operator</th>
+
+          </tr>
+        <tbody>
+
+          {% for fm in orgprofiledata %}
+          <tr>
+            <td>{{fm.battery_pack_manufacture}}</td>
+            <td>{{fm.battery_pack_distributor}}</td>
+            <td>{{fm.battery_pack_sub_distributor}}</td>
+            <td>{{fm.battery_pack_financier}}</td>
+            <td>{{fm.battery_pack_owner}}</td>
+            <td>{{fm.battery_pack_operator}}</td>
+            <td>{{fm.vehical_manufacture}}</td>
+            <td>{{fm.vehical_distributor}}</td>
+            <td>{{fm.vehical_sub_distributor}}</td>
+            <td>{{fm.vehical_retailer}}</td>
+            <td>{{fm.vehical_financier}}</td>
+            <td>{{fm.vehical_owner}}</td>
+            <td>{{fm.vehical_operator}}</td>
+            <td>{{fm.battrey_swap_satation_manufacture}}</td>
+            <td>{{fm.battrey_swap_satation_distributor}}</td>
+            <td>{{fm.battrey_swap_satation_sub_distributor}}</td>
+            <td>{{fm.battrey_swap_satation_financier}}</td>
+            <td>{{fm.battrey_swap_satation_owner}}</td>
+            <td>{{fm.battrey_swap_satation_operator}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+        </thead>
+      </table>
+
+      {% else %}
+      <h4 class="text-center alert alert warning">Organisation Profile Not Found</h4>
+      {% endif %}
+
+      <h4>Organisation Roles</h4>
+      {% if multipleOrg_role %}
+      <table class="table table-hover">
+        <div class="table_data">
+
+
+          <thead>
+            <div class="role_headers">
+              <tr>
+                <th scope="col">Role Name</th>
+                <th scope="col">Permission</th>
+                <th scope="col">Action</th>
+
+              </tr>
+            </div>
+
+          <tbody class="tabledata">
+            {% for fm in multipleOrg_role %}
+
+            <tr class="rolename">
+              <td class="">{{fm.role_name}}</td>
+              <td>
+                {% for data in fm.permission_name %}
+                {{data}}
+                {% endfor %}
+              </td>
+              <td>
+                <a href="{% url 'user_management:updaterole' fm.role_id %}" class="btn btn-secondary btn-sm">Edit</a>
+                <a href="{% url 'user_management:deleterole' fm.role_id %}?action=deleteUser" class="btn btn-danger btn-sm">Delete</a>
+
+                <!-- <form action="{% url 'user_management:deleterole' fm.role_id %}" method="POST" class="d-inline">
+                  {% csrf_token %}
+                  <input type="submit" class="btn btn-danger btn-sm" value="Delete">
+                </form> -->
+              </td>
+            </tr>
+
+            {% endfor %}
+          </tbody>
+          </thead>
+        </div>
+      </table>
+      
+
+      {% else %}
+      <h4 class="text-center alert alert warning">Roles Data Not Found</h4>
+      {% endif %}
 
     </form>
-    </div>
+    <a href="{% url 'user_management:listorg' %}" class="btn btn-primary btn-sm">Back</a>  
+  </div>
 </div>
 
 {% endblock %}

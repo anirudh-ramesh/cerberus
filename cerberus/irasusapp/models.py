@@ -51,8 +51,11 @@ def password_validator(value):
         )
 
 USER_TYPE = (
+    ('Admin', 'Admin'),
     ('Driver', 'Driver'), 
-    ('User', 'User')
+    ('User', 'User'),
+    ('Fleet_Operator', 'Fleet_Operator'),
+    ('Fleet_Owner', 'Fleet_Owner')
 )
 
 #USER-TABLE
@@ -66,7 +69,7 @@ class Crmuser(AbstractBaseUser):
     contact = models.CharField(max_length=12, default='')
     password = models.CharField(max_length=100,default='', validators=[password_validator])
     password_conformation = models.CharField(max_length=100,default='',validators=[password_validator])
-    last_login = models.DateField(auto_now_add=True)
+    last_login = models.DateTimeField(verbose_name="last login",auto_now=True)
     created_at = models.DateTimeField(default=datetime.datetime.now, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(default=datetime.datetime.now)
@@ -75,7 +78,7 @@ class Crmuser(AbstractBaseUser):
     pancard_proof = models.BinaryField(null=True,blank=True)
     license_proof = models.BinaryField(null=True, blank=True)
     is_admin = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     orgs = models.ManyToManyField(Organisation)
 
 
@@ -129,11 +132,11 @@ class Geofence(models.Model):
     geofence = models.PolygonField(srid=4326, null=True, blank=True)
     geotype = models.CharField(blank=True, max_length=100,choices=CHOICE_TYPE, null=True)
     location = models.PointField(srid=4326, null=True, blank=True)
-    description = models.CharField(default='', max_length=200)
+    description = models.CharField(default='', max_length=5000)
     enter_latitude = models.CharField(default='', max_length=5000, null=True, blank=True)
-    enter_longitude = models.CharField(default='', max_length=200, null=True, blank=True)
-    pos_address = models.CharField(default='', max_length=200)
-    geoname = models.CharField(default='', max_length=200)
+    enter_longitude = models.CharField(default='', max_length=5000, null=True, blank=True)
+    pos_address = models.CharField(default='', max_length=5000)
+    geoname = models.CharField(default='', max_length=225)
 
     def __str__(self):
         return self.geoname
@@ -157,8 +160,6 @@ class Vehicle(models.Model):
     chasis_number = models.CharField(max_length=225, default='',primary_key=True)
     configuration = models.CharField(max_length=20, default='', choices=CONFIGURATION)
     vehicle_choice = models.CharField(max_length=225, default='', choices=VEHICLE)
-    vehicle_iot_imei_number = models.CharField(max_length=100)
-    vehicle_sim_number = models.CharField(max_length=20)
     vehicle_warrenty_start_date = models.DateField(default='',blank=True,null=True)
     vehicle_warrenty_end_date = models.DateField(default='',blank=True, null=True)
     assigned_owner = models.CharField(max_length=225, default='')
@@ -167,6 +168,7 @@ class Vehicle(models.Model):
     vehicle_selected = models.BooleanField(default=False)
     assigned_to = models.ForeignKey(Crmuser,default=None,on_delete=models.CASCADE, null=True, blank=True)
     created_date = models.DateField(blank=True,null=True)
+    vehicle_status = models.CharField(max_length=225,default='', blank=True, null=True)
     # geofence = models.ManyToManyField(Geofence)
 
     def __str__(self):
@@ -176,6 +178,8 @@ class IotDevices(models.Model):
     imei_number = models.CharField(max_length=225, blank=True, primary_key=True)
     hardware_version = models.CharField(max_length=225, blank=True, null=True)
     firmware_version = models.CharField(max_length=225, blank=True, null=True)
+    status = models.CharField(max_length=225,default='', blank=True, null=True)
+
 
     def __str__(self):
         return str(self.imei_number)
@@ -194,42 +198,48 @@ BATTERY_TYPES = (
 )
 
 BMS_TYPE = (
-    ('ion', 'ION'),
-    ('electrifuel', 'ELECTRIFUEL'),
+    ('ION', 'ION'),
+    ('ELECTRIFUEL', 'ELECTRIFUEL'),
 )
 
 IOT_TYPE = (
-    ('tarckmate', 'TRACKMATE'),
+    ('trackmate', 'TRACKMATE'),
     ('electrifuel', 'ELECTRIFUEL'),
-    ('aeidth', 'AEIDTH'),
+    ('aeidth-IGT', 'AEIDTH-IGT'),
 )
 
 STATUS = (
-    ('in_swap_station', 'IN_SWAP_STATION'),
-    ('in_vehicle', 'IN_VEHICLE'),
-    ('idel', 'IDEL'),
-    ('damaged','DAMAGED'),
+    ('IN_SWAP_STATION', 'IN_SWAP_STATION'),
+    ('IN_VEHICLE', 'IN_VEHICLE'),
+    ('IDEL', 'IDEL'),
+    ('DAMAGED','DAMAGED'),
 )
 
+CHARGING_STATUS = (
+    ('FULL CHARGE', 'FULL CHARGE'),
+    ('HALF CHARGE', 'HALF CHARGE'),
+    ('INITIAL', 'INITIAL'),
+    ('DAMAGED','DAMAGED'),
+)
 #BATTERY-TABLE
 class BatteryDetail(models.Model):
-    model_name = models.CharField(max_length=100,default='', choices=MODEL_CHOICES, blank=True)
-    battery_serial_num = models.CharField(max_length=100, primary_key=True, default='', unique=True)
-    battery_type = models.CharField(max_length=100, default='', choices=BATTERY_TYPES)
-    bms_type = models.CharField(max_length=100, default='', choices=BMS_TYPE)
-    iot_type = models.CharField(max_length=100, default='', choices=IOT_TYPE)
+    model_name = models.CharField(max_length=225,default='', choices=MODEL_CHOICES, blank=True)
+    battery_serial_num = models.CharField(max_length=225, primary_key=True, default='', unique=True)
+    battery_type = models.CharField(max_length=225, default='', choices=BATTERY_TYPES)
+    bms_type = models.CharField(max_length=225, default='', choices=BMS_TYPE)
+    iot_type = models.CharField(max_length=225, default='', choices=IOT_TYPE)
     iot_imei_number = models.ForeignKey(IotDevices, on_delete=models.CASCADE, null=True, blank=True)
-    sim_number = models.CharField(max_length=12, default='', blank=True)
+    sim_number = models.CharField(max_length=225, default='', blank=True)
     warrenty_start_date = models.DateField(default='',blank=True,null=True)
     warrenty_duration = models.DateField(default='',blank=True, null=True)
-    assigned_owner = models.CharField(max_length=50)
-    status = models.CharField(max_length=50, choices=STATUS, default='')
-    battery_cell_chemistry = models.CharField(max_length=50, default='')
-    battery_pack_nominal_voltage = models.CharField(max_length=50, default='')
-    battery_pack_nominal_charge_capacity = models.CharField(max_length=50, default='')
-    charging_status = models.CharField(max_length=50, default='')
-    vehicle_assign = models.ForeignKey(Vehicle, on_delete=models.CASCADE, null=True, blank=True)
+    assigned_owner = models.CharField(max_length=225)
+    status = models.CharField(max_length=225, choices=STATUS, default='')
+    battery_cell_chemistry = models.CharField(max_length=225, default='')
+    battery_pack_nominal_voltage = models.CharField(max_length=225, default='')
+    battery_pack_capacity = models.CharField(max_length=225, default='')
+    charging_status = models.CharField(max_length=225, default='', choices=CHARGING_STATUS,blank=True)
     is_assigned = models.BooleanField(default=False)
+    vehicle_assign = models.ForeignKey(Vehicle, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return str(self.model_name)

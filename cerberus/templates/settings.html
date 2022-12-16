@@ -2,9 +2,73 @@
 
 {% block content %}
 
-<div class="settings" style="text-align: center;">
-    <h4>Under Process...</h4>
-    <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Back</a>
+
+<div class="col-sm-12">
+   
+    <h4 class="text-center alert alert info">Settings</h4>
+    <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Home</a>
+    
+    <form action="" method="GET">
+          
+      {% if messages %}
+        {% for message in messages %}
+          <div class = "alert alert-{{message.tags}}">{{message}}</div>
+        {% endfor %}
+      {% endif %}
+      
+        {% if module %}
+                <table class="settingdiv table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">Model Name</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    <tbody>
+                    {% for fm in module %}
+                        <tr>
+                            <td>{{fm.module_name}}</td>
+                            {% if fm.module_status %}
+                              <td>
+                                  <label class="switch">
+                                    <input type="checkbox" class="test" id="checkbox_value" value="{{fm.module_name}}" checked>
+                                    <span class="slider round"></span>
+                                  </label>
+                              </td>
+                            {% else %}  
+                            <td>
+                              <label class="switch">
+                                <input type="checkbox" class="test" id="checkbox_value" value="{{fm.module_name}}">
+                                <span class="slider round"></span>
+                              </label>
+                          </td>
+                          {% endif %}
+                        </tr>        
+                      {% endfor %}
+
+
+                    </tbody>
+                    </thead>
+                  </table>
+            
+        {% else %}
+            <h4 class="text-center alert alert warning">No Records Found</h4>
+        {% endif %}      
+    </form>
+    
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+    <script type="text/javascript">
+    jQuery(function($) {
+        jQuery('.test').change(function(e) {
+          console.log(e.target.value)
+          $.get("/settings", {
+                id: e.target.value,
+                // action:"False",
+                csrfmiddlewaretoken: '{{ csrf_token }}' 
+            });
+        });
+    }); 
+    </script>
 </div>
 
 {% endblock %}

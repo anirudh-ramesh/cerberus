@@ -2,20 +2,19 @@
 
 {% block content %}
 
-{% include 'status.html' %}
 
-<div class="">
-  <h4 class="text-center alert alert info">Organisation Data</h4>
+<div class="container-fluid">
+  <h4 class="text-center alert alert info">Delete Swap-Station Data</h4>
 
     <p>Are you sure you want to delete <b>"{{delete_swap_station.swap_station_name}}" ?</b></p>
 
     <form action="{% url 'user_management:deleteswapstation' delete_swap_station.imei_number %}" method="POST" class="d-inline">
         {% csrf_token %}
 
-        <td>
-            <a href="{% url 'user_management:listswap' %}" class="btn btn-secondary btn-sm">Back</a>
-        </td>
       <input type="submit" class="btn btn-danger btn-sm" value="Remove">
+      <td>
+        <a href="{% url 'user_management:listswap' %}" class="btn btn-secondary btn-sm">Back</a>
+      </td>
     </form>
 </div>
 

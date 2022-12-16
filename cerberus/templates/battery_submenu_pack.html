@@ -66,7 +66,7 @@
                      src="../static/icons/reports.svg"></img></a>
             </li>
             <li class="sidebar-item">
-               <a class="sidebar-link" href="{% url 'settings' %}" aria-expanded="false"><img
+               <a class="sidebar-link" href="{% url 'user_management:setting' %}" aria-expanded="false"><img
                      src="../static/icons/settings.svg"></img></a>
             </li>
             <li class="sidebar-item">
@@ -95,7 +95,11 @@
                <div class="search_and_title">
                   <div class="searchbar_item">
                      <h4 class="title_search">Title Goes Here</h4> 
-                     <input placeholder="Search Tasks Here" aria-describedby="search">
+                     <form class="search" action="{% url 'sub_data' %}" method='GET'>
+
+                        <input type="text" class="form-control search-menu" placeholder="Search..." name='charging_status'>
+                     </form>
+
                   </div>
                </div>
 
@@ -149,22 +153,18 @@
 
                            <div class="panel-dropdown">
                               <ul class="list-group">
-                                 <li class="group_item"> IGTR48520005 </li>
-                                 <li class="group_item"> IGTR48520006 </li>
-                                 <li class="group_item"> IGTR48520007 </li>
-                                 <li class="group_item"> IGTR48520008</li>
-                                 <li class="group_item"> IGTR48520009</li>
-                                 <li class="group_item"> IGTR48520010</li>
-                                 <li class="group_item"> IGTR48520011</li>
-                                 <li class="group_item"> IGTR48520012</li>
-                                 <li class="group_item"> IGTR48520013</li>
-                                 <li class="group_item"> IGTR48520014</li>
-                                 <li class="group_item"> IGTR48520015</li>
-                                 <li class="group_item"> IGTR48520016</li>
-                                 <li class="group_item"> IGTR48520017</li>
-                                 <li class="group_item"> IGTR48520018</li>
-                                 <li class="group_item"> IGTR48520019</li>
-                                 <li class="group_item"> IGTR48520020</li>
+                                 <table class="table table-hover">
+                                    <thead>
+                                    <tbody>
+                                       {% for fm in battery_data %}
+                                        <tr>
+                                          <a href="{% url 'sub_data' %}?battery_id={{fm.battery_serial_num}}" class="group_item link_line">{{fm.battery_serial_num}}</a>            
+                                        </tr>
+                                      
+                                      {% endfor %}
+                                    </tbody>
+                                    </thead>
+                                  </table>
                               </ul>
          
                            </div>
@@ -173,58 +173,36 @@
          
                         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
                         <div class="container">
+                           {% for fm in filter_data %}
+                           <div class="selected_battery">Selected Battery :{{fm.battery_serial_num}}</div>
                            <main class="grid">
-                              <article>
-                                 <div class="text">
-                                    <h3>Seamlessly visualize quality</h3>
-                                    <p>Collaboratively administrate empowered markets via plug-and-play networks.</p>
-                                    <a href="https://codepen.io/collection/XdWJOQ/" class="btn btn-primary btn-block">Here's
-                                       why</a>
-                                 </div>
-                              </article>
-                              <article>
-                                 <div class="text">
-                                    <h3>Completely Synergize</h3>
-                                    <p>Dramatically engage seamlessly visualize quality intellectual capital without superior
-                                       collaboration and idea-sharing.</p>
-                                    <a href="https://codepen.io/collection/XdWJOQ/" class="btn btn-primary btn-block">Here's
-                                       how</a>
-                                 </div>
-                              </article>
-                              <article>
-                                 <div class="text">
-                                    <h3>Dynamically Procrastinate</h3>
-                                    <p>Completely synergize resource taxing relationships via premier niche markets.</p>
-                                    <a href="https://codepen.io/collection/XdWJOQ/" class="btn btn-primary btn-block">Read
-                                       more</a>
-                                 </div>
-                              </article>
-                              <article>
-                                 <div class="text">
-                                    <h3>Best in class</h3>
-                                    <p>Imagine jumping into that boat, and just letting it sail wherever the wind takes you...
-                                    </p>
-                                    <a href="https://codepen.io/collection/XdWJOQ/" class="btn btn-primary btn-block">Just do
-                                       it...</a>
-                                 </div>
-                              </article>
-                              <article>
-                                 <div class="text">
-                                    <h3>Dynamically innovate supply chains</h3>
-                                    <p>Holisticly predominate extensible testing procedures for reliable supply chains.</p>
-                                    <a href="https://codepen.io/collection/XdWJOQ/" class="btn btn-primary btn-block">Here's
-                                       why</a>
-                                 </div>
-                              </article>
-                              <article>
-                                 <div class="text">
-                                    <h3>Sanity check</h3>
-                                    <p>Objectively innovate empowered manufactured products whereas parallel platforms.</p>
-                                    <a href="https://codepen.io/collection/XdWJOQ/" class="btn btn-primary btn-block">Stop
-                                       here</a>
-                                 </div>
-                              </article>
+                             <article>
+                               <div class="text">
+                                 <h3>State of Charge</h3>
+                                 <p>{{fm.charging_status}}</p>
+                               </div>
+                             </article>
+                             <article>
+                              <div class="text">
+                                <h3>Terminal Voltage</h3>
+                                <p>{{fm.battery_pack_nominal_voltage}}</p>
+                              </div>
+                            </article>
+                            <article>
+                              <div class="text">
+                                <h3>Energy Capacity</h3>
+                                <p>{{fm.battery_pack_capacity}}</p>
+                              </div>
+                            </article>
          
+                            <article>
+                              <div class="text">
+                                <h3>Charge Capacity</h3>
+                                <p>{{fm.charging_status}}</p>
+                              </div>
+                            </article>
+         
+                             {% endfor %}
                            </main>
                            <div class="card_button">
                               <div class="plus_sign"><button>+</button></div>

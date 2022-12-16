@@ -12,6 +12,7 @@ WORKDIR /app
 COPY requirements.txt /app/
 
 RUN pip install -r requirements.txt
+RUN pip install python-dotenv
 
 COPY . /app/
 
@@ -19,7 +20,7 @@ RUN apt update &&\
   apt install -y binutils libproj-dev gdal-bin
 # RUN apt install -y binutils libproj-dev gdal-bin
 # #RUN apt install -y postgresql
-RUN apt install -y postgis postgresql-postgis
+# RUN apt install -y postgis postgresql-postgis
 
 RUN adduser --disabled-password --gecos '' myuser
 

@@ -2,16 +2,25 @@ version: '3'
 services:  
   # PostgreSQL database
   db:
-    image: postgres:latest
-    # hostname: db
+    image: kartoza/postgis:14-3.2
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+    env_file: .env
+
     environment:
-      - POSTGRES_USER=myprojectuser
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=postgres
+      # If you need to create multiple database you can add coma separated databases eg gis,data
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${USER_NAME}
+      - POSTGRES_PASS=${PASSWORD}
+      - ALLOW_IP_RANGE=0.0.0.0/0
+      # Add extensions you need to be enabled by default in the DB. Default are the five specified below
+      - POSTGRES_MULTIPLE_EXTENSIONS=postgis,hstore,postgis_topology,postgis_raster,pgrouting
     ports:
-      - "5432:5432"
+      - "25432:5432"
+    restart: on-failure
+    healthcheck:
+      test: "exit 0"
+
 
   # Django web server
   web:
