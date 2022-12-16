@@ -205,6 +205,7 @@ def permission(role):
                 "create":True,
                 "update":True,
                 "delete":True,
+                "view": True
             },
             "fleetOperater":{
                 "create":True,

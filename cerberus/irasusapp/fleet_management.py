@@ -127,6 +127,7 @@ def listFleetOwner(request):
 
         """ list Fleet owner """
         if(request.session.get("IsAdmin")):
+            print("=========>>>>>")
             listData =FleetOwner.objects.values()
             return listData
 

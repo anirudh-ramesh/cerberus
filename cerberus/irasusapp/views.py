@@ -37,7 +37,6 @@ def dashboard(request):
     }
     newuserPermission=permission(getUserData[0]["user_type"])
 
-
     if(len(getUserData) != 0):
         context['IsAdmin']= getUserData[0]["is_admin"]
         data=UserPermission(request,getUserData[0]["is_admin"])
@@ -1346,6 +1345,9 @@ def updateFleetOperatorupnderFleetOwner(request,id):
     newuserPermission=permission(request.session.get("user_type"))
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     getBattery=list(BatteryDetail.objects.filter(assigned_owner=request.session.get("email")).values())
+
+    if(request.session.get("IsAdmin")):
+        getBattery=list(BatteryDetail.objects.all())
     if(data == False and len(data) != 0) :
         messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
         return render(request, "fleet_owner_and_fleet_operator/update_fleet_operator.html",{"getBattery":getBattery,"newuserPermission":newuserPermission,'data' : data ,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
