@@ -1,0 +1,21 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+
+<div class="">
+  <h4 class="text-center alert alert info">Fleet Operator Data</h4>
+
+    <p>Are you sure you want to delete <b>"{{data.username}} ?"</b></p>
+
+    <form action="{% url 'deletefleetowner' data.id %}" method="POST" class="d-inline">
+        {% csrf_token %}
+
+        <td>
+            <a href="{% url 'listfleetowner' %}" class="btn btn-secondary btn-sm">Back</a>
+        </td>
+      <input type="submit" class="btn btn-danger btn-sm" value="Remove">
+    </form>
+</div>
+
+{% endblock %}
