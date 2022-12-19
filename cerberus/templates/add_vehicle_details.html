@@ -68,10 +68,22 @@
 								<input type='date' name='vehicle_warrenty_end_date' class="input-register-text" required>
 							</div>
 						</div>
-						<div class="input-group mb-2">
+						<!-- <div class="input-group mb-2">
 							<div class="input-group-append">
 								<label class="label_formm">Assigned Owner</label>
 								<input type='text' name='assigned_owner' class="input-register-text" required>
+							</div>
+						</div> -->
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<label class="label_formm">Assigned Operator</label>
+                                <select type="text" name="assigned_operator" class="input-register-text" required>
+								{% for fleetData in get_FleetId %}
+		
+									<option value="{{fleetData.email}}">{{fleetData.username}}</option>  
+								{% endfor %}
+							</select>
+
 							</div>
 						</div>
 						<div class="input-group mb-2">

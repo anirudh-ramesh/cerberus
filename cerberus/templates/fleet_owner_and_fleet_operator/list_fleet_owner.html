@@ -22,8 +22,11 @@
                         <th scope="col">Email</th>
                         <!-- <th scope="col">IsAdmin</th> -->
                         <th scope="col">Status</th>
-                        <th scope="col">Action</th>
+                        {% if IsAdmin or newuserPermission.fleetOwner.update or newuserPermission.fleetOwner.delete %}
 
+                          <th scope="col">Action</th>
+
+                        {% endif %}
                       </tr>
                     <tbody>
                     {% for fm in data %}

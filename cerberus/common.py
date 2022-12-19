@@ -82,6 +82,8 @@ def successAndErrorMessages():
         "fleetoperatorCreate": "fleet operatoe is create successfully",
         "fleetoperatorupdate":"fleet operatoe is update successfully",
 
+        "fleetType": ["FleetOperator","FleetOwner"]
+
     }
     return response
 
@@ -204,6 +206,7 @@ def permission(role):
                 "create":True,
                 "update":True,
                 "delete":True,
+                "view": True
             },
             "fleetOperater":{
                 "create":True,
@@ -317,25 +320,25 @@ def permission(role):
             },
         }
         return User 
-    if(role == "FleetOprator"):
+    if(role == "FleetOperator"):
         fleetOperator={
             "vehicle":{
                 "create": False,
                 "update": False,
                 "delete": False,
                 "view": True,
-                "batteryAssigned": False,
+                "batteryAssigned": True,
                 "DriverCreate": False,
                 "batteryView": True,
-                "userAssigned": False,
-                "assignedOrganisation": False
+                "userAssigned": True,
+                "assignedOrganisation": True
             },
             "battery":{
                 "create": False,
                 "update": False,
                 "delete": False,
-                "batteryAssigned": False,
-                "assigned": False,
+                "batteryAssigned": True,
+                "assigned": True,
                 "view": True
             },
             "swapstation":{
@@ -343,7 +346,7 @@ def permission(role):
                 "update": False,
                 "delete": False,
                 "assigned": False,
-                "view": True
+                "view": False
             },
             "geofence":{
                 "create":False,
@@ -375,7 +378,7 @@ def permission(role):
                 "delete":False,
             },
             "fleetOperater":{
-                "create":False,
+                "create":True,
                 "update":False,
                 "delete":False,
             },
@@ -430,7 +433,7 @@ def permission(role):
                 "update": False,
                 "delete": False,
                 "assigned": False,
-                "view": True
+                "view": False
             },
             "geofence":{
                 "create":False,
@@ -445,8 +448,8 @@ def permission(role):
                 "assignedvehical":False,
                 "view":True,
                 "listVihical": True,
-                "create":True,
-                "update": True
+                "create":False,
+                "update": False
             },
             "iot":{
                 "create":False,
@@ -475,9 +478,9 @@ def permission(role):
 
             },
             "fleetOwner":{
-                "create":True,
-                "update":True,
-                "delete":True,
+                "create":False,
+                "update":False,
+                "delete":False,
                 "view": True
             },
             "fleetOperater":{
