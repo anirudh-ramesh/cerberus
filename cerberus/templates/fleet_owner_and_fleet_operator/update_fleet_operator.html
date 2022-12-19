@@ -25,13 +25,13 @@
                         <div class="input-group mb-2">
                             <div class="input-group-append">
                                 <label class="label_formm">username</label>
-                                <input type='text' name='username' value="{{fm.username}}" class="input-register-texts" required>
+                                <input type='text' name='username' value="{{fm.username}}" class="input-register-text" required>
                             </div>
                         </div>
                         <div class="input-group mb-2">
                             <div class="input-group-append">
                                 <label class="label_formm">username</label>
-                                <input type='text' name='email' value="{{fm.email}}" class="input-register-texts" readonly>
+                                <input type='text' name='email' value="{{fm.email}}" class="input-register-text" readonly>
                             </div>
                         </div>
                         <div class="input-group mb-2">
@@ -50,15 +50,15 @@
 								<label class="label_formm">Status</label>
                                 <br>
                                 {% if fm.status == True %}
-                                <label class="label_formm"><input name="status" type="radio" value="Active" required="" checked>Active</label>
+                                <label class="update_fleet_status"><input name="status" type="radio" value="Active" required="" checked>Active</label>
                                 {% else %}
-                                <label class="label_formm"><input name="status" type="radio" value="Active" required="" >Active</label>
+                                <label class="update_fleet_status"><input name="status" type="radio" value="Active" required="" >Active</label>
                                 {% endif %}
 
                                 {% if fm.status == False %}
-                                <label class="label_formm"><input name="status" type="radio" value="Inactive" required="" checked>Inactive</label>
+                                <label class="update_fleet_status"><input name="status" type="radio" value="Inactive" required="" checked>Inactive</label>
                                 {% else %}
-                                <label class="label_formm"><input name="status" type="radio" value="Inactive" required="" >Inactive</label>
+                                <label class="update_fleet_status"><input name="status" type="radio" value="Inactive" required="" >Inactive</label>
                                 {% endif %}
 							</div>
 						</div>

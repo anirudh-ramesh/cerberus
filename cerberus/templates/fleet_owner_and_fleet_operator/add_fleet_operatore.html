@@ -14,7 +14,7 @@
 		</div>
 		
 		<div class="card_Bettery card-body">
-			<h4 class="btn btn-secondary  btn-sm btn-block">Add Fleet Operator</h4>
+			<h4 class="btn btn-secondary  btn-sm btn-block" style="width: 38%;">Add Fleet Operator</h4>
 			<div class="card_subb card-body">
 				<form class="form" method="POST" action="">
 					{% csrf_token %}
@@ -38,15 +38,15 @@
 
                     <div class="input-group mb-2">
                         <div class="input-group-append">
-                            <label class="label_formm">Status</label>
+                            <label class="add_fleet_status">Status</label>
                             <br>
-                            <label class="label_formm"><input name="status" type="radio" value="Active" required="">Active</label>
-                            <label class="label_formm"><input name="status" type="radio" value="Inactive" required="">Inactive</label>
+                            <label class="label_formm" style="width: 9%;"><input name="status" type="radio" value="Active" required="">Active</label>
+                            <label class="label_formm" style="width: 9%;"><input name="status" type="radio" value="Inactive" required="">Inactive</label>
                             
                         </div>
                     </div>
 
-					<div class="submit-button">
+					<div class="add_update_button">
 						<div class="d-flex justify-content-center mt-3 login_container">
 							<input class="btn btn-success btn-sm" type="submit" value="Submit">
 						</div>

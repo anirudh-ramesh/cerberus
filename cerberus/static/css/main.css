@@ -802,8 +802,8 @@ p {
 .battery-header{
     width: 100%;
     display: flex;
-    justify-content: center;
-    /* margin-left: 17%; */
+    /* justify-content: center; */
+    margin-left: 17%;
 }
 
 .card_Bettery{
@@ -813,8 +813,10 @@ p {
 .update-swap-station-div{
     display: flex;
     justify-content: center;
-    position: relative;
-    left: 30%
+    /* position: relative; */
+    /* left: 30% */
+    margin-left: 3%;
+    width: 30%;
 }
 
 
@@ -972,9 +974,15 @@ label{
     margin: auto;
 
 }
-.udate_button{
+.update_button{
     margin-left: 10%;
     text-align: center !important;
+    display: flex;
+}
+.add_update_button{
+    margin-left: 7%;
+    text-align: center !important;
+    display: flex;
 }
 .update_battery_page{
     margin-left: 7% !important;
@@ -1155,4 +1163,27 @@ margin-left: -17% !important;
   
   .slider.round:before {
     border-radius: 50%;
+  }
+  .add_fleet_status{
+    width: 18%;
+  }
+  .update_fleet_status{
+    width: 100%;
+  }
+  .add_fleet{
+    width: 20%;
+  }
+  .add_fleet_owner{
+    width: 10%;
+  }
+  .update_fleet_status{
+    width: 22%;
+    margin-left: 22%;
+  }
+  .update_fleet_onwer{
+    width: 49%;
+    margin-left: 0%;
+    border-radius: 10px;
+    border: 1px solid black;
+    padding-left: 1rem;
   }
