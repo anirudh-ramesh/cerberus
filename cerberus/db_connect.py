@@ -429,8 +429,13 @@ def removeUserVehicle(select,chasis_number):
 
 
 #CONVERY BINARY DATA TO UTF-8 TO SHOW IMAGES
-def images_display():
+def images_display(check):
     try:
+        sql=""
+        if(check== True):
+            sql=f"SELECT email,username,user_type,is_active,adhar_proof,pancard_proof,license_proof FROM irasusapp_crmuser WHERE user_type='Driver'"
+        else:
+            sql=f"SELECT email,username,user_type,is_active,adhar_proof,pancard_proof,license_proof FROM irasusapp_crmuser WHERE user_type='Driver' AND created_id='{str(check)}'"
         conn=connect()
         cursor = conn.cursor()
         sql = "SELECT email,username,user_type,is_active,adhar_proof,pancard_proof,license_proof,vehicle_assigned_id  FROM irasusapp_crmuser WHERE user_type='Driver';"
@@ -438,6 +443,7 @@ def images_display():
         results = cursor.fetchall()
         one_row = []
         for value in results:
+        
             res={}
             res['email'] = value[0]
             res['username'] = value[1]
@@ -450,6 +456,7 @@ def images_display():
             one_row.append(res)
         return one_row
     except Exception as e:
+        print("-=-=-=",e)
         return []
 
 def iotDevice(iotList):
