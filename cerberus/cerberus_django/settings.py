@@ -79,7 +79,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'cerberus_django.wsgi.application'
 
-AUTH_USER_MODEL = ''
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -154,11 +153,6 @@ MAIL_SERVER_USERNAME = os.environ.get('MAIL_SERVER_USERNAME')
 MAIL_SERVER_PASSWORD = os.environ.get('MAIL_SERVER_PASSWORD')
 
 # 
-
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
-]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
