@@ -1,0 +1,30 @@
+<br>
+{% if IsAdmin %}
+<div class="row_status row">
+	<div class="col" onclick="location.href='/activefleetoperator?action=Active'"> 
+		<div class="col-md">
+			<div class="Card_status card text-center text-white  mb-3" id="total-orders">
+			  	<div class="card-header">
+			  		<h5>Active Fleet Operator</h5>
+			  	</div>
+			  	<div class="card-body">
+			    	<h3 class="card-title">{{ActiveFleetOperator}}</h3>
+			  	</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col" onclick="location.href='/inactivefleetoperator?action=Inactive'">
+		<div class="col-md">
+			<div class="Card_status card text-center text-white  mb-3" id="orders-delivered">
+			  	<div class="card-header">
+			  		<h5>Inactive Fleet Operator</h5>
+			  	</div>
+			  	<div class="card-body">
+			    	<h3 class="card-title">{{InactiveFleetOperator}}</h3>
+			  	</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endif %}

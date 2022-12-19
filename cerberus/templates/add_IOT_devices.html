@@ -9,7 +9,7 @@
 		<div class="card card-body">
 			<div class="battery">
 				<h5 class="btn btn-secondary  btn-sm btn-block" style="display: flex;
-				justify-content: center">Add IOT Device</h5>
+				justify-content: center; width:35%">Add IOT Device</h5>
 				<hr>
 			</div>
 			<div class="card_Bettery card-body">
@@ -24,28 +24,28 @@
 						{% endif %}
 						<div class="input-group">
 							<div class="input-group-append">
-								<label>Imei Number</label>
-								<input type='number' name='imei_number' class="input-register-text" required>
+								<label class="add_iot_device">Imei Number</label>
+								<input type='number' name='imei_number' class="input-register-text  add_iot_input" required>
 							</div>
 						</div>
 						<div class="input-group mb-2">
 							<div class="input-group-append">
-								<label>Hardware Version</label>
-								<input type="number" step="any"  name='hardware_version' class="input-register-text" required>
+								<label class="add_iot_device">Hardware Version</label>
+								<input type="number" step="any"  name='hardware_version' class="input-register-text add_iot_input" required>
 							</div>
 						</div>
 						<div class="input-group mb-2">
 							<div class="input-group-append">
-								<label>Firmware Version</label>
-								<input type="number" step="any" name='firmware_version' class="input-register-text" required>
+								<label class="add_iot_device">Firmware Version</label>
+								<input type="number" step="any" name='firmware_version' class="input-register-text add_iot_input" required>
 							</div>
 						</div>
 						<div class="input-group mb-2">
 							<div class="input-group-append">
-								<label>Status</label>
+								<label class="add_iot_device">Status</label>
                                 <br>
-                                <label><input name="status" type="radio" value="Active" required="" checked>Active</label>
-                                <label><input name="status" type="radio" value="Inactive" required="">Inactive</label>
+                                <label class="add_iot_device"><input name="status" type="radio" value="Active" required="" checked>Active</label>
+                                <label class="add_iot_device"><input name="status" type="radio" value="Inactive" required="">Inactive</label>
 							</div>
 						</div>
 	

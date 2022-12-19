@@ -1,0 +1,67 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div class="row">
+<div class="update-swap-station-div">
+    <div class="card_Bettery">
+        <div class="card-body">
+            <h5 class="btn btn-secondary  btn-sm btn-block" style="display: flex;
+            justify-content: center;width: 100%;">Update Fleet Operator Details</h5>
+            <hr>
+       
+            {% if data %}
+                <form class="formt" method="POST" action="">
+                    {% csrf_token %}
+    
+                    {% if messages %}
+                            {% for message in messages %}
+                                <div class = "alert alert-{{message.tags}}">{{message}}</div>
+                            {% endfor %}
+                    {% endif %}
+    
+    
+                    {% for fm in data %}
+                        <div class="input-group mb-2">
+                            <div class="input-group-append">
+                                <label class="label_formm">username</label>
+                                <input type='text' name='username' value="{{fm.username}}" class="input-register-texts" required>
+                            </div>
+                        </div>
+                        <div class="input-group mb-2">
+							<div class="input-group-append">
+								<label class="label_formm">Status</label>
+                                <br>
+                                {% if fm.status == True %}
+                                <label class="label_formm"><input name="status" type="radio" value="Active" required="" checked>Active</label>
+                                {% else %}
+                                <label class="label_formm"><input name="status" type="radio" value="Active" required="" >Active</label>
+                                {% endif %}
+
+                                {% if fm.status == False %}
+                                <label class="label_formm"><input name="status" type="radio" value="Inactive" required="" checked>Inactive</label>
+                                {% else %}
+                                <label class="label_formm"><input name="status" type="radio" value="Inactive" required="" >Inactive</label>
+                                {% endif %}
+							</div>
+						</div>
+    
+                    {% endfor %}
+                    
+                    <div class="submit-button">
+                        <div class="submit-div">
+                            <input type="submit" class="btn btn-success btn-sm" value="Update">
+                        </div>
+                        <div class="back-div">
+                            <a href="{% url 'listfleetoperator' %}" class="btn btn-info btn-sm">Back</a>
+                        </div> 
+                    </div>
+
+                {% else %}
+                    <h4 class="text-center alert alert warning btn-sm">No Records Found</h4>
+                {% endif %}
+            </form>
+    </div> </div>
+</div>
+</div>
+{% endblock %}

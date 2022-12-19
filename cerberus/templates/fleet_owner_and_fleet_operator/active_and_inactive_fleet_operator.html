@@ -1,0 +1,49 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div class="col-sm-12">
+
+    <h4 class="text-center alert alert info">{{action}} Fleet Operator</h4>
+    <div class="">
+      <a href="{% url 'listfleetowner' %}" class="btn btn-info btn-sm">Back</a>
+    <form action="" method="GET">
+      
+      {% if messages %}
+        {% for message in messages %}
+        <div class = "alert alert-{{message.tags}}">{{message}}</div>
+        {% endfor %}
+      {% endif %}
+        {% if data %}
+       
+                <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">Username</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">FleetOwner</th>
+                      </tr>
+                    <tbody>
+    
+                    {% for fm in data %}
+                      <tr>
+                        <td>{{fm.username}}</td>
+                        <td>{{fm.email}}</td>
+                        <td>{{fm.status}}</td>
+                        <td>{{fm.fleetId}}</td>  
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                    </thead>
+                  </table>
+                
+        {% else %}
+            <h4 class="text-center alert alert warning">No Data Found</h4>
+        {% endif %}
+
+    </form>  
+  </div>
+</div>
+
+{% endblock %}

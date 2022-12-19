@@ -4,14 +4,14 @@
 
   <aside class="sidebar-nav"> 
    <div class="profile-img">
-   <img src="../static/images/profile.png" alt="user" class="w-50">
+   <img src="../static/images/logo_1465364909556.svg (1).png" alt="user" class=" logo_img">
    </div>
     <ul id="sidebarnav" class="in">
 
        <li class="sidebar-item">
          <a class="sidebar-link" href="{% url 'home' %}" aria-expanded="false"><img src="../static/icons/home.svg"></img></a>
           </li>
-      {% if UserPermission.Users == True %}
+      {% if UserPermission.Users == True or newuserPermission.user.view == True %}
     
        <li class="sidebar-item">  
          <a class="sidebar-link"aria-expanded="false" href="{% url 'user_management:getdata' %}"><img src="../static/icons/Users.svg"></img></a>
@@ -27,27 +27,27 @@
        
        {% endif %}
 
-       {% if UserPermission.SwapingStation == True %}
+       {% if UserPermission.SwapingStation == True or newuserPermission.swapstation.view == True %}
 
        <li class="sidebar-item">
          <a class="sidebar-link" href="{% url 'user_management:listswap' %}" aria-expanded="false"><img src="../static/icons/Swapping Station -  Menu icon - Gray.svg"></img></a>
           
        </li>
        {% endif %}
-       {% if UserPermission.Geography == True %}
+       {% if UserPermission.Geography == True or newuserPermission.geofence.create == True %}
 
        <li class="sidebar-item">
           <a class="sidebar-link" href="{% url 'geofence' %}" aria-expanded="false"><img src="../static/icons/Geography.svg"></img></a>
        </li>
        {% endif %}
-       {% if UserPermission.Vehicles == True %}
+       {% if UserPermission.Vehicles == True or newuserPermission.vehicle.view == True %}
 
        <li class="sidebar-item">
          <a class="sidebar-link" href="{% url 'getvehicle' %}" aria-expanded="false"><img src="../static/icons/Vehicles.svg"></img></a>
       </li>
       {% endif %}
 
-      {% if UserPermission.VCU == True %}
+      {% if UserPermission.VCU == True or newuserPermission.org.view == True %}
 
       <li class="sidebar-item">
          <a class="sidebar-link" href="{% url 'user_management:listorg' %}" aria-expanded="false"><img src="../static/icons/VCU.svg"></img></a>
@@ -55,19 +55,32 @@
       {% endif %}
       
 
-      {% if UserPermission.IOTDevice == True %}
+      {% if UserPermission.IOTDevice == True or newuserPermission.iot.view == True %}
 
       <li class="sidebar-item">
          <a class="sidebar-link" href="{% url 'listdevice' %}" aria-expanded="false"><img src="../static/icons/IOT.svg"></img></a>
       </li>
       {% endif %}
 
-      {% if UserPermission.Reports == True %}
+      {% if UserPermission.Reports == True or newuserPermission.csv.download == True %}
       <li class="sidebar-item">
          <a class="sidebar-link" href="{% url 'csv' %}" aria-expanded="false"><img src="../static/icons/reports.svg"></img></a>
       </li>
       {% endif %}
+
+      {% if newuserPermission.fleetOperater.view == True %}
+      <li class="sidebar-item">
+         <a class="sidebar-link" href="{% url 'listfleetoperator' %}" aria-expanded="false"><img src="../static/icons/traffic-jam.png"></img></a>
+      </li>
+      {% endif %}
+
+      {% if newuserPermission.fleetOwner.view == True %}
+
+      <li class="sidebar-item">
+         <a class="sidebar-link" href="{% url 'listfleetowner' %}" aria-expanded="false"><img src="../static/icons/traffic-jam.png"></img></a>
+      </li>
       
+      {% endif %}
 
       <li class="sidebar-item">
          <a class="sidebar-link" href="{% url 'user_management:setting' %}" aria-expanded="false"><img src="../static/icons/settings.svg"></img></a>

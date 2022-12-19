@@ -9,7 +9,7 @@
 	<div class="col-md-5">
 		<hr>
 		<div class="card card-body">
-			<h4 class="btn btn-secondary  btn-sm btn-block" href="">Add Organisation Details</h4>
+			<h4 class="btn btn-secondary  btn-sm btn-block" href="" style="width: 30%;">Add Organisation Details</h4>
 			<div class="card card-body">
 				{% if messages %}
 					{% for message in messages %}
@@ -22,10 +22,20 @@
 										
 
 					{% for fm in form %}
-                		{{fm.label_tag}} {{fm}} {{fm.errors|striptags}} <br><br>
+					<div class="d-flex add_org">
+                		<div class="lavel_form">
+							{{fm.label_tag }}
+						</div> 
+						<div class="lavel_input">
+							{{fm}}
+						</div>
+						<div>
+							{{fm.errors|striptags}}
+						</div>  <br><br>
+					</div>
             		{% endfor %}
 					<input type="Submit" name="Submit" class="btn btn-success btn-sm" value="Submit" >
-					<a href="{% url 'user_management:listorg' %}" class="btn btn-secondary btn-sm">Back</a>
+					<a href="{% url 'user_management:listorg' %}" class="btn btn-secondary btn-sm button_details">Back</a>
 
 				</form>
 				

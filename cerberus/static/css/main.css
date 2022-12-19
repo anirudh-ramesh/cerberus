@@ -25,7 +25,7 @@ a {
 } 
 
 .card-header>h5{
-    font-size: calc((1vh, 1px + 1vmin) + (1px + 1vmax));
+    /* font-size: calc((1vh, 1px + 1vmin) + (1px + 1vmax)); */
     -webkit-hyphens: none;
     -moz-hyphens: none;
     -ms-hyphens: none;
@@ -54,7 +54,7 @@ a {
     padding-right: 15px;
     padding-left: 15px;
     margin-right: auto;
-    margin-left: auto;
+    margin-left: 3%;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -62,6 +62,9 @@ a {
     justify-content: center;
     align-items: center;
 }
+/* .container{
+    margin-left: auto !important;  
+} */
 .p_center{
     text-align: center;
 }
@@ -191,8 +194,8 @@ a {
     display: flex;
     flex-direction: column;
     height: 100%;
-    /* margin-left: 6%; */
-    /* padding: 2%;    */
+    margin-left: 3%; 
+     padding: 5%;   
 }
 
 .page-wrapper {
@@ -443,7 +446,7 @@ a {
     border-top-right-radius: var(--bs-card-inner-border-radius);
     padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
     object-fit: contain;
-    /* height: 180px; */
+    height: 180px;
 }
 
 .text-end {
@@ -501,6 +504,7 @@ a {
 .sidebar-nav ul .sidebar-item {
     width: 100%;
     /* margin-bottom: 6px; */
+    margin-top: 15%;
 }
 .sidebar-nav ul .sidebar-item .sidebar-link.active, .sidebar-nav ul .sidebar-item .sidebar-link:hover {
     opacity: 1;
@@ -695,12 +699,28 @@ p {
 .org_prof{
     width: 50%;
 }
+.lavel_form label{
+    width: 9vw;
+}
+.lavel_input {
+    margin-left: 6%;
+}
+.add_org{
+    width: 100%;
+}
 .input-register-text{
     width: 50%;
     margin-left: 0%;
     border-radius: 10px;
     border: 1px solid black;
     padding: 0 1rem;
+}
+.update_battery_input{
+    width: 30%;
+    margin-left: 0%;
+    border-radius: 10px;
+    border: 1px solid black;
+    padding: 0 1rem; 
 }
 .organisation_profile{
     width: 44%;
@@ -750,8 +770,14 @@ p {
     width: 50%;
     display: flex;
     align-items: center;
-    height: 28px;
-    
+    height: 28px; 
+}
+.update_battery{
+    margin-right: 0px;
+    width: 20%;
+    display: flex;
+    align-items: center;
+    height: 28px; 
 }
 
 .label_formtt{
@@ -773,7 +799,7 @@ p {
 }
 .login{
     margin-right: 15px;
-    width: 25%;
+    width: 10%;
 }
 
 .csv-report{
@@ -802,8 +828,8 @@ p {
 .battery-header{
     width: 100%;
     display: flex;
-    justify-content: center;
-    /* margin-left: 17%; */
+    /* justify-content: center; */
+    margin-left: 17%;
 }
 
 .card_Bettery{
@@ -883,7 +909,17 @@ min-width: 120px;
 
 label{
     width: 36%;
+}
+.add_iot_device{
+    width: 12%;
 } 
+.add_iot_input{
+    width: 22%;
+    margin-left: 0%;
+    border-radius: 10px;
+    border: 1px solid black;
+    padding: 0 1rem;
+}
 
 .justify-content-center {
     justify-content: center !important;
@@ -973,11 +1009,12 @@ label{
 
 }
 .udate_button{
-    margin-left: 10%;
-    text-align: center !important;
+    margin-left: 8%;
+    /* text-align: center !important; */
 }
 .update_battery_page{
     margin-left: 7% !important;
+    margin-top: 2%;
 }
 .add_vehicle{
 margin-left: -17% !important;
@@ -1020,7 +1057,7 @@ margin-left: -17% !important;
     display: flex;
     justify-content: space-evenly;
     height: 50px;
-
+    margin-top: -6%;
 }
 .ant-avatar {
     -webkit-font-feature-settings: "tnum","tnum";
@@ -1156,3 +1193,40 @@ margin-left: -17% !important;
   .slider.round:before {
     border-radius: 50%;
   }
+  .logo_img {
+    width: 80% !important;
+    height: 50% !important;
+    border-radius: 50%;
+}
+.update_user{
+    width: 20%;
+    margin-left: 0%;
+    border-radius: 10px;
+    border: 1px solid black;
+    padding: 0 1rem;
+}
+.update-user-div{
+    margin-left: 2%;
+    margin-top: 3%;
+}
+.add_user_detailes{
+    margin-left: -8% !important;
+    margin-right: 10% !important;
+}
+.update_iot_device{
+    width: 15%;
+}
+.update_iot_device_input{
+    width: 20%;
+    margin-left: 0%;
+    border-radius: 10px;
+    border: 1px solid black;
+    padding: 0 1rem;
+}
+.update_vehicle_details{
+    margin-left: -10%;
+}
+.button_details{
+    margin-left: 40px;
+
+}

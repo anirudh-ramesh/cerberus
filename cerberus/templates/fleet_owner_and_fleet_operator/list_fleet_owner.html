@@ -1,0 +1,60 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+{% include 'fleet_owner_and_fleet_operator/fleet_owner_status.html' %}
+
+<div class="col-sm-12">
+  {% if IsAdmin or newuserPermission.fleetOwner.create %}
+  <a href="{% url 'createfleetowner' %}" class="btn btn-info btn-sm">Add-Fleet-Owner</a>
+
+  {% endif %}
+        <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Home</a>
+
+    <h4 class="text-center">Fleet Owner Details</h4>
+    <form action="" method="GET">
+      
+        {% if data %}
+                <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">Username</th>
+                        <th scope="col">Email</th>
+                        <!-- <th scope="col">IsAdmin</th> -->
+                        <th scope="col">Status</th>
+                        <th scope="col">Action</th>
+
+                      </tr>
+                    <tbody>
+                    {% for fm in data %}
+                        <tr>
+                            <td>{{fm.username}}</td>
+                            <td>{{fm.email}}</td>
+                            <!-- <td>{{fm.is_admin}}</td> -->
+                            <td>{{fm.status}}</td>
+
+                          
+                          <td style="display: flex;">
+                            {% if IsAdmin or newuserPermission.fleetOwner.update %}
+                            <a class="table-link" aria-expanded="false" href="{% url 'updatefleetowner' fm.email %}"><img src="../static/icons/edit.svg"></a>
+                            {% endif %}
+                            {% if IsAdmin or newuserPermission.fleetOwner.delete %}
+                            <a class="table-link" aria-expanded="false" href="{% url 'deletefleetowner' fm.id %}"><img src="../static/icons/delete.svg"></a>
+                            {% endif %}
+
+                          </td>              
+                        </tr>
+                      
+                      {% endfor %}
+                    </tbody>
+                    </thead>
+                  </table>
+            
+        {% else %}
+            <h4 class="text-center alert alert warning">No Records Found</h4>
+        {% endif %}
+
+    </form>
+    
+</div>
+{% endblock %}

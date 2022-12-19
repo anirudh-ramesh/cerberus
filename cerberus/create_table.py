@@ -43,6 +43,47 @@ def AdminCreate():
 
 AdminCreate()
 
+
+def createFleetOwner():
+    try:
+        conn=connect()
+        cursor = conn.cursor()
+        sql = "INSERT INTO irasusapp_crmuser(username, email, contact, password, password_conformation, is_admin, is_active, last_login,created_at,updated_at,deleted_at,user_type) \
+        VALUES ('admin','demo.ims.in@gmail.com','7041999864','pbkdf2_sha256$390000$UnohK4YrmvOt9W5PeqWLG8$7QzSegy5en47+dI0uLq+4hrAlsOSDUi2OUhnm+k0ruk=','pbkdf2_sha256$390000$UnohK4YrmvOt9W5PeqWLG8$7QzSegy5en47+dI0uLq+4hrAlsOSDUi2OUhnm+k0ruk=','False','True','2022-12-09 06:58:35.943724+05:30','2022-12-09 06:58:35.943724+05:30','2022-12-09 06:58:35.943724+05:30','2022-12-09 06:58:35.943724+05:30','FeetOwner');"
+        cursor.execute(sql)
+        conn.commit()
+        print("done")
+        sql="select * from irasusapp_crmuser;"
+        cursor.execute(sql)
+        fleet_owner = cursor.fetchall()
+        print(fleet_owner)
+        cursor.close()
+        return
+    except Exception as e:
+        print(e) 
+
+createFleetOwner()
+
+def createFleetOperator():
+    try:
+        conn=connect()
+        cursor = conn.cursor()
+        sql = "INSERT INTO irasusapp_crmuser(username, email, contact, password, password_conformation, is_admin, is_active, last_login,created_at,updated_at,deleted_at,user_type,created_by) \
+        VALUES ('admin','fleetoperator.ims.in@gmail.com','7041999864','pbkdf2_sha256$390000$UnohK4YrmvOt9W5PeqWLG8$7QzSegy5en47+dI0uLq+4hrAlsOSDUi2OUhnm+k0ruk=','pbkdf2_sha256$390000$UnohK4YrmvOt9W5PeqWLG8$7QzSegy5en47+dI0uLq+4hrAlsOSDUi2OUhnm+k0ruk=','False','True','2022-12-09 06:58:35.943724+05:30','2022-12-09 06:58:35.943724+05:30','2022-12-09 06:58:35.943724+05:30','2022-12-09 06:58:35.943724+05:30','FleetOperator','demo.ims.in@gmail.com');"
+        cursor.execute(sql)
+        conn.commit()
+        print("done")
+        sql="select * from irasusapp_crmuser;"
+        cursor.execute(sql)
+        print(cursor.fetchall())
+        cursor.close()
+        return
+    except Exception as e:
+        print(e) 
+
+createFleetOperator()
+
+
 def settingsModuleName():
     try:
         conn=connect()

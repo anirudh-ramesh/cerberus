@@ -52,10 +52,10 @@ def password_validator(value):
 
 USER_TYPE = (
     ('Admin', 'Admin'),
-    ('Driver', 'Driver'), 
+    ('Driver', 'Driver'),
     ('User', 'User'),
-    ('Fleet_Operator', 'Fleet_Operator'),
-    ('Fleet_Owner', 'Fleet_Owner')
+    ('FeetOwner', 'FeetOwner'),
+    ('FleetOprater', 'FleetOprater')
 )
 
 #USER-TABLE
@@ -81,7 +81,8 @@ class Crmuser(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     orgs = models.ManyToManyField(Organisation)
     vehicle_assigned = models.ForeignKey("Vehicle",default=None,on_delete=models.CASCADE, null=True, blank=True)
-
+    created_by = models.CharField(max_length=100, default='', null=True, blank=True)
+    created_id = models.CharField(max_length=300, default='',null=True, blank=True)
 
     objects = CrmUserManager()
 
@@ -245,5 +246,26 @@ class BatteryDetail(models.Model):
     def __str__(self):
         return str(self.model_name)
 
+class FleetOperator(models.Model):
+    username = models.CharField(max_length=225, blank=True)
+    email = models.CharField(max_length=225, blank=False)
+    is_admin = models.BooleanField(default=False)
+    status = models.BooleanField(default=False)
+    fleetId = models.CharField(max_length=225, blank=False)
+    permission = models.CharField(max_length=4000, blank=True,null=True)
 
+    def __str__(self):
+        return str(self.model_name)
+
+
+
+class FleetOwner(models.Model):
+    username = models.CharField(max_length=225, blank=False)
+    email = models.CharField(max_length=225, blank=False)
+    is_admin = models.BooleanField(default=False)
+    status = models.BooleanField(default=False)
+    permission = models.CharField(max_length=4000, blank=True,null=True)
+    
+    def __str__(self):
+        return str(self.model_name)
 

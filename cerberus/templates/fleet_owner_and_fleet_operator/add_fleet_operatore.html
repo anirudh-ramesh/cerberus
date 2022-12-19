@@ -1,0 +1,66 @@
+
+{% extends 'main.html' %}
+
+{% block content %}
+
+
+<br>
+
+<div class="row">
+	<div class="col-md-5">
+		<div class="battery">
+			<h5 class="battery-header">Fleet Operator:</h5>
+			<hr>
+		</div>
+		
+		<div class="card_Bettery card-body">
+			<h4 class="btn btn-secondary  btn-sm btn-block">Add Fleet Operator</h4>
+			<div class="card_subb card-body">
+				<form class="form" method="POST" action="">
+					{% csrf_token %}
+					{% if messages %}
+						{% for message in messages %}
+							<div class = "alert alert-{{message.tags}}">{{message}}</div>
+						{% endfor %}
+					{% endif %}
+					<div class="input-group mb-2">
+						<div class="input-group-append">
+							<label class="label_form_battery">username</label>
+							<input type='text' name='username' class="input-register-text_battery" required>
+						</div>
+					</div>
+                    <div class="input-group mb-2">
+						<div class="input-group-append">
+							<label class="label_form_battery">email</label>
+							<input type='email' name='email' class="input-register-text_battery" required>
+						</div>
+					</div>
+
+                    <div class="input-group mb-2">
+                        <div class="input-group-append">
+                            <label class="label_formm">Status</label>
+                            <br>
+                            <label class="label_formm"><input name="status" type="radio" value="Active" required="">Active</label>
+                            <label class="label_formm"><input name="status" type="radio" value="Inactive" required="">Inactive</label>
+                            
+                        </div>
+                    </div>
+
+					<div class="submit-button">
+						<div class="d-flex justify-content-center mt-3 login_container">
+							<input class="btn btn-success btn-sm" type="submit" value="Submit">
+						</div>
+
+						<div class="d-flex justify-content-center mt-3 login_container">
+							<a href="{% url 'listfleetoperator' %}" class="btn btn-info btn-sm">Back</a>
+						</div>
+					</div>
+					  
+
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
