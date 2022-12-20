@@ -43,6 +43,16 @@
 						</div>
 						<div class="input-group mb-2">
 							<div class="input-group-append">
+								<label class="label_formm">Assigned Operator</label>
+                                <select type="text" name="driver_fleet_operator" class="input-register-text" required>
+								{% for fleetData in get_Fleet_Operator %}
+									<option value="{{fleetData.email}}">{{fleetData.username}}</option>  
+								{% endfor %}
+							</select>
+							</div>
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
 								<label class="label_formm">Adhar Card</label>
 								<input type='file' name='adhar_card' class="input-register-text" required>		
 							</div>
@@ -63,7 +73,7 @@
 						<div class="submit-button">
 							<div>
 								<input class="btn btn-success btn-sm" type="submit" value="Submit">
-								<a href="{% url 'getdrivers' %}" class="btn btn-info btn-sm button_details">List Vehicle</a>
+								<a href="{% url 'getdrivers' %}" class="btn btn-info btn-sm button_details">List Driver</a>
 							</div>
 							 
 				   		</div>

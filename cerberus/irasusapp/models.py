@@ -72,7 +72,7 @@ class Crmuser(AbstractBaseUser):
     created_at = models.DateTimeField(default=datetime.datetime.now, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(default=datetime.datetime.now)
-    user_type = models.CharField(max_length=100, default='', choices=USER_TYPE)
+    user_type = models.CharField(max_length=300, default='', choices=USER_TYPE)
     adhar_proof = models.BinaryField(null=True, blank=True)
     pancard_proof = models.BinaryField(null=True,blank=True)
     license_proof = models.BinaryField(null=True, blank=True)
@@ -80,8 +80,9 @@ class Crmuser(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     orgs = models.ManyToManyField(Organisation)
     vehicle_assigned = models.ForeignKey("Vehicle",default=None,on_delete=models.CASCADE, null=True, blank=True)
-    created_by = models.CharField(max_length=100, default='', null=True, blank=True)
+    created_by = models.CharField(max_length=300, default='', null=True, blank=True)
     created_id = models.CharField(max_length=300, default='',null=True, blank=True)
+    driver_fleet_operator = models.CharField(max_length=300, default='',null=True, blank=True)
 
     objects = CrmUserManager()
 

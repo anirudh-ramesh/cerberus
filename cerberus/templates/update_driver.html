@@ -50,6 +50,16 @@
                     </div>
                     <div class="input-group mb-2">
                         <div class="input-group-append">
+                            <label>Assigned Operator</label>
+                            <select type="text" name="driver_fleet_operator" class="input-register-text" required>
+                                {% for fleetData in get_Fleet_Operator %}
+                                    <option value="{{fleetData.email}}">{{fleetData.username}}</option>  
+                                {% endfor %}
+                        </select>
+                        </div>
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="input-group-append">
                             <label>Adhar Proof</label>
                             <img src='data:image/jpeg;base64,{{fm.adhar_proof}}' alt="no image display"
                                 name="adhar_proof" style="width:100px;height:100px;">

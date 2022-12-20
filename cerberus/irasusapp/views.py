@@ -689,10 +689,11 @@ def updateVehicleDetails(request,id):
 
 
     try:
-        update_vehicle = list(Vehicle.objects.filter(chasis_number=id).values())
         newData=[]
+        #LIST OF FLEET OPERATOR DROP-DOWN
+        update_vehicle = list(Vehicle.objects.filter(chasis_number=id).values())
         for data in getFleetId:
-            if(data.get('email') ==update_vehicle[0]["assigned_operator"]):
+            if(data.get('email') == update_vehicle[0]["assigned_operator"]):
                 newData.insert(0,data)
             else:
                 newData.append(data)    
@@ -727,6 +728,13 @@ def updateVehicleDetails(request,id):
                 'insurance_start_date': insurance_start_date,
                 'insurance_end_date': insurance_end_date, 'vehicle_status':vehicle_status
             }]
+            #SELECTED FLEET OPERATOR DROP-DOWN VALUE
+            update_vehicle = list(Vehicle.objects.filter(chasis_number=id).values())
+            for data in getFleetId:
+                if(data.get('email') == update_vehicle[0]["assigned_operator"]):
+                    newData.insert(0,data)
+                else:
+                    newData.append(data) 
             messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['updateVehicle'])
             return render(request,'update_vehicle.html',{"getFleetId":newData,"newuserPermission":newuserPermission,'update_vehicle_data': update_vehicle,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission,"ActiveVehicle":Vehicle.objects.filter(vehicle_status="Active").count(),"InactiveVehicle":Vehicle.objects.filter(vehicle_status="Inactive").count() })
 
@@ -942,6 +950,7 @@ def listgeofenceData(request):
 def addDriver(request):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     newuserPermission=permission(request.session.get("user_type"))
+    getFleetId= list(FleetOperator.objects.filter(created_id=request.session.get("email")).values())
 
     try:
         if request.method == "POST":
@@ -949,6 +958,7 @@ def addDriver(request):
             email = request.POST.get('contact')
             password = make_password(generatorPassword())
             user_type =  request.POST.get('user_type')
+            driver_fleet_operator = request.POST.get('driver_fleet_operator')
             adhar_proof = request.FILES['adhar_card'].file.read()
             pancard_proof = request.FILES['pan_card'].file.read()
             license_proof = request.FILES['driving_license'].file.read()
@@ -956,6 +966,7 @@ def addDriver(request):
 
             newdata = Crmuser.objects.create(
                 username=username,email=email,user_type=user_type,
+                driver_fleet_operator=driver_fleet_operator,
                 adhar_proof=adhar_proof,pancard_proof=pancard_proof,
                 license_proof=license_proof,is_active=is_active,
                 password = password
@@ -964,7 +975,7 @@ def addDriver(request):
             Crmuser.objects.filter(email=request.POST.get('contact')).update(is_admin=False,created_by=request.session.get("user_type"),created_id=request.session.get("email"))
 
             messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['addDriver']) 
-        return render(request, 'adddriver.html', {"newuserPermission":newuserPermission,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
+        return render(request, 'adddriver.html', { "get_Fleet_Operator": getFleetId, "newuserPermission":newuserPermission,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
 
     except Exception as e:
         return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError']) 
@@ -1009,9 +1020,11 @@ def listAddedDriver(request):
 def updateDriver(request,id):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     newuserPermission=permission(request.session.get("user_type"))
-
+    getFleetId=list(FleetOperator.objects.filter(created_id=request.session.get("email")).values())
+    
     try:
-        if request.method == 'GET':
+        newData=[]            
+        if request.method == 'GET':    
             pi =list(Crmuser.objects.filter(pk=id).values())
             pi[0]["email"]=pi[0]["email"]
             pi[0]["username"]=pi[0]["username"]
@@ -1020,18 +1033,30 @@ def updateDriver(request,id):
             pi[0]["adhar_proof"]=b64encode(pi[0]['adhar_proof']).decode("utf-8")
             pi[0]["pancard_proof"]=b64encode(pi[0]['pancard_proof']).decode("utf-8")
             pi[0]["license_proof"]=b64encode(pi[0]['license_proof']).decode("utf-8")
+            pi[0]['driver_fleet_operator']=pi[0]['driver_fleet_operator']
 
-        if request.method == 'POST':
+            #LIST OF FLEET OPERATOR DROP-DOWN
+            update_vehicle = list(Crmuser.objects.filter(email=id).values())
+            for data in getFleetId:
+                if(data.get('email') == update_vehicle[0]['driver_fleet_operator']):
+                    newData.insert(0,data)
+                else:
+                    newData.append(data)
+        
+        
+        if request.method == 'POST':      
             username = request.POST.get('username')
             email = request.POST.get('email')
             isactive = request.POST.get('is_active')
             user_type = request.POST.get('user_type')
+            driver_fleet_operator = request.POST['driver_fleet_operator']
+            
             if isactive == 'on':
                 isactive = True
             else:
                 isactive = False
-            Crmuser.objects.filter(pk=id).update(username=username,email=email,is_active=isactive,user_type=user_type,updated_at = timezone.now())
 
+            Crmuser.objects.filter(pk=id).update(username=username,email=email,is_active=isactive,user_type=user_type,driver_fleet_operator=driver_fleet_operator,updated_at = timezone.now())     
             pi =list(Crmuser.objects.filter(email=email).values())
             pi[0]["email"]=pi[0]["email"]
             pi[0]["username"]=pi[0]["username"]
@@ -1040,10 +1065,20 @@ def updateDriver(request,id):
             pi[0]["adhar_proof"]=b64encode(pi[0]['adhar_proof']).decode("utf-8")
             pi[0]["pancard_proof"]=b64encode(pi[0]['pancard_proof']).decode("utf-8")
             pi[0]["license_proof"]=b64encode(pi[0]['license_proof']).decode("utf-8")
-            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['updateDriver'])
-            return render(request,'update_driver.html',{"newuserPermission":newuserPermission, 'form': pi,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission })
+            pi[0]['driver_fleet_operator']=pi[0]['driver_fleet_operator']
 
-        return render(request,'update_driver.html',{"newuserPermission":newuserPermission, 'form': pi,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission })
+            #SELECTED FLEET OPERATOR DROP-DOWN VALUE
+            update_vehicle = list(Crmuser.objects.filter(email=id).values())
+            for data in getFleetId:
+                if(data.get('email') == update_vehicle[0]['driver_fleet_operator']):
+                    newData.insert(0,data)
+                else:
+                    newData.append(data)
+
+            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['updateDriver'])
+            return render(request,'update_driver.html',{"get_Fleet_Operator": newData, "newuserPermission":newuserPermission, 'form': pi,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission })
+
+        return render(request,'update_driver.html',{"get_Fleet_Operator": newData, "newuserPermission":newuserPermission, 'form': pi,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
 
     except Exception as error:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])

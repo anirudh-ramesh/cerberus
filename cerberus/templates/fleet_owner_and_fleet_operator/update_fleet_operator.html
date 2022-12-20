@@ -4,14 +4,14 @@
 
 <div class="row">
 <div class="update-swap-station-div">
-    <div class="card_Bettery">
+    <div>
         <div class="card-body">
             <h5 class="btn btn-secondary  btn-sm btn-block" style="display: flex;
             justify-content: center;width: 100%;">Update Fleet Operator Details</h5>
             <hr>
        
             {% if data %}
-                <form class="formt" method="POST" action="">
+                <form method="POST" action="">
                     {% csrf_token %}
     
                     {% if messages %}
@@ -25,13 +25,13 @@
                         <div class="input-group mb-2">
                             <div class="input-group-append">
                                 <label class="label_formm">username</label>
-                                <input type='text' name='username' value="{{fm.username}}" class="input-register-texts" required>
+                                <input type='text' name='username' value="{{fm.username}}" class="input-register-text" required>
                             </div>
                         </div>
                         <div class="input-group mb-2">
                             <div class="input-group-append">
-                                <label class="label_formm">username</label>
-                                <input type='text' name='email' value="{{fm.email}}" class="input-register-texts" readonly>
+                                <label class="label_formm">email</label>
+                                <input type='text' name='email' value="{{fm.email}}" class="input-register-text" required>
                             </div>
                         </div>
                         <div class="input-group mb-2">
