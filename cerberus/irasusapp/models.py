@@ -79,8 +79,8 @@ class Crmuser(AbstractBaseUser):
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     orgs = models.ManyToManyField(Organisation)
-    created_by = models.CharField(max_length=100, default='')
-    created_id = models.CharField(max_length=300, default='')
+    created_by = models.CharField(max_length=100, default='',null=True)
+    created_id = models.CharField(max_length=300, default='',null=True)
 
 
 
@@ -172,8 +172,8 @@ class Vehicle(models.Model):
     assigned_to = models.ForeignKey(Crmuser,default=None,on_delete=models.CASCADE, null=True, blank=True)
     created_date = models.DateField(blank=True,null=True)
     vehicle_status = models.CharField(max_length=225,default='', blank=True, null=True)
-    created_by = models.CharField(max_length=100, default='')
-    created_id = models.CharField(max_length=300, default='')
+    created_by = models.CharField(max_length=100, default='',null=True)
+    created_id = models.CharField(max_length=300, default='',null=True)
 
     # geofence = models.ManyToManyField(Geofence)
 
@@ -247,8 +247,8 @@ class BatteryDetail(models.Model):
     charging_status = models.CharField(max_length=225, default='', choices=CHARGING_STATUS,blank=True)
     is_assigned = models.BooleanField(default=False)
     vehicle_assign = models.ForeignKey(Vehicle, on_delete=models.CASCADE, null=True, blank=True)
-    created_by = models.CharField(max_length=100, default='')
-    created_id = models.CharField(max_length=300, default='')
+    created_by = models.CharField(max_length=100, default='',null=True)
+    created_id = models.CharField(max_length=300, default='',null=True)
     def __str__(self):
         return str(self.model_name)
 
@@ -259,8 +259,8 @@ class FleetOperator(models.Model):
     status = models.BooleanField(default=False)
     fleetId = models.CharField(max_length=225, blank=False)
     permission = models.CharField(max_length=4000, blank=True,null=True)
-    created_by = models.CharField(max_length=100, default='')
-    created_id = models.CharField(max_length=300, default='')
+    created_by = models.CharField(max_length=100, default='',null=True)
+    created_id = models.CharField(max_length=300, default='',null=True)
 
 
     def __str__(self):
@@ -274,8 +274,8 @@ class FleetOwner(models.Model):
     is_admin = models.BooleanField(default=False)
     status = models.BooleanField(default=False)
     permission = models.CharField(max_length=4000, blank=True,null=True)
-    created_by = models.CharField(max_length=100, default='')
-    created_id = models.CharField(max_length=300, default='')
+    created_by = models.CharField(max_length=100, default='',null=True)
+    created_id = models.CharField(max_length=300, default='',null=True)
 
     
     def __str__(self):
