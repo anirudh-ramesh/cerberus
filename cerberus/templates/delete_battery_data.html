@@ -11,10 +11,10 @@
 
     <form action="{% url 'deletedata' item.battery_serial_num %}" method="POST" class="d-inline">
         {% csrf_token %}
-        <td>
-            <a href="{% url 'data' %}" class="btn btn-secondary btn-sm">Back</a>
-        </td>
       <input type="submit" class="btn btn-danger btn-sm" value="Delete">
+      <td>
+        <a href="{% url 'data' %}" class="btn btn-secondary btn-sm">Back</a>
+    </td>
     </form>
 
 </div>

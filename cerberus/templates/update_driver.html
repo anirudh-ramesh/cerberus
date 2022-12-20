@@ -40,20 +40,10 @@
                             <label>User Type</label>
                             <select type="text" name="user_type" value="{{fm.user_type}}" class="input-register-text"
                                 required>
-                                {% if fm.user_type == "User" %}
-                                <option value="User" selected>User</option>
-                                {% else %}
-                                <option value="User">User</option>
-                                {% endif %}
                                 {% if fm.user_type == "Driver" %}
                                 <option value="Driver" selected>Driver</option>
                                 {% else %}
                                 <option value="Driver">Driver</option>
-                                {% endif %}
-                                {% if fm.user_type == "Admin" %}
-                                <option value="Admin" selected>Admin</option>
-                                {% else %}
-                                <option value="Admin">Admin</option>
                                 {% endif %}
                             </select>
                         </div>

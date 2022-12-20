@@ -36,9 +36,7 @@
                         <div class="input-group mb-2">
 							<div class="input-group-append">
 								<label class="label_formm">User Type</label>
-                                <select type="text"  name="user_type" class="input-register-text" required>
-									<option>Admin</option>
-                                    <option>User</option>
+                                <select type="text"  name="user_type" value="Driver" class="input-register-text" required>
                                     <option>Driver</option>
                                 </select>
 							</div>
@@ -65,7 +63,7 @@
 						<div class="submit-button">
 							<div>
 								<input class="btn btn-success btn-sm" type="submit" value="Submit">
-								<a href="{% url 'getdrivers' %}" class="btn btn-info btn-sm">List Vehicle</a>
+								<a href="{% url 'getdrivers' %}" class="btn btn-info btn-sm button_details">List Vehicle</a>
 							</div>
 							 
 				   		</div>
