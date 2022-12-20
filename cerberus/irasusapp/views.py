@@ -969,7 +969,7 @@ def addDriver(request):
                 driver_fleet_operator=driver_fleet_operator,
                 adhar_proof=adhar_proof,pancard_proof=pancard_proof,
                 license_proof=license_proof,is_active=is_active,
-                password = password
+                password = password,user_permission= json.dumps(permission("Driver"))
             )
             newdata.save()
             Crmuser.objects.filter(email=request.POST.get('contact')).update(is_admin=False,created_by=request.session.get("user_type"),created_id=request.session.get("email"))
@@ -987,14 +987,23 @@ def listAddedDriver(request):
 
     try:
         if request.method == "GET":
-            
+            vehicle_name=""
             if(request.session.get("IsAdmin")):
                 driverData = images_display(True)
+                if(driverData[0]['vehicle_assigned_id']):
+                    vehicle_data = list(Vehicle.objects.filter(chasis_number=driverData[0]['vehicle_assigned_id']).values())
+                    vehicle_name = vehicle_data[0]['vehicle_model_name']
             elif(request.session.get("user_type") in successAndErrorMessages()["fleetType"]):
                 driverData = images_display(request.session.get("email"))
+                if(driverData[0]['vehicle_assigned_id']):
+                    vehicle_data = list(Vehicle.objects.filter(chasis_number=driverData[0]['vehicle_assigned_id']).values())
+                    vehicle_name = vehicle_data[0]['vehicle_model_name']
 
             else:
                 driverData = images_display(request.session.get("email"))
+                if(driverData[0]['vehicle_assigned_id']):
+                    vehicle_data = list(Vehicle.objects.filter(chasis_number=driverData[0]['vehicle_assigned_id']).values())
+                    vehicle_name = vehicle_data[0]['vehicle_model_name']
 
          
 
@@ -1010,7 +1019,7 @@ def listAddedDriver(request):
                 messages.add_message(request, messages.WARNING, successAndErrorMessages()['vehicleRemovedFromDriver'])
                 return redirect('getdrivers')
         context={
-                "newuserPermission":newuserPermission,"drivers": driverData ,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission
+                "newuserPermission":newuserPermission,"drivers": driverData ,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission,'vehicle_name': vehicle_name
                 }
         return render(request, 'list_drivers.html',context)
     except Exception as e:

@@ -69,29 +69,35 @@
                             <td>{{fm.vehicle_status}}</td>                    
                           
                             <td>
-                            <a href="{% url 'assinged' fm.chasis_number %}" class="btn btn-secondary btn-sm">Battery Details</a>
+                              
+                            <a href="{% url 'assinged' fm.chasis_number %}" class="btn btn-info btn-sm">Battery Details</a>
 
-                            {% if IsAdmin or newuserPermission.vehicle.update%}
+                            {% if IsAdmin or newuserPermission.vehicle.update %}
                             <a href="{% url 'updatevehicle' fm.chasis_number %}" class="btn btn-info btn-sm">Edit</a>
                             {% endif %}
 
-                            {% if IsAdmin or newuserPermission.vehicle.delete%}
+                            {% if IsAdmin or newuserPermission.vehicle.delete %}
 
                             <a href="{% url 'deletevehicle' fm.chasis_number %}" class="btn btn-danger btn-sm">Delete</a>
                             {% endif %}
 
-                            {% if IsAdmin or newuserPermission.vehicle.batteryAssigned%}
+                            {% if IsAdmin or newuserPermission.vehicle.batteryAssigned %}
 
                             <a href="{% url 'data' %}?chasis_number={{fm.chasis_number}}" class="btn btn-warning btn-sm">Assign-To-Battery</a>
                             {% endif %}
 
-                            {% if IsAdmin or newuserPermission.vehicle.userAssigned%}
+                            {% if IsAdmin or newuserPermission.vehicle.userAssigned %}
 
                             <a href="{% url 'getvehicle' %}?assigned_to_id={{email_id}}&=chasis_number={{fm.chasis_number}}&action=AssignedToUser" class="btn btn-secondary btn-sm">Assigned-To-User</a>
                             {% endif %}
-                            {% if IsAdmin or newuserPermission.vehicle.assignedOrganisation%}
+                            {% if IsAdmin or newuserPermission.vehicle.assignedOrganisation %}
 
-                            <a href="{% url 'getvehicle' %}?serial_number={{serial_number}}&=chasis_number={{fm.chasis_number}}&action=AssignedToOrganisation" class="btn btn-secondary btn-sm">Assigned-To-Organisation</a>
+                            <a href="{% url 'getvehicle' %}?serial_numbeVehicle Profiler={{serial_number}}&=chasis_number={{fm.chasis_number}}&action=AssignedToOrganisation" class="btn btn-secondary btn-sm">Assigned-To-Organisation</a>
+                            {% endif %}
+
+                            {% if IsAdmin or newuserPermission.vehicle.assignedOrganisation %}
+
+                            <a href="{% url 'getdrivers' %}?serial_number={{serial_number}}&=chasis_number={{fm.chasis_number}}&action=AssignedToOrganisation" class="btn btn-secondary btn-sm">Assigned-Vehicle-To-Driver</a>
                             {% endif %}
 
 

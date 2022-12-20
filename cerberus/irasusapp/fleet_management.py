@@ -192,7 +192,7 @@ def createFleetOperator(request):
                     is_admin = True,
                     status=checkActiveAndInActiveStatus(request.POST.get('status')),
                     fleetId=request.session.get("email"),
-                    permission=json.dumps(permission("FleetOprater")
+                    permission=json.dumps(permission("FleetOperator")
                     )
                 )
         formData.save() 

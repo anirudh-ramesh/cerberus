@@ -438,7 +438,7 @@ def images_display(check):
             sql=f"SELECT email,username,user_type,is_active,adhar_proof,pancard_proof,license_proof FROM irasusapp_crmuser WHERE user_type='Driver' AND created_id='{str(check)}'"
         conn=connect()
         cursor = conn.cursor()
-        sql = "SELECT email,username,user_type,is_active,adhar_proof,pancard_proof,license_proof,vehicle_assigned_id, driver_fleet_operator  FROM irasusapp_crmuser WHERE user_type='Driver';"
+        sql = "SELECT email,username,user_type,is_active,adhar_proof,pancard_proof,license_proof,vehicle_assigned_id, driver_fleet_operator,vehicle_assigned_id FROM irasusapp_crmuser WHERE user_type='Driver';"
         cursor.execute(sql)
         results = cursor.fetchall()
         one_row = []
@@ -454,6 +454,7 @@ def images_display(check):
             res['driving_license'] = base64.b64encode(value[6]).decode("utf-8")
             res['vehicle_assigned_id'] = value[7]
             res['driver_fleet_operator'] = value[8]
+            res['vehicle_assigned_id'] = value[9]
             one_row.append(res)
         return one_row
     except Exception as e:

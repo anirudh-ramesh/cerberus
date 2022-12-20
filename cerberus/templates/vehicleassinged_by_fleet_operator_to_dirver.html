@@ -5,10 +5,11 @@
 <!-- {% include 'status.html' %} -->
 
 <div class="col-sm-12">
-    <h4 class="text-center alert alert info">List Of Drivers</h4>
+    <h4 class="text-center alert alert info">Assigned To Vehicle Driver List</h4>
     <a href="{% url 'getvehicle' %}" class="btn btn-info btn-sm">back</a>
     <form action="" method="GET">
-        {% if drivers %}
+        {% if driver_data %}
+
             {% if messages %}
                 {% for message in messages %}
                 <div class = "alert alert-{{message.tags}}">{{message}}</div>
@@ -25,12 +26,12 @@
                         <th scope="col">Adhar-Proof</th>
                         <th scope="col">Pan-Proof</th>
                         <th scope="col">Driving-License</th>
-                        <th scope="col">Driver Vehicle</th>
+                        
                         <th scope="col">Action</th>
 
                       </tr>
                     <tbody>
-                    {% for fm in drivers %}
+                    {% for fm in driver_data %}
                       
                         <tr>
                             <td>{{fm.username}}</td>
@@ -46,29 +47,14 @@
                             </td>
                             <td>
                                 <img src='data:image/jpeg;base64,{{fm.driving_license}}' alt="no image display" style="width:100px;height:100px;" >
-                            </td>
-                            {% if vehicle_name %}
-                                <td>{{vehicle_name}}</td>
-                            {% else %}
-                                <td>Not Assinged Yet</td>
-                            {% endif %}
-                            <td>
-                            {% if IsAdmin or newuserPermission.driver.update %} 
-                                <a href="{% url 'updatedriver' fm.email %}" class="btn btn-warning btn-sm">Edit</a>
-                            {% endif %}
-
-                            {% if IsAdmin or newuserPermission.vehicle.delete %} 
-                                <a href="{% url 'driverdelete' fm.email %}" class="btn btn-danger btn-sm">Delete</a>
-                            {% endif %}
-                                
-
-                            
+                            </td> 
+                            <td> 
                             
                             {% if fm.vehicle_assigned_id  %}
                               <a href="{% url 'getdrivers' %}?email={{fm.email}}&action='remove'" class="btn btn-danger btn-sm">Remove-To-Driver</a>
                               {% else %}
                               <a href="{% url 'drivervehicle' %}?email={{fm.email}}&action='add'" class="btn btn-secondary btn-sm"> Assing-To-Driver</a>
-                            {% endif %}    
+                            {% endif %}     
                             </td>             
                         </tr>
                       

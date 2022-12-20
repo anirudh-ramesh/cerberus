@@ -233,7 +233,7 @@ def permission(role):
             },
         }
         return superAdmin
-    if(role == "User" or role =="Driver"):
+    if(role =="Driver"):
         User={
             "vehicle":{
                 "create": False,
@@ -380,7 +380,7 @@ def permission(role):
             "fleetOperater":{
                 "create":True,
                 "update":False,
-                "delete":False,
+                "delete":False
             },
             "payment":{
                 "log": True
@@ -389,7 +389,7 @@ def permission(role):
                 "create":False,
                 "delete":False,
                 "update":False,
-                "view": False
+                "view": True
             },
             "user":{
                "create":False,

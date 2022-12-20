@@ -83,6 +83,7 @@ class Crmuser(AbstractBaseUser):
     created_by = models.CharField(max_length=300, default='', null=True, blank=True)
     created_id = models.CharField(max_length=300, default='',null=True, blank=True)
     driver_fleet_operator = models.CharField(max_length=300, default='',null=True, blank=True)
+    user_permission = models.CharField(max_length=4000, blank=True,null=True)
 
     objects = CrmUserManager()
 

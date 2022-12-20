@@ -106,8 +106,4 @@ urlpatterns= [
 
 
     
-
-
-    
-    
 ]
