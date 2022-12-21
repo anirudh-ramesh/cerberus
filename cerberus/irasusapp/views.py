@@ -10,6 +10,7 @@ from datetime import datetime
 import json
 import csv
 from django.utils import timezone
+from irasusapp.vcu_management import *
 # from .mixins import MessageHandler
 from .models import Crmuser, BatteryDetail, IotDevices,Vehicle,Geofence, Organisation
 from django.contrib import messages
@@ -1495,3 +1496,86 @@ def getActiveandInactiveFleetOperatorupnderFleetOwner(request):
 
     else:
         return render(request, "fleet_owner_and_fleet_operator/active_and_inactive_fleet_operator.html",{"newuserPermission":newuserPermission, "data": list(data),'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission,"action": parseQuerySting(request)["action"]})
+
+####  VCU ####
+# create VUC
+def createVCUManagement(request):
+    userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    newuserPermission=permission(request.session.get("user_type"))
+
+    if request.method == "GET":
+        return render(request, "vcu_management_templates/add_vcu.html",{"newuserPermission":newuserPermission,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+
+    if request.method == "POST":
+        data=createVCU(request)
+
+        if(data == True):
+            messages.add_message(request, messages.WARNING, successAndErrorMessages()['VCUExists'])
+            return render(request, "vcu_management_templates/add_vcu.html",{"newuserPermission":newuserPermission,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+
+        elif(data == False):
+            messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
+            return render(request, "vcu_management_templates/add_vcu.html",{"newuserPermission":newuserPermission,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+
+        else:
+            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['VCUCreate'])
+            return render(request, "vcu_management_templates/add_vcu.html",{"newuserPermission":newuserPermission,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+
+## update VCU data
+def updateVCUManagement(request,id):
+    userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    newuserPermission=permission(request.session.get("user_type"))
+
+    data=updateVCU(request,id)
+    if request.method == "GET":
+        return render(request, "vcu_management_templates/update_vcu.html",{"newuserPermission":newuserPermission,'data': data,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+
+    if(data == False and len(data) != 0):
+        messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
+        return render(request, "vcu_management_templates/update_vcu.html",{"newuserPermission":newuserPermission,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+
+    else:
+        if request.method == "POST":
+            data=updateVCU(request,id)
+            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['VCUUpdate'])
+            return render(request, "vcu_management_templates/update_vcu.html",{"newuserPermission":newuserPermission,'data' : data ,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+        else:
+
+            return render(request, "vcu_management_templates/update_vcu.html",{"newuserPermission":newuserPermission,'data' : data,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+
+
+## list VCU data
+def listVCUManagement(request):
+    data=listVCU(request)
+    newuserPermission=permission(request.session.get("user_type"))
+
+    userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    if(len(data) == 0) :
+        return render(request, "vcu_management_templates/list_vcu.html",{"newuserPermission":newuserPermission,'data':data, 'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+
+    elif(data == False):
+        messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
+        return render(request, "vcu_management_templates/list_vcu.html",{"newuserPermission":newuserPermission,'data':data, 'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+
+    else:
+        return render(request, "vcu_management_templates/list_vcu.html",{"newuserPermission":newuserPermission,'data':data, 'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+
+## delete VCU data
+def deleteVCUManagemant(request,id):
+    userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    newuserPermission=permission(request.session.get("user_type"))
+
+    data=True
+    if request.method == "GET": 
+        data=list(deleteVCU(request,id))[0]
+    if(data == False):
+        messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
+        return render(request, "vcu_management_templates/delete_vcu.html",{"newuserPermission":newuserPermission,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+
+    else:
+        if request.method == "POST":
+            data=deleteVCU(request,id)
+            messages.add_message(request, messages.WARNING, successAndErrorMessages()['VCUDelete'])
+            return redirect("listvcu")
+        else:
+            return render(request, "vcu_management_templates/delete_vcu.html",{"newuserPermission":newuserPermission,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission,"data":data})
