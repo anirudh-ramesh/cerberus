@@ -29,8 +29,7 @@ def createCrmUser(request,user_type):
         user_password = generatorPassword()
         password_conformation = user_password
         if user_password == password_conformation:
-            password = make_password(user_password)
-            print(password)
+            password = make_password(request.POST.get('password'))
             password_conformation = password
             if Crmuser.objects.filter(email=email).exists():
                 return True
@@ -131,6 +130,10 @@ def listFleetOwner(request):
             return listData
 
         else:
+            if(request.session.get("user_type") == "FleetOperator"):
+                listData =list(FleetOperator.objects.filter(email=request.session.get("email")).values())
+                listData=FleetOwner.objects.filter(email=listData[0]["fleetId"]).values()
+                return listData
             listData =FleetOwner.objects.filter(email=request.session.get("email")).values()
             return listData
 
@@ -269,8 +272,12 @@ def listFleetOperator(request):
             return listData
 
         else:
-            listData =FleetOperator.objects.filter(created_id=request.session.get("email")).values()
-            return listData
+            if(request.session.get("user_type") == "FleetOperator"):
+                listData =FleetOperator.objects.filter(email=request.session.get("email")).values()
+                return listData
+            elif(request.session.get("user_type") == "FleetOwner"):
+                listData =FleetOperator.objects.filter(created_id=request.session.get("email")).values()
+                return listData
 
     except Exception as e:
         return []        

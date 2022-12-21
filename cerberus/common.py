@@ -291,7 +291,7 @@ def permission(role):
                 "update":False,
                 "delete":False,
             },
-            "fleetOperater":{
+            "fleetOperator":{
                 "create":False,
                 "update":False,
                 "delete":False,
@@ -376,11 +376,14 @@ def permission(role):
                 "create":False,
                 "update":False,
                 "delete":False,
+                "view" : True
+
             },
-            "fleetOperater":{
-                "create":True,
+            "fleetOperator":{
+                "create":False,
                 "update":False,
-                "delete":False
+                "delete":False,
+                "view" : True
             },
             "payment":{
                 "log": True
@@ -483,7 +486,7 @@ def permission(role):
                 "delete":False,
                 "view": True
             },
-            "fleetOperater":{
+            "fleetOperator":{
                 "create":True,
                 "update":True,
                 "delete":True,

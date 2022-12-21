@@ -1,7 +1,7 @@
 """ 
    - This Modules is develop for Registration, Login, Battery Management,
    Microsoft signup functions, Vehicle Management, Geofencing,
-   Driver Management, Generate Csv, FleetOwner, FleetOperater.
+   Driver Management, Generate Csv, FleetOwner, FleetOperator.
 
 """
 from django.shortcuts import render, redirect
