@@ -1232,3 +1232,12 @@ margin-left: -17% !important;
     margin-left: 40px;
 
 }
+.add_fleet_status{
+    width: 18%;
+}
+.add_update_button{
+    display: flex;
+}
+.Update_fleet{
+    width: 28vw;
+}
