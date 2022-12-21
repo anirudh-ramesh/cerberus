@@ -839,8 +839,10 @@ p {
 .update-swap-station-div{
     display: flex;
     justify-content: center;
-    position: relative;
-    left: 30%
+    /* position: relative; */
+    /* left: 30% */
+    margin-left: 3%;
+    width: 30%;
 }
 
 

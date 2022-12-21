@@ -82,7 +82,7 @@ def successAndErrorMessages():
         "fleetoperatorCreate": "fleet operatoe is create successfully",
         "fleetoperatorupdate":"fleet operatoe is update successfully",
 
-        "fleetType": ["FleetOperator","FleetOwner"]
+        "fleetType": ["FleetOperator","FleetOwner","User","Driver"]
 
     }
     return response
@@ -208,7 +208,7 @@ def permission(role):
                 "delete":True,
                 "view": True
             },
-            "fleetOperater":{
+            "fleetOperator":{
                 "create":True,
                 "update":True,
                 "delete":True,

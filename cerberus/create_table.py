@@ -62,7 +62,7 @@ def createFleetOwner():
     except Exception as e:
         print(e) 
 
-createFleetOwner()
+# createFleetOwner()
 
 def createFleetOperator():
     try:
@@ -81,7 +81,7 @@ def createFleetOperator():
     except Exception as e:
         print(e) 
 
-createFleetOperator()
+# createFleetOperator()
 
 
 def settingsModuleName():

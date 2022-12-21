@@ -630,13 +630,15 @@ def getVehicleDetails(request):
         assigned_to_user = str(request.get_full_path()).split("?").pop()
         serial_number = assigned_to_user.split("=").pop()
         email_id = assigned_to_user.split("=").pop()
-
         if(request.session.get("IsAdmin")):
             vehicle_data = list(Vehicle.objects.values())
         elif(request.session.get("user_type") in successAndErrorMessages()["fleetType"]):
             vehicle_data=list(Vehicle.objects.filter(created_id=request.session.get("email")).values())
             if("FleetOperator" == request.session.get("user_type")):
                 vehicle_data=list(Vehicle.objects.filter(assigned_operator=request.session.get("email")).values())
+            if("User" == request.session.get("user_type") or "Driver" == request.session.get("user_type")):
+                vehicle_data=list(Crmuser.objects.filter(email=request.session.get("email")).values())
+                vehicle_data=list(Vehicle.objects.filter(chasis_number=vehicle_data[0]["vehicle_assigned_id"]))
         else:
             vehicle_data = list(Vehicle.objects.filter(assigned_to_id=request.session.get("email")).values())
                 
@@ -958,7 +960,7 @@ def addDriver(request):
             email = request.POST.get('contact')
             password = make_password(generatorPassword())
             user_type =  request.POST.get('user_type')
-            driver_fleet_operator = request.POST.get('driver_fleet_operator')
+            assigned_operator = request.POST.get('assigned_operator')
             adhar_proof = request.FILES['adhar_card'].file.read()
             pancard_proof = request.FILES['pan_card'].file.read()
             license_proof = request.FILES['driving_license'].file.read()
@@ -966,7 +968,7 @@ def addDriver(request):
 
             newdata = Crmuser.objects.create(
                 username=username,email=email,user_type=user_type,
-                driver_fleet_operator=driver_fleet_operator,
+                assigned_operator=assigned_operator,
                 adhar_proof=adhar_proof,pancard_proof=pancard_proof,
                 license_proof=license_proof,is_active=is_active,
                 password = password,user_permission= json.dumps(permission("Driver"))
@@ -1042,12 +1044,12 @@ def updateDriver(request,id):
             pi[0]["adhar_proof"]=b64encode(pi[0]['adhar_proof']).decode("utf-8")
             pi[0]["pancard_proof"]=b64encode(pi[0]['pancard_proof']).decode("utf-8")
             pi[0]["license_proof"]=b64encode(pi[0]['license_proof']).decode("utf-8")
-            pi[0]['driver_fleet_operator']=pi[0]['driver_fleet_operator']
+            pi[0]['assigned_operator']=pi[0]['assigned_operator']
 
             #LIST OF FLEET OPERATOR DROP-DOWN
             update_vehicle = list(Crmuser.objects.filter(email=id).values())
             for data in getFleetId:
-                if(data.get('email') == update_vehicle[0]['driver_fleet_operator']):
+                if(data.get('email') == update_vehicle[0]['assigned_operator']):
                     newData.insert(0,data)
                 else:
                     newData.append(data)
@@ -1058,14 +1060,14 @@ def updateDriver(request,id):
             email = request.POST.get('email')
             isactive = request.POST.get('is_active')
             user_type = request.POST.get('user_type')
-            driver_fleet_operator = request.POST['driver_fleet_operator']
+            assigned_operator = request.POST['assigned_operator']
             
             if isactive == 'on':
                 isactive = True
             else:
                 isactive = False
 
-            Crmuser.objects.filter(pk=id).update(username=username,email=email,is_active=isactive,user_type=user_type,driver_fleet_operator=driver_fleet_operator,updated_at = timezone.now())     
+            Crmuser.objects.filter(pk=id).update(username=username,email=email,is_active=isactive,user_type=user_type,assigned_operator=assigned_operator,updated_at = timezone.now())     
             pi =list(Crmuser.objects.filter(email=email).values())
             pi[0]["email"]=pi[0]["email"]
             pi[0]["username"]=pi[0]["username"]
@@ -1074,12 +1076,12 @@ def updateDriver(request,id):
             pi[0]["adhar_proof"]=b64encode(pi[0]['adhar_proof']).decode("utf-8")
             pi[0]["pancard_proof"]=b64encode(pi[0]['pancard_proof']).decode("utf-8")
             pi[0]["license_proof"]=b64encode(pi[0]['license_proof']).decode("utf-8")
-            pi[0]['driver_fleet_operator']=pi[0]['driver_fleet_operator']
+            pi[0]['assigned_operator']=pi[0]['assigned_operator']
 
             #SELECTED FLEET OPERATOR DROP-DOWN VALUE
             update_vehicle = list(Crmuser.objects.filter(email=id).values())
             for data in getFleetId:
-                if(data.get('email') == update_vehicle[0]['driver_fleet_operator']):
+                if(data.get('email') == update_vehicle[0]['assigned_operator']):
                     newData.insert(0,data)
                 else:
                     newData.append(data)

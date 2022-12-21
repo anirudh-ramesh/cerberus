@@ -1,5 +1,6 @@
 #!/bin/bash
-
+echo "Restart Postgres"
+service postgresql restart
 # Collect static files
 echo "Collect static files"
 python cerberus/manage.py collectstatic --noinput
