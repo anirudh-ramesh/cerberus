@@ -500,7 +500,6 @@ def assignedVehicleToDriver(request):
                 dictinary_obj = dict(parse.parse_qsl(parse.urlsplit(assigned_vehicle).query))
                 chasis_number = request.POST.get('name_of_select')
                 already_assign = list(Crmuser.objects.filter(email = dictinary_obj['email']).values())
-               
                 for x in already_assign:
                     
                     if x['vehicle_assigned_id'] is not None:
@@ -956,9 +955,14 @@ def addDriver(request):
 
     try:
         if request.method == "POST":
+            if Crmuser.objects.filter(email=request.POST.get('contact')).exists():
+                messages.add_message(request, messages.WARNING,"Driver is already exists") 
+                return redirect('addriver')
+
             username = request.POST.get('username')
             email = request.POST.get('contact')
-            password = make_password(generatorPassword())
+            newPassword=generatorPassword()
+            password = make_password(newPassword)
             user_type =  request.POST.get('user_type')
             assigned_operator = request.POST.get('assigned_operator')
             adhar_proof = request.FILES['adhar_card'].file.read()
@@ -976,7 +980,7 @@ def addDriver(request):
             newdata.save()
             Crmuser.objects.filter(email=request.POST.get('contact')).update(is_admin=False,created_by=request.session.get("user_type"),created_id=request.session.get("email"))
 
-            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['addDriver']) 
+            messages.add_message(request, messages.SUCCESS,f"Driver create suceessfully your one time password is '{newPassword}' ") 
         return render(request, 'adddriver.html', { "get_Fleet_Operator": getFleetId, "newuserPermission":newuserPermission,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
 
     except Exception as e:
@@ -989,26 +993,32 @@ def listAddedDriver(request):
 
     try:
         if request.method == "GET":
-            vehicle_name=""
+            newData=[]
             if(request.session.get("IsAdmin")):
                 driverData = images_display(True)
-                if(driverData[0]['vehicle_assigned_id']):
-                    vehicle_data = list(Vehicle.objects.filter(chasis_number=driverData[0]['vehicle_assigned_id']).values())
-                    vehicle_name = vehicle_data[0]['vehicle_model_name']
+                if(len(driverData) !=0):
+                    for i in driverData:
+                        vehicle_data = list(Vehicle.objects.filter(chasis_number=i['vehicle_assigned_id']).values())
+                        if(len(vehicle_data) != 0 and vehicle_data[0]['vehicle_model_name'] != None):
+                            i["vehicle_name"] = vehicle_data[0]['vehicle_model_name']
+                        newData.append(i)
             elif(request.session.get("user_type") in successAndErrorMessages()["fleetType"]):
                 driverData = images_display(request.session.get("email"))
-                if(driverData[0]['vehicle_assigned_id']):
-                    vehicle_data = list(Vehicle.objects.filter(chasis_number=driverData[0]['vehicle_assigned_id']).values())
-                    vehicle_name = vehicle_data[0]['vehicle_model_name']
-
+                if(len(driverData) !=0):
+                      for i in driverData:
+                        vehicle_data = list(Vehicle.objects.filter(chasis_number=i['vehicle_assigned_id']).values())
+                        if(len(vehicle_data) != 0 and vehicle_data[0]['vehicle_model_name'] != None):
+                            i["vehicle_name"] = vehicle_data[0]['vehicle_model_name']
+                        newData.append(i)
             else:
                 driverData = images_display(request.session.get("email"))
-                if(driverData[0]['vehicle_assigned_id']):
-                    vehicle_data = list(Vehicle.objects.filter(chasis_number=driverData[0]['vehicle_assigned_id']).values())
-                    vehicle_name = vehicle_data[0]['vehicle_model_name']
-
+                if(len(driverData) !=0):
+                    for i in driverData:
+                        vehicle_data = list(Vehicle.objects.filter(chasis_number=i['vehicle_assigned_id']).values())
+                        if(len(vehicle_data) != 0 and vehicle_data[0]['vehicle_model_name'] != None):
+                            i["vehicle_name"] = vehicle_data[0]['vehicle_model_name']
+                        newData.append(i)
          
-
             #REMOVE VEHICLE FROM DRIVER
             get_full_path = request.get_full_path()
             if("action" in get_full_path and "remove" in get_full_path):
@@ -1021,10 +1031,11 @@ def listAddedDriver(request):
                 messages.add_message(request, messages.WARNING, successAndErrorMessages()['vehicleRemovedFromDriver'])
                 return redirect('getdrivers')
         context={
-                "newuserPermission":newuserPermission,"drivers": driverData ,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission,'vehicle_name': vehicle_name
+                "newuserPermission":newuserPermission,"drivers": newData ,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission,
                 }
         return render(request, 'list_drivers.html',context)
     except Exception as e:
+        print(e)
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError']) 
 
 # This function will Update Driver
