@@ -625,6 +625,7 @@ def getVehicleDetails(request):
     parse.urlsplit(request.get_full_path())
     parse.parse_qs(parse.urlsplit(request.get_full_path()).query)
     dictinary_obj = dict(parse.parse_qsl(parse.urlsplit(request.get_full_path()).query))
+    print(dictinary_obj,"============DICTIONARY_OBJ===============")
 
     try:
         assigned_to_user = str(request.get_full_path()).split("?").pop()
@@ -649,6 +650,12 @@ def getVehicleDetails(request):
             assignedToOrg = list(Organisation.objects.filter(serial_number=serial_number).values())
             chasis_number = assigned_to_user.split('&')[1].split("=")[2]
             vehicleName = list(Vehicle.objects.filter(chasis_number=chasis_number).values())
+
+            if(dictinary_obj.get('serial_number') == "/getvehicle"):
+                if(request.session.get("IsAdmin")):
+                    data = Organisation.objects.values()
+                return redirect('user_management:listorg')
+
             if(assigned_to_user):
                 assignedVehicleToOrganisation(serial_number,chasis_number)
                 sendEmail(request, "Vehicle Assigned", f"{vehicleName[0]['vehicle_model_name']} Vehicle is Assigned To The Organisation {assignedToOrg[0]['organisation_name']}")
@@ -680,6 +687,7 @@ def getVehicleDetails(request):
                 return render(request, 'list_vehicle_details.html', {"newuserPermission":newuserPermission,'vehicle_data':list(Vehicle.objects.values()) , 'email_id': email_id , 'serial_number': serial_number,"IsAdmin":request.session.get("IsAdmin"),"ActiveVehicle":Vehicle.objects.filter(vehicle_status="Active").count(),"InactiveVehicle":Vehicle.objects.filter(vehicle_status="Inactive").count(),'UserPermission':userPermission})
         return render(request, 'list_vehicle_details.html', {"newuserPermission":newuserPermission,'vehicle_data':vehicle_data , 'email_id': email_id , 'serial_number': serial_number,"IsAdmin":request.session.get("IsAdmin"),"ActiveVehicle":Vehicle.objects.filter(vehicle_status="Active").count(),"InactiveVehicle":Vehicle.objects.filter(vehicle_status="Inactive").count(),'UserPermission':userPermission})
     except Exception as e:
+        print(e, "========E=============")
         return messages.warning(request, messages.ERROR,successAndErrorMessages()['internalError'])
 
 

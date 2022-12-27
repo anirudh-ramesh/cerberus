@@ -279,23 +279,29 @@ def deleteOraganisationProfile(request, id):
 #Create a role and inserting into permission organisation 
 def createUserRole(request,id):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
-    newuserPermission=permission(request.session.get("user_type"))
+    newuserPermission= permission(request.session.get("user_type"))
 
-    if(request.session.get("IsAdmin") == False):
-        messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
-        return redirect('user_management:listorg')
-    if request.method == "POST":
-        role_name=request.POST.get("roles")
-        permission=request.POST.get("permission")
-        if Role.objects.filter(roles=role_name).exists():
-            get_id=list(Role.objects.filter(roles=role_name).values())
-            insertIntoOrgnisationPermission(permission,role_name,get_id[0].get("id"))
-            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['Role'])
-        else:
-            form = Role.objects.create(roles=role_name,select=True,org_id=id)
-            form.save()
-            insertIntoOrgnisationPermission(permission,role_name,form.id)
-    return render(request,'user_management_templates/add_user_role.html', {"newuserPermission":newuserPermission,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
+    try:
+        if(request.session.get("IsAdmin") == False):
+            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
+            return redirect('user_management:listorg')
+
+        if request.method == "POST":
+            role_name=request.POST.get("roles")
+            permission_name=request.POST.get("permission")
+            if Role.objects.filter(roles=role_name).exists():
+                get_id=list(Role.objects.filter(roles=role_name).values())
+                insertIntoOrgnisationPermission(permission_name,role_name,get_id[0].get("id"))
+                messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['Role'])
+            else:
+                form = Role.objects.create(roles=role_name,select=True,org_id=id)
+                form.save()
+                insertIntoOrgnisationPermission(permission_name,role_name,form.id)
+        return render(request,'user_management_templates/add_user_role.html', {"newuserPermission":newuserPermission,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
+    except Exception as e:
+        print(e)
+        return messages.add_message(request,messages.WARNING, successAndErrorMessages()['internalError'])
+        
 
 #This function is used to get listing role. 
 def listRole(request):
@@ -413,26 +419,30 @@ def addSwapStation(request):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     newuserPermission=permission(request.session.get("user_type"))
 
-    if(request.session.get("IsAdmin") == False):
-        messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
-        return redirect('home')
-    if request.method == "POST":
-        if Swapstation.objects.filter(imei_number=request.POST.get('imei_number')).exists():
-            messages.add_message(request, messages.WARNING,"Details Already Added for this Swap-station Imei number, try with another one.") 
-            return redirect('user_management:addswap')
-        formData = Swapstation.objects.create(
-            swap_station_name = request.POST.get('swap_station_name'),
-            imei_number = request.POST.get('imei_number'),
-            number_of_doors = request.POST.get('number_of_doors'),
-            charge_specification = request.POST.get('charge_specification'),
-            location= request.POST.get('Location'),
-            assigned_owner = request.POST.get('assigned_owner'),
-            status = request.POST.get('status'),
-            assigned_fleet_owner = request.POST.get('assigned_fleet_owner'),
-        )
-        formData.save()
-        messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['createSwapStation'])
-    return render(request,'add_swapstation.html', {"newuserPermission":newuserPermission,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
+    try:
+
+        if(request.session.get("IsAdmin") == False):
+            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
+            return redirect('home')
+        if request.method == "POST":
+            if Swapstation.objects.filter(imei_number=request.POST.get('imei_number')).exists():
+                messages.add_message(request, messages.WARNING,"Details Already Added for this Swap-station Imei number, try with another one.") 
+                return redirect('user_management:addswap')
+            formData = Swapstation.objects.create(
+                swap_station_name = request.POST.get('swap_station_name'),
+                imei_number = request.POST.get('imei_number'),
+                number_of_doors = request.POST.get('number_of_doors'),
+                charge_specification = request.POST.get('charge_specification'),
+                location= request.POST.get('Location'),
+                assigned_owner = request.POST.get('assigned_owner'),
+                status = request.POST.get('status'),
+                assigned_fleet_owner = request.POST.get('assigned_fleet_owner'),
+            )
+            formData.save()
+            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['createSwapStation'])
+        return render(request,'add_swapstation.html', {"newuserPermission":newuserPermission,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
+    except Exception as e:
+        return messages.add_message(request,messages.WARNING, successAndErrorMessages()['internalError'])
 
 #Listing swap station data.
 def listSwapstation(request):
@@ -478,43 +488,47 @@ def updateSwapstationDetails(request,id):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     newuserPermission=permission(request.session.get("user_type"))
 
-    if(request.session.get("IsAdmin") == False):
-        messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
-        return redirect('home')
-    update_swapstation = list(Swapstation.objects.filter(imei_number=id).values())
+    try:
+        if(request.session.get("IsAdmin") == False):
+            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
+            return redirect('home')
+        update_swapstation = list(Swapstation.objects.filter(imei_number=id).values())
 
-    if request.method == "POST":
-        swap_station_name = request.POST.get('swap_station_name')
-        imei_number = request.POST.get('imei_number')
-        number_of_doors = request.POST.get('number_of_doors')
-        charge_specification = request.POST.get('charge_specification')
-        assigned_owner = request.POST.get('assigned_owner')
-        status = request.POST.get('status')
-        assigned_fleet_owner = request.POST.get('assigned_fleet_owner')
-        location= request.POST.get('Location')
+        if request.method == "POST":
+            swap_station_name = request.POST.get('swap_station_name')
+            imei_number = request.POST.get('imei_number')
+            number_of_doors = request.POST.get('number_of_doors')
+            charge_specification = request.POST.get('charge_specification')
+            assigned_owner = request.POST.get('assigned_owner')
+            status = request.POST.get('status')
+            assigned_fleet_owner = request.POST.get('assigned_fleet_owner')
+            location= request.POST.get('Location')
 
-        Swapstation.objects.filter(imei_number=id).update(
-            swap_station_name=swap_station_name, imei_number=imei_number,
-            number_of_doors=number_of_doors,charge_specification=charge_specification,
-            assigned_owner=assigned_owner,
-            status=status,assigned_fleet_owner=assigned_fleet_owner,
-            location=location
-        )
+            Swapstation.objects.filter(imei_number=id).update(
+                swap_station_name=swap_station_name, imei_number=imei_number,
+                number_of_doors=number_of_doors,charge_specification=charge_specification,
+                assigned_owner=assigned_owner,
+                status=status,assigned_fleet_owner=assigned_fleet_owner,
+                location=location
+            )
 
-        update_swapstation = [{
-            'swap_station_name':swap_station_name,
-            'imei_number':imei_number,'number_of_doors': number_of_doors,
-            'charge_specification': charge_specification,
-            'location': location,'assigned_owner': assigned_owner,
-            'status': status,
-            'assigned_fleet_owner': assigned_fleet_owner,
-        }]
+            update_swapstation = [{
+                'swap_station_name':swap_station_name,
+                'imei_number':imei_number,'number_of_doors': number_of_doors,
+                'charge_specification': charge_specification,
+                'location': location,'assigned_owner': assigned_owner,
+                'status': status,
+                'assigned_fleet_owner': assigned_fleet_owner,
+            }]
 
-        messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['updateSwapStation'])
+            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['updateSwapStation'])
+            return render(request,'update_swap_station.html',{"newuserPermission":newuserPermission,'update_swap_station_data': update_swapstation,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission })
+
+        update_swapstation = list(Swapstation.objects.filter(imei_number=id).values())
         return render(request,'update_swap_station.html',{"newuserPermission":newuserPermission,'update_swap_station_data': update_swapstation,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission })
+    except Exception as e:
+        return messages.add_message(request,messages.WARNING, successAndErrorMessages()['internalError'])
 
-    update_swapstation = list(Swapstation.objects.filter(imei_number=id).values())
-    return render(request,'update_swap_station.html',{"newuserPermission":newuserPermission,'update_swap_station_data': update_swapstation,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission })
 
 #delete records from swap station table.
 def deleteSwapStation(request,id):
