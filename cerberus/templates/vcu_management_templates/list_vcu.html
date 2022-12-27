@@ -1,0 +1,56 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+
+<div class="col-sm-12">
+  {% if IsAdmin or newuserPermission.VCU.create %}
+  <a href="{% url 'createvcu' %}" class="btn btn-info btn-sm">Add-VCU-Owner</a>
+
+  {% endif %}
+        <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Home</a>
+
+    <h4 class="text-center">VCU Details</h4>
+    <form action="" method="GET">
+      
+        {% if data %}
+                <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">IMEI Number</th>
+                        
+                        {% if IsAdmin or newuserPermission.VCU.update or newuserPermission.VCU.delete %}
+
+                          <th scope="col">Action</th>
+
+                        {% endif %}
+                      </tr>
+                    <tbody>
+                    {% for fm in data %}
+                        <tr>
+                            <td>{{fm.imei_number}}</td>
+
+                          <td style="display: flex;">
+                            {% if IsAdmin or newuserPermission.VCU.update %}
+                            <a class="table-link" aria-expanded="false" href="{% url 'updatevcu' fm.imei_number %}"><img src="../static/icons/edit.svg"></a>
+                            {% endif %}
+                            {% if IsAdmin or newuserPermission.VCU.delete %}
+                            <a class="table-link" aria-expanded="false" href="{% url 'deletevcu' fm.imei_number %}"><img src="../static/icons/delete.svg"></a>
+                            {% endif %}
+
+                          </td>              
+                        </tr>
+                      
+                      {% endfor %}
+                    </tbody>
+                    </thead>
+                  </table>
+            
+        {% else %}
+            <h4 class="text-center alert alert warning">No Records Found</h4>
+        {% endif %}
+
+    </form>
+    
+</div>
+{% endblock %}

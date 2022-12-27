@@ -281,3 +281,6 @@ class FleetOwner(models.Model):
     def __str__(self):
         return str(self.model_name)
 
+
+class VCU(models.Model):
+    imei_number = models.CharField(max_length=225, blank=True, primary_key=True)
