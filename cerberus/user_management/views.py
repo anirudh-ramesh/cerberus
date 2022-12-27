@@ -114,10 +114,14 @@ def addOrganisation(request):
 
     if request.method == "POST":
         form = OrgasationForm(request.POST)
+        if Organisation.objects.filter(serial_number=form.data['serial_number']).exists():
+            messages.add_message(request, messages.WARNING,"Organisation already exists.") 
+            return redirect('user_management:addorg')
+        
         if form.is_valid():
             form.save()
             messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['createOrganisation'])
-        return redirect("user_management:listorg")
+        return redirect("user_management:addorg")
     context = {"newuserPermission":newuserPermission, 'form': form,'UserPermission':userPermission }
 
     return render(request,'add_organisation.html',context)
@@ -413,6 +417,9 @@ def addSwapStation(request):
         messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['AuthError'])
         return redirect('home')
     if request.method == "POST":
+        if Swapstation.objects.filter(imei_number=request.POST.get('imei_number')).exists():
+            messages.add_message(request, messages.WARNING,"Details Already Added for this Swap-station Imei number, try with another one.") 
+            return redirect('user_management:addswap')
         formData = Swapstation.objects.create(
             swap_station_name = request.POST.get('swap_station_name'),
             imei_number = request.POST.get('imei_number'),

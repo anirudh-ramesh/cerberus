@@ -8,12 +8,13 @@
     <h4 class="text-center alert alert info">List Of Drivers</h4>
     <a href="{% url 'getvehicle' %}" class="btn btn-info btn-sm">back</a>
     <form action="" method="GET">
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class = "alert alert-{{message.tags}}">{{message}}</div>
+                    {% endfor %}
+                {% endif %}
+
         {% if drivers %}
-            {% if messages %}
-                {% for message in messages %}
-                <div class = "alert alert-{{message.tags}}">{{message}}</div>
-                {% endfor %}
-            {% endif %}
                 <table class="table table-hover">
                     <thead>
                       <tr>

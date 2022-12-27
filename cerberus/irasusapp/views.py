@@ -112,7 +112,7 @@ def batteryDetails(request):
     getOwnerList=list(FleetOwner.objects.all())
     try:
         serial_num = request.POST.get('battery_serial_num')
-        if BatteryDetail.objects.filter(battery_serial_num=serial_num):
+        if BatteryDetail.objects.filter(battery_serial_num=serial_num).exists():
             messages.add_message(request, messages.WARNING, successAndErrorMessages()['alreadyAddedBattery'])
             return render(request,'add_battery_details.html',{"getOwnerList":getOwnerList,"IsAdmin": request.session.get('IsAdmin'),"newuserPermission":newuserPermission,"userPermission":userPermission})
         else:
