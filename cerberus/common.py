@@ -190,7 +190,8 @@ def permission(role):
             "geofence":{
                 "create":True,
                 "update":True,
-                "delete":True
+                "delete":True,
+                "view": True
             },
             "org":{
                 "addUsertoorg":True,
@@ -273,7 +274,8 @@ def permission(role):
             "geofence":{
                 "create":False,
                 "update":False,
-                "delete":False
+                "delete":False,
+                "view": False
             },
             "org":{
                 "addUsertoorg":False,
@@ -359,7 +361,8 @@ def permission(role):
             "geofence":{
                 "create":False,
                 "update":False,
-                "delete":False
+                "delete":False,
+                "view": False
             },
             "org":{
                 "addUsertoorg":False,
@@ -449,7 +452,8 @@ def permission(role):
             "geofence":{
                 "create":False,
                 "update":False,
-                "delete":False
+                "delete":False,
+                "view": False
             },
             "org":{
                 "addUsertoorg":False,

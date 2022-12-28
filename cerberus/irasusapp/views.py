@@ -625,7 +625,6 @@ def getVehicleDetails(request):
     parse.urlsplit(request.get_full_path())
     parse.parse_qs(parse.urlsplit(request.get_full_path()).query)
     dictinary_obj = dict(parse.parse_qsl(parse.urlsplit(request.get_full_path()).query))
-    print(dictinary_obj,"============DICTIONARY_OBJ===============")
 
     try:
         assigned_to_user = str(request.get_full_path()).split("?").pop()
@@ -918,7 +917,7 @@ def addgeofenceVehicles(request):
                 longitude = coordinate_data[0]
                 latitude = coordinate_data[1]
                 location = Point(float(longitude),float(latitude),srid=4326)            
-                newdata = Geofence.objects.create(geoname=geoname,geotype=geotype,description=description,enter_latitude=latitude,enter_longitude=longitude,pos_address=position_add,location=location)
+                newdata = Geofence.objects.create(geoname=geoname,geotype=geotype,description=description,enter_latitude=latitude,enter_longitude=json.loads(longitude),pos_address=position_add,location=location)
                 messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['locationCreate'])
                 return redirect('geofence')
 
@@ -931,7 +930,7 @@ def addgeofenceVehicles(request):
                     res={}
                     longitude = ((polygon_data[0]),(polygon_data[1]))
                     res['lat'] = polygon_data[1]
-                    res['lang'] = polygon_data[0]
+                    res['lng'] = polygon_data[0]
                     longitude_data.append(res)
                     latitude = polygon_data[1]
                     latitude_data.append(latitude)
@@ -952,10 +951,24 @@ def listgeofenceData(request):
     try:
         if request.method == "GET":
             geofencedata = list(Geofence.objects.values())
-        return render(request, 'list_geofence_data.html',{"newuserPermission":newuserPermission, 'geofencedata': geofencedata ,"IsAdmin":request.session.get("IsAdmin")})
+
+        return render(request, 'list_geofence_data.html',{"newuserPermission":newuserPermission, 'listgeofencedata': geofencedata ,"IsAdmin":request.session.get("IsAdmin")})
     except Exception as e:
-        return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError'])
-   
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
+
+def geofenceFilteringData(request, id):
+    newuserPermission=permission(request.session.get("user_type"))
+    try:
+        geofencedata = list(Geofence.objects.filter(pk=id).values())
+        context = {
+            "newuserPermission":newuserPermission,
+            "IsAdmin":request.session.get("IsAdmin"),
+            'geofencedata':geofencedata[0]['enter_latitude']
+        }
+        return render(request, "filter_geofence_data.html",context)
+    except Exception as e:
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
+
 #Add driver For Vechicle Module.
 def addDriver(request):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))

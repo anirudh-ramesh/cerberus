@@ -54,6 +54,7 @@ urlpatterns= [
     ## GEOFENCE MODULE ##
     path('geofence', views.addgeofenceVehicles, name="geofence"),
     path('listdata', views.listgeofenceData, name="add_data"),
+    path('filterdata/<int:id>', views.geofenceFilteringData, name="filterdata"),    
     
     ## DRIVER MODULE ##
     path('driver', views.addDriver, name="addriver"),  

@@ -1,86 +1,54 @@
-<!DOCTYPE html>
-<html>
-  <head>
-      <title>Geofence</title>
-      <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <meta charset="utf-8">
-      <style>
-          #map {
-            height: 80%;
-          }
-          html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-          }
-      </style>
+{% extends 'main.html' %}
 
-  </head>
-    <body>
-      <div id="map"></div>
+{% block content %}
 
-        <div class="col-sm-8">
-            <h4 class="text-center alert alert info">Geofence Data</h4>
-            <form action="" method="GET">              
-                {% if geofencedata %}
-                        <table class="table table-hover">
-                            <thead>
-                              <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">Posotion Address</th>
-                                <th scope="col">Geo-Type</th>
-                                <th scope="col">Discription</th>
 
-                              </tr>
-                            <tbody>
-                            {% for fm in geofencedata %}
-                                <tr>
-                                  <div>
-                                    <td>{{fm.geoname}}</td>
-                                  </div>
-                                    <div>
-                                      <td>{{fm.pos_address}}</td>
-                                    </div>
-                                    <div>
-                                      <td>{{fm.geotype}}</td>
-                                    </div>
-                                    <div>
-                                      <td>{{fm.description}}</td>
-                                    </div>
+<body>
+  <div class="col-sm-8">
+    <h4 class="text-center alert alert info">Geofence Data</h4>
+    <form action="" method="GET">
 
-                                  </tr>
+      {% if listgeofencedata %}
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Posotion Address</th>
+            <th scope="col">Geo-Type</th>
+            <th scope="col">Discription</th>
+            <th scope="col">Action</th>
+          </tr>
+        <tbody>
+          {% for fm in listgeofencedata %}
+          <tr>
+            <div>
+              <td>{{fm.geoname}}</td>
+            </div>
+            <div>
+              <td>{{fm.pos_address}}</td>
+            </div>
+            <div>
+              <td>{{fm.geotype}}</td>
+            </div>
+            <div>
+              <td>{{fm.description}}</td>
+            </div>
+            <div>
+              <td><a class="btn btn-info btn-sm" href="{% url 'filterdata' fm.id %}">Details</a>
+              </td>
+            </div>
 
-                              {% endfor %}
-                            </tbody>
-                            </thead>
-                          </table>
+          </tr>
 
-                {% else %}
-                    <h4 class="text-center alert alert warning">No Records Found</h4>
-                {% endif %}
+          {% endfor %}
+        </tbody>
+        </thead>
+      </table>
+      {% else %}
+      <h4 class="text-center alert alert warning">No Records Found</h4>
+      {% endif %}
+    </form>
+  </div>
+</body>
 
-            </form>
-
-        </div>
-
-    <script type="text/javascript">
-      var data = JSON.stringify("{{ geofencedata | escapejs }}"); 
-          function initMap() {
-          var map = new google.maps.Map(document.getElementById("map"), {
-              //zoom: 3,
-              zoom: 10,
-              center: {
-                  lat: 28.620585, lng: 77.228609
-              }
-          });
-          var marker = new google.maps.Marker({
-              position: {lat : 22.836685107660927 , lng:70.63440917949923},
-              map : map
-          })
-      }
-      </script>
-      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBqY1ZuIisvFmyKR3fAx6DVrkAsAZR1CM4&libraries=drawing&callback=initMap"></script>
-    </body>
-
-</html>
+{% endblock %}
