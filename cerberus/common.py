@@ -49,8 +49,7 @@ def successAndErrorMessages():
 
         "csvGenerate" : "CSV generate successfully",
         "locationCreate" : "Location is created successfully",
-        "locationUpdate": "Location is update successfully",
-        "removeLocation": "Remove Location",
+        "removeLocation": "Location is Removed successfully",
         "internalError": "Server Error",
 
         "removeVehiclefromUser": "Removed vehicle from user",

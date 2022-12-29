@@ -33,6 +33,14 @@
           lat: coordinates[0]['lat'], lng: coordinates[0]['lng']
         }
       });
+
+      if (coordinates.length == 1){
+        var marker = new google.maps.Marker({
+              position: {lat : coordinates[0]['lat'] , lng:coordinates[0]['lng'] },
+              map : map
+      })
+        marker.setMap(map);
+      }
       const triangleCoords = JSON.parse(data.replace(/'/g, '"'))
 
       const bermudaTriangle = new google.maps.Polygon({
@@ -51,7 +59,7 @@
   </script>
 
   <div class="text-center mt-3">
-    <a class="btn btn-secondary" href="{% url 'add_data' %}">Back</a>
+    <a class="btn btn-secondary" href="{% url 'listgeofencedata' %}">Back</a>
   </div>
   
 </body>

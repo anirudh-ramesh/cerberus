@@ -914,10 +914,14 @@ def addgeofenceVehicles(request):
             coordinate_data = newdata["features"][0]['geometry']['coordinates']
 
             if newdata["features"][0]['geometry']['type'] == 'Point':
+                res={}
+                res['lat'] = coordinate_data[1]
+                res['lng'] = coordinate_data[0]
+                longitude_data.append(res)
                 longitude = coordinate_data[0]
                 latitude = coordinate_data[1]
                 location = Point(float(longitude),float(latitude),srid=4326)            
-                newdata = Geofence.objects.create(geoname=geoname,geotype=geotype,description=description,enter_latitude=latitude,enter_longitude=json.loads(longitude),pos_address=position_add,location=location)
+                newdata = Geofence.objects.create(geoname=geoname,geotype=geotype,description=description,enter_latitude=longitude_data,enter_longitude=longitude,pos_address=position_add,location=location)
                 messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['locationCreate'])
                 return redirect('geofence')
 
@@ -967,6 +971,23 @@ def geofenceFilteringData(request, id):
         }
         return render(request, "filter_geofence_data.html",context)
     except Exception as e:
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
+
+#Delete records of Geofence.
+def deleteGeofenceData(request, id):
+    userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    newuserPermission=permission(request.session.get("user_type"))
+ 
+    try:
+        pi = Geofence.objects.get(pk=id)
+        if request.method == 'POST':
+            pi.delete()
+            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['removeLocation']) 
+            return redirect('listgeofencedata')
+        context = {"newuserPermission":newuserPermission,'geofence' : pi,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission}
+        return render(request, "delete_geofence_data.html", context)
+    except Exception as e:
+        print(e)
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
 #Add driver For Vechicle Module.

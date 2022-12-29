@@ -6,7 +6,7 @@ function initMap() {
         mapTypeId: google.maps.MapTypeId.RoadMap
     }
     map = new google.maps.Map(document.getElementById('map'), mapOptions)
-
+    var selectedShape
     var drawingManager = new google.maps.drawing.DrawingManager({
         //drawingMode: google.maps.drawing.OverlayType.MARKER,
         drawingControl: true,
@@ -52,6 +52,9 @@ function initMap() {
     drawingManager.setMap(map);
 
     google.maps.event.addListener(drawingManager, 'overlaycomplete', function(event) {
+      var newShape = event.type
+      selectedShape = newShape;
+
         switch (event.type) {
           case google.maps.drawing.OverlayType.MARKER:
             map.data.add(new google.maps.Data.Feature({
@@ -94,15 +97,18 @@ function initMap() {
         }
 
       });
-    google.maps.event.addDomListener(document.getElementById('save'), 'click', function() {
-        map.data.toGeoJson(function(obj) {
-          document.getElementById('geojson').value = JSON.stringify(obj);
-        });
+      google.maps.event.addDomListener(document.getElementById('save'), 'click', function() {
+        if (!selectedShape) {
+          alert("There are no shape selected");
+          return 
+        }else{
+          map.data.toGeoJson(function(obj) {
+            document.getElementById('geojson').value = JSON.stringify(obj);
+          });
+        }
+        
       })
-
-
-    // loadPolygons(map);
-}
+    }
 
 // Apply listeners to refresh the GeoJson display on a given data layer.
 function bindDataLayerListeners(dataLayer) {
@@ -110,14 +116,6 @@ function bindDataLayerListeners(dataLayer) {
     dataLayer.addListener('removefeature', savePolygon);
     dataLayer.addListener('setgeometry', savePolygon);
 }
-
-// function loadPolygons(map) {
-//     var data = JSON.parse('{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-74.10690307617188,40.75531957477602],[-73.98571014404297,40.74023389131268],[-74.04373168945312,40.67829474034605],[-74.12063598632812,40.69183258262447],[-74.10690307617188,40.75531957477602]]]},"properties":{}}]}');
-//     map.data.forEach(function (f) {
-//         map.data.remove(f);
-//     });
-//     map.data.addGeoJson(data)
-// }
 
 function savePolygon() {
     map.data.toGeoJson(function (json) {
