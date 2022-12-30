@@ -70,7 +70,7 @@
                           
                             <td>
                               
-                            <a href="{% url 'assinged' fm.chasis_number %}" class="btn btn-info btn-sm">Battery Details</a>
+                            <a href="{% url 'assinged' fm.chasis_number %}" class="btn btn-primary btn-sm">Battery Details</a>
 
                             {% if IsAdmin or newuserPermission.vehicle.update %}
                             <a href="{% url 'updatevehicle' fm.chasis_number %}" class="btn btn-info btn-sm">Edit</a>
@@ -81,10 +81,10 @@
                             <a href="{% url 'deletevehicle' fm.chasis_number %}" class="btn btn-danger btn-sm">Delete</a>
                             {% endif %}
 
-                            {% if IsAdmin or newuserPermission.vehicle.batteryAssigned %}
+                            <!-- {% if IsAdmin or newuserPermission.vehicle.batteryAssigned %}
 
                             <a href="{% url 'data' %}?chasis_number={{fm.chasis_number}}" class="btn btn-warning btn-sm">Assign-To-Battery</a>
-                            {% endif %}
+                            {% endif %} -->
 
                             {% if IsAdmin or newuserPermission.vehicle.userAssigned %}
 

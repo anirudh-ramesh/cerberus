@@ -179,22 +179,22 @@ def getBatteryDetails(request):
                     cahis_id = str(request.get_full_path()).split("=").pop()
 
         # ASSIGNED BATTERY TO VEHICLE
-        if "AssignToVehicle" in request.get_full_path():
-            vehicle_id = str(request.get_full_path()).split("?").pop()
-            cahis_id = vehicle_id.split('&')[0].split("=")[1]
-            battery_serial_id = vehicle_id.split('&')[1].split("=")[1]
+        # if "AssignToVehicle" in request.get_full_path():
+        #     vehicle_id = str(request.get_full_path()).split("?").pop()
+        #     cahis_id = vehicle_id.split('&')[0].split("=")[1]
+        #     battery_serial_id = vehicle_id.split('&')[1].split("=")[1]
     
-            #IF BATTERY IS ALREADY ASSINGED
-            data = list(BatteryDetail.objects.filter(battery_serial_num=battery_serial_id).values())
-            if(data[0]["is_assigned"]):
-                messages.add_message(request, messages.WARNING, successAndErrorMessages()['addBatteryError'])
-                return redirect('data')
+        #     #IF BATTERY IS ALREADY ASSINGED
+        #     data = list(BatteryDetail.objects.filter(battery_serial_num=battery_serial_id).values())
+        #     if(data[0]["is_assigned"]):
+        #         messages.add_message(request, messages.WARNING, successAndErrorMessages()['addBatteryError'])
+        #         return redirect('data')
 
-            for x in data:
-                vehicleName = list(Vehicle.objects.filter(chasis_number=cahis_id).values())
-                BatteryDetail.objects.filter(pk=x['battery_serial_num']).update(vehicle_assign_id=str(cahis_id), is_assigned=True)
-                sendEmail(request, "Battery Assigned To Vehicle", f"{battery_serial_id} Battery is Assigned To The Vehicle {vehicleName[0]['vehicle_model_name']}")
-            return redirect('data')
+        #     for x in data:
+        #         vehicleName = list(Vehicle.objects.filter(chasis_number=cahis_id).values())
+        #         BatteryDetail.objects.filter(pk=x['battery_serial_num']).update(vehicle_assign_id=str(cahis_id), is_assigned=True)
+        #         sendEmail(request, "Battery Assigned To Vehicle", f"{battery_serial_id} Battery is Assigned To The Vehicle {vehicleName[0]['vehicle_model_name']}")
+        #     return redirect('data')
         context = { 'battery_data': data,"cahis_id": cahis_id, "IsAdmin":request.session.get("IsAdmin") ,"ActiveBattery":BatteryDetail.objects.filter(status="IN_VEHICLE").count()+BatteryDetail.objects.filter(status="IN_SWAP_STATION").count(),"DamagedBattery":BatteryDetail.objects.filter(status="DAMAGED").count(),"inActiveBattery":BatteryDetail.objects.filter(status="IDEL").count(),"newuserPermission":newuserPermission }
         context['UserPermission']=userPermission  
 
@@ -255,6 +255,35 @@ def updateBatteryDetails(request, id):
 
         battery_data = list(BatteryDetail.objects.filter(battery_serial_num=id).values())
         return render(request,'update_battery_details.html',{"getOwnerList":newData,"newuserPermission":newuserPermission,'form': battery_data, "IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
+    except Exception as e:
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
+
+def assignBatteryToVehicle(request):
+    try:
+        userPermission=UserPermission(request,request.session.get("IsAdmin"))
+        obj = Vehicle.objects.all()
+
+        #ASSIGN BATTERY TO VEHICLE
+        if request.method == "POST":
+            assigned_vehicle = request.get_full_path()
+            if("action" in assigned_vehicle and "add" in assigned_vehicle):
+                parse.urlsplit(assigned_vehicle)
+                parse.parse_qs(parse.urlsplit(assigned_vehicle).query)
+                dictinary_obj = dict(parse.parse_qsl(parse.urlsplit(assigned_vehicle).query))
+                chasis_number = request.POST.get('name_of_select')
+                already_assign = list(BatteryDetail.objects.filter(battery_serial_num = dictinary_obj['battery_serial_num']).values())
+                for x in already_assign:
+                    if x['vehicle_assign_id'] is not None:
+                        messages.add_message(request, messages.WARNING, successAndErrorMessages()['addBatteryError'])
+                        return redirect('assingedtovehicle')
+                    else:
+                        vehicleName = list(Vehicle.objects.filter(chasis_number=chasis_number).values())
+                        BatteryDetail.objects.filter(pk=dictinary_obj['battery_serial_num']).update(vehicle_assign_id = chasis_number, is_assigned=True)
+                        messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['assignBattery'])
+                        sendEmail(request, "Battery Assigned To Vehicle", f"{dictinary_obj['battery_serial_num']} Battery is Assigned To The Vehicle {vehicleName[0]['vehicle_model_name']}")
+                        return redirect('assingedtovehicle')
+        context = { 'assinged_vehicle': obj,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission }
+        return render(request,'assing_battery_to_vehicle.html', context)
     except Exception as e:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
@@ -686,7 +715,6 @@ def getVehicleDetails(request):
                 return render(request, 'list_vehicle_details.html', {"newuserPermission":newuserPermission,'vehicle_data':list(Vehicle.objects.values()) , 'email_id': email_id , 'serial_number': serial_number,"IsAdmin":request.session.get("IsAdmin"),"ActiveVehicle":Vehicle.objects.filter(vehicle_status="Active").count(),"InactiveVehicle":Vehicle.objects.filter(vehicle_status="Inactive").count(),'UserPermission':userPermission})
         return render(request, 'list_vehicle_details.html', {"newuserPermission":newuserPermission,'vehicle_data':vehicle_data , 'email_id': email_id , 'serial_number': serial_number,"IsAdmin":request.session.get("IsAdmin"),"ActiveVehicle":Vehicle.objects.filter(vehicle_status="Active").count(),"InactiveVehicle":Vehicle.objects.filter(vehicle_status="Inactive").count(),'UserPermission':userPermission})
     except Exception as e:
-        print(e, "========E=============")
         return messages.warning(request, messages.ERROR,successAndErrorMessages()['internalError'])
 
 
@@ -947,7 +975,6 @@ def addgeofenceVehicles(request):
                     latitude_data.append(latitude)
                     polygon_coordinates.append(longitude)
             geofence = Polygon(((polygon_coordinates)),srid=4326)
-            print("GEOFENCE", geofence)
             newdata = Geofence.objects.create(geoname=geoname,geotype=geotype, description=description,enter_latitude=longitude_data,pos_address=position_add,geofence=geofence)
             messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['locationCreate'])
             return redirect('geofence')

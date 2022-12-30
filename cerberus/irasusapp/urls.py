@@ -26,6 +26,7 @@ urlpatterns= [
     path(r'getdata', views.getBatteryDetails, name="data"),
     path('update/<str:id>', views.updateBatteryDetails, name="updatedata"),
     path('delete/<str:id>', views.deleteRecord, name="deletedata"),
+    path(r'assigntovehicle', views.assignBatteryToVehicle, name="assingedtovehicle"),  
 
     ## STATUS BATTERY ##
     path('activebattery', views.activeBatteryDetails, name="active"), 
@@ -50,6 +51,7 @@ urlpatterns= [
     path(r'assigned/<int:id>', views.assignedBatteryList, name="assinged"),
     path(r'orgvehicle/<int:id>', views.assignedOrgVehicleList, name="assingedtoorg"),
     path(r'uservehicle/<str:id>', views.assignedVehicleToUser, name="uservehicle"),
+    
 
     ## GEOFENCE MODULE ##
     path('geofence', views.addgeofenceVehicles, name="geofence"),

@@ -12,7 +12,7 @@
 
     <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Home</a>
     <h4 class="text-center alert alert info">Battery Data</h4>
-    <div class="card card-2"style="border-radius: 0px;">
+    <div>
     <form action="" method="GET">
       
       {% if messages %}
@@ -83,8 +83,7 @@
 
                         {% endif%}
                         {% if IsAdmin or newuserPermission.battery.batteryAssigned %}
-                            <a class="table-link" aria-expanded="false" href="{% url 'data' %}?cahis_id={{cahis_id}}&battery_serial_num={{fm.battery_serial_num}}&action=AssignToVehicle"><img src="../static/icons/add-88.svg"value="Add"></a>
-
+                              <a href="{% url 'assingedtovehicle' %}?battery_serial_num={{fm.battery_serial_num}}&action='add'" class="btn btn-secondary btn-sm">assign to vehicle</a>
                         {% endif%}
                           <a  href="{% url 'iramedata' fm.battery_serial_num %}" style="height:100%; width: 100%;"  aria-expanded="false" class="btn btn-secondary btn-sm">Battery Packs</a> 
                         </td>
