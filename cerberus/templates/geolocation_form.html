@@ -33,6 +33,7 @@
         <div id="map">
         </div>
         <div class="col-sm-8">
+            <a href="{% url 'geofence' %}?action=remove" class="btn btn-danger btn-sm text-center mt-3 geolocation_map">Remove Shape</a>
         <div class="fromdata">
             <form method="POST" action="" id="">
                 {% csrf_token %}

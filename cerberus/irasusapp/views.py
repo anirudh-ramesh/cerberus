@@ -901,6 +901,13 @@ def addgeofenceVehicles(request):
     newuserPermission=permission(request.session.get("user_type"))
 
     try:
+        get_full_path = request.get_full_path()
+        if("action" in get_full_path):
+            parse.urlsplit(get_full_path)
+            parse.parse_qs(parse.urlsplit(get_full_path).query)
+            dictinary_obj = dict(parse.parse_qsl(parse.urlsplit(get_full_path).query))
+            if dictinary_obj['action']:
+                return redirect('geofence')
         polygon_coordinates = []
         longitude_data = []
         latitude_data = []
