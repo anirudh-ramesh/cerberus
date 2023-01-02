@@ -174,8 +174,7 @@ class Vehicle(models.Model):
     vehicle_status = models.CharField(max_length=225,default='', blank=True, null=True)
     created_by = models.CharField(max_length=100, default='',null=True)
     created_id = models.CharField(max_length=300, default='',null=True)
-
-    # geofence = models.ManyToManyField(Geofence)
+    geofence = models.ManyToManyField(Geofence)
 
     def __str__(self):
         return str(self.vehicle_model_name)

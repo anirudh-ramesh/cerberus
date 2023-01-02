@@ -83,9 +83,9 @@
 
                         {% endif%}
                         {% if IsAdmin or newuserPermission.battery.batteryAssigned %}
-                              <a href="{% url 'assingedtovehicle' %}?battery_serial_num={{fm.battery_serial_num}}&action='add'" class="btn btn-secondary btn-sm">assign to vehicle</a>
+                              <a href="{% url 'assingedtovehicle' %}?battery_serial_num={{fm.battery_serial_num}}&action='add'" style="height:100%; width: 100%;" class="btn btn-secondary btn-sm">assign to vehicle</a>
                         {% endif%}
-                          <a  href="{% url 'iramedata' fm.battery_serial_num %}" style="height:100%; width: 100%;"  aria-expanded="false" class="btn btn-secondary btn-sm">Battery Packs</a> 
+                              <a  href="{% url 'iramedata' fm.battery_serial_num %}" style="height:100%; width: 100%;"  aria-expanded="false" class="btn btn-secondary btn-sm">Battery Packs</a>
                         </td>
                       </tr>
                       {% endfor %}

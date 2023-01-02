@@ -83,6 +83,7 @@ def getOrgInfobyEmail(email):
         return my_data
     except Exception as e:
         print(e)
+
 #ADD ORGANISATION PROFILE DATA
 def orgProfileAddData(id,orgprofile_id):
     try:
@@ -496,3 +497,53 @@ def iotDevice(iotList):
         return new_data
     except Exception as e:
         return []
+
+def insertDataintoGeofenceVehicle(vehicle_id,geofence_id):
+    try:
+        conn=connect()
+        cursor = conn.cursor()
+        sql = 'INSERT INTO irasusapp_vehicle_geofence(vehicle_id,geofence_id) \
+        VALUES(%s,%s)'
+        my_data = (vehicle_id,geofence_id)
+        cursor.execute(sql, my_data)
+        conn.commit()
+        cursor.close()
+        return
+    except Exception as e:
+        print(e)
+
+def listGeofenceVehicle(id):
+    try:
+        conn=connect()
+        cursor = conn.cursor()
+        sql = f"SELECT \
+        irasusapp_geofence.geoname, irasusapp_geofence.description, irasusapp_geofence.pos_address, irasusapp_vehicle_geofence.geofence_id,irasusapp_vehicle_geofence.vehicle_id,irasusapp_vehicle_geofence.id  \
+        FROM irasusapp_geofence \
+        LEFT JOIN irasusapp_vehicle_geofence ON irasusapp_geofence.id = irasusapp_vehicle_geofence.geofence_id \
+        WHERE irasusapp_vehicle_geofence.geofence_id='{id}'"
+        cursor.execute(sql)
+        myresult = cursor.fetchall()
+        new_data = []
+        for data in myresult:
+            res={}
+            res['geoname'] = data[0]
+            res['description'] = data[1]
+            res['pos_address'] = data[2]
+            res['geofence_id'] = data[3]
+            res['vehicle_id'] = data[4]
+            res['id'] = data[5]
+            new_data.append(res)
+        return new_data
+    except Exception as e:
+        return []
+
+def removeUserVehicle(id):
+    try:
+        conn=connect()
+        cursor = conn.cursor()
+        sql = f"DELETE FROM irasusapp_vehicle_geofence WHERE id={id};"
+        cursor.execute(sql)
+        conn.commit()
+        cursor.close()
+    except Exception as e:
+        print(e)

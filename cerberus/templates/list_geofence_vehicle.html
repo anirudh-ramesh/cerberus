@@ -1,0 +1,55 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+
+<body>
+  <div class="col-sm-8">
+    <h4 class="text-center alert alert info">Geofence Data</h4>
+    <form action="" method="GET">
+      {% if messages %}
+        {% for message in messages %}
+        <div class = "alert alert-{{message.tags}}">{{message}}</div>
+        {% endfor %}
+      {% endif %}
+
+      {% if listgeofencevehicle %}
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Location Name</th>
+            <th scope="col">Location Address</th>
+            <th scope="col">Location Description</th>
+            <th scope="col">Geofence Id</th>
+            <th scope="col">Vehicle</th>
+            <th scope="col">Action</th>
+          </tr>
+        <tbody>
+          {% for fm in listgeofencevehicle %}
+          <tr>
+            <td>{{fm.geoname}}</td>
+            <td>{{fm.pos_address}}</td>
+            <td>{{fm.description}}</td>
+            <td>{{fm.geofence_id}}</td>
+            <td>{{fm.vehicle_id}}</td>
+            <td>
+              <a class="btn btn-danger btn-sm" href="{% url 'removegeofencevehicle' fm.id %}?geofence_id={{fm.geofence_id}}">Remove</a>  
+            </td>
+          </tr>
+
+          {% endfor %}
+        </tbody>
+        </thead>
+      </table>
+      {% else %}
+      <h4 class="text-center alert alert warning">No Records Found</h4>
+      {% endif %}
+    </form>
+
+    <div class="text-center mt-3">
+      <a class="btn btn-secondary" href="{% url 'listgeofencedata' %}">Back</a>
+    </div>
+  </div>
+</body>
+
+{% endblock %}

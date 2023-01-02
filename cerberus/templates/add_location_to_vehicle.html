@@ -12,7 +12,7 @@
       {% endfor %}
     {% endif %}
 
-    <h4 class="text-center alert alert info">Add Battery To Vehicle</h4>
+    <h4 class="text-center alert alert info">Add Vehicle To Location</h4>
     <select name='name_of_select'>
       {% for data in assinged_vehicle %}
         <option  class="assigned_value"  value="{{data.chasis_number}}">{{data.vehicle_model_name}}</option>
@@ -20,7 +20,7 @@
     </select>
     <Button type='submit' class="btn btn-success btn-sm" value="Submit">Submit</Button>
     
-    <a href="{% url 'data' %}" class="btn btn-dark btn-sm">Back</a>
+    <a href="{% url 'listgeofencedata' %}" class="btn btn-dark btn-sm">Back</a>
   </form>
     
 </div>

@@ -17,7 +17,7 @@ from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.hashers import make_password, check_password 
 # from irasusapp.auth_helper import getSignInFlow, getTokenFromCode,getToken,getMsalApp,removeUserAndToken, storeUser
-from db_connect import listAssignedBatteryVehicle,assignedVehicleToOrganisation,getOrgAssignedVehicle,removeAssignedVehiclefromOrganisation,listAssignedVehicleToUser,removeUserVehicle,images_display ,iotDevice
+from db_connect import *
 from django.contrib.gis.geos import Point,Polygon
 from base64 import b64encode
 import requests
@@ -645,7 +645,7 @@ def addVehicleDetails(request):
                 messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['addVehicle'])
             return render(request,'add_vehicle_details.html',{"get_FleetId":getFleetId,"newuserPermission":newuserPermission,'UserPermission':userPermission,"ActiveVehicle":Vehicle.objects.filter(vehicle_status="Active").count(),"InactiveVehicle":Vehicle.objects.filter(vehicle_status="Inactive").count()})
     except Exception as e:
-        return messages.warning(request, messages.ERROR, successAndErrorMessages()['internalError'])
+        return messages.warning(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
 #Listing of vehile.
 def getVehicleDetails(request):
@@ -715,7 +715,7 @@ def getVehicleDetails(request):
                 return render(request, 'list_vehicle_details.html', {"newuserPermission":newuserPermission,'vehicle_data':list(Vehicle.objects.values()) , 'email_id': email_id , 'serial_number': serial_number,"IsAdmin":request.session.get("IsAdmin"),"ActiveVehicle":Vehicle.objects.filter(vehicle_status="Active").count(),"InactiveVehicle":Vehicle.objects.filter(vehicle_status="Inactive").count(),'UserPermission':userPermission})
         return render(request, 'list_vehicle_details.html', {"newuserPermission":newuserPermission,'vehicle_data':vehicle_data , 'email_id': email_id , 'serial_number': serial_number,"IsAdmin":request.session.get("IsAdmin"),"ActiveVehicle":Vehicle.objects.filter(vehicle_status="Active").count(),"InactiveVehicle":Vehicle.objects.filter(vehicle_status="Inactive").count(),'UserPermission':userPermission})
     except Exception as e:
-        return messages.warning(request, messages.ERROR,successAndErrorMessages()['internalError'])
+        return messages.warning(request, messages.WARNING,successAndErrorMessages()['internalError'])
 
 
 #This function will Update Vehicle Table.
@@ -779,7 +779,7 @@ def updateVehicleDetails(request,id):
         return render(request,'update_vehicle.html',{"getFleetId":newData,"newuserPermission":newuserPermission,'update_vehicle_data': update_vehicle,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission,"ActiveVehicle":Vehicle.objects.filter(vehicle_status="Active").count(),"InactiveVehicle":Vehicle.objects.filter(vehicle_status="Inactive").count() })
     except Exception as error:
         print(error)
-        return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError'])
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
 #Delete records from Vehicle table.
 def deleteVehicleRecord(request,id):
@@ -862,7 +862,7 @@ def assignedBatteryList(request,id):
         }
         return render(request, 'list_assigned_battery.html',context)
     except Exception as e:
-        return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError'])
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
 
 #Assigned vehicle to org
@@ -897,7 +897,7 @@ def assignedOrgVehicleList(request,id):
         return render(request, 'list_organisation_vehicle.html',{"newuserPermission":newuserPermission,'org_vehicle_list': org_vehicle_list,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission, 'org_id': id})
     except Exception as e:
         print(e)
-        return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError'])
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
 #Assigned vehicle to user
 def assignedVehicleToUser(request,id):
@@ -921,7 +921,7 @@ def assignedVehicleToUser(request,id):
 
         return render(request,'list_assigned_vehicle_to_user.html',{"newuserPermission":newuserPermission,'user_vehicle':user_vehicle,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission,"ActiveBattery":BatteryDetail.objects.filter(status="in_vehicle").count()+BatteryDetail.objects.filter(status="in_swap_station").count(),"DamagedBattery":BatteryDetail.objects.filter(status="damaged").count(),"inActiveBattery":BatteryDetail.objects.filter(status="idel").count()})
     except Exception as e:
-       return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError'])
+       return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
 #Create Geofencing Locations.
 def addgeofenceVehicles(request):
@@ -980,7 +980,7 @@ def addgeofenceVehicles(request):
             return redirect('geofence')
         return render(request, 'geolocation_form.html',{"newuserPermission":newuserPermission,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
     except Exception as e:
-        return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError']) 
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError']) 
 
 #list Geofencing data
 def listgeofenceData(request):
@@ -1024,6 +1024,62 @@ def deleteGeofenceData(request, id):
         print(e)
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
+
+def assignVehicleToGeofence(request):
+    try:
+        userPermission=UserPermission(request,request.session.get("IsAdmin"))
+        obj = Vehicle.objects.all()
+
+        #ASSIGN VEHICLE TO GEOFENCE
+        if request.method == "POST":
+            assigned_vehicle = request.get_full_path()
+            if("action" in assigned_vehicle and "add" in assigned_vehicle):
+                parse.urlsplit(assigned_vehicle)
+                parse.parse_qs(parse.urlsplit(assigned_vehicle).query)
+                dictinary_obj = dict(parse.parse_qsl(parse.urlsplit(assigned_vehicle).query))
+                chasis_number = request.POST.get('name_of_select')
+                already_assigned = listGeofenceVehicle(dictinary_obj['id'])
+
+                #IF VEHICLE ALREADY IN ADDED TO LOCATION
+                for i in already_assigned:
+                    if i['vehicle_id'] == chasis_number:
+                        messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['vehicleAlreadyAddedToLocation'])
+                        return redirect('assignlocation')
+                insertDataintoGeofenceVehicle(chasis_number,dictinary_obj['id'])                        
+                messages.add_message(request, messages.SUCCESS, 'Vehicle Add to This Location')
+                return redirect('assignlocation')
+        context = { 'assinged_vehicle': obj,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission }
+        return render(request,'add_location_to_vehicle.html', context)
+    except Exception as e:
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
+
+def geofenceVehicle(request,id):
+    userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    newuserPermission=permission(request.session.get("user_type"))
+    try:
+        if request.method == "GET":
+            newData=[]
+            listdata = listGeofenceVehicle(id)
+            for i in listdata:
+                if (len(listdata) != 0 and listdata[0]['vehicle_id'] != None):
+                    vehicle_name = list(Vehicle.objects.filter(chasis_number= i['vehicle_id']).values())
+                    i["vehicle_id"] = vehicle_name[0]['vehicle_model_name']   
+                newData.append(i)
+        return render(request, 'list_geofence_vehicle.html', { "listgeofencevehicle": newData, "newuserPermission":newuserPermission,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
+    except Exception as e:
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError']) 
+
+def removeGeofenceVehicle(request,id):
+    try:
+        parse.urlsplit(request.get_full_path())
+        parse.parse_qs(parse.urlsplit(request.get_full_path()).query)
+        dictinary_obj = dict(parse.parse_qsl(parse.urlsplit(request.get_full_path()).query))
+        removeUserVehicle(id)
+        messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['vehicleRemoveFromLocation'])
+        return redirect('listvehicle',dictinary_obj['geofence_id'])
+    except Exception as e:
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError']) 
+
 #Add driver For Vechicle Module.
 def addDriver(request):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
@@ -1061,7 +1117,7 @@ def addDriver(request):
         return render(request, 'adddriver.html', { "get_Fleet_Operator": getFleetId, "newuserPermission":newuserPermission,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
 
     except Exception as e:
-        return messages.add_message(request, messages.ERROR, successAndErrorMessages()['internalError']) 
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError']) 
 
 #This function used for listing driver. 
 def listAddedDriver(request):
@@ -1257,25 +1313,26 @@ def VCU(request):
 
 #Open swap-station doors.
 def swapSatationDoors(request):
-    newuserPermission=permission(request.session.get("user_type"))
+    try:
+        newuserPermission=permission(request.session.get("user_type"))
 
-    url = "http://216.48.177.157:1880/ss/open_door/"
+        url = "http://216.48.177.157:1880/ss/open_door/"
 
-    imei = request.POST.get('imei')
-    doorid = request.POST.get('doorid')
+        imei = request.POST.get('imei')
+        doorid = request.POST.get('doorid')
 
-    payload = json.dumps({
-    "imei": imei,
-    "doorid": doorid
-    })
+        payload = json.dumps({
+        "imei": imei,
+        "doorid": doorid
+        })
 
-    headers = {
-    'Content-Type': 'application/json'
-    }
-    response = requests.request("POST", url, headers=headers, data=payload)
-
-    return render(request, "swap_station_door.html", {"newuserPermission":newuserPermission,'response': response,"IsAdmin":request.session.get("IsAdmin")})
-
+        headers = {
+        'Content-Type': 'application/json'
+        }
+        response = requests.request("POST", url, headers=headers, data=payload)
+        return render(request, "swap_station_door.html", {"newuserPermission":newuserPermission,'response': response,"IsAdmin":request.session.get("IsAdmin")})
+    except Exception as e:
+        return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
 def battery_pack_menu(request):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))

@@ -51,7 +51,9 @@ def successAndErrorMessages():
         "locationCreate" : "Location is created successfully",
         "removeLocation": "Location is Removed successfully",
         "internalError": "Server Error",
-
+        "vehicleRemoveFromLocation" : 'Vehicle is Removed From This Location',
+        "vehicleAlreadyAddedToLocation": 'Vehicle Already Added to This Location.',
+        
         "removeVehiclefromUser": "Removed vehicle from user",
         "addVehicleToUser" : "Vehicle added to user",
 

@@ -57,7 +57,10 @@ urlpatterns= [
     path('geofence', views.addgeofenceVehicles, name="geofence"),
     path('listdata', views.listgeofenceData, name="listgeofencedata"),
     path('filterdata/<int:id>', views.geofenceFilteringData, name="filterdata"),
-    path('deletegeofence/<int:id>', views.deleteGeofenceData, name="deletegeofence"),    
+    path('deletegeofence/<int:id>', views.deleteGeofenceData, name="deletegeofence"),
+    path(r'assignlocation', views.assignVehicleToGeofence, name="assignlocation"),
+    path(r'listvehicle/<int:id>', views.geofenceVehicle, name="listvehicle"),
+    path(r'remnovegeofencevehicle/<int:id>', views.removeGeofenceVehicle, name="removegeofencevehicle"),        
     
     ## DRIVER MODULE ##
     path('driver', views.addDriver, name="addriver"),  
