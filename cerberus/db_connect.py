@@ -458,9 +458,9 @@ def images_display(check):
             one_row.append(res)
         return one_row
     except Exception as e:
-        print("-=-=-=",e)
         return []
 
+#LIST IOT-DEVICE BATTERY
 def iotDevice(iotList):
     try:
         conn = connect()
@@ -498,6 +498,7 @@ def iotDevice(iotList):
     except Exception as e:
         return []
 
+#ADDING VEHICLE TO LOCATION
 def insertDataintoGeofenceVehicle(vehicle_id,geofence_id):
     try:
         conn=connect()
@@ -512,6 +513,7 @@ def insertDataintoGeofenceVehicle(vehicle_id,geofence_id):
     except Exception as e:
         print(e)
 
+#LIST LOCATION VEHICLES
 def listGeofenceVehicle(id):
     try:
         conn=connect()
@@ -537,7 +539,8 @@ def listGeofenceVehicle(id):
     except Exception as e:
         return []
 
-def removeUserVehicle(id):
+#REMOVE LOCATION VEHICLE
+def removeLocationVehicle(id):
     try:
         conn=connect()
         cursor = conn.cursor()

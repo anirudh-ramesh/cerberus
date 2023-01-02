@@ -984,24 +984,27 @@ def addgeofenceVehicles(request):
 
 #list Geofencing data
 def listgeofenceData(request):
+    userPermission=UserPermission(request,request.session.get("IsAdmin"))
     newuserPermission=permission(request.session.get("user_type"))
 
     try:
         if request.method == "GET":
             geofencedata = list(Geofence.objects.values())
 
-        return render(request, 'list_geofence_data.html',{"newuserPermission":newuserPermission, 'listgeofencedata': geofencedata ,"IsAdmin":request.session.get("IsAdmin")})
+        return render(request, 'list_geofence_data.html',{"newuserPermission":newuserPermission, 'listgeofencedata': geofencedata ,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission })
     except Exception as e:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
 def geofenceFilteringData(request, id):
+    userPermission=UserPermission(request,request.session.get("IsAdmin"))
     newuserPermission=permission(request.session.get("user_type"))
     try:
         geofencedata = list(Geofence.objects.filter(pk=id).values())
         context = {
             "newuserPermission":newuserPermission,
             "IsAdmin":request.session.get("IsAdmin"),
-            'geofencedata':geofencedata[0]['enter_latitude']
+            'geofencedata':geofencedata[0]['enter_latitude'],
+            'UserPermission':userPermission
         }
         return render(request, "filter_geofence_data.html",context)
     except Exception as e:
@@ -1028,6 +1031,7 @@ def deleteGeofenceData(request, id):
 def assignVehicleToGeofence(request):
     try:
         userPermission=UserPermission(request,request.session.get("IsAdmin"))
+        newuserPermission=permission(request.session.get("user_type"))
         obj = Vehicle.objects.all()
 
         #ASSIGN VEHICLE TO GEOFENCE
@@ -1048,7 +1052,7 @@ def assignVehicleToGeofence(request):
                 insertDataintoGeofenceVehicle(chasis_number,dictinary_obj['id'])                        
                 messages.add_message(request, messages.SUCCESS, 'Vehicle Add to This Location')
                 return redirect('assignlocation')
-        context = { 'assinged_vehicle': obj,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission }
+        context = { 'assinged_vehicle': obj,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission, "newuserPermission":newuserPermission }
         return render(request,'add_location_to_vehicle.html', context)
     except Exception as e:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
@@ -1074,7 +1078,7 @@ def removeGeofenceVehicle(request,id):
         parse.urlsplit(request.get_full_path())
         parse.parse_qs(parse.urlsplit(request.get_full_path()).query)
         dictinary_obj = dict(parse.parse_qsl(parse.urlsplit(request.get_full_path()).query))
-        removeUserVehicle(id)
+        removeLocationVehicle(id)
         messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['vehicleRemoveFromLocation'])
         return redirect('listvehicle',dictinary_obj['geofence_id'])
     except Exception as e:
