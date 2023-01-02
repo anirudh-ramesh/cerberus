@@ -303,7 +303,7 @@ a {
 }
 .iconlink{
     display: flex;
-    min-width: calc(208px);
+    min-width: calc(220px);
     /* min-width: calc(var(--vh, 1vh)*205px); */
     justify-content: center;
     align-items: center;

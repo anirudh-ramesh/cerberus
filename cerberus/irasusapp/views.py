@@ -287,6 +287,7 @@ def assignBatteryToVehicle(request):
     except Exception as e:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
+#This function is used to show Active battery list.
 def activeBatteryDetails(request):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     newuserPermission=permission(request.session.get("user_type"))
@@ -309,6 +310,7 @@ def activeBatteryDetails(request):
     except Exception as e:
         print(e)
 
+#This function is used to show Inactive battery list.
 def inactiveBatteryDetails(request):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     newuserPermission=permission(request.session.get("user_type"))
@@ -329,7 +331,7 @@ def inactiveBatteryDetails(request):
     except Exception as e:
         print(e)
 
-
+#This function is used to show Damaged battery list.
 def damagedBatteryDetails(request):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     newuserPermission=permission(request.session.get("user_type"))
@@ -370,7 +372,7 @@ def deleteRecord(request, id):
     except Exception as e:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
-
+#This function is used to add IOT-Device.
 def addIotDevice(request):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     newuserPermission=permission(request.session.get("user_type"))
@@ -395,7 +397,7 @@ def addIotDevice(request):
     except Exception as e:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
-
+#active and inactive IOT deivce status.
 def getActiveAnddeactiveIotBystatus(request):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     newuserPermission=permission(request.session.get("user_type"))
@@ -413,7 +415,7 @@ def getActiveAnddeactiveIotBystatus(request):
     return render(request, 'iot_list_by_status.html',contex)
 
 
-
+#This function is used to show IOT-device details.
 def listIotDevice(request):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     newuserPermission=permission(request.session.get("user_type"))
@@ -436,6 +438,7 @@ def listIotDevice(request):
     except Exception as e:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
+#This function is used for update IOT-Device.
 def updateIOTDevice(request,id):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     newuserPermission=permission(request.session.get("user_type"))
@@ -467,6 +470,7 @@ def updateIOTDevice(request,id):
     except Exception as error:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError']) 
 
+#This function used to remove IOT-device.
 def deleteIOTDeviceRecord(request,id):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     newuserPermission=permission(request.session.get("user_type"))
@@ -482,6 +486,7 @@ def deleteIOTDeviceRecord(request,id):
     except Exception as e:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError']) 
 
+#This function used to assign battery to the IOT-Device.
 def assignedIotDeviceToBattery(request):
     try:
         userPermission=UserPermission(request,request.session.get("IsAdmin"))
@@ -515,6 +520,7 @@ def assignedIotDeviceToBattery(request):
     except Exception as e:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError']) 
 
+#This function used to assign vehicle to the driver.
 def assignedVehicleToDriver(request):
     try:
         userPermission=UserPermission(request,request.session.get("IsAdmin"))
@@ -797,7 +803,7 @@ def deleteVehicleRecord(request,id):
     except Exception as e:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['removeVehicle'])
 
-
+#This function used to show active vehicle details
 def activeVehicleDetails(request):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     newuserPermission=permission(request.session.get("user_type"))
@@ -817,6 +823,7 @@ def activeVehicleDetails(request):
     except Exception as e:
         print(e)
 
+#This function used to show inactive vehicle details.
 def inactiveVehicleDetails(request):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     newuserPermission=permission(request.session.get("user_type"))
@@ -837,7 +844,7 @@ def inactiveVehicleDetails(request):
     except Exception as e:
         print(e)
 
-#Assigned BatteryList
+#This Function is used to get assigned batteries to vehicle
 def assignedBatteryList(request,id):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     newuserPermission=permission(request.session.get("user_type"))
@@ -858,7 +865,7 @@ def assignedBatteryList(request,id):
                 return redirect('getvehicle')
 
         context = {
-                        "newuserPermission":newuserPermission,'assigned_battery_list' : data,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission,"ActiveBattery":BatteryDetail.objects.filter(status="IN_VEHICLE").count()+BatteryDetail.objects.filter(status="IN_SWAP_STATION").count(),"DamagedBattery":BatteryDetail.objects.filter(status="DAMAGED").count(),"inActiveBattery":BatteryDetail.objects.filter(status="IDEL").count()
+                "newuserPermission":newuserPermission,'assigned_battery_list' : data,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission,"ActiveBattery":BatteryDetail.objects.filter(status="IN_VEHICLE").count()+BatteryDetail.objects.filter(status="IN_SWAP_STATION").count(),"DamagedBattery":BatteryDetail.objects.filter(status="DAMAGED").count(),"inActiveBattery":BatteryDetail.objects.filter(status="IDEL").count()
         }
         return render(request, 'list_assigned_battery.html',context)
     except Exception as e:
@@ -995,6 +1002,7 @@ def listgeofenceData(request):
     except Exception as e:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
+#Geofencing location details.
 def geofenceFilteringData(request, id):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     newuserPermission=permission(request.session.get("user_type"))
@@ -1027,7 +1035,7 @@ def deleteGeofenceData(request, id):
         print(e)
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
-
+#Assign Vehicle To Location.
 def assignVehicleToGeofence(request):
     try:
         userPermission=UserPermission(request,request.session.get("IsAdmin"))
@@ -1057,6 +1065,7 @@ def assignVehicleToGeofence(request):
     except Exception as e:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
 
+#List location of vehicle.
 def geofenceVehicle(request,id):
     userPermission=UserPermission(request,request.session.get("IsAdmin"))
     newuserPermission=permission(request.session.get("user_type"))
@@ -1073,6 +1082,7 @@ def geofenceVehicle(request,id):
     except Exception as e:
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError']) 
 
+#Remove vehicle from Location
 def removeGeofenceVehicle(request,id):
     try:
         parse.urlsplit(request.get_full_path())
