@@ -54,7 +54,7 @@ a {
     padding-right: 15px;
     padding-left: 15px;
     margin-right: auto;
-    margin-left: 3%;
+    margin-left: auto;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -194,10 +194,16 @@ a {
     display: flex;
     flex-direction: column;
     height: 100%;
-    margin-left: 3%; 
-     padding: 5%;   
+   
 }
-
+#login-wrapper {
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    
+}
 .page-wrapper {
     position: relative;
     /* background: #eef5f9; */
@@ -303,7 +309,7 @@ a {
 }
 .iconlink{
     display: flex;
-    min-width: calc(208px);
+    min-width: calc(220px);
     /* min-width: calc(var(--vh, 1vh)*205px); */
     justify-content: center;
     align-items: center;
@@ -500,6 +506,7 @@ a {
 .h-100:hover{
     background: #f8f9fa;
     box-shadow: 1px 0 20px rgb(132 105 198);
+    transform: translateY(-4px) scale(1.01);
 }
 .sidebar-nav ul .sidebar-item {
     width: 100%;
@@ -959,7 +966,7 @@ label{
 .sign_up_class{
     width: 100%!important;
     border-radius: 20px;
-    min-height: 100%;
+    height: 100%;
 }
 
 .login_img_div{
@@ -1059,7 +1066,7 @@ margin-left: -17% !important;
     display: flex;
     justify-content: space-evenly;
     height: 50px;
-    margin-top: -6%;
+   
 }
 .ant-avatar {
     -webkit-font-feature-settings: "tnum","tnum";
