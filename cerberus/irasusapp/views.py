@@ -10,6 +10,7 @@ from datetime import datetime
 import json
 import csv
 from django.utils import timezone
+from irasusapp.vcu_management import *
 # from .mixins import MessageHandler
 from .models import Crmuser, BatteryDetail, IotDevices,Vehicle,Geofence, Organisation
 from django.contrib import messages
@@ -500,7 +501,6 @@ def assignedVehicleToDriver(request):
                 dictinary_obj = dict(parse.parse_qsl(parse.urlsplit(assigned_vehicle).query))
                 chasis_number = request.POST.get('name_of_select')
                 already_assign = list(Crmuser.objects.filter(email = dictinary_obj['email']).values())
-               
                 for x in already_assign:
                     
                     if x['vehicle_assigned_id'] is not None:
@@ -956,9 +956,14 @@ def addDriver(request):
 
     try:
         if request.method == "POST":
+            if Crmuser.objects.filter(email=request.POST.get('contact')).exists():
+                messages.add_message(request, messages.WARNING,"Driver is already exists") 
+                return redirect('addriver')
+
             username = request.POST.get('username')
             email = request.POST.get('contact')
-            password = make_password(generatorPassword())
+            newPassword=generatorPassword()
+            password = make_password(newPassword)
             user_type =  request.POST.get('user_type')
             assigned_operator = request.POST.get('assigned_operator')
             adhar_proof = request.FILES['adhar_card'].file.read()
@@ -976,7 +981,7 @@ def addDriver(request):
             newdata.save()
             Crmuser.objects.filter(email=request.POST.get('contact')).update(is_admin=False,created_by=request.session.get("user_type"),created_id=request.session.get("email"))
 
-            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['addDriver']) 
+            messages.add_message(request, messages.SUCCESS,f"Driver create suceessfully your one time password is '{newPassword}' ") 
         return render(request, 'adddriver.html', { "get_Fleet_Operator": getFleetId, "newuserPermission":newuserPermission,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission})
 
     except Exception as e:
@@ -989,26 +994,32 @@ def listAddedDriver(request):
 
     try:
         if request.method == "GET":
-            vehicle_name=""
+            newData=[]
             if(request.session.get("IsAdmin")):
                 driverData = images_display(True)
-                if(driverData[0]['vehicle_assigned_id']):
-                    vehicle_data = list(Vehicle.objects.filter(chasis_number=driverData[0]['vehicle_assigned_id']).values())
-                    vehicle_name = vehicle_data[0]['vehicle_model_name']
+                if(len(driverData) !=0):
+                    for i in driverData:
+                        vehicle_data = list(Vehicle.objects.filter(chasis_number=i['vehicle_assigned_id']).values())
+                        if(len(vehicle_data) != 0 and vehicle_data[0]['vehicle_model_name'] != None):
+                            i["vehicle_name"] = vehicle_data[0]['vehicle_model_name']
+                        newData.append(i)
             elif(request.session.get("user_type") in successAndErrorMessages()["fleetType"]):
                 driverData = images_display(request.session.get("email"))
-                if(driverData[0]['vehicle_assigned_id']):
-                    vehicle_data = list(Vehicle.objects.filter(chasis_number=driverData[0]['vehicle_assigned_id']).values())
-                    vehicle_name = vehicle_data[0]['vehicle_model_name']
-
+                if(len(driverData) !=0):
+                      for i in driverData:
+                        vehicle_data = list(Vehicle.objects.filter(chasis_number=i['vehicle_assigned_id']).values())
+                        if(len(vehicle_data) != 0 and vehicle_data[0]['vehicle_model_name'] != None):
+                            i["vehicle_name"] = vehicle_data[0]['vehicle_model_name']
+                        newData.append(i)
             else:
                 driverData = images_display(request.session.get("email"))
-                if(driverData[0]['vehicle_assigned_id']):
-                    vehicle_data = list(Vehicle.objects.filter(chasis_number=driverData[0]['vehicle_assigned_id']).values())
-                    vehicle_name = vehicle_data[0]['vehicle_model_name']
-
+                if(len(driverData) !=0):
+                    for i in driverData:
+                        vehicle_data = list(Vehicle.objects.filter(chasis_number=i['vehicle_assigned_id']).values())
+                        if(len(vehicle_data) != 0 and vehicle_data[0]['vehicle_model_name'] != None):
+                            i["vehicle_name"] = vehicle_data[0]['vehicle_model_name']
+                        newData.append(i)
          
-
             #REMOVE VEHICLE FROM DRIVER
             get_full_path = request.get_full_path()
             if("action" in get_full_path and "remove" in get_full_path):
@@ -1021,10 +1032,11 @@ def listAddedDriver(request):
                 messages.add_message(request, messages.WARNING, successAndErrorMessages()['vehicleRemovedFromDriver'])
                 return redirect('getdrivers')
         context={
-                "newuserPermission":newuserPermission,"drivers": driverData ,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission,'vehicle_name': vehicle_name
+                "newuserPermission":newuserPermission,"drivers": newData ,"IsAdmin":request.session.get("IsAdmin"),'UserPermission':userPermission,
                 }
         return render(request, 'list_drivers.html',context)
     except Exception as e:
+        print(e)
         return messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError']) 
 
 # This function will Update Driver
@@ -1495,3 +1507,86 @@ def getActiveandInactiveFleetOperatorupnderFleetOwner(request):
 
     else:
         return render(request, "fleet_owner_and_fleet_operator/active_and_inactive_fleet_operator.html",{"newuserPermission":newuserPermission, "data": list(data),'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission,"action": parseQuerySting(request)["action"]})
+
+####  VCU ####
+# create VUC
+def createVCUManagement(request):
+    userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    newuserPermission=permission(request.session.get("user_type"))
+
+    if request.method == "GET":
+        return render(request, "vcu_management_templates/add_vcu.html",{"newuserPermission":newuserPermission,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+
+    if request.method == "POST":
+        data=createVCU(request)
+
+        if(data == True):
+            messages.add_message(request, messages.WARNING, successAndErrorMessages()['VCUExists'])
+            return render(request, "vcu_management_templates/add_vcu.html",{"newuserPermission":newuserPermission,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+
+        elif(data == False):
+            messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
+            return render(request, "vcu_management_templates/add_vcu.html",{"newuserPermission":newuserPermission,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+
+        else:
+            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['VCUCreate'])
+            return render(request, "vcu_management_templates/add_vcu.html",{"newuserPermission":newuserPermission,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+
+## update VCU data
+def updateVCUManagement(request,id):
+    userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    newuserPermission=permission(request.session.get("user_type"))
+
+    data=updateVCU(request,id)
+    if request.method == "GET":
+        return render(request, "vcu_management_templates/update_vcu.html",{"newuserPermission":newuserPermission,'data': data,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+
+    if(data == False and len(data) != 0):
+        messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
+        return render(request, "vcu_management_templates/update_vcu.html",{"newuserPermission":newuserPermission,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+
+    else:
+        if request.method == "POST":
+            data=updateVCU(request,id)
+            messages.add_message(request, messages.SUCCESS, successAndErrorMessages()['VCUUpdate'])
+            return render(request, "vcu_management_templates/update_vcu.html",{"newuserPermission":newuserPermission,'data' : data ,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+        else:
+
+            return render(request, "vcu_management_templates/update_vcu.html",{"newuserPermission":newuserPermission,'data' : data,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+
+
+## list VCU data
+def listVCUManagement(request):
+    data=listVCU(request)
+    newuserPermission=permission(request.session.get("user_type"))
+
+    userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    if(len(data) == 0) :
+        return render(request, "vcu_management_templates/list_vcu.html",{"newuserPermission":newuserPermission,'data':data, 'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+
+    elif(data == False):
+        messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
+        return render(request, "vcu_management_templates/list_vcu.html",{"newuserPermission":newuserPermission,'data':data, 'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+
+    else:
+        return render(request, "vcu_management_templates/list_vcu.html",{"newuserPermission":newuserPermission,'data':data, 'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+
+## delete VCU data
+def deleteVCUManagemant(request,id):
+    userPermission=UserPermission(request,request.session.get("IsAdmin"))
+    newuserPermission=permission(request.session.get("user_type"))
+
+    data=True
+    if request.method == "GET": 
+        data=list(deleteVCU(request,id))[0]
+    if(data == False):
+        messages.add_message(request, messages.WARNING, successAndErrorMessages()['internalError'])
+        return render(request, "vcu_management_templates/delete_vcu.html",{"newuserPermission":newuserPermission,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission})
+
+    else:
+        if request.method == "POST":
+            data=deleteVCU(request,id)
+            messages.add_message(request, messages.WARNING, successAndErrorMessages()['VCUDelete'])
+            return redirect("listvcu")
+        else:
+            return render(request, "vcu_management_templates/delete_vcu.html",{"newuserPermission":newuserPermission,'IsAdmin' : request.session.get("IsAdmin"),'UserPermission':userPermission,"data":data})

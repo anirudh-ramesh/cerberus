@@ -104,6 +104,13 @@ urlpatterns= [
     path(r'inactivefleetoperator', views.getActiveandInactiveFleetOperatorupnderFleetOwner, name="inactivefleetoperator"),
     path(r'deletefleetowner/<int:id>', views.deleteFleetManagemant, name="deletefleetowner"),
 
+    ## VCU Management ##
+
+    path(r'createvcu', views.createVCUManagement, name="createvcu"),
+    path(r'listvcu', views.listVCUManagement, name="listvcu"),
+
+    path(r'deletevcu/<str:id>', views.deleteVCUManagemant, name="deletevcu"),
+    path(r'updatevcu/<str:id>', views.updateVCUManagement, name="updatevcu"),
 
     
 ]

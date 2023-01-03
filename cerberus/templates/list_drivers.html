@@ -47,11 +47,7 @@
                             <td>
                                 <img src='data:image/jpeg;base64,{{fm.driving_license}}' alt="no image display" style="width:100px;height:100px;" >
                             </td>
-                            {% if vehicle_name %}
-                                <td>{{vehicle_name}}</td>
-                            {% else %}
-                                <td>Not Assinged Yet</td>
-                            {% endif %}
+                            <td>{{fm.vehicle_name}}</td>
                             <td>
                             {% if IsAdmin or newuserPermission.driver.update %} 
                                 <a href="{% url 'updatedriver' fm.email %}" class="btn btn-warning btn-sm">Edit</a>

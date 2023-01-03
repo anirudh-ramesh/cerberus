@@ -82,7 +82,15 @@ def successAndErrorMessages():
         "fleetoperatorCreate": "fleet operatoe is create successfully",
         "fleetoperatorupdate":"fleet operatoe is update successfully",
 
-        "fleetType": ["FleetOperator","FleetOwner","User","Driver"]
+        "fleetType": ["FleetOperator","FleetOwner","User","Driver"],
+
+        ## VCU
+
+        "VCUExists": "imei_number is already exists",
+        "VCUCreate": "imei_number is create successfully",
+        "VCUUpdate":"imei_number is update successfully",
+        "VCUDelete":"imei_number is delete successfully",
+
 
     }
     return response
@@ -224,11 +232,11 @@ def permission(role):
                 "view":True 
             },
               "VCU":{
-                "create":False,
-                "update":False,
-                "delete":False,
-                "assignBattery":False,
-                "view": False
+                "create":True,
+                "update":True,
+                "delete":True,
+                "assignBattery":True,
+                "view": True
 
             },
         }
